@@ -109,6 +109,14 @@ function App() {
         setLoading(true);
         // Simulate or wait for data/API readiness
         await new Promise(resolve => setTimeout(resolve, 2500));
+        
+        // --- PRODUCTION API TEST LOGIC ---
+        const API = import.meta.env.VITE_API_URL;
+        fetch(`${API}`)
+          .then(res => res.text()) // Use text() first as it returns "API Running" String, not strictly JSON initially unless formatted. Wait, we return res.send('API Running') which is text.
+          .then(data => console.log("✅ API Connected:", data))
+          .catch(err => console.error("❌ API Error:", err));
+          
       } catch (err) {
         console.error("Failed during initialization:", err);
       } finally {

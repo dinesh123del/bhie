@@ -22,6 +22,10 @@ import healthRoutes from './health.js';
 const router = express.Router();
 
 // Health check and root info
+router.get('/', (_req, res) => {
+  res.send('API Running');
+});
+
 router.use('/system', healthRoutes);
 router.use('/events', eventRoutes);
 router.use('/analytics/intel', analyticsIntelRoutes);
