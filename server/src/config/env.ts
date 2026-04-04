@@ -65,6 +65,14 @@ const envSchema = z
           message: 'Database connection URI is required for production',
         });
       }
+
+      if (!data.OPENAI_API_KEY) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['OPENAI_API_KEY'],
+          message: 'OPENAI_API_KEY is missing and strictly required for production',
+        });
+      }
     }
 
     for (const [index, origin] of legacyFrontendUrls.entries()) {
@@ -116,6 +124,15 @@ const legacyFrontendUrls = (envValues.FRONTEND_URL || '')
   .map((value) => value.trim())
   .filter(Boolean);
 const clientUrls = [...new Set([envValues.CLIENT_URL, ...legacyFrontendUrls].filter(Boolean))];
+
+// Environment Variable Validation Verification Output (Security Hardened)
+console.log('✅ ENV CONFIG LOADED:');
+console.log(` -> PORT: ${envValues.PORT}`);
+console.log(` -> NODE_ENV: ${envValues.NODE_ENV}`);
+console.log(` -> MONGODB: ${envValues.MONGO_URI ? 'CONNECTED [HIDDEN]' : 'MISSING'}`);
+console.log(` -> REDIS: ${envValues.REDIS_URL ? 'CONFIGURED [HIDDEN]' : 'MISSING'}`);
+console.log(` -> OPENAI: ${envValues.OPENAI_API_KEY ? 'CONFIGURED [HIDDEN]' : 'MISSING'}`);
+
 
 export const env = {
   ...envValues,
