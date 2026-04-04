@@ -41,7 +41,7 @@ router.get('/plans', asyncHandler(async (_req, res) => {
 }));
 router.get('/subscription', asyncHandler(async (req, res) => {
     const user = requireUser(req);
-    const account = await User.findById(user.userId).select('plan isActive planExpiry recordCount');
+    const account = await User.findById(user.userId).select('plan isActive planExpiry usageCount isPremium subscriptionId subscriptionStatus');
     if (!account) {
         throw new AppError(404, 'User not found');
     }
@@ -55,7 +55,7 @@ router.get('/subscription', asyncHandler(async (req, res) => {
         billingPlan: account.plan,
         subscriptionStatus: account.isActive ? 'active' : 'inactive',
         expiryDate: account.planExpiry?.toISOString() || null,
-        recordCount: account.recordCount,
+        usageCount: account.usageCount,
         premiumAccess: activePremium,
     });
 }));

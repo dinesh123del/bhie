@@ -57,8 +57,8 @@ export const recordsController = {
       })
     );
 
-    if (typeof user.incrementRecordCount === 'function') {
-      await user.incrementRecordCount();
+    if (typeof user.incrementUsageCount === 'function') {
+      await user.incrementUsageCount();
     }
 
     res.status(201).json(record);
@@ -95,8 +95,8 @@ export const recordsController = {
       throw new AppError(404, 'Record not found or access denied');
     }
 
-    if (account && typeof account.decrementRecordCount === 'function') {
-      await account.decrementRecordCount();
+    if (account && typeof account.decrementUsageCount === 'function') {
+      await account.decrementUsageCount();
     }
 
     res.json({ message: 'Record deleted' });

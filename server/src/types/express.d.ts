@@ -4,7 +4,7 @@ declare global {
       userId: string;
       id: string;
       role: 'admin' | 'user';
-      plan?: 'free' | '59' | '119';
+      plan?: 'free' | 'pro' | 'premium';
       hasPremium?: boolean;
     }
   }

@@ -61,7 +61,7 @@ router.get(
   '/subscription',
   asyncHandler(async (req: AuthRequest, res: Response) => {
     const user = requireUser(req);
-    const account = await User.findById(user.userId).select('plan isActive planExpiry recordCount');
+    const account = await User.findById(user.userId).select('plan isActive planExpiry usageCount isPremium subscriptionId subscriptionStatus');
 
     if (!account) {
       throw new AppError(404, 'User not found');
@@ -79,7 +79,7 @@ router.get(
       billingPlan: account.plan,
       subscriptionStatus: account.isActive ? 'active' : 'inactive',
       expiryDate: account.planExpiry?.toISOString() || null,
-      recordCount: account.recordCount,
+      usageCount: account.usageCount,
       premiumAccess: activePremium,
     });
   })
@@ -165,7 +165,7 @@ router.post(
     }
 
     const payment = await Payment.findOne({ 
-
+      razorpayOrderId: razorpay_order_id,
       verifiedAt: { $exists: false } 
     });
     if (!payment) {

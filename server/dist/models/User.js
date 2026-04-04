@@ -32,8 +32,12 @@ const userSchema = new mongoose.Schema({
     },
     plan: {
         type: String,
-        enum: ['free', '59', '119'],
+        enum: ['free', 'pro', 'premium'],
         default: 'free',
+    },
+    isPremium: {
+        type: Boolean,
+        default: false,
     },
     planExpiry: {
         type: Date,
@@ -42,9 +46,16 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
     },
-    recordCount: {
+    usageCount: {
         type: Number,
         default: 0,
+    },
+    subscriptionId: {
+        type: String,
+    },
+    subscriptionStatus: {
+        type: String,
+        enum: ['active', 'cancelled', 'expired'],
     },
 }, {
     timestamps: true,
@@ -93,29 +104,34 @@ userSchema.methods.canCreateRecord = function () {
     if (this.hasPremiumAccess()) {
         return true;
     }
-    return (this.recordCount || 0) < FREE_UPLOAD_LIMIT;
+    return (this.usageCount || 0) < FREE_UPLOAD_LIMIT;
 };
-userSchema.methods.incrementRecordCount = async function () {
-    this.recordCount = (this.recordCount || 0) + 1;
+userSchema.methods.incrementUsageCount = async function () {
+    this.usageCount = (this.usageCount || 0) + 1;
     await this.save();
 };
-userSchema.methods.decrementRecordCount = async function () {
-    this.recordCount = Math.max(0, (this.recordCount || 0) - 1);
+userSchema.methods.decrementUsageCount = async function () {
+    this.usageCount = Math.max(0, (this.usageCount || 0) - 1);
     await this.save();
 };
-userSchema.methods.resetRecordCount = async function () {
-    this.recordCount = 0;
+userSchema.methods.resetUsageCount = async function () {
+    this.usageCount = 0;
     await this.save();
 };
-userSchema.methods.upgradePlan = async function (plan) {
+userSchema.methods.upgradePlan = async function (plan, subscriptionId) {
     const now = new Date();
     // Set expiry to 30 days from now for monthly plans
     const expiryDate = new Date(now);
     expiryDate.setDate(expiryDate.getDate() + 30);
     this.plan = plan;
+    this.isPremium = true;
+    if (subscriptionId) {
+        this.subscriptionId = subscriptionId;
+        this.subscriptionStatus = 'active';
+    }
     this.planExpiry = expiryDate;
     this.isActive = true;
-    this.recordCount = 0;
+    this.usageCount = 0;
     await this.save();
 };
 userSchema.pre('save', async function (next) {

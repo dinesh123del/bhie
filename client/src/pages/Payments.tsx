@@ -15,6 +15,7 @@ import { PremiumBadge, PremiumButton, PremiumCard } from '../components/ui/Premi
 import paymentService, { SubscriptionResponse } from '../services/paymentService';
 import { PLAN_DETAILS, getPlanLabel, getRemainingUploads, hasPremiumAccess, type AppPlan } from '../utils/plan';
 
+
 type PaidPlan = Exclude<AppPlan, 'free'>;
 
 interface PlanCard {
@@ -46,12 +47,12 @@ const planCards: PlanCard[] = [
     popular: true,
   },
   {
-    code: 'enterprise',
-    name: 'Enterprise',
-    price: PLAN_DETAILS.enterprise.price,
-    billingText: PLAN_DETAILS.enterprise.billingText,
+    code: 'premium',
+    name: 'Premium',
+    price: PLAN_DETAILS.premium.price,
+    billingText: PLAN_DETAILS.premium.billingText,
     description: 'For larger teams that need premium workflows, reporting, and support.',
-    features: PLAN_DETAILS.enterprise.features,
+    features: PLAN_DETAILS.premium.features,
   },
 ];
 
@@ -73,7 +74,7 @@ const Payments = () => {
       try {
         const response = await paymentService.getSubscription();
         setSubscription(response);
-        if (response.plan === 'pro' || response.plan === 'enterprise') {
+        if (response.plan === 'pro' || response.plan === 'premium') {
           setSelectedPlan(response.plan);
         }
       } catch {
@@ -332,7 +333,7 @@ const Payments = () => {
               detail: 'Unlock unlimited uploads, AI insights, and advanced analytics for daily business use.',
             },
             {
-              title: 'Enterprise',
+              title: 'Premium',
               detail: 'Add premium support and enterprise-ready workflows for teams and larger operations.',
             },
           ].map((item) => (

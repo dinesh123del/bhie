@@ -4,16 +4,17 @@ declare global {
   interface Window {
     Razorpay?: new (options: RazorpayCheckoutOptions) => {
       open: () => void;
+      on: (event: string, handler: (...args: any[]) => void) => void;
     };
   }
 }
 
 export interface SubscriptionResponse {
-  plan: 'free' | 'pro' | 'enterprise';
-  billingPlan?: 'free' | 'pro' | 'enterprise';
+  plan: 'free' | 'pro' | 'premium';
+  billingPlan?: 'free' | 'pro' | 'premium';
   subscriptionStatus: 'active' | 'inactive' | 'expired';
   expiryDate: string | null;
-  recordCount: number;
+  usageCount: number;
   premiumAccess: boolean;
 }
 
@@ -21,7 +22,7 @@ export interface CreateOrderResponse {
   orderId: string;
   amount: number;
   currency: string;
-  plan: 'pro' | 'enterprise';
+  plan: 'pro' | 'premium';
   label: string;
   key?: string;
 }
@@ -63,7 +64,7 @@ export const paymentService = {
     return response.data;
   },
 
-  async createOrder(plan: 'pro' | 'enterprise') {
+  async createOrder(plan: 'pro' | 'premium') {
     const response = await api.post<CreateOrderResponse>('/payment/create-order', { plan });
     return response.data;
   },

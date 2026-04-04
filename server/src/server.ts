@@ -14,9 +14,8 @@ import { AppError } from './utils/appError.js';
 import { createDefaultAdmin } from './utils/createDefaultAdmin.js';
 import { ensureUploadDir, uploadDir } from './utils/uploads.js';
 import apiRouter from './routes/apiRouter.js';
-import './workers/uploadWorker.js'; 
 import { SubscriptionManager } from './utils/subscriptionManager.js';
-import { connectRedis, disconnectRedis } from './config/redisClient.js';
+import { connectRedis, disconnectRedis, isRedisConnected } from './config/redisClient.js';
 
 const app = express();
 
@@ -98,7 +97,6 @@ app.use(errorHandler);
 
 // --- Server Lifecycle ---
 import { initSocket } from './socket/socketManager.js';
-import './workers/eventWorker.js';
 
 let server: Server | null = null;
 
@@ -122,20 +120,40 @@ async function init(): Promise<void> {
     await ensureUploadDir();
     
     console.log('🔌 Connecting to infrastructure...');
-    await Promise.all([
-      connectDB(),
-      connectRedis()
-    ]);
+    
+    // Connect to MongoDB (required)
+    await connectDB();
+    
+    // Connect to Redis (optional — gracefully degrades)
+    await connectRedis();
     
     console.log('⚙️  Configuring BHIE services...');
     await createDefaultAdmin();
     SubscriptionManager.startExpiryChecker();
     
-    // Start automated task engines
-    const { actionGenerationQueue } = await import('./config/queues.js');
-    await actionGenerationQueue.add('daily_audit', {}, { 
-      repeat: { pattern: '0 6 * * *' } // Every day at 6 AM
-    });
+    // Initialize workers only if Redis is available
+    if (isRedisConnected()) {
+      try {
+        const { initUploadWorker } = await import('./workers/uploadWorker.js');
+        initUploadWorker();
+        
+        const { initEventWorker } = await import('./workers/eventWorker.js');
+        initEventWorker();
+        
+        // Start automated task engines
+        const { getActionGenerationQueue } = await import('./config/queues.js');
+        const actionQueue = getActionGenerationQueue();
+        await actionQueue.add('daily_audit', {}, { 
+          repeat: { pattern: '0 6 * * *' } // Every day at 6 AM
+        });
+        
+        console.log('✅ Background workers initialized');
+      } catch (workerError) {
+        console.warn('⚠️ Background workers could not be initialized:', workerError);
+      }
+    } else {
+      console.warn('⚠️ Redis unavailable — background workers disabled');
+    }
     
     await startServer();
   } catch (error) {
@@ -181,5 +199,3 @@ process.on('unhandledRejection', (reason) => {
 void init();
 
 export default app;
-
- 

@@ -16,11 +16,13 @@ export interface AuthUser {
   id: string;
   name: string;
   email: string;
-  role: 'admin' | 'customer';
-  plan: 'free' | 'pro' | 'enterprise' | string;
+  role: 'admin' | 'user';
+  plan: 'free' | 'pro' | 'premium';
   planExpiry?: string | null;
+  expiryDate?: string | null;
   isActive: boolean;
-  recordCount: number;
+  usageCount: number;
+  subscriptionStatus?: string;
   hasPremiumAccess?: boolean;
 }
 
@@ -36,9 +38,11 @@ const normalizeUser = (user: any): AuthUser => ({
   role: user.role,
   plan: user.plan || 'free',
   planExpiry: user.planExpiry ?? user.expiryDate ?? null,
+  expiryDate: user.expiryDate ?? user.planExpiry ?? null,
   isActive: user.isActive ?? true,
-  recordCount: user.recordCount ?? 0,
-  hasPremiumAccess: user.hasPremiumAccess ?? (user.plan !== 'free'),
+  usageCount: user.usageCount ?? user.recordCount ?? 0,
+  subscriptionStatus: user.subscriptionStatus || (user.isActive ? 'active' : 'inactive'),
+  hasPremiumAccess: user.hasPremiumAccess ?? (user.plan !== 'free' && user.isActive),
 });
 
 export const authService = {
@@ -68,6 +72,19 @@ export const authService = {
     };
   },
 
+  googleLogin: async (googleToken: string): Promise<AuthResponse> => {
+    const response = await api.post('/auth/google', { token: googleToken });
+    const normalizedUser = normalizeUser(response.data.user);
+    
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('user', JSON.stringify(normalizedUser));
+    
+    return {
+      token: response.data.token,
+      user: normalizedUser,
+    };
+  },
+
   getMe: async (): Promise<AuthUser> => {
     const data = await authAPI.me();
     const normalizedUser = normalizeUser(data.user);
@@ -84,4 +101,3 @@ export const authService = {
     }
   }
 };
-

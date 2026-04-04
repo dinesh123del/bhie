@@ -58,10 +58,10 @@ export const reportsAPI = {
 
 // ================= PAYMENTS =================
 export const paymentsAPI = {
-  getAll: () => extractData<any[]>(api.get('/payment')),
-  getSubscription: () => extractData<any>(api.get('/payment/subscription')),
-  createOrder: (plan: 'pro' | 'enterprise') => extractData<any>(api.post('/payment/create-order', { plan })),
-  verify: <T>(payload: T) => extractData<any>(api.post('/payment/verify', payload)),
+  getAll: () => extractData<any[]>(api.get('/payments')),
+  getSubscription: () => extractData<any>(api.get('/payments/subscription')),
+  createOrder: (plan: 'pro' | 'premium') => extractData<any>(api.post('/payments/create-order', { plan })),
+  verify: <T>(payload: T) => extractData<any>(api.post('/payments/verify', payload)),
 };
 
 // ================= AI =================

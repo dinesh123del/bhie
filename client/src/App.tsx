@@ -1,13 +1,15 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 
 // Layout Components
 import PremiumLayout from './components/PremiumLayout';
+import LoadingScreen from './components/LoadingScreen';
 import FullscreenLogoLoader from './components/FullscreenLogoLoader';
+import { UpgradeModal } from './components/UpgradeModal';
 
 // Dynamic Page Imports
 const PremiumLogin = lazy(() => import('./pages/LoginPremium'));
@@ -27,65 +29,145 @@ const Profile = lazy(() => import('./pages/Home')); // Using Home as Profile pla
 
 const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
   const { user, loading } = useAuth();
-  if (loading) return <FullscreenLogoLoader label="Securing Session" />;
+  if (loading) return <LoadingScreen />;
   return user ? <PremiumLayout>{children}</PremiumLayout> : <Navigate to="/login" replace />;
 };
 
-function AppContent() {
+function MainApp() {
   const location = useLocation();
+  const [routeLoading, setRouteLoading] = useState(false);
+
+  // Route Transition Loading (Advanced)
+  useEffect(() => {
+    // Show loading during route changes
+    setRouteLoading(true);
+    
+    // Simulate brief transition handling or wait for component mount
+    const timer = setTimeout(() => {
+      setRouteLoading(false);
+    }, 600); 
+
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
 
   return (
-    <Suspense fallback={<FullscreenLogoLoader label="Initialising Universe" />}>
+    <>
       <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          {/* Public Routes */}
-          <Route path="/" element={<PremiumLanding />} />
-          <Route path="/login" element={<PremiumLogin />} />
-          <Route path="/register" element={<PremiumRegister />} />
-          <Route path="/pricing" element={<Pricing />} />
-
-          {/* Core Dashboard Experience */}
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-          <Route path="/ai-analysis" element={<ProtectedRoute><AIAnalysis /></ProtectedRoute>} />
-          <Route path="/system-health" element={<ProtectedRoute><SystemHealth /></ProtectedRoute>} />
-          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-
-          
-          {/* Support Modules */}
-          <Route path="/records" element={<ProtectedRoute><Records /></ProtectedRoute>} />
-          <Route path="/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
-          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-
-          {/* Catch All */}
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
+        {routeLoading && (
+          <motion.div
+            key="route-loading"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.4 } }}
+            className="fixed inset-0 z-[10000] pointer-events-none"
+          >
+            <LoadingScreen />
+          </motion.div>
+        )}
       </AnimatePresence>
-    </Suspense>
+
+      <Suspense fallback={<LoadingScreen />}>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            {/* Public Routes */}
+            <Route path="/" element={<PremiumLanding />} />
+            <Route path="/login" element={<PremiumLogin />} />
+            <Route path="/register" element={<PremiumRegister />} />
+            <Route path="/pricing" element={<Pricing />} />
+
+            {/* Core Dashboard Experience */}
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+            <Route path="/ai-analysis" element={<ProtectedRoute><AIAnalysis /></ProtectedRoute>} />
+            <Route path="/system-health" element={<ProtectedRoute><SystemHealth /></ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+
+            {/* Support Modules */}
+            <Route path="/records" element={<ProtectedRoute><Records /></ProtectedRoute>} />
+            <Route path="/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+
+            {/* Catch All */}
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </AnimatePresence>
+      </Suspense>
+    </>
   );
 }
 
 function App() {
+  // Global loading state
+  const [loading, setLoading] = useState(true);
+
+  // Initial Load Handling & API-Based Loading Control Example
+  useEffect(() => {
+    let isMounted = true;
+
+    const initializeApp = async () => {
+      try {
+        setLoading(true);
+        // Simulate or wait for data/API readiness
+        await new Promise(resolve => setTimeout(resolve, 2500));
+      } catch (err) {
+        console.error("Failed during initialization:", err);
+      } finally {
+        // Prevent infinite loading by ensuring loading always turns false
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    initializeApp();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <AuthProvider>
       <ThemeProvider>
-        <AppContent />
-        <Toaster 
-          position="bottom-right"
-          toastOptions={{
-            style: {
-              background: 'rgba(15, 23, 42, 0.9)',
-              color: '#fff',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(12px)',
-              borderRadius: '16px',
-            },
-          }} 
-        />
+        {/* Smooth exit animation for loading screen switch */}
+        <AnimatePresence mode="wait">
+          {loading ? (
+            <motion.div
+              key="global-loading"
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
+              className="fixed inset-0 z-[10000]"
+            >
+              <LoadingScreen />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="main-app"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
+              className="h-full w-full"
+            >
+              <MainApp />
+              <Toaster 
+                position="bottom-right"
+                toastOptions={{
+                  style: {
+                    background: 'rgba(15, 23, 42, 0.9)',
+                    color: '#fff',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    backdropFilter: 'blur(12px)',
+                    borderRadius: '16px',
+                  },
+                }} 
+              />
+              <UpgradeModal />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </ThemeProvider>
     </AuthProvider>
   );
 }
 
 export default App;
-

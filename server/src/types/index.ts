@@ -12,7 +12,7 @@ export type AuthRequest = Request & {
   user?: AuthenticatedUser;
 };
 
-export type PlanType = 'free' | '59' | '119';
+export type PlanType = 'free' | 'pro' | 'premium';
 
 export interface Record {
   title: string;

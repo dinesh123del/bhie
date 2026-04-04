@@ -95,7 +95,7 @@ const PremiumRecords = () => {
       try {
         const response = await recordsAPI.getAll();
         if (active) {
-          setRecords(Array.isArray(response.data) ? response.data : []);
+          setRecords(Array.isArray(response) ? response : []);
         }
       } catch {
         if (active) {

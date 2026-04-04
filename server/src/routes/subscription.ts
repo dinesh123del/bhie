@@ -8,7 +8,8 @@ const router = Router();
 router.use(authenticateToken);
 
 router.get('/status', subscriptionController.getStatus);
-router.post('/subscribe', subscriptionController.subscribe);
+router.post('/create', subscriptionController.create);
+router.post('/verify', subscriptionController.verify);
 router.post('/cancel', subscriptionController.cancel);
 
 export default router;

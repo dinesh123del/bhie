@@ -2,6 +2,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { OAuth2Client } from 'google-auth-library';
 import { z } from 'zod';
 import { env } from '../config/env';
 import { asyncHandler } from '../middleware/asyncHandler';
@@ -20,6 +21,7 @@ const registerSchema = z.object({
     password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 const googleOAuthEnabled = Boolean(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET);
+const googleClient = new OAuth2Client(env.GOOGLE_CLIENT_ID);
 if (googleOAuthEnabled) {
     passport.use(new GoogleStrategy({
         clientID: env.GOOGLE_CLIENT_ID,
@@ -106,7 +108,7 @@ router.post('/login', asyncHandler(async (req, res) => {
             plan: typeof user.getEffectivePlan === 'function' ? user.getEffectivePlan() : user.plan,
             isActive: user.isActive,
             expiryDate: user.planExpiry?.toISOString() || null,
-            recordCount: user.recordCount,
+            usageCount: user.usageCount,
         },
     });
 }));
@@ -133,7 +135,7 @@ router.post('/register', asyncHandler(async (req, res) => {
             plan: ('getEffectivePlan' in user && typeof user.getEffectivePlan === 'function') ? user.getEffectivePlan() : user.plan,
             subscriptionStatus: user.isActive ? 'active' : 'inactive',
             expiryDate: user.planExpiry?.toISOString() || null,
-            recordCount: user.recordCount,
+            usageCount: user.usageCount,
         },
     });
 }));
@@ -165,6 +167,53 @@ router.get('/google/callback', (req, res, next) => {
         res.redirect(redirectUrl.toString());
     })(req, res, next);
 });
+router.post('/google', asyncHandler(async (req, res) => {
+    const { token: googleToken } = req.body;
+    if (!googleToken) {
+        throw new AppError(400, 'Google token is required');
+    }
+    const ticket = await googleClient.verifyIdToken({
+        idToken: googleToken,
+        audience: env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    if (!payload || !payload.email) {
+        throw new AppError(400, 'Invalid Google Token Payload');
+    }
+    let user = await User.findOne({ email: payload.email });
+    if (user) {
+        if (!user.googleId) {
+            user.googleId = payload.sub;
+            await user.save();
+        }
+        if ('refreshSubscriptionStatus' in user && typeof user.refreshSubscriptionStatus === 'function') {
+            await user.refreshSubscriptionStatus();
+        }
+    }
+    else {
+        user = await User.create({
+            name: payload.name || 'Google User',
+            email: payload.email,
+            googleId: payload.sub,
+            role: 'customer',
+            plan: 'free',
+        });
+    }
+    const token = generateToken(user._id.toString(), user.role);
+    res.json({
+        token,
+        user: {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            plan: typeof user.getEffectivePlan === 'function' ? user.getEffectivePlan() : user.plan,
+            isActive: user.isActive,
+            expiryDate: user.planExpiry?.toISOString() || null,
+            usageCount: user.usageCount,
+        },
+    });
+}));
 router.get('/me', authenticateToken, asyncHandler(async (req, res) => {
     const authUser = requireUser(req);
     const user = await User.findById(authUser.userId).select('-password');
@@ -183,7 +232,7 @@ router.get('/me', authenticateToken, asyncHandler(async (req, res) => {
             plan: typeof user.getEffectivePlan === 'function' ? user.getEffectivePlan() : user.plan,
             subscriptionStatus: user.isActive ? 'active' : 'inactive',
             expiryDate: user.planExpiry?.toISOString() || null,
-            recordCount: user.recordCount,
+            usageCount: user.usageCount,
         },
     });
 }));

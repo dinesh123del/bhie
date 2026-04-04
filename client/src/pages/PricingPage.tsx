@@ -8,22 +8,22 @@ const plans = [
     name: 'Starter',
     price: 'Free',
     description: 'For early teams that want a sharper view of business health.',
-    features: ['Core analytics workspace', 'Weekly intelligence summary', 'Up to 3 team members'],
+    features: ['Core analytics workspace', 'Weekly intelligence summary', 'Up to 5 uploads'],
   },
   {
-    name: 'Growth',
-    price: '₹59',
+    name: 'Pro',
+    price: '₹99',
     period: '/month',
     description: 'For scaling companies that need live planning, forecasting, and AI assistance.',
-    features: ['Live business intelligence dashboards', 'Forecasting and predictive insights', 'Unlimited stakeholders', 'Priority implementation support'],
+    features: ['Unlimited uploads', 'AI-powered insights', 'Advanced analytics', 'Priority support', 'Export data'],
     featured: true,
   },
   {
-    name: 'Enterprise',
-    price: '₹119',
+    name: 'Premium',
+    price: '₹299',
     period: '/month',
     description: 'For organizations with advanced governance, integrations, and executive workflows.',
-    features: ['Custom data pipelines', 'Advanced security controls', 'Dedicated success partner', 'Executive reporting design'],
+    features: ['Everything in Pro', 'Custom integrations', 'Advanced reporting', 'Dedicated support', 'API access'],
   },
 ];
 
@@ -103,14 +103,14 @@ export default function PricingPage() {
                 </div>
 
                 <Link
-                  to={plan.name === 'Enterprise' ? '/contact' : '/login'}
+                  to={plan.name === 'Premium' ? '/payments' : '/login'}
                   className={`mt-10 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition hover:scale-[1.02] ${
                     plan.featured
                       ? 'bg-white text-slate-950'
                       : 'border border-white/15 bg-white/5 text-white'
                   }`}
                 >
-                  {plan.name === 'Enterprise' ? 'Contact sales' : 'Get started'}
+                  {plan.name === 'Premium' ? 'Get Premium' : 'Get started'}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>

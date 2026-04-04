@@ -1,39 +1,87 @@
-import { Queue, Worker, QueueEvents } from 'bullmq';
-import { env } from '../config/env.js';
+import { Queue } from 'bullmq';
+import { isRedisConnected } from './redisClient.js';
+
+const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 
 const connection = {
-  url: env.REDIS_URL,
+  url: REDIS_URL,
 };
 
-// --- Queue Definitions ---
+// --- Lazy queue factory ---
+// Queues are only created when Redis is actually available.
+// This prevents BullMQ from crashing at import time.
 
-// 1. Initial event ingestion and normalization
-export const eventProcessingQueue = new Queue('event-processing', { 
-  connection,
-  defaultJobOptions: {
-    attempts: 3,
-    backoff: { type: 'exponential', delay: 1000 },
-    removeOnComplete: true,
+let _eventProcessingQueue: Queue | null = null;
+let _aiProcessingQueue: Queue | null = null;
+let _actionGenerationQueue: Queue | null = null;
+
+const createQueueSafe = (name: string, opts: any): Queue | null => {
+  try {
+    return new Queue(name, opts);
+  } catch (error) {
+    console.warn(`⚠️ Queue "${name}" could not be created (Redis unavailable)`);
+    return null;
   }
+};
+
+// Dummy queue that silently drops jobs when Redis is unavailable
+const dummyQueue = {
+  add: async () => ({ id: 'noop' }),
+  close: async () => {},
+} as unknown as Queue;
+
+export const getEventProcessingQueue = (): Queue => {
+  if (!_eventProcessingQueue && isRedisConnected()) {
+    _eventProcessingQueue = createQueueSafe('event-processing', {
+      connection,
+      defaultJobOptions: {
+        attempts: 3,
+        backoff: { type: 'exponential', delay: 1000 },
+        removeOnComplete: true,
+      },
+    });
+  }
+  return _eventProcessingQueue || dummyQueue;
+};
+
+export const getAiProcessingQueue = (): Queue => {
+  if (!_aiProcessingQueue && isRedisConnected()) {
+    _aiProcessingQueue = createQueueSafe('ai-processing', {
+      connection,
+      defaultJobOptions: {
+        attempts: 2,
+        backoff: { type: 'fixed', delay: 5000 },
+        removeOnComplete: true,
+      },
+    });
+  }
+  return _aiProcessingQueue || dummyQueue;
+};
+
+export const getActionGenerationQueue = (): Queue => {
+  if (!_actionGenerationQueue && isRedisConnected()) {
+    _actionGenerationQueue = createQueueSafe('action-generation', {
+      connection,
+      defaultJobOptions: {
+        attempts: 3,
+        removeOnComplete: true,
+      },
+    });
+  }
+  return _actionGenerationQueue || dummyQueue;
+};
+
+// Legacy named exports for backward compat
+export const eventProcessingQueue = new Proxy({} as Queue, {
+  get: (_target, prop) => (getEventProcessingQueue() as any)[prop],
 });
 
-// 2. High-latency AI processing
-export const aiProcessingQueue = new Queue('ai-processing', { 
-  connection,
-  defaultJobOptions: {
-    attempts: 2,
-    backoff: { type: 'fixed', delay: 5000 },
-    removeOnComplete: true,
-  }
+export const aiProcessingQueue = new Proxy({} as Queue, {
+  get: (_target, prop) => (getAiProcessingQueue() as any)[prop],
 });
 
-// 3. Daily action generation logic
-export const actionGenerationQueue = new Queue('action-generation', { 
-  connection,
-  defaultJobOptions: {
-    attempts: 3,
-    removeOnComplete: true,
-  }
+export const actionGenerationQueue = new Proxy({} as Queue, {
+  get: (_target, prop) => (getActionGenerationQueue() as any)[prop],
 });
 
 export default {

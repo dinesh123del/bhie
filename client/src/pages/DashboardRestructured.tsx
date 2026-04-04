@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   ChevronDown,
   TrendingUp,
-  DollarSign,
+  IndianRupee,
   AlertCircle,
   ArrowUpRight,
   ArrowDownRight,
@@ -17,6 +17,7 @@ import { PremiumCard, PremiumButton, PremiumBadge } from '../components/ui/Premi
 import { useAuth } from '../hooks/useAuth';
 import { api } from '../services/api';
 import { formatCurrency } from '../utils/dashboardIntelligence';
+import Onboarding from '../components/Onboarding';
 
 interface DashboardMetrics {
   totalIncome: number;
@@ -133,6 +134,7 @@ const DashboardRestructured = () => {
 
   return (
     <div className="min-h-screen bg-slate-950">
+      <Onboarding />
       <div className="w-full space-y-6 px-6 py-8 lg:px-8 pt-28">
         {/* PAGE HEADER */}
         <motion.div
@@ -159,7 +161,7 @@ const DashboardRestructured = () => {
 
         {/* TOP SUMMARY CARDS - 4 COLUMN GRID */}
         <motion.div
-          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
+          className="tour-step-overview grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -170,7 +172,7 @@ const DashboardRestructured = () => {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold uppercase text-gray-400">Total Income</span>
-                  <DollarSign className="h-4 w-4 text-green-400" />
+                  <IndianRupee className="h-4 w-4 text-green-400" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">
@@ -194,7 +196,7 @@ const DashboardRestructured = () => {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold uppercase text-gray-400">Total Expenses</span>
-                  <DollarSign className="h-4 w-4 text-red-400" />
+                  <IndianRupee className="h-4 w-4 text-red-400" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-white">
@@ -338,7 +340,7 @@ const DashboardRestructured = () => {
           {/* AI INSIGHTS SECTION */}
           <motion.div
             variants={itemVariants}
-            className="rounded-2xl border border-white/10 bg-white/[0.05] backdrop-blur-sm"
+            className="tour-step-insights rounded-2xl border border-white/10 bg-white/[0.05] backdrop-blur-sm"
           >
             <button
               onClick={() => toggleSection('insights')}
@@ -403,7 +405,7 @@ const DashboardRestructured = () => {
 
         {/* ACTION BUTTONS */}
         <motion.div
-          className="flex flex-wrap gap-3"
+          className="tour-step-actions flex flex-wrap gap-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}

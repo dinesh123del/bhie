@@ -1,9 +1,10 @@
-export type AppPlan = 'free' | 'pro' | 'enterprise';
+export type AppPlan = 'free' | 'pro' | 'premium';
 export type SubscriptionStatus = 'active' | 'inactive' | 'expired';
 
 export interface PlanAwareUser {
   plan?: string;
   subscriptionStatus?: string;
+  usageCount?: number;
   recordCount?: number;
   expiryDate?: string | null;
 }
@@ -28,37 +29,39 @@ export const PLAN_DETAILS: Record<AppPlan, {
   },
   pro: {
     code: 'pro',
-    label: '₹59/month',
-    price: 59,
+    label: '₹99/month',
+    price: 99,
     billingText: 'per month',
     premium: true,
-    features: ['Unlimited uploads', 'AI insights', 'Advanced analytics', 'Priority support'],
+    features: ['Unlimited uploads', 'AI insights', 'Advanced analytics', 'Priority support', 'Export data'],
   },
-  enterprise: {
-    code: 'enterprise',
-    label: '₹119/month',
-    price: 119,
+  premium: {
+    code: 'premium',
+    label: '₹299/month',
+    price: 299,
     billingText: 'per month',
     premium: true,
-    features: ['Everything in Pro', 'Custom integrations', 'Advanced reporting', 'Dedicated support'],
+    features: ['Everything in Pro', 'Custom integrations', 'Advanced reporting', 'Dedicated support', 'API access'],
   },
 };
 
 export const hasPremiumAccess = (user?: PlanAwareUser | null): boolean =>
-  Boolean(user && (user.plan === 'pro' || user.plan === 'enterprise') && user.subscriptionStatus === 'active');
+  Boolean(user && (user.plan === 'pro' || user.plan === 'premium') && user.subscriptionStatus === 'active');
 
 export const canUseAIInsights = (user?: PlanAwareUser | null): boolean => hasPremiumAccess(user);
 
-export const getRemainingUploads = (user?: PlanAwareUser | null): number =>
-  hasPremiumAccess(user) ? Number.POSITIVE_INFINITY : Math.max(0, FREE_UPLOAD_LIMIT - Number(user?.recordCount || 0));
+export const getRemainingUploads = (user?: PlanAwareUser | null): number => {
+  const count = Number(user?.usageCount ?? user?.recordCount ?? 0);
+  return hasPremiumAccess(user) ? Number.POSITIVE_INFINITY : Math.max(0, FREE_UPLOAD_LIMIT - count);
+};
 
 export const canUploadMore = (user?: PlanAwareUser | null): boolean =>
   hasPremiumAccess(user) || getRemainingUploads(user) > 0;
 
 export const getPlanLabel = (plan?: string): string => {
   switch (plan) {
-    case 'enterprise':
-      return 'Enterprise';
+    case 'premium':
+      return 'Premium';
     case 'pro':
       return 'Pro';
     case 'free':

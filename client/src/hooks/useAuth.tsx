@@ -24,10 +24,8 @@ interface AuthContextType {
   validateAuth: () => Promise<void>;
 }
 
-// ✅ FIX: default undefined safe
 const AuthContext = createContext<AuthContextType | null>(null);
 
-// ✅ FIX: safe hook
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -40,7 +38,21 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-// ✅ FIX: remove React.FC (causes TS issues sometimes)
+const normalizeUser = (
+  userData: Pick<AuthUser, 'id' | 'name' | 'email' | 'role'> & Partial<AuthUser>
+): User => ({
+  id: userData.id,
+  name: userData.name,
+  email: userData.email,
+  role: userData.role,
+  plan: userData.plan || 'free',
+  isActive: userData.isActive ?? true,
+  usageCount: userData.usageCount ?? 0,
+  subscriptionStatus: userData.subscriptionStatus || 'inactive',
+  expiryDate: userData.expiryDate ?? userData.planExpiry ?? null,
+  hasPremiumAccess: userData.hasPremiumAccess ?? (userData.plan !== 'free' && userData.isActive !== false),
+});
+
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -48,7 +60,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // ✅ GOOGLE LOGIN FIX (NO RACE CONDITION)
+  // Google OAuth callback handler
   useEffect(() => {
     const handleGoogleAuth = async () => {
       const urlParams = new URLSearchParams(location.search);
@@ -58,12 +70,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (token && fromGoogle) {
         try {
           localStorage.setItem('token', token);
-
           const userData = await authService.getMe();
-
           localStorage.setItem('user', JSON.stringify(userData));
           setUser(userData);
-
           toast.success('Google login successful');
           navigate('/dashboard', { replace: true });
         } catch (error) {
@@ -77,11 +86,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     handleGoogleAuth();
   }, [location.search, navigate]);
 
-  // ✅ AUTH VALIDATION FIX
+  // Auth validation on mount
   const validateAuth = useCallback(async () => {
     try {
       setLoading(true);
-
       const token = localStorage.getItem('token');
 
       if (!token) {
@@ -90,16 +98,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
 
       const userData = await authService.getMe();
-
       localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
     } catch (error) {
       console.error('Auth error:', error);
-
       localStorage.clear();
       setUser(null);
 
-      if (location.pathname !== '/login') {
+      if (location.pathname !== '/login' && location.pathname !== '/' && location.pathname !== '/register' && location.pathname !== '/pricing') {
         toast.error('Session expired');
         navigate('/login', { replace: true });
       }
@@ -112,7 +118,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     validateAuth();
   }, [validateAuth]);
 
-  // ✅ LOGIN
+  // Login
   const login = (
     token: string,
     userData: Pick<AuthUser, 'id' | 'name' | 'email' | 'role'> & Partial<AuthUser>
@@ -120,28 +126,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const normalizedUser = normalizeUser(userData);
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(normalizedUser));
-
     setUser(normalizedUser);
-
     toast.success(`Welcome ${normalizedUser.name}`);
     navigate('/dashboard', { replace: true });
   };
 
-  // ✅ LOGOUT
+  // Logout
   const logout = async () => {
     try {
       await authService.logout();
     } catch (error) {
       console.error(error);
     }
-
     localStorage.clear();
     setUser(null);
-
     navigate('/login', { replace: true });
   };
 
-  // ✅ REFETCH
+  // Refetch user data
   const refetchUser = async () => {
     try {
       const userData = await authService.getMe();
@@ -168,16 +170,3 @@ export function AuthProvider({ children }: AuthProviderProps) {
     </AuthContext.Provider>
   );
 }
-  const normalizeUser = (
-    userData: Pick<AuthUser, 'id' | 'name' | 'email' | 'role'> & Partial<AuthUser>
-  ): User => ({
-    id: userData.id,
-    name: userData.name,
-    email: userData.email,
-    role: userData.role,
-    plan: userData.plan || 'free',
-    isActive: userData.isActive ?? true,
-    recordCount: userData.recordCount ?? 0,
-    subscriptionStatus: userData.subscriptionStatus || 'inactive',
-    expiryDate: userData.expiryDate ?? null,
-  });

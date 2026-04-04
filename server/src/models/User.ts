@@ -11,20 +11,23 @@ export interface UserDocument extends mongoose.Document {
   password: string;
   googleId?: string;
   role: 'admin' | 'user';
-  plan: 'free' | '59' | '119';
+  plan: 'free' | 'pro' | 'premium';
+  isPremium: boolean;
   planExpiry?: Date;
   isActive: boolean;
-  recordCount: number;
+  usageCount: number;
+  subscriptionId?: string;
+  subscriptionStatus?: 'active' | 'cancelled' | 'expired';
   createdAt: Date;
   updatedAt: Date;
   canCreateRecord(): boolean;
   hasPremiumAccess(): boolean;
   refreshSubscriptionStatus(): Promise<void>;
-  getEffectivePlan(): 'free' | '59' | '119';
-  incrementRecordCount(): Promise<void>;
-  decrementRecordCount(): Promise<void>;
-  resetRecordCount(): Promise<void>;
-  upgradePlan(plan: '59' | '119'): Promise<void>;
+  getEffectivePlan(): 'free' | 'pro' | 'premium';
+  incrementUsageCount(): Promise<void>;
+  decrementUsageCount(): Promise<void>;
+  resetUsageCount(): Promise<void>;
+  upgradePlan(plan: 'pro' | 'premium', subscriptionId?: string): Promise<void>;
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -59,8 +62,12 @@ const userSchema = new mongoose.Schema<UserDocument>({
   },
   plan: {
     type: String,
-    enum: ['free', '59', '119'],
+    enum: ['free', 'pro', 'premium'],
     default: 'free',
+  },
+  isPremium: {
+    type: Boolean,
+    default: false,
   },
   planExpiry: {
     type: Date,
@@ -69,9 +76,16 @@ const userSchema = new mongoose.Schema<UserDocument>({
     type: Boolean,
     default: true,
   },
-  recordCount: {
+  usageCount: {
     type: Number,
     default: 0,
+  },
+  subscriptionId: {
+    type: String,
+  },
+  subscriptionStatus: {
+    type: String,
+    enum: ['active', 'cancelled', 'expired'],
   },
 }, {
   timestamps: true,
@@ -89,7 +103,7 @@ userSchema.methods.hasPremiumAccess = function(this: UserDocument) {
   return this.planExpiry.getTime() > Date.now();
 };
 
-userSchema.methods.getEffectivePlan = function(this: UserDocument): 'free' | '59' | '119' {
+userSchema.methods.getEffectivePlan = function(this: UserDocument): 'free' | 'pro' | 'premium' {
   return this.hasPremiumAccess() ? this.plan : 'free';
 };
 
@@ -131,25 +145,25 @@ userSchema.methods.canCreateRecord = function(this: UserDocument) {
     return true;
   }
 
-  return (this.recordCount || 0) < FREE_UPLOAD_LIMIT;
+  return (this.usageCount || 0) < FREE_UPLOAD_LIMIT;
 };
 
-userSchema.methods.incrementRecordCount = async function(this: UserDocument) {
-  this.recordCount = (this.recordCount || 0) + 1;
+userSchema.methods.incrementUsageCount = async function(this: UserDocument) {
+  this.usageCount = (this.usageCount || 0) + 1;
   await this.save();
 };
 
-userSchema.methods.decrementRecordCount = async function(this: UserDocument) {
-  this.recordCount = Math.max(0, (this.recordCount || 0) - 1);
+userSchema.methods.decrementUsageCount = async function(this: UserDocument) {
+  this.usageCount = Math.max(0, (this.usageCount || 0) - 1);
   await this.save();
 };
 
-userSchema.methods.resetRecordCount = async function(this: UserDocument) {
-  this.recordCount = 0;
+userSchema.methods.resetUsageCount = async function(this: UserDocument) {
+  this.usageCount = 0;
   await this.save();
 };
 
-userSchema.methods.upgradePlan = async function(this: UserDocument, plan: '59' | '119') {
+userSchema.methods.upgradePlan = async function(this: UserDocument, plan: 'pro' | 'premium', subscriptionId?: string) {
   const now = new Date();
 
   // Set expiry to 30 days from now for monthly plans
@@ -157,9 +171,14 @@ userSchema.methods.upgradePlan = async function(this: UserDocument, plan: '59' |
   expiryDate.setDate(expiryDate.getDate() + 30);
 
   this.plan = plan;
+  this.isPremium = true;
+  if (subscriptionId) {
+    this.subscriptionId = subscriptionId;
+    this.subscriptionStatus = 'active';
+  }
   this.planExpiry = expiryDate;
   this.isActive = true;
-  this.recordCount = 0;
+  this.usageCount = 0;
   await this.save();
 };
 

@@ -34,15 +34,15 @@ export const Dashboard: React.FC = () => {
 
       // Fetch KPIs
       const summaryRes = await analyticsAPI.getSummary();
-      setKpis(summaryRes.data.kpis);
+      setKpis(summaryRes.kpis);
 
       // Fetch Trends
       const trendsRes = await analyticsAPI.getTrends();
-      setTrends(trendsRes.data.trends);
+      setTrends(trendsRes.trends);
 
       // Fetch Records
       const recordsRes = await recordsAPI.getAll();
-      setRecords(recordsRes.data.slice(0, 5)); // Show last 5
+      setRecords(recordsRes.slice(0, 5)); // Show last 5
     } catch (err: any) {
       console.error('Dashboard error:', err);
       setError(err.response?.data?.message || 'Failed to load dashboard');

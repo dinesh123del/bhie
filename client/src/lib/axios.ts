@@ -74,6 +74,10 @@ api.interceptors.response.use(
       // If there are validation details, keep them attached
       if (data.details) {
         (error as any).details = data.details;
+        
+        if (response.status === 403 && data.details.limitReached && typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('limitReached'));
+        }
       }
     } else if (error.request) {
       errorMessage = 'Network connection issue. Please check your internet.';

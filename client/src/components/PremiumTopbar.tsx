@@ -68,10 +68,15 @@ const PremiumTopbar = () => {
           </button>
 
           {/* Premium Badge */}
-          <div className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-br from-amber-400/10 to-amber-600/10 border border-amber-500/20 shadow-amber-500/5 shadow-lg">
-            <Crown className="w-4 h-4 text-amber-500" fill="currentColor" />
-            <span className="text-xs font-bold text-amber-500 tracking-wide uppercase">Upgrade</span>
-          </div>
+          {(!user?.plan || user.plan === 'free') && (
+            <button 
+              onClick={() => window.dispatchEvent(new CustomEvent('limitReached'))}
+              className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-br from-amber-400/10 to-amber-600/10 border border-amber-500/20 shadow-amber-500/5 shadow-lg hover:shadow-amber-500/20 transition-all cursor-pointer"
+            >
+              <Crown className="w-4 h-4 text-amber-500" fill="currentColor" />
+              <span className="text-xs font-bold text-amber-500 tracking-wide uppercase">Upgrade</span>
+            </button>
+          )}
 
           <div className="h-6 w-px bg-white/10 mx-2 hidden sm:block" />
 

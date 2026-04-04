@@ -1,126 +1,144 @@
 import { Worker, Job } from 'bullmq';
-import { env } from '../config/env.js';
-import Event from '../models/Event.js';
-import BusinessRecord from '../models/Record.js';
-import DailySummary from '../models/DailySummary.js';
-import { OCRService } from '../services/ocrService.js';
-import { aiProcessingQueue } from '../config/queues.js';
+import { isRedisConnected } from '../config/redisClient.js';
 
-const connection = { url: env.REDIS_URL };
+let eventWorkerInstance: Worker | null = null;
+let aiWorkerInstance: Worker | null = null;
 
-/**
- * Event Processing Worker
- * Handles normalization, validation, and read model updates
- */
-export const eventWorker = new Worker('event-processing', async (job: Job) => {
-  const { eventId, businessId, type, data, source } = job.data;
-  console.log(`👷 Worker: Processing event ${eventId} (${type})`);
+export const initEventWorker = () => {
+  if (!isRedisConnected()) {
+    console.warn('⚠️ Event worker skipped (Redis unavailable)');
+    return null;
+  }
+
+  const connection = { url: process.env.REDIS_URL || 'redis://localhost:6379' };
 
   try {
-    const event = await Event.findById(eventId);
-    if (!event) return;
+    eventWorkerInstance = new Worker('event-processing', async (job: Job) => {
+      const { eventId, businessId, type, data, source } = job.data;
+      console.log(`👷 Worker: Processing event ${eventId} (${type})`);
 
-    // 1. If confidence is low, route to AI processing first
-    if (event.confidence < 0.8) {
-      await aiProcessingQueue.add(`ai_${eventId}`, { eventId, businessId, type, data, source });
-      return;
-    }
+      try {
+        const Event = (await import('../models/Event.js')).default;
+        const BusinessRecord = (await import('../models/Record.js')).default;
+        const DailySummary = (await import('../models/DailySummary.js')).default;
+        const { aiProcessingQueue } = await import('../config/queues.js');
 
-    // 2. Update Read Models (CQRS)
-    if (type === 'payment_received' || type === 'expense_added') {
-      // Update Transactions/Records
-      await BusinessRecord.create({
-        userId: businessId, // Assuming businessId maps to userId here for simplicity in this schema
-        type: type === 'payment_received' ? 'income' : 'expense',
-        amount: data.amount,
-        category: data.category || 'general',
-        date: data.date || new Date(),
-        description: data.note || `Event ${source}: ${type}`,
-        status: 'completed',
-        metadata: { eventId }
-      });
+        const event = await Event.findById(eventId);
+        if (!event) return;
 
-      // Update Daily Summary
-      const date = new Date(data.date || new Date());
-      date.setHours(0, 0, 0, 0);
+        if (event.confidence < 0.8) {
+          await aiProcessingQueue.add(`ai_${eventId}`, { eventId, businessId, type, data, source });
+          return;
+        }
 
-      await DailySummary.findOneAndUpdate(
-        { businessId, date },
-        { 
-          $inc: { 
-            totalRevenue: type === 'payment_received' ? data.amount : 0,
-            totalExpenses: type === 'expense_added' ? data.amount : 0,
-            totalOrders: type === 'payment_received' ? 1 : 0
-          }
-        },
-        { upsert: true, new: true }
-      );
-    }
+        if (type === 'payment_received' || type === 'expense_added') {
+          await BusinessRecord.create({
+            userId: businessId,
+            type: type === 'payment_received' ? 'income' : 'expense',
+            amount: data.amount,
+            category: data.category || 'general',
+            date: data.date || new Date(),
+            description: data.note || `Event ${source}: ${type}`,
+            status: 'completed',
+            metadata: { eventId }
+          });
 
-    event.status = 'confirmed';
-    event.processedAt = new Date();
-    await event.save();
+          const date = new Date(data.date || new Date());
+          date.setHours(0, 0, 0, 0);
 
-    // 3. Real-time Dashboard Update
-    const { emitToBusiness } = await import('../socket/socketManager.js');
-    emitToBusiness(String(businessId), 'dashboard_update', {
-      type: 'EVENT_PROCESSED',
-      eventId,
-      businessId,
-      timestamp: new Date().toISOString()
-    });
+          await DailySummary.findOneAndUpdate(
+            { businessId, date },
+            {
+              $inc: {
+                totalRevenue: type === 'payment_received' ? data.amount : 0,
+                totalExpenses: type === 'expense_added' ? data.amount : 0,
+                totalOrders: type === 'payment_received' ? 1 : 0
+              }
+            },
+            { upsert: true, new: true }
+          );
+        }
 
-    console.log(`✅ Worker: Event ${eventId} confirmed and processed`);
+        event.status = 'confirmed';
+        event.processedAt = new Date();
+        await event.save();
 
+        try {
+          const { emitToBusiness } = await import('../socket/socketManager.js');
+          emitToBusiness(String(businessId), 'dashboard_update', {
+            type: 'EVENT_PROCESSED',
+            eventId,
+            businessId,
+            timestamp: new Date().toISOString()
+          });
+        } catch {
+          // Socket emission is best-effort
+        }
+
+        console.log(`✅ Worker: Event ${eventId} confirmed and processed`);
+      } catch (error) {
+        console.error(`❌ Worker Error [Event]:`, error);
+        throw error;
+      }
+    }, { connection });
+
+    console.log('✅ Event worker initialized');
   } catch (error) {
-    console.error(`❌ Worker Error [Event]:`, error);
-    throw error;
+    console.warn('⚠️ Event worker could not be initialized:', error);
   }
-}, { connection });
 
-/**
- * AI Processing Worker
- * Handles complex parsing (OCR, NLP, Multi-Source extraction)
- */
-export const aiWorker = new Worker('ai-processing', async (job: Job) => {
-  const { eventId, businessId, type, data, source } = job.data;
-  console.log(`🤖 AI-Worker: Processing event ${eventId}`);
-
+  // AI Processing Worker
   try {
-    const event = await Event.findById(eventId);
-    if (!event) return;
+    aiWorkerInstance = new Worker('ai-processing', async (job: Job) => {
+      const { eventId, businessId, type, data, source } = job.data;
+      console.log(`🤖 AI-Worker: Processing event ${eventId}`);
 
-    let processedData = { ...data };
-    let confidence = event.confidence;
+      try {
+        const Event = (await import('../models/Event.js')).default;
 
-    if (source === 'ocr' && data.filePath) {
-      const extracted = await OCRService.processDocument(data.filePath);
-      processedData = { ...extracted };
-      confidence = extracted.confidence;
-    } else if (source === 'whatsapp' && data.rawMessage) {
-      // Simulate/Implement AI Message Parser
-      const prompt = `Parse this business message: "${data.rawMessage}". Extract amount, type (income/expense), and category. Response JSON.`;
-      const aiResponse = await (await import('../utils/aiEngine.js')).AIEngine.generateCompletion(prompt);
-      const parsed = JSON.parse(aiResponse.content);
-      processedData = { ...parsed };
-      confidence = parsed.confidence || 0.85;
-    }
+        const event = await Event.findById(eventId);
+        if (!event) return;
 
-    event.data = processedData;
-    event.confidence = confidence;
-    event.status = confidence >= 0.8 ? 'confirmed' : 'pending';
-    await event.save();
+        let processedData = { ...data };
+        let confidence = event.confidence;
 
-    // If now confirmed, push back to event worker for read model updates
-    if (event.status === 'confirmed') {
-      const { eventProcessingQueue } = await import('../config/queues.js');
-      await eventProcessingQueue.add(`reprocess_${eventId}`, {
-        eventId, businessId, type, data: processedData, source
-      });
-    }
+        if (source === 'ocr' && data.filePath) {
+          const { OCRService } = await import('../services/ocrService.js');
+          const extracted = await OCRService.processDocument(data.filePath);
+          processedData = { ...extracted };
+          confidence = extracted.confidence;
+        } else if (source === 'whatsapp' && data.rawMessage) {
+          const prompt = `Parse this business message: "${data.rawMessage}". Extract amount, type (income/expense), and category. Response JSON.`;
+          const { AIEngine } = await import('../utils/aiEngine.js');
+          const aiResponse = await AIEngine.generateCompletion(prompt);
+          const parsed = JSON.parse(aiResponse.content);
+          processedData = { ...parsed };
+          confidence = parsed.confidence || 0.85;
+        }
 
+        event.data = processedData;
+        event.confidence = confidence;
+        event.status = confidence >= 0.8 ? 'confirmed' : 'pending';
+        await event.save();
+
+        if (event.status === 'confirmed') {
+          const { eventProcessingQueue } = await import('../config/queues.js');
+          await eventProcessingQueue.add(`reprocess_${eventId}`, {
+            eventId, businessId, type, data: processedData, source
+          });
+        }
+      } catch (error) {
+        console.error(`❌ AI-Worker Error:`, error);
+        throw error;
+      }
+    }, { connection });
+
+    console.log('✅ AI worker initialized');
   } catch (error) {
-    console.error(`❌ AI-Worker Error:`, error);
-    throw error;
+    console.warn('⚠️ AI worker could not be initialized:', error);
   }
-}, { connection });
+
+  return { eventWorkerInstance, aiWorkerInstance };
+};
+
+export { eventWorkerInstance as eventWorker, aiWorkerInstance as aiWorker };

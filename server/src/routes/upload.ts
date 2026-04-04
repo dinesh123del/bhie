@@ -434,11 +434,11 @@ async function handleRecordUpload(req: AuthRequest, res: Response): Promise<void
 
   const hasPremiumAccess =
     typeof user.hasPremiumAccess === 'function' ? user.hasPremiumAccess() : false;
-  const remainingSlots = hasPremiumAccess ? uploadedFiles.length : Math.max(0, 5 - (user.recordCount || 0));
+  const remainingSlots = hasPremiumAccess ? uploadedFiles.length : Math.max(0, 5 - (user.usageCount || 0));
 
   if (!hasPremiumAccess && uploadedFiles.length > remainingSlots) {
     await cleanupFiles(uploadedFiles);
-    throw new AppError(403, 'Record limit reached. Upgrade your plan or upload fewer files.');
+    throw new AppError(403, "You've reached your free limit", { details: { limitReached: true } });
   }
 
   const items: Array<globalThis.Record<string, unknown>> = [];
@@ -506,7 +506,7 @@ async function handleRecordUpload(req: AuthRequest, res: Response): Promise<void
           });
         }
 
-        user.recordCount = (user.recordCount || 0) + 1;
+        user.usageCount = (user.usageCount || 0) + 1;
 
         items.push({
           file: {

@@ -1,9 +1,10 @@
 import api from '../lib/axios';
 
 export interface SubscriptionStatus {
-  plan: 'free' | '59' | '119';
+  plan: 'free' | 'pro' | 'premium';
   planExpiry?: string | null;
   isActive: boolean;
+  subscriptionStatus?: string;
   hasPremiumAccess: boolean;
   features: PlanFeatures;
 }
@@ -18,7 +19,7 @@ export interface PlanFeatures {
 }
 
 export interface SubscribeRequest {
-  plan: '59' | '119';
+  plan: 'pro' | 'premium';
 }
 
 export const subscriptionService = {
@@ -27,13 +28,30 @@ export const subscriptionService = {
     return response.data.data;
   },
 
-  subscribe: async (data: SubscribeRequest): Promise<{
-    plan: '59' | '119';
-    planExpiry: string;
-    features: PlanFeatures;
+  create: async (plan: 'pro' | 'premium'): Promise<{
+    subscriptionId: string;
+    plan_id: string;
+    key: string;
   }> => {
-    const response = await api.post('/subscription/subscribe', data);
-    return response.data.data;
+    const response = await api.post('/subscription/create', { plan });
+    return response.data;
+  },
+
+  verify: async (payload: {
+    razorpay_payment_id: string;
+    razorpay_signature: string;
+    razorpay_subscription_id: string;
+  }): Promise<{
+    success: boolean;
+    message: string;
+    data: {
+      plan: string;
+      planExpiry: string;
+      features: PlanFeatures;
+    };
+  }> => {
+    const response = await api.post('/subscription/verify', payload);
+    return response.data;
   },
 
   cancel: async (): Promise<{
@@ -45,25 +63,25 @@ export const subscriptionService = {
   }
 };
 
-export const planFeatures: Record<'free' | '59' | '119', PlanFeatures> = {
+export const planFeatures: Record<'free' | 'pro' | 'premium', PlanFeatures> = {
   free: {
-    maxRecords: 10,
+    maxRecords: 5,
     basicInsights: true,
     advancedInsights: false,
     predictions: false,
     reports: false,
     support: 'basic'
   },
-  '59': {
-    maxRecords: -1, // unlimited
+  pro: {
+    maxRecords: -1,
     basicInsights: true,
     advancedInsights: true,
     predictions: false,
     reports: false,
     support: 'priority'
   },
-  '119': {
-    maxRecords: -1, // unlimited
+  premium: {
+    maxRecords: -1,
     basicInsights: true,
     advancedInsights: true,
     predictions: true,

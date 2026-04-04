@@ -53,6 +53,43 @@ export const checkSubscription: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const checkLimit: RequestHandler = async (req, res, next) => {
+  try {
+    if (!req.user) {
+      next(new AppError(401, 'Authentication required'));
+      return;
+    }
+
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      next(new AppError(404, 'User not found'));
+      return;
+    }
+
+    if (user.role === 'admin') {
+      return next(); // admin bypasses all limits
+    }
+
+    // Refresh subscription status
+    await user.refreshSubscriptionStatus();
+
+    if (user.hasPremiumAccess()) {
+      return next(); // Premium users bypass limits
+    }
+
+    // Free users: limit 5 + 1 grace = block at 6
+    if (user.usageCount >= 6) {
+      return next(new AppError(403, "You've reached your free limit", {
+        details: { limitReached: true }
+      }));
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const optionalSubscription: RequestHandler = async (req, res, next) => {
   try {
     if (!req.user) {

@@ -1,0 +1,195 @@
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Shield, Zap, TrendingUp, X, Star } from 'lucide-react';
+import { useAuth } from '../hooks/useAuth';
+import toast from 'react-hot-toast';
+import api from '../lib/axios';
+import paymentService from '../services/paymentService';
+
+const plans = [
+  {
+    id: 'pro' as const,
+    name: 'Pro',
+    price: '₹99',
+    period: '/month',
+    features: [
+      { icon: <TrendingUp size={18} className="text-blue-400" />, text: 'Unlimited uploads' },
+      { icon: <Zap size={18} className="text-purple-400" />, text: 'AI-powered insights' },
+      { icon: <Shield size={18} className="text-indigo-400" />, text: 'Advanced analytics' },
+    ],
+    popular: true,
+  },
+  {
+    id: 'premium' as const,
+    name: 'Premium',
+    price: '₹299',
+    period: '/month',
+    features: [
+      { icon: <Star size={18} className="text-amber-400" />, text: 'Everything in Pro' },
+      { icon: <TrendingUp size={18} className="text-emerald-400" />, text: 'Custom integrations' },
+      { icon: <Shield size={18} className="text-cyan-400" />, text: 'Dedicated support' },
+    ],
+  },
+];
+
+export const UpgradeModal: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<'pro' | 'premium'>('pro');
+  const { user, refetchUser } = useAuth();
+
+  useEffect(() => {
+    const handleLimitReached = () => {
+      setIsOpen(true);
+    };
+
+    window.addEventListener('limitReached', handleLimitReached);
+    return () => window.removeEventListener('limitReached', handleLimitReached);
+  }, []);
+
+  const handleUpgrade = async (plan: 'pro' | 'premium') => {
+    try {
+      setIsProcessing(true);
+      setSelectedPlan(plan);
+
+      // Load Razorpay SDK
+      await paymentService.ensureRazorpayLoaded();
+
+      // Create order via payment route (one-time payment flow)
+      const order = await paymentService.createOrder(plan);
+      const razorpayKey = order.key || import.meta.env.VITE_RAZORPAY_KEY;
+
+      if (!razorpayKey || !window.Razorpay) {
+        throw new Error('Payment gateway unavailable');
+      }
+
+      const rzp = new window.Razorpay({
+        key: razorpayKey,
+        amount: order.amount,
+        currency: order.currency,
+        name: 'BHIE',
+        description: `Upgrade to ${plan === 'pro' ? 'Pro' : 'Premium'}`,
+        order_id: order.orderId,
+        handler: async (response) => {
+          try {
+            const result = await paymentService.verify(response);
+            if (result.success) {
+              toast.success(`Successfully upgraded to ${plan === 'pro' ? 'Pro' : 'Premium'}! 🚀`);
+              setIsOpen(false);
+              await refetchUser();
+            }
+          } catch {
+            toast.error('Payment verification failed. Contact support.');
+          }
+        },
+        prefill: {
+          name: user?.name,
+          email: user?.email,
+        },
+        theme: { color: '#6366f1' },
+        modal: {
+          ondismiss: () => {
+            setIsProcessing(false);
+          },
+        },
+      });
+
+      rzp.on('payment.failed', () => {
+        toast.error('Payment failed or cancelled');
+        setIsProcessing(false);
+      });
+
+      rzp.open();
+    } catch (error: any) {
+      toast.error(error?.displayMessage || error?.message || 'Could not initiate upgrade. Try again.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <AnimatePresence>
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 10 }}
+          className="relative max-w-2xl w-full bg-slate-900 border border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden shadow-indigo-500/20"
+        >
+          {/* Glowing background effects */}
+          <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-50" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+
+          <button
+            onClick={() => setIsOpen(false)}
+            className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors z-10"
+          >
+            <X size={24} />
+          </button>
+
+          <div className="p-8 relative z-10">
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500/20 to-purple-500/20 mb-6 border border-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
+                <span className="text-3xl">🚀</span>
+              </div>
+              <h2 className="text-3xl font-bold text-white mb-3">You're growing fast</h2>
+              <p className="text-indigo-200 text-lg">Choose a plan that fits your needs</p>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 mb-8">
+              {plans.map((plan) => (
+                <div
+                  key={plan.id}
+                  className={`relative bg-slate-800/50 border rounded-xl p-5 cursor-pointer transition-all hover:bg-slate-800/80 ${
+                    selectedPlan === plan.id
+                      ? 'border-indigo-500/60 shadow-[0_0_20px_rgba(99,102,241,0.15)]'
+                      : 'border-slate-700/50'
+                  }`}
+                  onClick={() => setSelectedPlan(plan.id)}
+                >
+                  {plan.popular && (
+                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-500 to-purple-500 px-3 py-0.5 rounded-full text-[10px] font-bold text-white shadow-lg">
+                      Most Popular
+                    </div>
+                  )}
+                  <div className="flex items-baseline gap-1 mb-4 mt-1">
+                    <span className="text-2xl font-black text-white">{plan.price}</span>
+                    <span className="text-sm text-slate-400">{plan.period}</span>
+                  </div>
+                  <ul className="space-y-3">
+                    {plan.features.map((feature, i) => (
+                      <li key={i} className="flex items-center text-slate-300 gap-2.5 text-sm">
+                        <div className="p-0.5 rounded bg-slate-800/80">{feature.icon}</div>
+                        <span>{feature.text}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
+              <button
+                onClick={() => setIsOpen(false)}
+                className="flex-1 py-3 px-4 rounded-xl font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 hover:text-white transition-all order-2 sm:order-1"
+              >
+                Maybe Later
+              </button>
+              <button
+                onClick={() => handleUpgrade(selectedPlan)}
+                disabled={isProcessing}
+                className="flex-1 overflow-hidden relative group py-3 px-4 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] transition-all order-1 sm:order-2 disabled:opacity-70"
+              >
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[100%] group-hover:animate-[shimmer_1.5s_infinite]" />
+                {isProcessing ? 'Processing...' : `Upgrade to ${selectedPlan === 'pro' ? 'Pro' : 'Premium'}`}
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </AnimatePresence>
+  );
+};

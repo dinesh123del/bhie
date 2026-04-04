@@ -1,51 +1,27 @@
-import { callOpenAI, parseAIResponse } from '../utils/openai.js';
-/**
- * Financial Agent
- * Analyzes business financial data to identify problems and opportunities
- */
-export async function analyzeFinancialData(businessData) {
+import { AIEngine } from '../utils/aiEngine.js';
+export async function analyzeFinancialData(businessData, provider) {
     const prompt = `
-You are a financial analyst AI agent. Analyze the following business financial data and provide insights.
+You are a top-tier business intelligence agent. High-impact analysis only. 
+Respond in JSON.
 
-BUSINESS DATA:
-- Revenue: $${businessData.revenue || 0}
-- Expenses: $${businessData.expenses || 0}
-- Previous Revenue: $${businessData.previousRevenue || 0}
-- Customer Count: ${businessData.customerCount || 0}
+DATA:
+- Revenue: $${businessData.revenue}
+- Expenses: $${businessData.expenses}
+- Customers: ${businessData.customerCount}
 
-CRITICAL ANALYSIS REQUIRED:
-1. Profit margin analysis (profit/revenue)
-2. Expense-to-revenue ratio
-3. Financial risks identified
-4. Quick wins for improvement
-5. Red flags (if any)
-
-Provide your analysis in this JSON format:
+REQUIRED JSON:
 {
-  "profitMargin": "X%",
-  "expenseRatio": "Y%",
-  "profitTrend": "positive/negative/stable",
-  "keyFindings": [
-    "finding 1",
-    "finding 2",
-    "finding 3"
-  ],
-  "risks": [
-    "risk 1",
-    "risk 2"
-  ],
-  "recommendations": [
-    "action 1",
-    "action 2"
-  ],
-  "severity": "low/medium/high"
-}
-
-Respond with ONLY the JSON object, no additional text.
-`;
+  "profitMargin": "string",
+  "expenseRatio": "string",
+  "profitTrend": "positive | negative",
+  "keyFindings": ["string"],
+  "risks": ["string"],
+  "recommendations": ["string"],
+  "severity": "low | medium | high"
+}`;
     try {
-        const response = await callOpenAI(prompt);
-        return parseAIResponse(response);
+        const response = await AIEngine.generateCompletion(prompt, { preferredProvider: provider });
+        return JSON.parse(response.content);
     }
     catch (error) {
         console.error('Financial Agent Error:', error);
@@ -55,4 +31,3 @@ Respond with ONLY the JSON object, no additional text.
         };
     }
 }
-export default { analyzeFinancialData };

@@ -216,7 +216,7 @@ const Dashboard = () => {
         return;
       }
 
-      const payload = response.data as DashboardResponse;
+      const payload = response as DashboardResponse;
 
       startTransition(() => {
         setApiData(payload);
@@ -294,7 +294,7 @@ const Dashboard = () => {
     company?.profitMargin ??
     metrics?.kpis?.profitMargin ??
     (revenue > 0 ? (profit / revenue) * 100 : 0);
-  const totalRecords = metrics?.kpis?.totalRecords ?? user?.recordCount ?? 0;
+  const totalRecords = metrics?.kpis?.totalRecords ?? user?.usageCount ?? 0;
   const activeRecords = metrics?.kpis?.activeRecords ?? Math.max(0, Math.round(totalRecords * 0.72));
   const expenseRatio = revenue > 0 ? (expenses / revenue) * 100 : 58;
   const aiInsightsEnabled = canUseAIInsights(user);
