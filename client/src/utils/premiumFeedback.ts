@@ -1,41 +1,82 @@
-// Premium Feedback Utility for Haptics and Sound
+// Premium Feedback Utility for Haptics and Sound using Web Audio API
+// This ensures reliable, zero-latency feedback without external assets
 
-const sounds = {
-  tick: new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3'),
-  chime: new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3'),
-  low: new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3'),
-};
+class FeedbackEngine {
+  private audioContext: AudioContext | null = null;
 
-// Set volumes low for premium feel
-Object.values(sounds).forEach(s => { s.volume = 0.15; });
-
-export const playSound = (type: keyof typeof sounds) => {
-  try {
-    const sound = sounds[type].cloneNode() as HTMLAudioElement;
-    sound.volume = 0.15;
-    sound.play().catch(() => { /* Ignore autoplay blocks */ });
-  } catch (e) {
-    console.warn('Sound play failed', e);
+  private initAudio() {
+    if (!this.audioContext && typeof window !== 'undefined') {
+      const AudioCtx = (window.AudioContext || (window as any).webkitAudioContext);
+      this.audioContext = new AudioCtx();
+    }
+    if (this.audioContext?.state === 'suspended') {
+      this.audioContext.resume();
+    }
   }
-};
 
-export const triggerHaptic = (duration: number | number[] = 10) => {
-  if (typeof navigator !== 'undefined' && navigator.vibrate) {
-    navigator.vibrate(duration as any);
+  private playTone(freq: number, type: OscillatorType, duration: number, volume: number = 0.05) {
+    this.initAudio();
+    if (!this.audioContext) return;
+
+    const osc = this.audioContext.createOscillator();
+    const gain = this.audioContext.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, this.audioContext.currentTime);
+
+    gain.gain.setValueAtTime(volume, this.audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + duration);
+
+    osc.connect(gain);
+    gain.connect(this.audioContext.destination);
+
+    osc.start();
+    osc.stop(this.audioContext.currentTime + duration);
   }
-};
+
+  // Soft "tick" for button clicks
+  tick() {
+    this.playTone(800, 'sine', 0.1, 0.04);
+  }
+
+  // Light "chime" for success
+  chime() {
+    this.playTone(1200, 'sine', 0.3, 0.05);
+    setTimeout(() => this.playTone(1500, 'sine', 0.4, 0.03), 50);
+  }
+
+  // Soft low tone for errors
+  low() {
+    this.playTone(150, 'triangle', 0.4, 0.08);
+  }
+
+  vibrate(ms: number | number[] = 10) {
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      try {
+        navigator.vibrate(ms);
+      } catch (e) {
+        // Ignore haptic failures
+      }
+    }
+  }
+}
+
+const engine = new FeedbackEngine();
 
 export const premiumFeedback = {
   click: () => {
-    playSound('tick');
-    triggerHaptic(10);
+    engine.tick();
+    engine.vibrate(8);
   },
   success: () => {
-    playSound('chime');
-    triggerHaptic([15, 30, 15]);
+    engine.chime();
+    engine.vibrate([10, 30, 10]);
   },
   error: () => {
-    playSound('low');
-    triggerHaptic(50);
+    engine.low();
+    engine.vibrate(50);
+  },
+  haptic: (ms: number = 10) => {
+    engine.vibrate(ms);
   }
 };

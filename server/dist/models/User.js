@@ -58,6 +58,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['active', 'cancelled', 'expired'],
     },
+    pushToken: {
+        type: String,
+        default: null,
+    },
+    profilePic: {
+        type: String,
+        default: null,
+    },
 }, {
     timestamps: true,
 });

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -13,9 +13,11 @@ import {
   Sun,
   Crown
 } from 'lucide-react';
+import { ThemeToggle } from './ThemeToggle';
+import { premiumFeedback } from '../utils/premiumFeedback';
 
 const PremiumTopbar = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [showProfile, setShowProfile] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -23,119 +25,139 @@ const PremiumTopbar = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const triggerHaptic = () => {
-    if ('vibrate' in navigator) {
-      navigator.vibrate(10);
-    }
+  const handleAction = () => {
+    premiumFeedback.click();
   };
 
   return (
     <motion.header
-      className={`fixed top-0 right-0 left-0 lg:left-[auto] lg:w-[calc(100%-280px)] h-20 z-40 px-8 transition-all duration-300 ${
-        isScrolled ? 'backdrop-blur-xl bg-black/20' : 'bg-transparent'
+      className={`fixed top-0 right-0 z-40 px-8 transition-all duration-300 h-20 ${
+        isScrolled 
+          ? 'bg-white/70 dark:bg-[#0f172a]/70 backdrop-blur-xl border-b border-black/[0.03] dark:border-white/5' 
+          : 'bg-transparent'
       }`}
+      style={{ left: 'var(--sidebar-width, auto)' }}
     >
-      <div className="flex items-center h-full justify-between gap-6">
-        {/* Search Bar - Apple Style */}
+      <div className="flex items-center h-full justify-between gap-8">
+        {/* Modern Search */}
         <div className="flex-1 max-w-lg hidden md:block">
           <div className="relative group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 transition-colors group-focus-within:text-blue-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black/20 dark:text-white/20 transition-colors group-focus-within:text-brand-500" />
             <input
               type="text"
-              placeholder="Search Insights..."
-              className="w-full bg-white/5 border border-white/10 rounded-2xl py-2.5 pl-12 pr-12 text-sm text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all"
+              placeholder="Quick search..."
+              className="w-full bg-black/[0.01] dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-2xl py-2.5 pl-11 pr-12 text-sm text-black dark:text-white placeholder-black/20 dark:placeholder-white/20 focus:outline-none focus:ring-4 focus:ring-brand-500/5 focus:border-brand-500/20 transition-all font-medium"
             />
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/5 text-[10px] font-bold text-white/30 border border-white/10">
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 px-2 py-0.5 rounded-lg bg-black/[0.02] dark:bg-white/[0.02] text-[10px] font-bold text-black/20 dark:text-white/20 border border-black/5 dark:border-white/5">
               <Command className="w-3 h-3" />
               <span>K</span>
             </div>
           </div>
         </div>
 
-        {/* Action Section */}
-        <div className="flex items-center gap-4">
-          {/* Notifications */}
+        {/* Global Toolbar */}
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+
           <button
-            onClick={triggerHaptic}
-            className="p-2.5 rounded-2xl bg-white/5 border border-white/10 text-white/50 hover:text-white transition-all relative"
+            onClick={handleAction}
+            className="p-2.5 rounded-2xl bg-black/[0.01] dark:bg-white/[0.02] border border-black/5 dark:border-white/5 text-black/40 dark:text-white/40 hover:text-brand-500 dark:hover:text-brand-400 transition-all relative overflow-hidden group"
           >
             <Bell className="w-5 h-5" />
-            <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-blue-500 border border-blue-500 shadow-blue-500/50 shadow-md animate-pulse" />
+            <span className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-brand-500 shadow-lg shadow-brand-500/50" />
           </button>
 
-          {/* Premium Badge */}
           {(!user?.plan || user.plan === 'free') && (
             <button 
-              onClick={() => window.dispatchEvent(new CustomEvent('limitReached'))}
-              className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-br from-amber-400/10 to-amber-600/10 border border-amber-500/20 shadow-amber-500/5 shadow-lg hover:shadow-amber-500/20 transition-all cursor-pointer"
+              onClick={() => {
+                handleAction();
+                window.dispatchEvent(new CustomEvent('limitReached'));
+              }}
+              className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-2xl bg-brand-500/10 dark:bg-brand-500/10 border border-brand-500/20 text-brand-600 dark:text-brand-400 font-black text-[11px] uppercase tracking-wider hover:bg-brand-500 hover:text-white transition-all shadow-sm"
             >
-              <Crown className="w-4 h-4 text-amber-500" fill="currentColor" />
-              <span className="text-xs font-bold text-amber-500 tracking-wide uppercase">Upgrade</span>
+              <Crown className="w-3.5 h-3.5" fill="currentColor" />
+              Upgrade
             </button>
           )}
 
-          <div className="h-6 w-px bg-white/10 mx-2 hidden sm:block" />
+          <div className="h-6 w-px bg-black/5 dark:bg-white/5 mx-2" />
 
-          {/* User Profile */}
+          {/* User Account */}
           <div className="relative">
             <button
               onClick={() => {
-                triggerHaptic();
+                handleAction();
                 setShowProfile(!showProfile);
               }}
-              className="flex items-center gap-3 p-1.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all border-transparent hover:border-white/10 group"
+              className="flex items-center gap-3 p-1.5 rounded-2xl hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-all group"
             >
-              <div className="w-10 h-10 rounded-xl overflow-hidden shadow-xl ring-2 ring-transparent group-hover:ring-blue-500/20 transition-all">
-                <div className="w-full h-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white font-bold text-lg select-none uppercase">
-                  {user?.name?.charAt(0) || 'U'}
-                </div>
+              <div className="w-9 h-9 rounded-xl overflow-hidden shadow-sm ring-2 ring-transparent group-hover:ring-brand-500/20 transition-all bg-gradient-to-br from-brand-400 to-brand-600 border border-brand-500/50 flex items-center justify-center text-white font-black text-sm uppercase">
+                {user?.name?.charAt(0) || 'U'}
               </div>
-              <div className="hidden lg:block text-left mr-2">
-                <p className="text-sm font-bold text-white tracking-wide truncate max-w-[120px]">{user?.name}</p>
-                <p className="text-[10px] font-bold text-blue-400 tracking-wider uppercase leading-none">{user?.role || 'Member'}</p>
+              <div className="hidden lg:block text-left pr-1">
+                <p className="text-sm font-black text-black dark:text-white tracking-tighter truncate max-w-[120px] leading-none mb-1">
+                  {user?.name}
+                </p>
+                <p className="text-[10px] font-bold text-black/30 dark:text-white/20 uppercase tracking-widest leading-none">
+                  {user?.role || 'User'}
+                </p>
               </div>
-              <ChevronDown className={`w-4 h-4 text-white/30 transition-transform duration-300 hidden sm:block ${showProfile ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-4 h-4 text-black/20 dark:text-white/20 transition-transform duration-300 ${showProfile ? 'rotate-180' : ''}`} />
             </button>
 
-            {/* Profile Dropdown */}
+            {/* Account Popover */}
             <AnimatePresence>
               {showProfile && (
                 <motion.div
-                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 15, scale: 0.95 }}
-                  className="absolute right-0 mt-4 w-72 rounded-3xl bg-slate-900/90 backdrop-blur-2xl border border-white/10 shadow-2xl p-4 overflow-hidden drop-shadow-2xl"
+                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                  className="absolute right-0 mt-4 w-64 rounded-3xl bg-white dark:bg-[#0f172a] border border-black/[0.03] dark:border-white/5 shadow-2xl p-4 z-50 ring-1 ring-black/5 overflow-hidden"
                 >
-                  <div className="mb-4 pb-4 border-b border-white/10">
-                    <p className="text-xs font-bold text-white/30 tracking-widest uppercase mb-2 px-2">Account Summary</p>
-                    <div className="p-3 rounded-2xl bg-white/5 border border-white/10">
-                      <p className="text-sm font-bold text-white mb-1 truncate">{user?.email}</p>
-                      <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-blue-500 shadow-blue-500/50 shadow-md" />
-                        <span className="text-xs text-blue-400 font-bold tracking-wide uppercase leading-none">Active Session</span>
+                  <div className="mb-4 pb-4 border-b border-black/[0.03] dark:border-white/5">
+                    <p className="text-[10px] font-black text-black/20 dark:text-white/20 tracking-widest uppercase mb-3 px-2">Account Registry</p>
+                    <div className="p-3 rounded-2xl bg-black/[0.01] dark:bg-white/[0.01] border border-black/5 dark:border-white/5">
+                      <p className="text-xs font-black text-black dark:text-white mb-1 truncate">{user?.email}</p>
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-[9px] text-black/30 dark:text-white/30 font-black uppercase tracking-widest leading-none">Active Identity</span>
                       </div>
                     </div>
                   </div>
 
                   <div className="space-y-1">
                     {[
-                      { icon: User, label: 'Profile' },
-                      { icon: Settings, label: 'Settings' },
-                      { icon: Moon, label: 'Dark Mode' },
-                      { icon: HelpCircle, label: 'Support' }
+                      { icon: User, label: 'Profile Settings' },
+                      { icon: Settings, label: 'Ecosystem Config' },
+                      { icon: HelpCircle, label: 'Documentation' }
                     ].map((item, i) => (
                       <button
                         key={i}
-                        className="w-full flex items-center gap-3 px-4 py-2.5 rounded-2xl text-white/60 hover:text-white hover:bg-white/5 transition-all text-sm font-medium pr-10"
+                        onClick={handleAction}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-black/50 dark:text-white/40 hover:text-brand-500 dark:hover:text-brand-400 hover:bg-brand-500/5 transition-all text-xs font-black uppercase tracking-widest"
                       >
                         <item.icon className="w-4 h-4" />
                         {item.label}
                       </button>
                     ))}
+                    
+                    {/* Logout Button */}
+                    <div className="pt-2 mt-2 border-t border-black/[0.03] dark:border-white/5">
+                      <button
+                        onClick={() => {
+                          handleAction();
+                          logout();
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-rose-500 hover:bg-rose-500/5 transition-all text-xs font-black uppercase tracking-widest"
+                      >
+                        <div className="w-4 h-4" />
+                        Terminate Session
+                      </button>
+                    </div>
                   </div>
                 </motion.div>
               )}

@@ -117,10 +117,6 @@ const Navbar = () => {
 // ======================= HERO =======================
 const Hero = () => (
   <section className="relative min-h-[100svh] flex items-center justify-center pt-20 px-6 overflow-hidden">
-    {/* Cinematic Gradient Vignette */}
-    <div className="absolute inset-0 bg-gradient-to-b from-black via-[#111] to-black z-0" />
-    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(229,9,20,0.15)_0%,rgba(0,0,0,0)_60%)] z-0" />
-
     <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -128,11 +124,11 @@ const Hero = () => (
         transition={{ duration: 0.8, delay: 4.0 }} // after intro
       >
         <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-6">
-          RUN YOUR BUSINESS<br/>
-          <span className="text-[#E50914]">SMARTER INSIGHTS</span>
+          TRACK EXPENSES<br/>
+          <span className="text-[#E50914]">INSTANTLY FROM RECEIPTS</span>
         </h1>
         <p className="text-lg md:text-2xl text-white/60 max-w-3xl mx-auto mb-10 font-medium">
-          Automatically track, analyze, and grow your business with daily actionable insights delivered straight from your cinematic command center.
+          Stop wasting hours on spreadsheets. Scan any receipt, and let BHIE handle the rest with AI-powered categorization and real-time insights.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -176,9 +172,9 @@ const Problem = () => (
       </div>
       <div className="grid md:grid-cols-3 gap-8">
          {[
-           { title: "Profit Blindness", desc: "You don't know your daily net profit until the end of the month." },
-           { title: "Paralyzing Manual Work", desc: "You waste hours in spreadsheets instead of growing the business." },
-           { title: "Data Without Direction", desc: "You have charts, but no clear decisions on what action to take." },
+           { title: "Manual Entry Pain", desc: "You waste hours typing data from paper receipts into old spreadsheets." },
+           { title: "Tax Compliance Stress", desc: "You struggle to find that one specific receipt during tax season." },
+           { title: "Spending Blindness", desc: "You don't know your real-time budget until it's too late." },
          ].map((item, i) => (
            <motion.div 
              key={i}
@@ -212,9 +208,9 @@ const Solution = () => (
           </p>
           <ul className="space-y-4">
              {[
-               "Auto Tracks Revenue & Expenses",
-               "Generates Real-time Insights",
-               "Provides 3 Daily Revenue-Boosting Actions"
+               "AI-Powered Receipt Scanning",
+               "Automatic Expense Categorization",
+               "Real-time Profit & Loss Dashboard"
              ].map((str, i) => (
                <li key={i} className="flex items-center gap-4 text-white text-lg font-medium">
                  <CheckCircle className="text-[#E50914] w-6 h-6 flex-shrink-0" /> {str}
@@ -243,11 +239,11 @@ const Solution = () => (
 // ======================= FEATURES =======================
 const Features = () => {
   const cards = [
-    { icon: Activity, title: "Auto Data Tracking", desc: "Connect sources and let data ingest silently in the background." },
-    { icon: BarChart2, title: "Cinematic Dashboard", desc: "High-performance interface mapping your entire financial health." },
-    { icon: BrainCircuit, title: "Today's Actions", desc: "Every morning, receive up to 3 strategic actions to grow revenue." },
-    { icon: MessageSquare, title: "WhatsApp Input", desc: "Record expenses directly from a simple text message." },
-    { icon: FileText, title: "OCR Document Parsing", desc: "Upload chaotic PDFs or receipts, and watch them become structured data." },
+    { icon: Activity, title: "Instant Scan", desc: "Snap a photo of any receipt. Our AI extracts merchant, date, and amount in seconds." },
+    { icon: BarChart2, title: "Smart Categorization", desc: "Automatically groups spending into Tax, Business, and Personal categories." },
+    { icon: BrainCircuit, title: "Real-time Analytics", desc: "See your daily profit and loss at a glance with high-contrast charts." },
+    { icon: MessageSquare, title: "WhatsApp Input", desc: "Record expenses directly by texting our simple WhatsApp bot." },
+    { icon: FileText, title: "OCR Document Parsing", desc: "Upload chaotic PDFs or image folders and watch them become structured data." },
   ];
 
   return (
@@ -283,9 +279,9 @@ const HowItWorks = () => (
         <div className="hidden md:block absolute top-[28px] left-[10%] right-[10%] h-[2px] bg-[#333] z-0" />
         
         {[
-          { icon: ShieldCheck, title: "1. Integrate", desc: "Connect banking or upload via OCR." },
-          { icon: Activity, title: "2. Process", desc: "Our engine structure and analyzes the raw inputs." },
-          { icon: BrainCircuit, title: "3. Execute", desc: "You receive intelligence ready for immediate deployment." }
+          { icon: ShieldCheck, title: "1. Snap", desc: "Take a photo of your receipt or upload a PDF." },
+          { icon: Activity, title: "2. Process", desc: "Our AI engines structure the data and categorize it." },
+          { icon: BrainCircuit, title: "3. Analyze", desc: "Watch your dashboard update with actionable insights." }
         ].map((item, i) => (
           <div key={i} className="relative z-10 flex flex-col items-center text-center w-full md:w-1/3">
              <div className="w-16 h-16 rounded-full bg-black border-[4px] border-[#333] flex items-center justify-center mb-6 text-white font-black text-xl shadow-[0_0_30px_rgba(0,0,0,0.8)]">
@@ -432,7 +428,7 @@ export default function LandingPremium() {
   const [introFinished, setIntroFinished] = useState(false);
 
   return (
-    <div className="bg-black min-h-screen text-white font-sans selection:bg-[#E50914] selection:text-white">
+    <div className="min-h-screen text-white font-sans selection:bg-[#E50914] selection:text-white">
       <AnimatePresence>
         {!introFinished && <CinematicIntro onComplete={() => setIntroFinished(true)} />}
       </AnimatePresence>

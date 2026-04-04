@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { motion } from 'framer-motion';
 import { authService } from '../services/authService';
 import { useAuth } from '../hooks/useAuth';
 import axios from 'axios';
+import { GoogleButton } from '../components/auth/GoogleButton';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,7 +14,32 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const token = params.get('token');
+    const from = params.get('from');
+
+    if (token && from === 'google') {
+      setLoading(true);
+      localStorage.setItem('token', token);
+      authService.getMe()
+        .then(user => {
+          if (user) {
+            login(token, user);
+            toast.success('Logged in with Google successfully!');
+          }
+        })
+        .catch(err => {
+          console.error('Google token validation failed:', err);
+          localStorage.removeItem('token');
+          toast.error('Failed to complete Google login');
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [location, login]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -198,10 +224,15 @@ const Login = () => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => navigate('/otp-login')}
-            className="w-full py-3 px-4 bg-white/8 border border-white/20 hover:border-indigo-400/50 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 mb-6"
+            className="w-full py-3 px-4 bg-white/8 border border-white/20 hover:border-indigo-400/50 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 mb-4"
           >
             Login with OTP
           </motion.button>
+
+          {/* Google Login */}
+          <div className="flex justify-center w-full mb-6">
+            <GoogleButton />
+          </div>
 
           {/* Footer */}
           <div className="text-center">

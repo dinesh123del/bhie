@@ -142,11 +142,9 @@ router.post(
 
 import { 
   register as registerController, 
-  login as loginController 
 } from '../controllers/authController.js';
 
 router.post('/register', registerController);
-router.post('/login', loginController);
 
 router.get('/google', (req, res, next) => {
   if (!googleOAuthEnabled) {
@@ -206,8 +204,12 @@ router.post(
     if (user) {
       if (!user.googleId) {
         user.googleId = payload.sub;
-        await user.save();
       }
+      if (payload.picture) {
+        user.profilePic = payload.picture;
+      }
+      await user.save();
+      
       if ('refreshSubscriptionStatus' in user && typeof user.refreshSubscriptionStatus === 'function') {
         await user.refreshSubscriptionStatus();
       }
@@ -216,8 +218,11 @@ router.post(
         name: payload.name || 'Google User',
         email: payload.email,
         googleId: payload.sub,
+        profilePic: payload.picture,
         role: 'user',
         plan: 'free',
+        isActive: true,
+        usageCount: 0,
       });
     }
 
@@ -234,6 +239,7 @@ router.post(
         isActive: user.isActive,
         expiryDate: user.planExpiry?.toISOString() || null,
         usageCount: user.usageCount,
+        profilePic: user.profilePic,
       },
     });
   })
@@ -264,6 +270,7 @@ router.get(
         subscriptionStatus: user.isActive ? 'active' : 'inactive',
         expiryDate: user.planExpiry?.toISOString() || null,
         usageCount: user.usageCount,
+        profilePic: user.profilePic,
       },
     });
   })

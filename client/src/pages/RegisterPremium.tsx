@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { User, Mail, Lock, ArrowRight, AlertCircle, CheckCircle } from 'lucide-react';
 import { registerUser } from '../api';
-import { PremiumButton, PremiumCard } from '../components/ui/PremiumComponents';
+import { PremiumButton, PremiumCard, PremiumInput } from '../components/ui/PremiumComponents';
 import { useAuth } from '../hooks/useAuth';
 import Logo from '../components/Logo';
+import { GoogleButton } from '../components/auth/GoogleButton';
+import { toast } from 'react-hot-toast';
+import { authService } from '../services/authService';
 
 const PremiumRegister = () => {
   const [searchParams] = useSearchParams();
@@ -23,7 +25,32 @@ const PremiumRegister = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const token = params.get('token');
+    const from = params.get('from');
+
+    if (token && from === 'google') {
+      setLoading(true);
+      localStorage.setItem('token', token);
+      authService.getMe()
+        .then(user => {
+          if (user) {
+            login(token, user);
+            toast.success('Welcome to BHIE Premium via Google!');
+          }
+        })
+        .catch(err => {
+          console.error('Google token validation failed:', err);
+          localStorage.removeItem('token');
+          toast.error('Failed to complete Google login');
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [location, login]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,7 +77,7 @@ const PremiumRegister = () => {
       }
     } catch (err: any) {
       console.error('Registration Technical Error:', err);
-      setError('We encountered an issue creating your account. Please try again or contact support.');
+      setError(err.message || 'We encountered an issue creating your account. Please try again or contact support.');
     } finally {
       setLoading(false);
     }
@@ -102,21 +129,19 @@ const PremiumRegister = () => {
         )}
 
         {/* Logo & Header */}
-        <motion.div variants={itemVariants} className="text-center mb-12">
+        <motion.div variants={itemVariants} className="text-center mb-10">
           <div className="flex justify-center mb-6">
-            <Logo size="lg" to="/" subtitle="Business Health Intelligence Engine" />
+            <Logo size="lg" to="/" subtitle="Forge Your Advantage" glow />
           </div>
-          <h1 className="text-4xl font-bold text-white mb-2">Create Account</h1>
-          <p className="text-gray-400 text-lg">Join thousands of users optimizing their business</p>
         </motion.div>
 
         {/* Card */}
         <motion.div variants={itemVariants}>
-          <PremiumCard gradient className="p-8">
+          <PremiumCard extreme className="p-10 backdrop-blur-3xl bg-white/[0.01] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)]">
             {/* Heading */}
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-white mb-2">Get Started</h2>
-              <p className="text-gray-400">Create your BHIE account in less than a minute</p>
+            <div className="mb-10">
+              <h2 className="text-3xl font-black text-white mb-2 tracking-tight">Create Account</h2>
+              <p className="text-gray-400 text-sm font-medium">Join the elite network of business intelligence</p>
             </div>
 
             {/* Error Alert */}
@@ -124,7 +149,7 @@ const PremiumRegister = () => {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-start gap-3"
+                className="mb-8 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-start gap-3"
               >
                 <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
                 <p className="text-sm text-red-200">{error}</p>
@@ -132,90 +157,61 @@ const PremiumRegister = () => {
             )}
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Name */}
-              <motion.div variants={itemVariants}>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Full Name
-                </label>
-                <div className="relative">
-                  <User className="absolute left-4 top-3.5 w-5 h-5 text-gray-500" />
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="John Doe"
-                    className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
-                  />
-                </div>
-              </motion.div>
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <PremiumInput
+                floating
+                label="Full Name"
+                type="text"
+                value={formData.name}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })}
+                icon={<User className="w-5 h-5" />}
+                placeholder="John Doe"
+              />
 
-              {/* Email */}
-              <motion.div variants={itemVariants}>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-3.5 w-5 h-5 text-gray-500" />
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="you@example.com"
-                    className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
-                  />
-                </div>
-              </motion.div>
+              <PremiumInput
+                floating
+                label="Email Address"
+                type="email"
+                value={formData.email}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value })}
+                icon={<Mail className="w-5 h-5" />}
+                placeholder="you@example.com"
+              />
 
-              {/* Password */}
-              <motion.div variants={itemVariants}>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-3.5 w-5 h-5 text-gray-500" />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    placeholder="••••••••"
-                    className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
-                  />
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3.5 text-gray-500 hover:text-gray-400"
-                  >
-                    {showPassword ? '👁' : '👁‍🗨'}
-                  </motion.button>
-                </div>
-              </motion.div>
+              <PremiumInput
+                floating
+                label="Password"
+                type="password"
+                value={formData.password}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, password: e.target.value })}
+                icon={<Lock className="w-5 h-5" />}
+                placeholder="••••••••"
+              />
 
               {/* Terms */}
-              <motion.div variants={itemVariants} className="flex items-start gap-2 pt-2">
+              <motion.div variants={itemVariants} className="flex items-start gap-3 pt-2">
                 <input
                   type="checkbox"
                   id="terms"
-                  className="w-4 h-4 bg-white/10 border border-white/20 rounded accent-indigo-500 mt-1"
+                  className="w-4 h-4 bg-white/10 border border-white/10 rounded accent-sky-500 mt-1 cursor-pointer transition-all focus:ring-sky-500/50"
                   required
                 />
-                <label htmlFor="terms" className="text-xs text-gray-400 leading-relaxed">
-                  I agree to the <a href="#" className="text-indigo-400 hover:text-indigo-300">Terms of Service</a> and{' '}
-                  <a href="#" className="text-indigo-400 hover:text-indigo-300">Privacy Policy</a>
+                <label htmlFor="terms" className="text-[10px] uppercase font-black tracking-widest text-white/40 leading-relaxed cursor-pointer select-none">
+                  Agree to <a href="#" className="text-sky-400 hover:text-sky-300 transition-colors">Terms</a> &{' '}
+                  <a href="#" className="text-sky-400 hover:text-sky-300 transition-colors">Privacy Policy</a>
                 </label>
               </motion.div>
 
               {/* Submit Button */}
-              <motion.div variants={itemVariants} className="pt-4">
+              <motion.div variants={itemVariants} className="pt-6">
                 <PremiumButton
                   type="submit"
                   size="lg"
                   loading={loading}
-                  className="w-full"
+                  className="w-full bg-gradient-to-r from-sky-400 to-indigo-500 hover:from-sky-300 hover:to-indigo-400 text-white border-none shadow-[0_20px_40px_-10px_rgba(56,189,248,0.3)]"
                   icon={<ArrowRight className="w-5 h-5" />}
                 >
-                  {loading ? 'Creating Account...' : 'Create Account'}
+                  {loading ? 'Creating Account...' : 'Get Started'}
                 </PremiumButton>
               </motion.div>
             </form>
@@ -225,6 +221,10 @@ const PremiumRegister = () => {
               <div className="flex-1 h-px bg-white/10" />
               <span className="text-xs text-gray-500 px-2">OR</span>
               <div className="flex-1 h-px bg-white/10" />
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="flex justify-center mb-6">
+              <GoogleButton />
             </motion.div>
 
             {/* Login Link */}

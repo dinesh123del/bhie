@@ -16,6 +16,7 @@ import transactionsRoutes from './transactions.js';
 import subscriptionRoutes from './subscription.js';
 import eventRoutes from './events.js';
 import analyticsIntelRoutes from './analyticsIntelligence.js';
+import notificationRoutes from './notifications.js';
 
 import healthRoutes from './health.js';
 
@@ -57,5 +58,6 @@ router.use('/alerts', alertsRoutes);
 router.use('/insights', insightsRoutes);
 router.use('/transactions', transactionsRoutes);
 router.use('/subscription', subscriptionRoutes);
+router.use('/notifications', notificationRoutes);
 
 export default router;

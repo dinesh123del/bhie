@@ -1,52 +1,46 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { premiumFeedback } from '../../utils/premiumFeedback';
 
-export const TableRowHover: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
-  children,
-  className = '',
-  ...props
-}) => (
+/**
+ * Premium micro-interaction components using Framer Motion
+ */
+
+// Page Transition Component (Elite Spring Physics)
+export const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <motion.div
-    whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', x: 4 }}
-    transition={{ type: 'tween', duration: 0.15 }}
-    className={`transition-colors duration-200 ${className}`}
-    {...(props as any)}
+    initial={{ opacity: 0, y: 30, scale: 0.98 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    exit={{ opacity: 0, y: -20, scale: 0.98 }}
+    transition={{ type: 'spring', stiffness: 200, damping: 20, mass: 0.8 }}
+    className="w-full h-full min-h-screen"
   >
     {children}
   </motion.div>
 );
 
+// Scale on Hover with Spring Physics
 export const ScaleOnHover: React.FC<{ children: React.ReactNode; className?: string }> = ({
   children,
   className = '',
 }) => (
   <motion.div
-    whileHover={{ scale: 1.02 }}
-    whileTap={{ scale: 0.98 }}
-    transition={{ type: 'tween', duration: 0.2 }}
+    whileHover={{ scale: 1.03 }}
+    whileTap={{ scale: 0.95 }}
+    transition={{ type: 'spring', stiffness: 200, damping: 15 }}
     className={className}
+    onMouseEnter={() => premiumFeedback.haptic(5)}
   >
     {children}
   </motion.div>
 );
 
-export const TextAnimated: React.FC<{ children: string; delay?: number }> = ({
-  children,
-  delay = 0,
-}) => (
-  <motion.span
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3, delay }}
-  >
-    {children}
-  </motion.span>
-);
-
+// Staggered List Animation
 export const StaggerList: React.FC<{
   children: React.ReactNode[];
   className?: string;
-}> = ({ children, className = '' }) => (
+  delay?: number;
+}> = ({ children, className = '', delay = 0.1 }) => (
   <motion.div
     className={className}
     initial="hidden"
@@ -54,8 +48,8 @@ export const StaggerList: React.FC<{
     variants={{
       visible: {
         transition: {
-          staggerChildren: 0.1,
-          delayChildren: 0.1,
+          staggerChildren: 0.08,
+          delayChildren: delay,
         },
       },
     }}
@@ -63,8 +57,13 @@ export const StaggerList: React.FC<{
     {React.Children.map(children, (child) => (
       <motion.div
         variants={{
-          hidden: { opacity: 0, y: 20 },
-          visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+          hidden: { opacity: 0, y: 20, scale: 0.96 },
+          visible: { 
+            opacity: 1, 
+            y: 0, 
+            scale: 1,
+            transition: { type: 'spring', stiffness: 150, damping: 18 } 
+          },
         }}
       >
         {child}
@@ -73,188 +72,131 @@ export const StaggerList: React.FC<{
   </motion.div>
 );
 
-export const IconButton: React.FC<
-  React.ButtonHTMLAttributes<HTMLButtonElement> & { icon?: React.ReactNode }
-> = ({ icon, className = '', ...props }) => (
-  <motion.button
-    whileHover={{ scale: 1.1, rotate: 5 }}
-    whileTap={{ scale: 0.95 }}
-    transition={{ type: 'tween', duration: 0.15 }}
-    className={`inline-flex items-center justify-center rounded-lg p-2 hover:bg-white/5 transition-colors duration-200 ${className}`}
-    {...(props as any)}
-  >
-    {icon}
-  </motion.button>
+// Success Check Animation
+export const PremiumSuccessAnimation: React.FC<{ show: boolean; message?: string }> = ({ show, message }) => (
+  <AnimatePresence>
+    {show && (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 1.05 }}
+        onAnimationStart={() => premiumFeedback.success()}
+        className="flex flex-col items-center justify-center p-6 space-y-4"
+      >
+        <div className="relative">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1.2, opacity: 0 }}
+            transition={{ duration: 0.8, repeat: Infinity }}
+            className="absolute inset-0 bg-emerald-400/30 rounded-full"
+          />
+          <motion.svg
+            viewBox="0 0 52 52"
+            className="h-16 w-16 text-emerald-400 relative z-10 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.circle
+              cx="26"
+              cy="26"
+              r="25"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 1, transition: { duration: 0.5 } },
+              }}
+            />
+            <motion.path
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M14.1 27.2l7.1 7.2 16.7-16.8"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 1, transition: { duration: 0.4, delay: 0.4 } },
+              }}
+            />
+          </motion.svg>
+        </div>
+        {message && (
+          <motion.p
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="text-emerald-400 font-bold tracking-tight text-lg"
+          >
+            {message}
+          </motion.p>
+        )}
+      </motion.div>
+    )}
+  </AnimatePresence>
 );
 
-export const SmoothLink: React.FC<React.AnchorHTMLAttributes<HTMLAnchorElement>> = ({
-  children,
-  className = '',
-  ...props
-}) => (
-  <motion.a
-    whileHover={{ x: 4 }}
-    whileTap={{ scale: 0.98 }}
-    transition={{ type: 'tween', duration: 0.2 }}
-    className={`transition-colors duration-200 ${className}`}
-    {...(props as any)}
-  >
-    {children}
-  </motion.a>
-);
-
-export const PulseGlow: React.FC<{ className?: string }> = ({ className = '' }) => (
-  <motion.div
-    animate={{
-      boxShadow: [
-        '0 0 0 0 rgba(99, 102, 241, 0.7)',
-        '0 0 0 10px rgba(99, 102, 241, 0)',
-      ],
-    }}
-    transition={{
-      duration: 2,
-      repeat: Infinity,
-    }}
-    className={`rounded-full ${className}`}
-  />
-);
-
-export const FadeIn: React.FC<{
-  children: React.ReactNode;
-  delay?: number;
-  duration?: number;
-}> = ({ children, delay = 0, duration = 0.4 }) => (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ delay, duration }}
-  >
-    {children}
-  </motion.div>
-);
-
-export const SlideInFromLeft: React.FC<{
-  children: React.ReactNode;
-  delay?: number;
-}> = ({ children, delay = 0 }) => (
-  <motion.div
-    initial={{ opacity: 0, x: -20 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ delay, duration: 0.3 }}
-  >
-    {children}
-  </motion.div>
-);
-
-export const SlideInFromRight: React.FC<{
-  children: React.ReactNode;
-  delay?: number;
-}> = ({ children, delay = 0 }) => (
-  <motion.div
-    initial={{ opacity: 0, x: 20 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ delay, duration: 0.3 }}
-  >
-    {children}
-  </motion.div>
-);
-
-export const NumberTicker: React.FC<{
-  value: number;
-  duration?: number;
-  decimals?: number;
-}> = ({ value, duration = 1, decimals = 0 }) => {
-  const ref = React.useRef<HTMLSpanElement>(null);
-
+// Error Shake Animation
+export const ShakeOnTrigger: React.FC<{ children: React.ReactNode; trigger?: any }> = ({ children, trigger }) => {
   React.useEffect(() => {
-    if (!ref.current) return;
-
-    const controls = {
-      from: 0,
-      to: value,
-    };
-
-    const updateNumber = (v: number) => {
-      if (ref.current) {
-        ref.current.textContent = v.toFixed(decimals);
-      }
-    };
-
-    const startTime = Date.now();
-    const animate = () => {
-      const elapsed = (Date.now() - startTime) / 1000;
-      const progress = Math.min(elapsed / duration, 1);
-      const current = controls.from + (controls.to - controls.from) * progress;
-      updateNumber(current);
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
-
-    animate();
-  }, [value, duration, decimals]);
-
-  export const Shake: React.FC<{ children: React.ReactNode; trigger?: any }> = ({ children, trigger }) => (
-  <motion.div
-    animate={trigger ? { x: [-10, 10, -10, 10, 0] } : {}}
-    transition={{ duration: 0.4 }}
-  >
-    {children}
-  </motion.div>
-);
-
-export const SuccessCheck: React.FC = () => (
-  <motion.svg
-    viewBox="0 0 52 52"
-    className="h-16 w-16 text-emerald-400"
-    initial="hidden"
-    animate="visible"
-  >
-    <motion.circle
-      cx="26"
-      cy="26"
-      r="25"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      variants={{
-        hidden: { pathLength: 0, opacity: 0 },
-        visible: { pathLength: 1, opacity: 1, transition: { duration: 0.5 } },
-      }}
-    />
-    <motion.path
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="3"
-      d="M14.1 27.2l7.1 7.2 16.7-16.8"
-      variants={{
-        hidden: { pathLength: 0, opacity: 0 },
-        visible: { pathLength: 1, opacity: 1, transition: { duration: 0.3, delay: 0.5 } },
-      }}
-    />
-  </motion.svg>
-);
-
-export const CursorParallax: React.FC<{ children: React.ReactNode; factor?: number }> = ({ children, factor = 20 }) => {
-  const [position, setPosition] = React.useState({ x: 0, y: 0 });
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const { clientX, clientY } = e;
-    const { innerWidth, innerHeight } = window;
-    const x = (clientX - innerWidth / 2) / factor;
-    const y = (clientY - innerHeight / 2) / factor;
-    setPosition({ x, y });
-  };
+    if (trigger) {
+      premiumFeedback.error();
+    }
+  }, [trigger]);
 
   return (
     <motion.div
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => setPosition({ x: 0, y: 0 })}
-      animate={{ x: position.x, y: position.y }}
-      transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+      animate={trigger ? { 
+        x: [0, -10, 10, -10, 10, -5, 5, 0],
+        transition: { duration: 0.5, ease: "easeInOut" }
+      } : {}}
     >
       {children}
     </motion.div>
   );
 };
+
+// Cursor Parallax Hook/Component
+export const FloatingCursorParallax: React.FC<{ children: React.ReactNode; intensity?: number }> = ({ 
+  children, 
+  intensity = 50 
+}) => {
+  const [offset, setOffset] = React.useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+    const x = (clientX - innerWidth / 2) / intensity;
+    const y = (clientY - innerHeight / 2) / intensity;
+    setOffset({ x, y });
+  };
+
+  return (
+    <motion.div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => setOffset({ x: 0, y: 0 })}
+      animate={{ x: offset.x, y: offset.y }}
+      transition={{ type: 'spring', stiffness: 100, damping: 25, mass: 1 }}
+      className="relative w-full"
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+// Text Processing Fade
+export const TextProcessingFade: React.FC<{ text: string }> = ({ text }) => (
+  <AnimatePresence mode="wait">
+    <motion.span
+      key={text}
+      initial={{ opacity: 0, filter: 'blur(4px)' }}
+      animate={{ opacity: 1, filter: 'blur(0px)' }}
+      exit={{ opacity: 0, filter: 'blur(4px)' }}
+      transition={{ duration: 0.4 }}
+      className="inline-block"
+    >
+      {text}
+    </motion.span>
+  </AnimatePresence>
+);

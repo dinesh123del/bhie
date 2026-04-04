@@ -33,6 +33,40 @@ router.post('/analyze', authenticateToken, asyncHandler(async (req, res) => {
     }
     res.json(analysisResult);
 }));
+import multer from 'multer';
+import { processDocument } from '../services/documentIntelligenceService.js';
+import { ensureUploadDir, uploadDir, cleanupFiles } from '../utils/uploads.js';
+const storage = multer.diskStorage({
+    destination: async (_req, _file, cb) => {
+        await ensureUploadDir();
+        cb(null, uploadDir);
+    },
+    filename: (_req, file, cb) => {
+        cb(null, `bill-${Date.now()}${file.originalname}`);
+    }
+});
+const upload = multer({ storage });
+router.post('/scan-bill', authenticateToken, upload.single('bill'), asyncHandler(async (req, res) => {
+    if (!req.file)
+        throw new AppError(400, 'No bill image uploaded');
+    try {
+        const result = await processDocument(req.file.path);
+        res.json({
+            success: true,
+            data: {
+                items: result.items,
+                totalAmount: result.amount,
+                date: result.date,
+                confidence: result.confidence,
+                rawText: result.rawText
+            }
+        });
+    }
+    finally {
+        if (req.file)
+            await cleanupFiles([req.file]);
+    }
+}));
 router.get('/history', authenticateToken, (_req, res) => {
     res.json({ history: [], message: 'History feature coming soon' });
 });

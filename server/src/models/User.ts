@@ -18,6 +18,8 @@ export interface UserDocument extends mongoose.Document {
   usageCount: number;
   subscriptionId?: string;
   subscriptionStatus?: 'active' | 'cancelled' | 'expired';
+  pushToken?: string;
+  profilePic?: string;
   createdAt: Date;
   updatedAt: Date;
   canCreateRecord(): boolean;
@@ -87,6 +89,14 @@ const userSchema = new mongoose.Schema<UserDocument>({
   subscriptionStatus: {
     type: String,
     enum: ['active', 'cancelled', 'expired'],
+  },
+  pushToken: {
+    type: String,
+    default: null,
+  },
+  profilePic: {
+    type: String,
+    default: null,
   },
 }, {
   timestamps: true,

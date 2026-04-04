@@ -35,12 +35,25 @@ const apiLimiter = rateLimit({
 
 // 1. Secure CORS
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://client-p21fg3h4c-bhies-projects.vercel.app"
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = env.CLIENT_URLS.length > 0 ? env.CLIENT_URLS : ['http://localhost:5173', 'http://127.0.0.1:5173'];
+    
+    if (env.IS_PRODUCTION) {
+        if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('vercel.app')) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+    } else {
+        callback(null, true);
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
 }));
 
 // Body Parser

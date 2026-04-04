@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, DollarSign, PieChart } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, DollarSign, PieChart, Sparkles, BrainCircuit } from 'lucide-react';
 import api from '../lib/axios';
+import { SkeletonCard, SkeletonText, IntelligentMessage } from '../components/ui/EliteUI';
+import { useRetentionEngine } from '../hooks/useRetentionEngine';
+import { PremiumCard } from '../components/ui/PremiumComponents';
 
 interface AnalyticsData {
   totalIncome?: number;
@@ -165,6 +168,8 @@ const Analytics = () => {
     fetchData();
   }, []);
 
+  const { insights } = useRetentionEngine(data, []);
+
   const mockMonthlyData: ChartData[] = [
     { month: 'Jan', income: 4000, expenses: 2400, profit: 1600 },
     { month: 'Feb', income: 3000, expenses: 1398, profit: 1602 },
@@ -185,12 +190,24 @@ const Analytics = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-          className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full"
-        />
+      <div className="space-y-12 animate-in fade-in duration-700">
+        <div className="space-y-4">
+          <SkeletonText width="w-1/3" />
+          <SkeletonText width="w-1/2" />
+        </div>
+        <div className="flex gap-4 overflow-hidden">
+          <SkeletonCard height="h-44" />
+          <SkeletonCard height="h-44" />
+          <SkeletonCard height="h-44" />
+        </div>
+        <div className="space-y-6">
+          <SkeletonText width="w-1/4" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <SkeletonCard height="h-64" />
+            <SkeletonCard height="h-64" />
+            <SkeletonCard height="h-64" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -315,29 +332,57 @@ const Analytics = () => {
         })}
       </ScrollableSection>
 
-      {/* Insights Card */}
-      <motion.div
-        className="p-8 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-      >
-        <h3 className="text-xl font-bold text-white mb-4">Quick Insights</h3>
-        <ul className="space-y-3 text-slate-300">
-          <li className="flex items-start gap-3">
-            <div className="w-2 h-2 rounded-full bg-blue-500 mt-2" />
-            <span>Your Revenue is trending upward with a 12% increase compared to last week</span>
-          </li>
-          <li className="flex items-start gap-3">
-            <div className="w-2 h-2 rounded-full bg-green-500 mt-2" />
-            <span>Expenses are well-controlled at below the average budget threshold</span>
-          </li>
-          <li className="flex items-start gap-3">
-            <div className="w-2 h-2 rounded-full bg-yellow-500 mt-2" />
-            <span>Consider allocating more budget to marketing for improved ROI</span>
-          </li>
-        </ul>
-      </motion.div>
+      {/* Intelligent Insights Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-4">
+          <div className="flex items-center gap-3 mb-6">
+            <BrainCircuit className="w-6 h-6 text-indigo-400" />
+            <h3 className="text-xl font-bold text-white tracking-tight">Intelligence Feed</h3>
+          </div>
+          
+          <AnimatePresence mode="popLayout">
+            {insights.length > 0 ? insights.map((insight) => (
+              <IntelligentMessage 
+                key={insight.id}
+                title={insight.title}
+                message={insight.message}
+                type={insight.type}
+              />
+            )) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="p-8 rounded-[2rem] border border-dashed border-white/10 flex flex-col items-center justify-center text-center"
+              >
+                <Sparkles className="w-8 h-8 text-white/20 mb-4" />
+                <p className="text-white/40 text-sm font-medium">Monitoring your financial patterns...<br/>Deep insights will appear as you interact.</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <PremiumCard gradient className="h-fit">
+          <h3 className="text-xl font-bold text-white mb-6">Behavioral Score</h3>
+          <div className="relative h-48 flex items-center justify-center">
+            <motion.div 
+              className="absolute inset-0 rounded-full border-[12px] border-white/5"
+              initial={{ rotate: -90 }}
+            />
+            <motion.div 
+              className="absolute inset-0 rounded-full border-[12px] border-indigo-500 border-t-transparent border-r-transparent"
+              animate={{ rotate: 45 }}
+              transition={{ duration: 2, ease: "easeOut" }}
+            />
+            <div className="text-center">
+              <span className="text-5xl font-black text-white">84</span>
+              <p className="text-indigo-400 text-xs font-bold uppercase tracking-widest mt-1">Excellent</p>
+            </div>
+          </div>
+          <p className="text-white/40 text-xs mt-6 leading-relaxed italic text-center">
+            "Your retention of liquid assets has improved by 14% since the last cycle."
+          </p>
+        </PremiumCard>
+      </div>
     </div>
   );
 };

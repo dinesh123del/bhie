@@ -80,6 +80,19 @@ const exportRecords = (records: RecordItem[]) => {
   URL.revokeObjectURL(url);
 };
 
+// Premium Section Wrapper for consistent animations
+const PremiumSection = ({ children, delay = 0, className = "" }: { children: React.ReactNode, delay?: number, className?: string }) => (
+  <motion.section
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+    className={className}
+  >
+    {children}
+  </motion.section>
+);
+
 const PremiumRecords = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
@@ -212,74 +225,76 @@ const PremiumRecords = () => {
           </div>
         </motion.section>
 
-        <section className="grid gap-4 md:grid-cols-3">
-          <PremiumCard hoverable={false} className="border border-white/10">
-            <div className="flex items-start justify-between gap-4">
+        <PremiumSection delay={0.2} className="grid gap-6 md:grid-cols-3">
+          <PremiumCard hoverable className="border-white/5 bg-white/[0.01] backdrop-blur-3xl shadow-2xl group">
+             <div className="absolute inset-0 bg-gradient-to-br from-sky-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="flex items-start justify-between gap-4 relative z-10">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-400">Visible records</p>
-                <p className="mt-3 text-3xl font-black tracking-[-0.08em] text-white">{totals.total}</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/30">Total Documents</p>
+                <p className="mt-3 text-4xl font-black tracking-tighter text-white">{totals.total}</p>
               </div>
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-sky-400">
                 <BarChart3 className="h-5 w-5" />
               </div>
             </div>
           </PremiumCard>
 
-          <PremiumCard hoverable={false} className="border border-white/10">
-            <div className="flex items-start justify-between gap-4">
+          <PremiumCard hoverable className="border-white/5 bg-white/[0.01] backdrop-blur-3xl shadow-2xl group">
+             <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="flex items-start justify-between gap-4 relative z-10">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-400">Revenue</p>
-                <p className="mt-3 text-3xl font-black tracking-[-0.08em] text-white">{formatCurrency(totals.income)}</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/30">Total Revenue</p>
+                <p className="mt-3 text-4xl font-black tracking-tighter text-white">{formatCurrency(totals.income)}</p>
               </div>
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-200">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-400">
                 <CircleDollarSign className="h-5 w-5" />
               </div>
             </div>
           </PremiumCard>
 
-          <PremiumCard hoverable={false} className="border border-white/10">
-            <div className="flex items-start justify-between gap-4">
+          <PremiumCard hoverable className="border-white/5 bg-white/[0.01] backdrop-blur-3xl shadow-2xl group">
+             <div className="absolute inset-0 bg-gradient-to-br from-rose-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="flex items-start justify-between gap-4 relative z-10">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-400">Expenses</p>
-                <p className="mt-3 text-3xl font-black tracking-[-0.08em] text-white">{formatCurrency(totals.expenses)}</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/30">Total Expenses</p>
+                <p className="mt-3 text-4xl font-black tracking-tighter text-white">{formatCurrency(totals.expenses)}</p>
               </div>
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-rose-400/20 bg-rose-500/10 text-rose-200">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-rose-400/20 bg-rose-500/10 text-rose-400">
                 <IndianRupee className="h-5 w-5" />
               </div>
             </div>
           </PremiumCard>
-        </section>
+        </PremiumSection>
 
-        <section className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-          <div className="relative w-full xl:max-w-xl">
-            <Search className="absolute left-4 top-3.5 h-5 w-5 text-ink-400" />
+        <PremiumSection delay={0.3} className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+          <div className="relative w-full xl:max-w-xl group">
+            <Search className="absolute left-4 top-3.5 h-5 w-5 text-white/30 group-focus-within:text-sky-400 transition-colors" />
             <input
               type="text"
-              placeholder="Search by title, category, type, or description"
+              placeholder="Search Intelligence Core..."
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] py-3 pl-12 pr-4 text-white placeholder:text-ink-400 focus:border-sky-300/50 focus:outline-none focus:ring-2 focus:ring-sky-400/20"
+              className="w-full rounded-2xl border border-white/5 bg-white/[0.02] py-3 pl-12 pr-4 text-white placeholder:text-white/20 focus:border-sky-400/50 backdrop-blur-xl focus:outline-none focus:ring-4 focus:ring-sky-400/10 transition-all"
             />
           </div>
 
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {(['all', 'pending', 'in_progress', 'completed', 'cancelled'] as const).map((filter) => (
               <button
                 key={filter}
                 type="button"
                 onClick={() => setStatusFilter(filter)}
-                className={`inline-flex items-center gap-2 rounded-2xl border px-4 py-3 text-sm font-semibold transition-all duration-200 ${
+                className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
                   statusFilter === filter
-                    ? 'border-sky-300/50 bg-sky-400/15 text-white shadow-[0_0_24px_rgba(56,189,248,0.18)]'
-                    : 'border-white/10 bg-white/[0.04] text-ink-300 hover:bg-white/[0.08] hover:text-white'
+                    ? 'border-sky-400/50 bg-sky-400/20 text-white shadow-[0_0_20px_rgba(56,189,248,0.2)]'
+                    : 'border-white/5 bg-white/[0.01] text-white/40 hover:bg-white/5 hover:text-white'
                 }`}
               >
-                <Filter className="h-4 w-4" />
-                {filter === 'all' ? 'All statuses' : formatStatusLabel(filter)}
+                {filter === 'all' ? 'All Records' : formatStatusLabel(filter)}
               </button>
             ))}
           </div>
-        </section>
+        </PremiumSection>
 
         {loading ? (
           <div className="grid gap-4">

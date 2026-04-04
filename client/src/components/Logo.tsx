@@ -55,16 +55,16 @@ const LogoGraphic = ({ size }: { size: LogoSize }) => {
     <div className={`relative ${sizeMap[size].mark}`}>
       <motion.div
         aria-hidden
-        className="absolute inset-0 rounded-[28%] bg-gradient-to-br from-sky-300 via-sky-400 to-indigo-400 shadow-[0_16px_34px_rgba(96,165,250,0.26)]"
+        className="absolute inset-0 rounded-[28%] bg-gradient-to-br from-sky-400 via-purple-500 to-orange-500 shadow-[0_20px_40px_rgba(168,85,247,0.3)]"
         initial={{ opacity: 0.84, scale: 0.94 }}
-        animate={{ opacity: [0.88, 1, 0.9], scale: [0.98, 1.02, 0.99] }}
-        transition={{ duration: 4.6, repeat: Infinity, ease: 'easeInOut' }}
+        animate={{ opacity: [0.9, 1, 0.95], scale: [0.98, 1.05, 0.99] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
         aria-hidden
-        className="absolute -inset-2 rounded-[36%] bg-gradient-to-r from-sky-300/28 via-sky-400/18 to-indigo-400/28 blur-xl"
-        animate={{ opacity: [0.18, 0.38, 0.18], scale: [0.96, 1.04, 0.96] }}
-        transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute -inset-4 rounded-[40%] bg-gradient-to-r from-sky-400/30 via-purple-500/20 to-orange-500/30 blur-2xl"
+        animate={{ opacity: [0.2, 0.5, 0.2], scale: [0.9, 1.1, 0.9] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.svg
         viewBox={current.viewBox}
@@ -138,7 +138,7 @@ const LogoInner = ({
     <LogoGraphic size={size} />
     <div className="relative flex flex-col items-start">
       <motion.span
-        className={`${sizeMap[size].wordmark} font-black tracking-[-0.08em] leading-none bg-gradient-to-r from-sky-200 via-white to-indigo-200 bg-clip-text text-transparent`}
+        className={`${sizeMap[size].wordmark} font-black tracking-[-0.08em] leading-none bg-gradient-to-r from-sky-300 via-purple-300 to-orange-300 bg-clip-text text-transparent`}
         whileHover={{ letterSpacing: '-0.04em' }}
         transition={{ duration: 0.3 }}
       >

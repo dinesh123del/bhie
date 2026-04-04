@@ -1,4 +1,4 @@
-export const API = import.meta.env.VITE_API_URL || "https://bhie-server.onrender.com";
+export const API = import.meta.env.VITE_API_URL || "https://bhie-api.onrender.com";
 
 if (!API) {
   console.error("VITE_API_URL is undefined. API calls may fail.");

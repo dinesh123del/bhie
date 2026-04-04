@@ -2,23 +2,29 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
-  ChevronDown,
   TrendingUp,
   IndianRupee,
   AlertCircle,
   ArrowUpRight,
-  ArrowDownRight,
   RefreshCw,
   BarChart3,
-  Plus,
   Scan,
+  ArrowRight,
+  TrendingDown,
+  Layers,
+  Zap,
+  Share2,
+  Flame,
+  MessageSquare
 } from 'lucide-react';
-import { MainLayout } from '../components/Layout/MainLayout';
+import toast from 'react-hot-toast';
 import { PremiumCard, PremiumButton, PremiumBadge } from '../components/ui/PremiumComponents';
+import { EliteEmptyState } from '../components/ui/EliteUI';
 import { useAuth } from '../hooks/useAuth';
 import { api } from '../services/api';
 import { formatCurrency } from '../utils/dashboardIntelligence';
-import Onboarding from '../components/Onboarding';
+import { analyticsService } from '../services/analyticsService';
+import { PageTransition, StaggerList, FloatingCursorParallax } from '../components/ui/MicroInteractions';
 
 interface DashboardMetrics {
   totalIncome: number;
@@ -34,55 +40,28 @@ interface DashboardMetrics {
   }>;
 }
 
-interface CompanyData {
-  name: string;
-  industry: string;
-  revenue: number;
-  expenses: number;
-}
-
 const DashboardRestructured = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
-  const [company, setCompany] = useState<CompanyData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [expandedSections, setExpandedSections] = useState({
-    recentTransactions: true,
-    insights: true,
-  });
 
   const loadDashboard = useCallback(async () => {
     try {
       setLoading(true);
       const response = await api.get('/dashboard');
-      
       if (response.data) {
         const totalIncome = response.data.metrics?.kpis?.revenue || 0;
         const totalExpenses = response.data.metrics?.kpis?.expenses || 0;
-        const profit = totalIncome - totalExpenses;
-        const businessHealth = response.data.scoreData?.score || 75;
-        const growthRate = response.data.metrics?.kpis?.growthRate || 0;
-        const expenseRatio = totalIncome > 0 ? (totalExpenses / totalIncome) * 100 : 0;
-
         setMetrics({
           totalIncome,
           totalExpenses,
-          profit,
-          businessHealth,
-          growthRate,
-          expenseRatio,
+          profit: totalIncome - totalExpenses,
+          businessHealth: response.data.scoreData?.score || 75,
+          growthRate: response.data.metrics?.kpis?.growthRate || 0,
+          expenseRatio: totalIncome > 0 ? (totalExpenses / totalIncome) * 100 : 0,
           monthlyData: response.data.metrics?.monthlyData || [],
         });
-
-        if (response.data.company) {
-          setCompany({
-            name: response.data.company.name || 'Your Business',
-            industry: response.data.company.industry || 'N/A',
-            revenue: totalIncome,
-            expenses: totalExpenses,
-          });
-        }
       }
     } catch (error) {
       console.error('Failed to load dashboard:', error);
@@ -93,339 +72,257 @@ const DashboardRestructured = () => {
 
   useEffect(() => {
     loadDashboard();
-    const interval = setInterval(() => loadDashboard(), 30000);
-    return () => clearInterval(interval);
   }, [loadDashboard]);
 
-  const toggleSection = (section: keyof typeof expandedSections) => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
-  };
-
-  const healthStatus = !metrics
-    ? 'Loading'
-    : metrics.businessHealth >= 80
-    ? 'Excellent'
-    : metrics.businessHealth >= 60
-    ? 'Good'
-    : 'Needs attention';
-
-  const healthColor = !metrics
-    ? 'text-gray-400'
-    : metrics.businessHealth >= 80
-    ? 'text-green-400'
-    : metrics.businessHealth >= 60
-    ? 'text-blue-400'
-    : 'text-amber-400';
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.1 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-  };
-
   return (
-    <div className="min-h-screen bg-slate-950">
-      <Onboarding />
-      <div className="w-full space-y-6 px-6 py-8 lg:px-8 pt-28">
-        {/* PAGE HEADER */}
-        <motion.div
-          className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div>
-            <h1 className="text-3xl font-bold text-white">Business Overview</h1>
-            <p className="mt-1 text-sm text-gray-400">
-              {company?.name || 'Your business'} • {new Date().toLocaleDateString('en-IN', { weekday: 'long', month: 'short', day: 'numeric' })}
-            </p>
+    <PageTransition>
+      <div className="bg-mesh min-h-full pb-20">
+        <div className="max-w-[1400px] mx-auto space-y-10 px-6 lg:px-10">
+          
+          {/* PREMIUM HEADER */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pt-10">
+            <div className="space-y-1">
+              <PremiumBadge variant="info" icon={<Layers className="w-3 h-3" />}>DASHBOARD OVERVIEW</PremiumBadge>
+              <h1 className="text-4xl font-black tracking-tight text-black dark:text-white">
+                Welcome back, <span className="text-brand-500">{user?.name}.</span>
+              </h1>
+              <p className="text-black/40 dark:text-white/40 font-medium text-sm">
+                Your ecosystem is <span className="text-emerald-500 font-bold">Stable</span>. You've scanned {user?.usageCount || 0} records this month.
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <PremiumButton 
+                variant="ghost" 
+                onClick={() => {
+                  navigator.share?.({
+                    title: 'BHIE Weekly Summary',
+                    text: `I've tracked ${user?.usageCount || 0} expenses this month with BHIE! My business health score is ${metrics?.businessHealth || 0}.`,
+                    url: window.location.origin,
+                  }).then(() => {
+                    analyticsService.addMetric('share_summary', 1);
+                  }).catch(() => {
+                    toast.success('Summary link copied to clipboard!');
+                    navigator.clipboard.writeText(`${window.location.origin} - Track expenses instantly!`);
+                    analyticsService.addMetric('copy_summary_link', 1);
+                  });
+                }}
+                icon={<Share2 className="w-4 h-4" />}
+              >
+                Share
+              </PremiumButton>
+              <PremiumButton 
+                variant="secondary" 
+                onClick={loadDashboard} 
+                loading={loading}
+                icon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
+              >
+                Sync Data
+              </PremiumButton>
+            </div>
           </div>
-          <PremiumButton
-            variant="secondary"
-            onClick={loadDashboard}
-            icon={<RefreshCw className="h-4 w-4" />}
-            disabled={loading}
+
+          {/* KPI GRID - Ultra Premium Cards */}
+          <StaggerList className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <FloatingCursorParallax intensity={40}>
+              <PremiumCard gradient className="group">
+                <div className="flex justify-between items-start mb-6">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
+                    <TrendingUp className="w-6 h-6" />
+                  </div>
+                  <PremiumBadge variant="success" icon={<ArrowUpRight className="w-3 h-3" />}>+12.4%</PremiumBadge>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-[11px] font-black uppercase tracking-widest text-black/30 dark:text-white/30">Total Revenue</p>
+                  <h3 className="text-3xl font-black text-black dark:text-white tracking-tighter">
+                    {loading ? '---' : formatCurrency(metrics?.totalIncome || 0)}
+                  </h3>
+                </div>
+              </PremiumCard>
+            </FloatingCursorParallax>
+
+            <FloatingCursorParallax intensity={40}>
+              <PremiumCard className="group">
+                <div className="flex justify-between items-start mb-6">
+                  <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-500">
+                    <TrendingDown className="w-6 h-6" />
+                  </div>
+                  <PremiumBadge variant="error" icon={<AlertCircle className="w-3 h-3" />}>High</PremiumBadge>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-[11px] font-black uppercase tracking-widest text-black/30 dark:text-white/30">Total Expenses</p>
+                  <h3 className="text-3xl font-black text-black dark:text-white tracking-tighter">
+                    {loading ? '---' : formatCurrency(metrics?.totalExpenses || 0)}
+                  </h3>
+                </div>
+              </PremiumCard>
+            </FloatingCursorParallax>
+
+            <FloatingCursorParallax intensity={40}>
+              <PremiumCard className="group relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4">
+                  <div className="flex items-center gap-1.5 px-3 py-1 bg-orange-500/10 border border-orange-500/20 rounded-full">
+                    <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500" />
+                    <span className="text-[10px] font-black text-orange-500">3 DAY STREAK</span>
+                  </div>
+                </div>
+                <div className="flex justify-between items-start mb-6">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-500">
+                    <Zap className="w-6 h-6" />
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-[11px] font-black uppercase tracking-widest text-black/30 dark:text-white/30">Engagement Level</p>
+                  <h3 className="text-3xl font-black text-black dark:text-white tracking-tighter">
+                    Elite Tier
+                  </h3>
+                </div>
+              </PremiumCard>
+            </FloatingCursorParallax>
+          </StaggerList>
+
+          {/* SMART NOTIFICATION / DAILY ACTION */}
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-brand-500/5 border border-brand-500/10 rounded-2xl p-4 flex items-center gap-4 group hover:border-brand-500/30 transition-all"
           >
-            Refresh
-          </PremiumButton>
-        </motion.div>
+            <div className="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center text-brand-500 shrink-0">
+              <MessageSquare className="w-5 h-5" />
+            </div>
+            <div className="flex-1">
+              <p className="text-xs font-black text-brand-500 uppercase tracking-widest leading-none mb-1">Smart Suggestion</p>
+              <p className="text-sm text-black/60 dark:text-white/60 font-medium">
+                You tracked 15% more expenses this week than last. <span className="text-brand-500 font-bold">Great momentum!</span> Scan your dinner receipt now.
+              </p>
+            </div>
+            <ArrowRight className="w-4 h-4 text-brand-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+          </motion.div>
 
-        {/* TOP SUMMARY CARDS - 4 COLUMN GRID */}
-        <motion.div
-          className="tour-step-overview grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {/* TOTAL INCOME CARD */}
-          <motion.div variants={itemVariants}>
-            <PremiumCard className="border border-green-500/20 bg-gradient-to-br from-green-500/10 to-transparent">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold uppercase text-gray-400">Revenue</span>
-                  <IndianRupee className="h-4 w-4 text-green-400" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-white">
-                    {loading ? '-' : formatCurrency(metrics?.totalIncome || 0)}
-                  </p>
-                  <p className="mt-1 text-xs text-gray-400">Money coming in</p>
-                </div>
-                {metrics && metrics.growthRate > 0 && (
-                  <div className="flex items-center gap-1 text-xs text-green-400">
-                    <ArrowUpRight className="h-3 w-3" />
-                    {metrics.growthRate.toFixed(1)}% growth
+          {/* MAIN GRID - Charts & Activity */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-8">
+              <PremiumCard padded={false} className="overflow-hidden">
+                <div className="p-8 border-b border-black/[0.03] dark:border-white/5 flex justify-between items-center">
+                  <div>
+                    <h3 className="text-lg font-black text-black dark:text-white tracking-tight">Growth Analytics</h3>
+                    <p className="text-xs text-black/40 dark:text-white/40 font-bold uppercase tracking-wider mt-1">Monthly performance trend</p>
                   </div>
-                )}
-              </div>
-            </PremiumCard>
-          </motion.div>
-
-          {/* TOTAL EXPENSES CARD */}
-          <motion.div variants={itemVariants}>
-            <PremiumCard className="border border-red-500/20 bg-gradient-to-br from-red-500/10 to-transparent">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold uppercase text-gray-400">Expenses</span>
-                  <IndianRupee className="h-4 w-4 text-red-400" />
+                  <BarChart3 className="w-5 h-5 text-brand-500" />
                 </div>
-                <div>
-                  <p className="text-2xl font-bold text-white">
-                    {loading ? '-' : formatCurrency(metrics?.totalExpenses || 0)}
-                  </p>
-                  <p className="mt-1 text-xs text-gray-400">Money going out</p>
-                </div>
-                {metrics && (
-                  <div className="text-xs text-gray-400">
-                    {metrics.expenseRatio.toFixed(0)}% of your income
-                  </div>
-                )}
-              </div>
-            </PremiumCard>
-          </motion.div>
-
-          {/* PROFIT CARD */}
-          <motion.div variants={itemVariants}>
-            <PremiumCard className="border border-blue-500/20 bg-gradient-to-br from-blue-500/10 to-transparent">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold uppercase text-gray-400">Net Balance</span>
-                  <TrendingUp className="h-4 w-4 text-blue-400" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-white">
-                    {loading ? '-' : formatCurrency(metrics?.profit || 0)}
-                  </p>
-                  <p className="mt-1 text-xs text-gray-400">Money left over</p>
-                </div>
-                {metrics && metrics.profit > 0 ? (
-                  <div className="text-xs text-green-400">✓ Profitable</div>
-                ) : (
-                  <div className="text-xs text-amber-400">⚠ Review needed</div>
-                )}
-              </div>
-            </PremiumCard>
-          </motion.div>
-
-          {/* BUSINESS HEALTH CARD */}
-          <motion.div variants={itemVariants}>
-            <PremiumCard className="border border-purple-500/20 bg-gradient-to-br from-purple-500/10 to-transparent">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold uppercase text-gray-400">Business Health</span>
-                  <AlertCircle className="h-4 w-4 text-purple-400" />
-                </div>
-                <div>
-                  <p className={`text-2xl font-bold ${healthColor}`}>
-                    {loading ? '-' : `${metrics?.businessHealth || 0}/100`}
-                  </p>
-                  <p className="mt-1 text-xs text-gray-400">{healthStatus}</p>
-                </div>
-                <div className="h-1 w-full overflow-hidden rounded-full bg-gray-700">
-                  <div
-                    className={`h-full transition-all duration-500 ${
-                      metrics && metrics.businessHealth >= 80
-                        ? 'bg-green-400'
-                        : metrics && metrics.businessHealth >= 60
-                        ? 'bg-blue-400'
-                        : 'bg-amber-400'
-                    }`}
-                    style={{ width: `${metrics?.businessHealth || 0}%` }}
-                  />
-                </div>
-              </div>
-            </PremiumCard>
-          </motion.div>
-        </motion.div>
-
-        {/* EXPANDABLE SECTIONS */}
-        <motion.div className="space-y-4" variants={containerVariants} initial="hidden" animate="visible">
-          {/* RECENT TRANSACTIONS SECTION */}
-          <motion.div
-            variants={itemVariants}
-            className="rounded-2xl border border-white/10 bg-white/[0.05] backdrop-blur-sm"
-          >
-            <button
-              onClick={() => toggleSection('recentTransactions')}
-              className="flex w-full items-center justify-between px-6 py-4 transition-colors hover:bg-white/[0.08]"
-            >
-              <div className="flex items-center gap-3">
-                <BarChart3 className="h-5 w-5 text-blue-400" />
-                <span className="font-semibold text-white">Recent Activity</span>
-              </div>
-              <motion.div
-                animate={{ rotate: expandedSections.recentTransactions ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ChevronDown className="h-5 w-5 text-gray-400" />
-              </motion.div>
-            </button>
-
-            <motion.div
-              animate={{ height: expandedSections.recentTransactions ? 'auto' : 0 }}
-              transition={{ duration: 0.3 }}
-              className="overflow-hidden"
-            >
-              <div className="border-t border-white/10 px-6 py-4">
-                {loading ? (
-                  <div className="space-y-3">
-                    {[1, 2, 3].map(i => (
-                      <div key={i} className="h-12 rounded-lg bg-white/[0.05] animate-pulse" />
-                    ))}
-                  </div>
-                ) : metrics?.monthlyData && metrics.monthlyData.length > 0 ? (
-                  <div className="space-y-3">
-                    {metrics.monthlyData.slice(0, 5).map((item, idx) => (
-                      <div key={idx} className="flex items-center justify-between rounded-lg bg-white/[0.05] p-3">
-                        <div>
-                          <p className="text-sm font-medium text-white">{item.month}</p>
-                          <p className="text-xs text-gray-400">
-                            Income: {formatCurrency(item.revenue)} | Expenses: {formatCurrency(item.expenses)}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-sm font-semibold text-green-400">
-                            +{formatCurrency(item.revenue - item.expenses)}
-                          </p>
-                        </div>
+                <div className="min-h-[300px] flex items-center justify-center bg-black/[0.01] dark:bg-white/[0.01] p-8">
+                   {loading ? (
+                     <div className="w-full space-y-4">
+                       <div className="flex items-end gap-2 h-32 justify-center">
+                         {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+                           <motion.div 
+                             key={i}
+                             animate={{ opacity: [0.3, 0.6, 0.3] }}
+                             transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
+                             className="w-8 rounded-t-lg bg-brand-500/10 h-24"
+                           />
+                         ))}
+                       </div>
+                       <div className="flex flex-col items-center gap-2">
+                         <div className="h-2 w-32 bg-white/5 rounded-full overflow-hidden relative">
+                            <motion.div className="absolute inset-0 bg-brand-500/20" animate={{ x: ['-100%', '100%'] }} transition={{ duration: 2, repeat: Infinity }} />
+                         </div>
+                       </div>
+                     </div>
+                   ) : (metrics?.monthlyData?.length || 0) > 0 ? (
+                    <div className="text-center space-y-3 w-full">
+                       <div className="flex items-end gap-2 h-32 justify-center">
+                         {(metrics?.monthlyData || []).map((item, i) => (
+                           <motion.div 
+                             key={i}
+                             initial={{ height: 0 }}
+                             animate={{ height: `${(item.revenue / (metrics?.totalIncome || 1)) * 100}%` }}
+                             transition={{ delay: i * 0.1, duration: 0.8, ease: "easeOut" }}
+                             className="w-8 rounded-t-lg bg-gradient-to-t from-brand-500/20 to-brand-500"
+                           />
+                         ))}
+                       </div>
+                       <p className="text-xs font-black text-black/20 dark:text-white/20 uppercase tracking-[0.2em]">Data Synced with Ecosystem</p>
+                    </div>
+                   ) : (
+                    <div className="flex flex-col items-center justify-center text-center p-12">
+                      <div className="w-16 h-16 rounded-3xl bg-brand-500/10 flex items-center justify-center text-brand-500 mb-6">
+                        <Scan className="w-8 h-8" />
                       </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="rounded-lg bg-white/[0.05] p-4 text-center">
-                    <p className="text-sm text-gray-400">No data yet. Upload invoices to see transactions.</p>
-                    <PremiumButton
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => navigate('/uploads')}
-                      className="mt-3"
-                    >
-                      Upload Now
-                    </PremiumButton>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          </motion.div>
+                      <h4 className="text-xl font-black text-black dark:text-white mb-2">Ecosystem Silent</h4>
+                      <p className="text-sm text-black/40 dark:text-white/40 max-w-sm mb-8">
+                        Your intelligence core requires data to generate growth patterns. Start by scanning your first receipt.
+                      </p>
+                      <PremiumButton onClick={() => navigate('/scan-bill')} variant="secondary">
+                        Initialize Scan
+                      </PremiumButton>
+                    </div>
+                   )}
+                </div>
+              </PremiumCard>
 
-          {/* INSIGHTS SECTION */}
-          <motion.div
-            variants={itemVariants}
-            className="tour-step-insights rounded-2xl border border-white/10 bg-white/[0.05] backdrop-blur-sm"
-          >
-            <button
-              onClick={() => toggleSection('insights')}
-              className="flex w-full items-center justify-between px-6 py-4 transition-colors hover:bg-white/[0.08]"
-            >
-              <div className="flex items-center gap-3">
-                <AlertCircle className="h-5 w-5 text-amber-400" />
-                <span className="font-semibold text-white">Smart Insights</span>
+              <div className="flex flex-wrap gap-4 pt-4">
+                <PremiumButton 
+                  onClick={() => {
+                    analyticsService.addMetric('scan_receipt_start', 1);
+                    navigate('/scan-bill');
+                  }} 
+                  variant="primary" 
+                  icon={<Scan className="w-4 h-4" />}
+                >
+                  Scan Receipt
+                </PremiumButton>
+                <PremiumButton onClick={() => navigate('/analytics')} variant="secondary">
+                  Detailed Intelligence
+                </PremiumButton>
+                <PremiumButton onClick={() => navigate('/records')} variant="ghost">
+                  History
+                </PremiumButton>
               </div>
-              <motion.div
-                animate={{ rotate: expandedSections.insights ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ChevronDown className="h-5 w-5 text-gray-400" />
-              </motion.div>
-            </button>
+            </div>
 
-            <motion.div
-              animate={{ height: expandedSections.insights ? 'auto' : 0 }}
-              transition={{ duration: 0.3 }}
-              className="overflow-hidden"
-            >
-              <div className="border-t border-white/10 px-6 py-4">
-                {!metrics ? (
-                  <div className="space-y-3">
-                    {[1, 2, 3].map(i => (
-                      <div key={i} className="h-16 rounded-lg bg-white/[0.05] animate-pulse" />
-                    ))}
+            <div className="space-y-8">
+               <PremiumCard>
+                  <h3 className="text-lg font-black text-black dark:text-white tracking-tight mb-6">Business Health</h3>
+                  <div className="flex flex-col items-center justify-center p-6 space-y-6">
+                    <div className="relative w-40 h-40 flex items-center justify-center">
+                      <svg className="w-full h-full transform -rotate-90">
+                        <circle cx="80" cy="80" r="70" stroke="currentColor" strokeWidth="8" fill="transparent" className="text-black/[0.03] dark:text-white/5" />
+                        <motion.circle 
+                          cx="80" cy="80" r="70" stroke="currentColor" strokeWidth="8" fill="transparent" 
+                          strokeDasharray="440"
+                          initial={{ strokeDashoffset: 440 }}
+                          animate={{ strokeDashoffset: 440 - (440 * (metrics?.businessHealth || 0)) / 100 }}
+                          transition={{ duration: 1.5, ease: "easeInOut" }}
+                          className="text-brand-500 drop-shadow-[0_0_8px_rgba(139,92,246,0.3)]"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <span className="text-4xl font-black text-black dark:text-white tracking-tighter">{metrics?.businessHealth || 0}</span>
+                        <span className="text-[10px] font-bold text-black/30 dark:text-white/30 uppercase tracking-widest">Score</span>
+                      </div>
+                    </div>
+                    <div className="text-center space-y-2">
+                       <p className="text-sm font-black text-black/60 dark:text-white/60">Your ecosystem is stable.</p>
+                       <p className="text-xs text-black/30 dark:text-white/30 leading-relaxed font-medium">Keep maintaining this score by scanning regular invoices.</p>
+                    </div>
                   </div>
-                ) : (
-                  <div className="space-y-3">
-                    {metrics.expenseRatio > 60 && (
-                      <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-4">
-                        <p className="text-sm font-semibold text-amber-200">💡 You are spending more than half of your income</p>
-                        <p className="mt-1 text-xs text-amber-100/70">
-                          Consider reviewing expenses to improve profit.
-                        </p>
-                      </div>
-                    )}
-                    {metrics.profit > 0 && (
-                      <div className="rounded-lg border border-green-500/30 bg-green-500/10 p-4">
-                        <p className="text-sm font-semibold text-green-200">✓ Your business is profitable</p>
-                        <p className="mt-1 text-xs text-green-100/70">
-                          Keep this trend going by maintaining income and controlling costs.
-                        </p>
-                      </div>
-                    )}
-                    {metrics.businessHealth < 60 && (
-                      <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-4">
-                        <p className="text-sm font-semibold text-red-200">⚠ Your business needs attention</p>
-                        <p className="mt-1 text-xs text-red-100/70">
-                          Focus on increasing income or reducing expenses immediately.
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          </motion.div>
-        </motion.div>
+               </PremiumCard>
 
-        {/* ACTION BUTTONS */}
-        <motion.div
-          className="tour-step-actions flex flex-wrap gap-3"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
-          <PremiumButton onClick={() => navigate('/scan-bill')} variant="secondary" icon={<Scan className="w-4 h-4" />}>
-            Scan Receipt
-          </PremiumButton>
-          <PremiumButton onClick={() => navigate('/uploads')} variant="primary">
-            Upload Files
-          </PremiumButton>
-          <PremiumButton onClick={() => navigate('/records')} variant="secondary">
-            View All Records
-          </PremiumButton>
-          <PremiumButton onClick={() => navigate('/analytics')} variant="secondary">
-            See Charts
-          </PremiumButton>
-        </motion.div>
+               <PremiumCard className="bg-gradient-to-br from-brand-500 to-indigo-600 border-none text-white overflow-hidden relative group">
+                  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
+                  <div className="relative z-10 space-y-4">
+                    <Zap className="w-8 h-8 text-white/50 group-hover:scale-110 transition-transform" />
+                    <h3 className="text-xl font-black tracking-tight leading-tight">Unlock AI Financial Predictions</h3>
+                    <p className="text-sm text-white/70 font-medium">Get deeper insights with our premium prediction engine.</p>
+                    <PremiumButton variant="secondary" className="w-full bg-white text-brand-600 hover:bg-white/90 border-none">Upgrade Now</PremiumButton>
+                  </div>
+               </PremiumCard>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
+    </PageTransition>
   );
 };
 

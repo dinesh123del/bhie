@@ -5,12 +5,12 @@ import {
   BarChart, Bar, LineChart, Line, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip,
 } from 'recharts';
 import {
-  TrendingUp, MoreHorizontal, ArrowUpRight, Download, Filter,
+  TrendingUp, MoreHorizontal, ArrowUpRight, Download, Filter, Sparkles,
 } from 'lucide-react';
 import { MainLayout } from '../components/Layout/MainLayout';
 import { PremiumCard, PremiumButton, KPICard } from '../components/ui/PremiumComponents';
 import api from '../lib/axios';
-import { AIAnalysisDashboard } from '../components/AIAnalysisDashboard';
+import { AnalysisDashboard } from '../components/AIAnalysisDashboard';
 import { aiService, BusinessData, AIAnalysisResponse } from '../services/aiService';
 import { canUseAIInsights } from '../utils/plan';
 
@@ -148,145 +148,195 @@ const PremiumAnalytics = () => {
 
         {/* KPIs */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ staggerChildren: 0.1 }}
+          initial="initial"
+          animate="animate"
+          variants={{
+            initial: { opacity: 0 },
+            animate: { opacity: 1, transition: { staggerChildren: 0.1 } }
+          }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6"
         >
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <KPICard
-              icon={<BarChart className="w-8 h-8 text-indigo-400" />}
-              label="Total Events"
-              value={metrics?.kpis?.totalRecords || 0}
-              change="+15.2%"
-              trend="up"
-              gradient="from-indigo-500/10 to-indigo-600/10"
-            />
-          </motion.div>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <KPICard
-              icon={<TrendingUp className="w-8 h-8 text-purple-400" />}
-              label="Avg. Performance"
-              value="94.2%"
-              change="+3.1%"
-              trend="up"
-              gradient="from-purple-500/10 to-purple-600/10"
-            />
-          </motion.div>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-            <KPICard
-              icon={<ArrowUpRight className="w-8 h-8 text-emerald-400" />}
-              label="Prediction Accuracy"
-              value="87.5%"
-              change="+5.2%"
-              trend="up"
-              gradient="from-emerald-500/10 to-emerald-600/10"
-            />
-          </motion.div>
+          {[
+            { icon: <BarChart className="w-8 h-8 text-sky-400" />, label: "Total Records", value: metrics?.kpis?.totalRecords || 0, trend: "+15.2%" },
+            { icon: <TrendingUp className="w-8 h-8 text-indigo-400" />, label: "Avg. Performance", value: "94.2%", trend: "+3.1%" },
+            { icon: <ArrowUpRight className="w-8 h-8 text-emerald-400" />, label: "Prediction Accuracy", value: "87.5%", trend: "+5.2%" }
+          ].map((kpi, i) => (
+            <motion.div 
+              key={i}
+              variants={{
+                initial: { opacity: 0, y: 20, scale: 0.95 },
+                animate: { opacity: 1, y: 0, scale: 1 }
+              }}
+              whileHover={{ y: -5, scale: 1.02 }}
+            >
+              <KPICard
+                icon={kpi.icon}
+                label={kpi.label}
+                value={kpi.value}
+                trend={{ val: kpi.trend, positive: true }}
+              />
+            </motion.div>
+          ))}
         </motion.div>
 
-        {/* Charts */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, staggerChildren: 0.1 }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-        >
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <PremiumCard>
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-white">Performance Metrics</h3>
-                <motion.button whileHover={{ scale: 1.1 }} className="p-2 hover:bg-white/10 rounded-lg">
-                  <MoreHorizontal className="w-5 h-5 text-gray-400" />
+        {/* Charts with Glass Overlays */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="group relative"
+          >
+            <div className="absolute -inset-1 bg-gradient-to-r from-sky-400/20 to-indigo-500/20 rounded-[2.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000" />
+            <PremiumCard className="relative bg-white/[0.01] backdrop-blur-3xl border-white/10 p-8">
+              <div className="flex items-center justify-between mb-8">
+                <div>
+                  <h3 className="text-xl font-black text-white tracking-tight">Performance Metrics</h3>
+                  <p className="text-xs text-white/30 uppercase tracking-[0.2em] mt-1 font-bold">Historical data</p>
+                </div>
+                <motion.button whileHover={{ scale: 1.1 }} className="p-2 hover:bg-white/10 rounded-xl transition-colors">
+                  <MoreHorizontal className="w-5 h-5 text-gray-500" />
                 </motion.button>
               </div>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                  <XAxis dataKey="name" stroke="#9ca3af" />
-                  <YAxis stroke="#9ca3af" />
-                  <Tooltip contentStyle={{
-                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                  }} />
-                  <Bar dataKey="value" fill="#4f46e5" />
-                </BarChart>
-              </ResponsiveContainer>
+              <div className="h-[300px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={chartData}>
+                    <defs>
+                      <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#38bdf8" stopOpacity={0.8}/>
+                        <stop offset="100%" stopColor="#818cf8" stopOpacity={0.3}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <XAxis dataKey="name" stroke="#64748b" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600 }} dy={10} />
+                    <YAxis stroke="#64748b" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600 }} />
+                    <Tooltip 
+                      cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                      contentStyle={{
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        borderRadius: '16px',
+                        backdropFilter: 'blur(12px)',
+                        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)'
+                      }} 
+                    />
+                    <Bar dataKey="value" fill="url(#barGradient)" radius={[6, 6, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </PremiumCard>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <PremiumCard>
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-white">Prediction vs Actual</h3>
-                <motion.button whileHover={{ scale: 1.1 }} className="p-2 hover:bg-white/10 rounded-lg">
-                  <MoreHorizontal className="w-5 h-5 text-gray-400" />
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="group relative"
+          >
+             <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-[2.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000" />
+            <PremiumCard className="relative bg-white/[0.01] backdrop-blur-3xl border-white/10 p-8">
+              <div className="flex items-center justify-between mb-8">
+                <div>
+                  <h3 className="text-xl font-black text-white tracking-tight">Predictive Insights</h3>
+                  <p className="text-xs text-white/30 uppercase tracking-[0.2em] mt-1 font-bold">Future projections</p>
+                </div>
+                <motion.button whileHover={{ scale: 1.1 }} className="p-2 hover:bg-white/10 rounded-xl transition-colors">
+                  <MoreHorizontal className="w-5 h-5 text-gray-500" />
                 </motion.button>
               </div>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                  <XAxis dataKey="name" stroke="#9ca3af" />
-                  <YAxis stroke="#9ca3af" />
-                  <Tooltip contentStyle={{
-                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                  }} />
-                  <Line type="monotone" dataKey="value" stroke="#4f46e5" />
-                  <Line type="monotone" dataKey="prediction" stroke="#8b5cf6" strokeDasharray="5 5" />
-                </LineChart>
-              </ResponsiveContainer>
+              <div className="h-[300px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={chartData}>
+                    <defs>
+                      <linearGradient id="lineColor" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#6366f1" stopOpacity={0.8}/>
+                        <stop offset="100%" stopColor="#a855f7" stopOpacity={0.3}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <XAxis dataKey="name" stroke="#64748b" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600 }} dy={10} />
+                    <YAxis stroke="#64748b" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600 }} />
+                    <Tooltip 
+                      contentStyle={{
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        borderRadius: '16px',
+                        backdropFilter: 'blur(12px)',
+                        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)'
+                      }} 
+                    />
+                    <Line type="monotone" dataKey="value" stroke="#6366f1" strokeWidth={4} dot={{ r: 4, fill: '#6366f1', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 6, strokeWidth: 0 }} />
+                    <Line type="monotone" dataKey="prediction" stroke="#a855f7" strokeWidth={2} strokeDasharray="8 8" dot={false} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
             </PremiumCard>
           </motion.div>
-        </motion.div>
+        </div>
 
-        {/* AI Insights */}
+        {/* AI Insights with Premium Overlay */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="relative group overflow-hidden rounded-[3rem] border border-white/10 bg-white/[0.01] backdrop-blur-3xl"
         >
-          <PremiumCard>
-            <div className="flex items-center justify-between mb-6">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/10 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[100px] pointer-events-none" />
+          
+          <div className="p-10 relative z-10">
+            <div className="flex items-center justify-between flex-wrap gap-6 mb-10">
               <div>
-                <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                  🤖 AI Insights Dashboard
-                </h3>
-                <p className="text-sm text-gray-400">Real-time business analysis and recommendations</p>
+                <motion.div 
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-400/10 border border-sky-400/20 text-sky-400 text-[10px] font-black uppercase tracking-widest mb-3"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <Sparkles className="w-3 h-3" /> Core Intelligence
+                </motion.div>
+                <h3 className="text-3xl font-black text-white tracking-tight">AI Strategic Analysis</h3>
+                <p className="text-gray-400 mt-2 font-medium">Synthesized business recommendations based on real-time data.</p>
               </div>
               {aiInsightsEnabled ? (
                 <PremiumButton 
                   onClick={generateAIInsights}
                   loading={aiLoading}
-                  size="sm"
+                  size="lg"
+                  className="bg-sky-500 hover:bg-sky-400 border-none shadow-[0_15px_30px_-5px_rgba(14,165,233,0.3)]"
                   icon={<TrendingUp className="w-4 h-4" />}
                 >
-                  Refresh AI
+                  Refresh Intelligence
                 </PremiumButton>
               ) : null}
             </div>
+
             {!aiInsightsEnabled ? (
-              <div className="rounded-3xl border border-dashed border-amber-400/20 bg-amber-500/10 p-8 text-center">
-                <TrendingUp className="w-16 h-16 mx-auto mb-4 text-amber-200" />
-                <p className="text-lg font-semibold text-white">Upgrade to Pro to unlock AI analysis</p>
-                <p className="mt-3 text-sm leading-6 text-ink-300">
-                  Free accounts can view analytics, but AI forecasts and strategic recommendations are premium features.
+              <div className="rounded-[2.5rem] border border-white/5 bg-white/[0.02] p-12 text-center backdrop-blur-xl relative overflow-hidden group-hover:border-white/10 transition-colors">
+                <div className="absolute inset-0 bg-gradient-to-br from-sky-500/5 to-purple-500/5 opacity-50" />
+                <motion.div
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <Sparkles className="w-20 h-20 mx-auto mb-6 text-sky-400/40" />
+                </motion.div>
+                <h3 className="text-2xl font-black text-white mb-4">Unlock Strategic Power</h3>
+                <p className="mx-auto max-w-xl text-gray-400 font-medium leading-relaxed">
+                  The AI Strategic Engine is currently reserved for Pro Tier users. Upgrade today to access predictive forecasting, expense optimization, and growth scaling strategies.
                 </p>
-                <div className="mt-6">
-                  <PremiumButton onClick={() => navigate('/pricing')}>View plans</PremiumButton>
+                <div className="mt-8 flex justify-center gap-4">
+                  <PremiumButton onClick={() => navigate('/pricing')} size="lg" className="px-10">Upgrade to Pro</PremiumButton>
                 </div>
               </div>
             ) : aiAnalysis ? (
-              <AIAnalysisDashboard analysisResult={aiAnalysis} />
+              <AnalysisDashboard analysisResult={aiAnalysis} />
             ) : (
-              <div className="text-center py-8 text-gray-500">
-                <TrendingUp className="w-16 h-16 mx-auto mb-4 opacity-40" />
-                <p>AI insights loading or no company data</p>
+              <div className="text-center py-20">
+                <div className="w-16 h-16 border-4 border-sky-400/20 border-t-sky-400 rounded-full animate-spin mx-auto mb-6" />
+                <p className="text-white/40 font-bold uppercase tracking-widest text-xs">Synthesizing Business Intelligence...</p>
               </div>
             )}
-          </PremiumCard>
+          </div>
         </motion.div>
       </div>
     </MainLayout>

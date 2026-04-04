@@ -91,21 +91,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
+      const savedUser = localStorage.getItem('user');
 
       if (!token) {
+        setLoading(false);
         setUser(null);
         return;
       }
 
+      // Initial state from cache for perceived performance
+      if (savedUser) {
+        setUser(JSON.parse(savedUser));
+      }
+
+      // Live verification from backend
       const userData = await authService.getMe();
       localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
     } catch (error) {
-      console.error('Auth error:', error);
+      console.error('Session expired or invalid:', error);
       localStorage.clear();
       setUser(null);
-
-      if (location.pathname !== '/login' && location.pathname !== '/' && location.pathname !== '/register' && location.pathname !== '/pricing') {
+      if (!['/', '/login', '/register'].includes(location.pathname)) {
         toast.error('Session expired');
         navigate('/login', { replace: true });
       }
@@ -127,7 +134,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(normalizedUser));
     setUser(normalizedUser);
-    toast.success(`Welcome ${normalizedUser.name}`);
+    toast.success(`Welcome back, ${normalizedUser.name}`);
     navigate('/dashboard', { replace: true });
   };
 
@@ -136,10 +143,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       await authService.logout();
     } catch (error) {
-      console.error(error);
+      console.error('Remote logout failed:', error);
     }
     localStorage.clear();
     setUser(null);
+    toast.success('Logged out successfully');
     navigate('/login', { replace: true });
   };
 

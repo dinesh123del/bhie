@@ -112,33 +112,8 @@ router.post('/login', asyncHandler(async (req, res) => {
         },
     });
 }));
-router.post('/register', asyncHandler(async (req, res) => {
-    const { name, email, password } = registerSchema.parse(req.body);
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-        throw new AppError(409, 'User already exists');
-    }
-    const user = await User.create({
-        name,
-        email,
-        password,
-        role: 'user',
-    });
-    const token = generateToken(user._id.toString(), user.role);
-    res.status(201).json({
-        token,
-        user: {
-            id: user._id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            plan: ('getEffectivePlan' in user && typeof user.getEffectivePlan === 'function') ? user.getEffectivePlan() : user.plan,
-            subscriptionStatus: user.isActive ? 'active' : 'inactive',
-            expiryDate: user.planExpiry?.toISOString() || null,
-            usageCount: user.usageCount,
-        },
-    });
-}));
+import { register as registerController, } from '../controllers/authController.js';
+router.post('/register', registerController);
 router.get('/google', (req, res, next) => {
     if (!googleOAuthEnabled) {
         next(new AppError(503, 'Google OAuth is not configured'));
@@ -184,8 +159,11 @@ router.post('/google', asyncHandler(async (req, res) => {
     if (user) {
         if (!user.googleId) {
             user.googleId = payload.sub;
-            await user.save();
         }
+        if (payload.picture) {
+            user.profilePic = payload.picture;
+        }
+        await user.save();
         if ('refreshSubscriptionStatus' in user && typeof user.refreshSubscriptionStatus === 'function') {
             await user.refreshSubscriptionStatus();
         }
@@ -195,8 +173,11 @@ router.post('/google', asyncHandler(async (req, res) => {
             name: payload.name || 'Google User',
             email: payload.email,
             googleId: payload.sub,
+            profilePic: payload.picture,
             role: 'user',
             plan: 'free',
+            isActive: true,
+            usageCount: 0,
         });
     }
     const token = generateToken(user._id.toString(), user.role);
@@ -211,6 +192,7 @@ router.post('/google', asyncHandler(async (req, res) => {
             isActive: user.isActive,
             expiryDate: user.planExpiry?.toISOString() || null,
             usageCount: user.usageCount,
+            profilePic: user.profilePic,
         },
     });
 }));
@@ -233,6 +215,7 @@ router.get('/me', authenticateToken, asyncHandler(async (req, res) => {
             subscriptionStatus: user.isActive ? 'active' : 'inactive',
             expiryDate: user.planExpiry?.toISOString() || null,
             usageCount: user.usageCount,
+            profilePic: user.profilePic,
         },
     });
 }));

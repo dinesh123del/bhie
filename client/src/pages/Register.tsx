@@ -1,9 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { toast } from 'react-hot-toast';
 import { authService } from '../services/authService';
 import { useAuth } from '../hooks/useAuth';
 import axios from 'axios';
+import { GoogleButton } from '../components/auth/GoogleButton';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -15,7 +17,32 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const token = params.get('token');
+    const from = params.get('from');
+
+    if (token && from === 'google') {
+      setLoading(true);
+      localStorage.setItem('token', token);
+      authService.getMe()
+        .then(user => {
+          if (user) {
+            login(token, user);
+            toast.success('Joined BHIE with Google!');
+          }
+        })
+        .catch(err => {
+          console.error('Google token validation failed:', err);
+          localStorage.removeItem('token');
+          toast.error('Failed to complete Google login');
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [location, login]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -195,6 +222,10 @@ const Register = () => {
             <div className="flex-1 h-px bg-white/10" />
             <span className="text-xs text-gray-400 font-medium">OR</span>
             <div className="flex-1 h-px bg-white/10" />
+          </div>
+
+          <div className="flex justify-center w-full mb-6">
+            <GoogleButton />
           </div>
 
           {/* Footer */}

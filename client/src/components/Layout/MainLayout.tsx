@@ -241,11 +241,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <motion.aside
         initial={false}
         animate={{
-          x: mobileOpen ? 0 : -320,
+          x: mobileOpen ? 0 : -340,
           width: collapsed ? 104 : 288,
         }}
-        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-        className={`glass-panel-strong fixed left-0 top-0 z-50 flex h-screen flex-col ${widthClass} rounded-none border-l-0 border-t-0 border-b-0 lg:translate-x-0`}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className={`fixed left-0 top-0 z-50 flex h-screen flex-col ${widthClass} border-r border-white/10 bg-slate-950/95 backdrop-blur-3xl shadow-[0_0_100px_rgba(0,0,0,0.5)] lg:translate-x-0 ${mobileOpen ? 'rounded-r-[3rem]' : ''}`}
         style={{ transformOrigin: 'left center' }}
       >
         <div className="flex items-center justify-between border-b border-white/10 px-5 py-5">
@@ -372,12 +372,44 @@ export const MainLayout: React.FC<{
         userName={userName}
       />
 
+      {/* Mobile Bottom Navigation */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 px-4 pb-4 lg:hidden">
+        <motion.nav 
+          initial={{ y: 80 }}
+          animate={{ y: 0 }}
+          className="mx-auto flex h-16 max-w-md items-center justify-around gap-1 rounded-2xl border border-white/10 bg-slate-950/80 p-2 shadow-2xl backdrop-blur-2xl"
+        >
+          {sidebarItems.slice(0, 4).map((item) => {
+             const selected = activePage === item.href;
+             return (
+               <motion.button
+                 key={item.href}
+                 whileTap={{ scale: 0.9 }}
+                 onClick={() => onNavigate(item.href)}
+                 className={`flex flex-col items-center justify-center gap-1 rounded-xl px-4 py-1 transition-colors ${selected ? 'text-sky-400' : 'text-white/40'}`}
+               >
+                 <span className={selected ? 'scale-110' : ''}>{item.icon}</span>
+                 <span className="text-[10px] font-black uppercase tracking-tight">{item.label.slice(0, 5)}</span>
+               </motion.button>
+             );
+          })}
+          <motion.button
+             whileTap={{ scale: 0.9 }}
+             onClick={() => setMobileOpen(true)}
+             className="flex flex-col items-center justify-center gap-1 rounded-xl px-4 py-1 text-white/40"
+          >
+             <Menu className="h-5 w-5" />
+             <span className="text-[10px] font-black uppercase tracking-tight">More</span>
+          </motion.button>
+        </motion.nav>
+      </div>
+
       <main className={`pt-24 transition-all duration-300 ease-premium ${collapsed ? 'lg:pl-[6.5rem]' : 'lg:pl-[18rem]'}`}>
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="px-4 pb-14 md:px-6 lg:px-8"
+          className="px-4 pb-24 md:px-6 lg:px-8"
         >
           {children}
         </motion.div>
