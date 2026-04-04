@@ -140,9 +140,13 @@ router.post(
   })
 );
 
-import { register as registerController } from '../controllers/authController.js';
+import { 
+  register as registerController, 
+  login as loginController 
+} from '../controllers/authController.js';
 
 router.post('/register', registerController);
+router.post('/login', loginController);
 
 router.get('/google', (req, res, next) => {
   if (!googleOAuthEnabled) {
