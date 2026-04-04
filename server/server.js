@@ -19,8 +19,7 @@ app.use(cors({
 }));
 
 const authRoutes = express.Router();
-authRoutes.post("/register", (req, res) => res.json({ message: "User registered" }));
-authRoutes.post("/login", (req, res) => res.json({ token: "fake-token" }));
+authRoutes.post("/register", (req, res) => res.json({ success: true, message: "User registered" }));
 app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {

@@ -1,8 +1,10 @@
-export const API = import.meta.env.VITE_API_URL || "https://bhie-server.onrender.com";
+export const API = import.meta.env.VITE_API_URL;
 
 if (!API) {
   console.error("VITE_API_URL is undefined. API calls may fail.");
 }
+
+console.log("API:", import.meta.env.VITE_API_URL);
 
 const envApiUrl = (API || '').trim();
 
@@ -20,9 +22,7 @@ export const apiBaseUrl = normalizeApiBaseUrl(envApiUrl);
 
 export const backendOrigin = envApiUrl
   ? trimTrailingSlash(envApiUrl).replace(/\/api$/i, '')
-  : import.meta.env.DEV
-    ? 'https://your-backend.onrender.com'
-    : window.location.origin;
+  : window.location.origin;
 
 export const apiRoute = (pathname: string): string => {
   const normalizedPath = pathname.startsWith('/') ? pathname : `/${pathname}`;

@@ -111,14 +111,25 @@ function App() {
         await new Promise(resolve => setTimeout(resolve, 2500));
         
         // --- PRODUCTION API TEST LOGIC ---
-        const API = import.meta.env.VITE_API_URL || "https://bhie-server.onrender.com";
-        console.log("API:", API);
+        const API = import.meta.env.VITE_API_URL;
+        console.log("API:", import.meta.env.VITE_API_URL);
         if (!API) console.error("VITE_API_URL is undefined. API calls may fail.");
 
-        fetch(`${API}/api/health`)
-          .then(res => res.json())
-          .then(data => console.log("✅ API Connected:", data))
-          .catch(err => console.error("❌ API Error:", err));
+        try {
+          const res = await fetch(`${API}/api/health`);
+          const data = await res.json();
+          console.log("✅ API Connected:", data);
+
+          const authRes = await fetch(`${API}/api/auth/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({})
+          });
+          const authData = await authRes.json();
+          console.log("✅ Auth API Connected:", authData);
+        } catch (err) {
+          console.error("❌ API Error:", err);
+        }
           
       } catch (err) {
         console.error("Failed during initialization:", err);
