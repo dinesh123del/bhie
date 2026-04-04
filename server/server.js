@@ -1,32 +1,33 @@
-import path from 'node:path';
-import { spawn } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const cwd = __dirname;
-const sourceEntry = path.join(cwd, 'src', 'server.ts');
+dotenv.config();
 
-const child = spawn(process.execPath, ['--import', 'tsx', sourceEntry], {
-  cwd,
-  stdio: 'inherit',
-  env: process.env,
+const app = express();
+
+app.use(express.json());
+
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://client-zeta-teal.vercel.app"
+  ],
+  credentials: true
+}));
+
+// ✅ ADD THIS ROOT ROUTE
+app.get("/", (req, res) => {
+  res.send("Backend is LIVE 🚀");
 });
 
-const forwardSignal = (signal) => {
-  if (!child.killed) {
-    child.kill(signal);
-  }
-};
+// ✅ HEALTH CHECK
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok" });
+});
 
-process.on('SIGINT', () => forwardSignal('SIGINT'));
-process.on('SIGTERM', () => forwardSignal('SIGTERM'));
+const PORT = process.env.PORT || 5000;
 
-child.on('exit', (code, signal) => {
-  if (signal) {
-    process.kill(process.pid, signal);
-    return;
-  }
-
-  process.exit(code ?? 0);
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
 });
