@@ -14,6 +14,7 @@ const connection = {
 let _eventProcessingQueue: Queue | null = null;
 let _aiProcessingQueue: Queue | null = null;
 let _actionGenerationQueue: Queue | null = null;
+let _paymentProcessingQueue: Queue | null = null;
 
 const createQueueSafe = (name: string, opts: any): Queue | null => {
   try {
@@ -71,6 +72,20 @@ export const getActionGenerationQueue = (): Queue => {
   return _actionGenerationQueue || dummyQueue;
 };
 
+export const getPaymentProcessingQueue = (): Queue => {
+  if (!_paymentProcessingQueue && isRedisConnected()) {
+    _paymentProcessingQueue = createQueueSafe('payment-processing', {
+      connection,
+      defaultJobOptions: {
+        attempts: 5,
+        backoff: { type: 'exponential', delay: 2000 },
+        removeOnComplete: true,
+      },
+    });
+  }
+  return _paymentProcessingQueue || dummyQueue;
+};
+
 // Legacy named exports for backward compat
 export const eventProcessingQueue = new Proxy({} as Queue, {
   get: (_target, prop) => (getEventProcessingQueue() as any)[prop],
@@ -84,8 +99,13 @@ export const actionGenerationQueue = new Proxy({} as Queue, {
   get: (_target, prop) => (getActionGenerationQueue() as any)[prop],
 });
 
+export const paymentProcessingQueue = new Proxy({} as Queue, {
+  get: (_target, prop) => (getPaymentProcessingQueue() as any)[prop],
+});
+
 export default {
   eventProcessingQueue,
   aiProcessingQueue,
   actionGenerationQueue,
+  paymentProcessingQueue,
 };

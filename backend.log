@@ -521,3 +521,344 @@ NNECTED [HIDDEN]
 📡 URL: http://localhost:10000
 🌍 Env: development
 
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: CONNECTED [HIDDEN]
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+🏗️  Starting BHIE Integration Engine...
+🔌 Connecting to infrastructure...
+✅ MongoDB connected
+✅ Redis connected
+⚙️  Configuring BHIE services...
+⏰ Subscription expiry checker started (runs daily at midnight)
+✅ Upload worker initialized
+✅ Event worker initialized
+✅ AI worker initialized
+✅ Background workers initialized
+💥 Uncaught Exception: Error: listen EADDRINUSE: address already in use 0.0.0.0:5001
+    at Server.setupListenHandle [as _listen2] (node:net:2008:16)
+    at listenInCluster (node:net:2065:12)
+    at node:net:2274:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 5001
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: CONNECTED [HIDDEN]
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+🏗️  Starting BHIE Integration Engine...
+🔌 Connecting to infrastructure...
+✅ MongoDB connected
+✅ Redis connected
+⚙️  Configuring BHIE services...
+⏰ Subscription expiry checker started (runs daily at midnight)
+✅ Upload worker initialized
+✅ Event worker initialized
+✅ AI worker initialized
+✅ Background workers initialized
+
+🚀 BHIE Engine initialised successfully
+📡 URL: http://localhost:5001
+🌍 Env: development
+
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: CONNECTED [HIDDEN]
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+🏗️  Starting BHIE Integration Engine...
+🔌 Connecting to infrastructure...
+✅ MongoDB connected
+✅ Redis connected
+⚙️  Configuring BHIE services...
+⏰ Subscription expiry checker started (runs daily at midnight)
+✅ Upload worker initialized
+✅ Event worker initialized
+✅ AI worker initialized
+✅ Background workers initialized
+
+🚀 BHIE Engine initialised successfully
+📡 URL: http://localhost:5001
+🌍 Env: development
+
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: CONNECTED [HIDDEN]
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+🏗️  Starting BHIE Integration Engine...
+🔌 Connecting to infrastructure...
+✅ MongoDB connected
+✅ Redis connected
+⚙️  Configuring BHIE services...
+⏰ Subscription expiry checker started (runs daily at midnight)
+✅ Upload worker initialized
+✅ Event worker initialized
+✅ AI worker initialized
+✅ Background workers initialized
+⏰ Background cron engine initialized successfully.
+
+🚀 BHIE Engine initialised successfully
+📡 URL: http://localhost:5001
+🌍 Env: development
+
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'mammoth' imported from /Users/srilekha/Desktop/BHIE/server/src/services/fileRecordService.ts
+    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:301:9)
+    at packageResolve (node:internal/modules/esm/resolve:764:81)
+    at moduleResolve (node:internal/modules/esm/resolve:855:18)
+    at defaultResolve (node:internal/modules/esm/resolve:988:11)
+    at nextResolve (node:internal/modules/esm/hooks:769:28)
+    at resolveBase (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312365875:2:3744)
+    at resolveDirectory (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312365875:2:4243)
+    at resolveTsPaths (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312365875:2:4984)
+    at resolve (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312365875:2:5361)
+    at nextResolve (node:internal/modules/esm/hooks:769:28) {
+  code: 'ERR_MODULE_NOT_FOUND'
+}
+
+Node.js v25.8.2
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'mammoth' imported from /Users/srilekha/Desktop/BHIE/server/src/services/fileRecordService.ts
+    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:301:9)
+    at packageResolve (node:internal/modules/esm/resolve:764:81)
+    at moduleResolve (node:internal/modules/esm/resolve:855:18)
+    at defaultResolve (node:internal/modules/esm/resolve:988:11)
+    at nextResolve (node:internal/modules/esm/hooks:769:28)
+    at resolveBase (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312374433:2:3744)
+    at resolveDirectory (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312374433:2:4243)
+    at resolveTsPaths (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312374433:2:4984)
+    at resolve (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312374433:2:5361)
+    at nextResolve (node:internal/modules/esm/hooks:769:28) {
+  code: 'ERR_MODULE_NOT_FOUND'
+}
+
+Node.js v25.8.2
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: CONNECTED [HIDDEN]
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+🏗️  Starting BHIE Integration Engine...
+🔌 Connecting to infrastructure...
+✅ MongoDB connected
+✅ Redis connected
+⚙️  Configuring BHIE services...
+⏰ Subscription expiry checker started (runs daily at midnight)
+✅ Upload worker initialized
+✅ Event worker initialized
+✅ AI worker initialized
+✅ Background workers initialized
+⏰ Background cron engine initialized successfully.
+
+🚀 BHIE Engine initialised successfully
+📡 URL: http://localhost:5001
+🌍 Env: development
+
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: CONNECTED [HIDDEN]
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+🏗️  Starting BHIE Integration Engine...
+🔌 Connecting to infrastructure...
+✅ MongoDB connected
+✅ Redis connected
+⚙️  Configuring BHIE services...
+⏰ Subscription expiry checker started (runs daily at midnight)
+✅ Upload worker initialized
+✅ Event worker initialized
+✅ AI worker initialized
+✅ Background workers initialized
+
+❌ Fatal: BHIE startup failed: Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/srilekha/Desktop/BHIE/server/src/workers/cronJobs.js' imported from /Users/srilekha/Desktop/BHIE/server/src/server.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:861:10)
+    at defaultResolve (node:internal/modules/esm/resolve:988:11)
+    at nextResolve (node:internal/modules/esm/hooks:769:28)
+    at resolveBase (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312459540:2:3744)
+    at async resolveDirectory (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312459540:2:4237)
+    at async resolve (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312459540:2:5355)
+    at async nextResolve (node:internal/modules/esm/hooks:769:22)
+    at async AsyncLoaderHooksOnLoaderHookWorker.resolve (node:internal/modules/esm/hooks:265:24)
+    at async handleMessage (node:internal/modules/esm/worker:251:18) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///Users/srilekha/Desktop/BHIE/server/src/workers/cronJobs.js'
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: CONNECTED [HIDDEN]
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+🏗️  Starting BHIE Integration Engine...
+🔌 Connecting to infrastructure...
+✅ MongoDB connected
+✅ Redis connected
+⚙️  Configuring BHIE services...
+⏰ Subscription expiry checker started (runs daily at midnight)
+✅ Upload worker initialized
+✅ Event worker initialized
+✅ AI worker initialized
+✅ Background workers initialized
+
+❌ Fatal: BHIE startup failed: Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/srilekha/Desktop/BHIE/server/src/workers/cronJobs.js' imported from /Users/srilekha/Desktop/BHIE/server/src/server.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:861:10)
+    at defaultResolve (node:internal/modules/esm/resolve:988:11)
+    at nextResolve (node:internal/modules/esm/hooks:769:28)
+    at resolveBase (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312480119:2:3744)
+    at async resolveDirectory (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312480119:2:4237)
+    at async resolve (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312480119:2:5355)
+    at async nextResolve (node:internal/modules/esm/hooks:769:22)
+    at async AsyncLoaderHooksOnLoaderHookWorker.resolve (node:internal/modules/esm/hooks:265:24)
+    at async handleMessage (node:internal/modules/esm/worker:251:18) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///Users/srilekha/Desktop/BHIE/server/src/workers/cronJobs.js'
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: CONNECTED [HIDDEN]
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+🏗️  Starting BHIE Integration Engine...
+🔌 Connecting to infrastructure...
+✅ MongoDB connected
+✅ Redis connected
+⚙️  Configuring BHIE services...
+⏰ Subscription expiry checker started (runs daily at midnight)
+✅ Upload worker initialized
+✅ Event worker initialized
+✅ AI worker initialized
+✅ Background workers initialized
+
+❌ Fatal: BHIE startup failed: Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/srilekha/Desktop/BHIE/server/src/workers/cronJobs.js' imported from /Users/srilekha/Desktop/BHIE/server/src/server.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+    at moduleResolve (node:internal/modules/esm/resolve:861:10)
+    at defaultResolve (node:internal/modules/esm/resolve:988:11)
+    at nextResolve (node:internal/modules/esm/hooks:769:28)
+    at resolveBase (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312496662:2:3744)
+    at async resolveDirectory (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312496662:2:4237)
+    at async resolve (file:///Users/srilekha/Desktop/BHIE/server/node_modules/tsx/dist/esm/index.mjs?1775312496662:2:5355)
+    at async nextResolve (node:internal/modules/esm/hooks:769:22)
+    at async AsyncLoaderHooksOnLoaderHookWorker.resolve (node:internal/modules/esm/hooks:265:24)
+    at async handleMessage (node:internal/modules/esm/worker:251:18) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///Users/srilekha/Desktop/BHIE/server/src/workers/cronJobs.js'
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: CONNECTED [HIDDEN]
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+🏗️  Starting BHIE Integration Engine...
+🔌 Connecting to infrastructure...
+✅ MongoDB connected
+✅ Redis connected
+⚙️  Configuring BHIE services...
+⏰ Subscription expiry checker started (runs daily at midnight)
+✅ Upload worker initialized
+✅ Event worker initialized
+✅ AI worker initialized
+✅ Background workers initialized
+⏰ Background cron engine initialized successfully.
+
+🚀 BHIE Engine initialised successfully
+📡 URL: http://localhost:5001
+🌍 Env: development
+
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: CONNECTED [HIDDEN]
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+🏗️  Starting BHIE Integration Engine...
+🔌 Connecting to infrastructure...
+✅ MongoDB connected
+✅ Redis connected
+⚙️  Configuring BHIE services...
+⏰ Subscription expiry checker started (runs daily at midnight)
+✅ Upload worker initialized
+✅ Event worker initialized
+✅ AI worker initialized
+✅ Background workers initialized
+⏰ Background cron engine initialized successfully.
+
+🚀 BHIE Engine initialised successfully
+📡 URL: http://localhost:5001
+🌍 Env: development
+
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: CONNECTED [HIDDEN]
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+[32minfo[39m: 🏗️  Starting BHIE Integration Engine... {"service":"bhie-api","timestamp":"2026-04-04 19:52:44"}
+[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"bhie-api","timestamp":"2026-04-04 19:52:44"}
+✅ MongoDB connected
+✅ Redis connected
+[32minfo[39m: ⚙️  Configuring BHIE services... {"service":"bhie-api","timestamp":"2026-04-04 19:52:44"}
+⏰ Subscription expiry checker started (runs daily at midnight)
+✅ Upload worker initialized
+✅ Event worker initialized
+✅ AI worker initialized
+✅ Background workers initialized
+⏰ Background cron engine initialized successfully.
+[32minfo[39m: 🚀 BHIE Engine initialised successfully {"service":"bhie-api","timestamp":"2026-04-04 19:52:44"}
+[32minfo[39m: 📡 URL: http://localhost:5001 {"service":"bhie-api","timestamp":"2026-04-04 19:52:44"}
+[32minfo[39m: 🌍 Env: development {"service":"bhie-api","timestamp":"2026-04-04 19:52:44"}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m

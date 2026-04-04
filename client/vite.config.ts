@@ -13,7 +13,7 @@ export default defineConfig(({ command }) => ({
     strictPort: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:10000',
+        target: 'https://your-backend.onrender.com',
         changeOrigin: true,
         secure: false,
       },

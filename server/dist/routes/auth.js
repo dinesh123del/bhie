@@ -4,12 +4,12 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { OAuth2Client } from 'google-auth-library';
 import { z } from 'zod';
-import { env } from '../config/env';
-import { asyncHandler } from '../middleware/asyncHandler';
-import { authenticateToken } from '../middleware/auth';
-import User from '../models/User';
-import { AppError } from '../utils/appError';
-import { requireUser } from '../utils/request';
+import { env } from '../config/env.js';
+import { asyncHandler } from '../middleware/asyncHandler.js';
+import { authenticateToken } from '../middleware/auth.js';
+import User from '../models/User.js';
+import { AppError } from '../utils/appError.js';
+import { requireUser } from '../utils/request.js';
 const router = express.Router();
 const loginSchema = z.object({
     email: z.string().email('Invalid email'),
@@ -42,7 +42,7 @@ if (googleOAuthEnabled) {
                         name: profile.displayName,
                         email,
                         googleId: profile.id,
-                        role: 'customer',
+                        role: 'user',
                         plan: 'free',
                     });
                 }
@@ -122,7 +122,7 @@ router.post('/register', asyncHandler(async (req, res) => {
         name,
         email,
         password,
-        role: 'customer',
+        role: 'user',
     });
     const token = generateToken(user._id.toString(), user.role);
     res.status(201).json({
@@ -195,7 +195,7 @@ router.post('/google', asyncHandler(async (req, res) => {
             name: payload.name || 'Google User',
             email: payload.email,
             googleId: payload.sub,
-            role: 'customer',
+            role: 'user',
             plan: 'free',
         });
     }

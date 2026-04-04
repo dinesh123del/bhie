@@ -52,6 +52,7 @@ const userSchema = new mongoose.Schema({
     },
     subscriptionId: {
         type: String,
+        index: true,
     },
     subscriptionStatus: {
         type: String,

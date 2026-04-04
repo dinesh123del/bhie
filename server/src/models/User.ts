@@ -82,6 +82,7 @@ const userSchema = new mongoose.Schema<UserDocument>({
   },
   subscriptionId: {
     type: String,
+    index: true,
   },
   subscriptionStatus: {
     type: String,

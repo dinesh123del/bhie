@@ -9,13 +9,12 @@ import rateLimit from 'express-rate-limit';
 import { connectDB, disconnectDB } from './config/db.js';
 import { env } from './config/env.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
-import { AppError } from './utils/appError.js';
 import { createDefaultAdmin } from './utils/createDefaultAdmin.js';
 import { ensureUploadDir, uploadDir } from './utils/uploads.js';
 import apiRouter from './routes/apiRouter.js';
-import './workers/uploadWorker.js';
 import { SubscriptionManager } from './utils/subscriptionManager.js';
-import { connectRedis, disconnectRedis } from './config/redisClient.js';
+import { connectRedis, disconnectRedis, isRedisConnected } from './config/redisClient.js';
+import logger from './utils/logger.js';
 const app = express();
 // --- Configuration & Middleware ---
 app.disable('x-powered-by');
@@ -28,21 +27,9 @@ const apiLimiter = rateLimit({
     legacyHeaders: false,
     message: { message: 'Too many requests. Please try again later.' },
 });
-// CORS Configuration
+// CORS Configuration as per requirements
 const corsOptions = {
-    origin(origin, callback) {
-        // Development or explicit client urls
-        if (!origin || env.CLIENT_URLS.includes(origin) || !env.IS_PRODUCTION) {
-            callback(null, true);
-            return;
-        }
-        // Dynamically allow Vercel production/preview deploys to prevent broken deployment states
-        if (origin.endsWith('.vercel.app')) {
-            callback(null, true);
-            return;
-        }
-        callback(new AppError(403, `CORS blocked for origin: ${origin}`));
-    },
+    origin: "*",
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'],
@@ -85,7 +72,6 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 // --- Server Lifecycle ---
 import { initSocket } from './socket/socketManager.js';
-import './workers/eventWorker.js';
 let server = null;
 async function startServer() {
     const port = env.PORT;
@@ -93,34 +79,56 @@ async function startServer() {
         server = app.listen(port, '0.0.0.0', () => {
             if (server)
                 initSocket(server);
-            console.log(`\n🚀 BHIE Engine initialised successfully`);
-            console.log(`📡 URL: http://localhost:${port}`);
-            console.log(`🌍 Env: ${env.NODE_ENV}\n`);
+            logger.info(`🚀 BHIE Engine initialised successfully`);
+            logger.info(`📡 URL: http://localhost:${port}`);
+            logger.info(`🌍 Env: ${env.NODE_ENV}`);
             resolve();
         });
     });
 }
 async function init() {
     try {
-        console.log('🏗️  Starting BHIE Integration Engine...');
+        logger.info('🏗️  Starting BHIE Integration Engine...');
         await ensureUploadDir();
-        console.log('🔌 Connecting to infrastructure...');
-        await Promise.all([
-            connectDB(),
-            connectRedis()
-        ]);
-        console.log('⚙️  Configuring BHIE services...');
+        logger.info('🔌 Connecting to infrastructure...');
+        // Connect to MongoDB (required)
+        await connectDB();
+        // Connect to Redis (optional — gracefully degrades)
+        await connectRedis();
+        logger.info('⚙️  Configuring BHIE services...');
         await createDefaultAdmin();
         SubscriptionManager.startExpiryChecker();
-        // Start automated task engines
-        const { actionGenerationQueue } = await import('./config/queues.js');
-        await actionGenerationQueue.add('daily_audit', {}, {
-            repeat: { pattern: '0 6 * * *' } // Every day at 6 AM
-        });
+        // Initialize workers only if Redis is available
+        if (isRedisConnected()) {
+            try {
+                const { initUploadWorker } = await import('./workers/uploadWorker.js');
+                initUploadWorker();
+                const { initEventWorker } = await import('./workers/eventWorker.js');
+                initEventWorker();
+                const { initPaymentWorker } = await import('./workers/paymentWorker.js');
+                initPaymentWorker();
+                // Start automated task engines
+                const { getActionGenerationQueue } = await import('./config/queues.js');
+                const actionQueue = getActionGenerationQueue();
+                await actionQueue.add('daily_audit', {}, {
+                    repeat: { pattern: '0 6 * * *' } // Every day at 6 AM
+                });
+                console.log('✅ Background workers initialized');
+            }
+            catch (workerError) {
+                console.warn('⚠️ Background workers could not be initialized:', workerError);
+            }
+        }
+        else {
+            console.warn('⚠️ Redis unavailable — background workers disabled');
+        }
+        // Initialize standalone cron engine (works without Redis)
+        const { startCronJobs } = await import('./jobs/cron.js');
+        startCronJobs();
         await startServer();
     }
     catch (error) {
-        console.error('\n❌ Fatal: BHIE startup failed:', error);
+        logger.error('❌ Fatal: BHIE startup failed:', error);
         process.exit(1);
     }
 }

@@ -19,7 +19,7 @@ export const apiBaseUrl = normalizeApiBaseUrl(envApiUrl);
 export const backendOrigin = envApiUrl
   ? trimTrailingSlash(envApiUrl).replace(/\/api$/i, '')
   : import.meta.env.DEV
-    ? 'http://localhost:10000'
+    ? 'https://your-backend.onrender.com'
     : window.location.origin;
 
 export const apiRoute = (pathname: string): string => {

@@ -119,6 +119,7 @@ router.post('/verify', asyncHandler(async (req, res) => {
         throw new AppError(400, 'Invalid payment signature');
     }
     const payment = await Payment.findOne({
+        razorpayOrderId: razorpay_order_id,
         verifiedAt: { $exists: false }
     });
     if (!payment) {
