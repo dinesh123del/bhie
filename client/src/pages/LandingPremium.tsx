@@ -308,13 +308,13 @@ const Pricing = () => (
       <div className="grid md:grid-cols-3 gap-8 items-center">
          {[
            { name: "FREE", price: "0", features: ["Basic Analytics", "Manual Entry", "Standard Dashboard", "Community Support"], color: "border-[#333]" },
-           { name: "PRO", price: "49", features: ["AI Insights & Predictions", "Today's Action Engine", "File OCR Uploads", "Priority Engine Queue"], color: "border-[#E50914] shadow-[0_0_50px_rgba(229,9,20,0.2)] bg-[#E50914]/5 scale-105", highlight: true },
-           { name: "BUSINESS", price: "199", features: ["Unlimited Event Ingestion", "Multi-Tenant Access", "Custom Webhooks", "Dedicated Architect"], color: "border-[#333]" },
+           { name: "PRO", price: "59", features: ["AI Insights & Predictions", "Today's Action Engine", "File OCR Uploads", "Priority Engine Queue"], color: "border-[#E50914] shadow-[0_0_50px_rgba(229,9,20,0.2)] bg-[#E50914]/5 scale-105", highlight: true },
+           { name: "BUSINESS", price: "119", features: ["Unlimited Event Ingestion", "Multi-Tenant Access", "Custom Webhooks", "Dedicated Architect"], color: "border-[#333]" },
          ].map((plan, i) => (
            <div key={i} className={`p-8 rounded-xl border bg-black ${plan.color} relative`}>
               {plan.highlight && <div className="absolute top-0 right-8 -translate-y-1/2 px-4 py-1 bg-[#E50914] text-white text-xs font-bold tracking-widest uppercase rounded">Popular</div>}
               <h3 className="text-lg font-medium text-white/50 tracking-widest mb-4">{plan.name}</h3>
-              <div className="text-5xl font-black text-white mb-8">${plan.price}<span className="text-lg text-white/30 font-medium">/mo</span></div>
+              <div className="text-5xl font-black text-white mb-8">₹{plan.price}<span className="text-lg text-white/30 font-medium">/mo</span></div>
               <ul className="space-y-4 mb-8">
                 {plan.features.map((f, j) => (
                   <li key={j} className="flex items-center gap-3 text-white/70">

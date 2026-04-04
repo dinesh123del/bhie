@@ -12,7 +12,7 @@ const plans = [
   },
   {
     name: 'Growth',
-    price: '₹7,500',
+    price: '₹59',
     period: '/month',
     description: 'For scaling companies that need live planning, forecasting, and AI assistance.',
     features: ['Live business intelligence dashboards', 'Forecasting and predictive insights', 'Unlimited stakeholders', 'Priority implementation support'],
@@ -20,7 +20,8 @@ const plans = [
   },
   {
     name: 'Enterprise',
-    price: 'Custom',
+    price: '₹119',
+    period: '/month',
     description: 'For organizations with advanced governance, integrations, and executive workflows.',
     features: ['Custom data pipelines', 'Advanced security controls', 'Dedicated success partner', 'Executive reporting design'],
   },
