@@ -6,7 +6,7 @@ dotenv.config();
 const envSchema = z
   .object({
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
-    PORT: z.coerce.number().int().positive().default(5001),
+    PORT: z.coerce.number().int().positive().default(5000),
     MONGO_URI: z.string().trim().min(1).optional(),
     MONGODB_URI: z.string().trim().min(1).optional(),
     REDIS_URL: z.string().trim().min(1).default('redis://localhost:6379'),

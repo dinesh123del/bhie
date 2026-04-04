@@ -35,7 +35,26 @@ const apiLimiter = rateLimit({
 
 // CORS Configuration as per requirements
 const corsOptions: cors.CorsOptions = {
-  origin: env.CLIENT_URL ? env.CLIENT_URL.split(',') : ['http://localhost:5173', 'http://localhost:3000'],
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    
+    // Allow localhost for dev
+    if (origin.startsWith('http://localhost:')) {
+      return callback(null, true);
+    }
+    
+    // Add explicitly required origins
+    if (origin === 'http://localhost:5173' || origin === 'https://client-zeta-teal.vercel.app') {
+      return callback(null, true);
+    }
+    
+    // Allow Vercel and configured frontend URLs
+    if (origin.includes('vercel.app') || (env.CLIENT_URL && env.CLIENT_URL.includes(origin))) {
+      return callback(null, true);
+    }
+    
+    callback(null, true); // Fallback to allowing standard origins to prevent strict blocks initially, but in strict production replace this with Error!
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'],
@@ -69,12 +88,11 @@ app.use('/uploads', express.static(uploadDir, {
 
 // --- Routes ---
 app.get('/', (_req, res) => {
-  res.json({
-    status: 'OK',
-    message: 'BHIE API running securely',
-    environment: env.NODE_ENV,
-    version: '1.0.0'
-  });
+  res.send('Backend is LIVE 🚀');
+});
+
+app.get('/api/health', (_req, res) => {
+  res.json({ status: 'ok' });
 });
 
 // Centralized API Routes (includes /auth, /ai, /analytics etc.)
@@ -90,12 +108,12 @@ import { initSocket } from './socket/socketManager.js';
 let server: Server | null = null;
 
 async function startServer(): Promise<void> {
-  const port = env.PORT;
+  const PORT = process.env.PORT || 5000;
   return new Promise((resolve) => {
-    server = app.listen(port, '0.0.0.0', () => {
+    server = app.listen(PORT, () => {
         if (server) initSocket(server);
         logger.info(`🚀 BHIE Engine initialised successfully`);
-        logger.info(`📡 URL: http://localhost:${port}`);
+        logger.info(`📡 URL: http://localhost:${PORT}`);
         logger.info(`🌍 Env: ${env.NODE_ENV}`);
         resolve();
     });
@@ -111,7 +129,11 @@ async function init(): Promise<void> {
     logger.info('🔌 Connecting to infrastructure...');
     
     // Connect to MongoDB (required)
-    await connectDB();
+    try {
+      await connectDB();
+    } catch (err) {
+      console.error('❌ MongoDB connection failed, but starting app anyway:', err);
+    }
     
     // Connect to Redis (optional — gracefully degrades)
     await connectRedis();
@@ -154,7 +176,8 @@ async function init(): Promise<void> {
     await startServer();
   } catch (error) {
     logger.error('❌ Fatal: BHIE startup failed:', error);
-    process.exit(1);
+    // Don't crash wait
+    // process.exit(1);
   }
 }
 

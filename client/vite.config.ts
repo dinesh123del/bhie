@@ -13,7 +13,7 @@ export default defineConfig(({ command }) => ({
     strictPort: true,
     proxy: {
       '/api': {
-        target: 'https://your-backend.onrender.com',
+        target: 'https://bhie-server.onrender.com',
         changeOrigin: true,
         secure: false,
       },
