@@ -58,7 +58,8 @@ router.post('/scan-bill', authenticateToken, upload.single('bill'), asyncHandler
                 totalAmount: result.amount,
                 date: result.date,
                 confidence: result.confidence,
-                rawText: result.rawText
+                rawText: result.rawText,
+                exactText: result.exactText // Added exact text to response
             }
         });
     }

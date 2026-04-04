@@ -69,6 +69,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       if (token && fromGoogle) {
         try {
+          setLoading(true);
           localStorage.setItem('token', token);
           const userData = await authService.getMe();
           localStorage.setItem('user', JSON.stringify(userData));
@@ -76,9 +77,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
           toast.success('Google login successful');
           navigate('/dashboard', { replace: true });
         } catch (error) {
-          console.error(error);
+          console.error('Google login error:', error);
           localStorage.clear();
           toast.error('Google login failed');
+        } finally {
+          setLoading(false);
         }
       }
     };
@@ -88,6 +91,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Auth validation on mount
   const validateAuth = useCallback(async () => {
+    let isMounted = true;
+    const safetyTimeout = setTimeout(() => {
+      if (isMounted) {
+        console.warn('⚠️ Auth validation timed out. Assuming offline/cached state.');
+        setLoading(false);
+      }
+    }, 4000);
+
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
@@ -96,6 +107,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (!token) {
         setLoading(false);
         setUser(null);
+        clearTimeout(safetyTimeout);
         return;
       }
 
@@ -117,6 +129,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         navigate('/login', { replace: true });
       }
     } finally {
+      clearTimeout(safetyTimeout);
       setLoading(false);
     }
   }, [navigate, location.pathname]);

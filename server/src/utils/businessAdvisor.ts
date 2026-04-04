@@ -17,26 +17,26 @@ function analyzeBusinessHealth(data: InputData): BusinessAdvisorOutput {
   let advice = '';
 
   if (trend === 'up' && isProfitable) {
-    summary = `You're doing great — revenue is growing steadily at a healthy pace. Profit margins look solid, showing your business is on a strong upward trajectory.`;
-    advice = `Keep the momentum going! Consider strategic investments like hiring key talent or expanding into complementary markets to accelerate growth even further.`;
+    summary = `Your business is growing steadily! Profit margins look solid, showing you're on a great path.`;
+    advice = `Keep it up! Think about hiring more people or expanding into new areas to grow even faster.`;
   } else if (trend === 'up' && !isProfitable) {
-    summary = `Good news on revenue growth, but expenses are keeping profit under pressure right now.`;
-    advice = `Tighten expense control while protecting growth initiatives. Review vendor contracts and optimize operations to unlock the profitability you deserve.`;
+    summary = `Revenue is growing, but your expenses are too high right now, which is eating into your profit.`;
+    advice = `Try to lower your costs while still growing your sales. Review your monthly bills and optimize how you work.`;
   } else if (trend === 'down') {
-    summary = `Things are a bit challenging with declining trends across key metrics. This is a signal to take decisive action.`;
-    advice = `Conduct an immediate operational review. Cut non-essential costs by 15-20%, renegotiate supplier terms, and focus on your highest-margin products/services.`;
+    summary = `Numbers are going down lately. It's time to take quick action to fix this.`;
+    advice = `Review all your spending immediately. Cut non-essential costs by 15-20% and focus on your most profitable services.`;
   } else if (trend === 'stable' && isProfitable) {
-    summary = `Your business is running smoothly with steady performance and healthy profits. Perfect foundation for the next growth phase.`;
-    advice = `This stability is your opportunity. Explore new revenue streams, product diversification, or market expansion to break through to the next level.`;
+    summary = `Everything is running smoothly with steady profit. This is a great time to plan for the future.`;
+    advice = `Use this stability to your advantage. Look for new ways to make money or expand your business.`;
   } else if (trend === 'stable' && !isProfitable) {
-    summary = `Operations are stable but profitability needs attention. Expenses might be slightly high relative to revenue.`;
-    advice = `Small wins matter here. Negotiate better rates with suppliers, streamline processes, or introduce premium pricing to improve margins without disrupting stability.`;
+    summary = `Your business is stable, but you aren't making enough profit yet. Expenses might be too high.`;
+    advice = `Small changes will help. Negotiate better prices with suppliers or raise your prices slightly to improve your profit.`;
   } else if (expensesHigh) {
-    summary = `Revenue looks promising, however expenses are consuming too much of your top line, limiting profit potential.`;
-    advice = `Target your biggest expense categories first. Look for 10-15% savings through better vendor terms, process automation, or outsourcing non-core functions.`;
+    summary = `Revenue looks good, but you are spending too much money, which leaves very little profit.`;
+    advice = `Look at your biggest expenses first. Try to save 10-15% by using automation or negotiating better deals.`;
   } else {
-    summary = `Your business shows balanced fundamentals. Steady progress with room for optimization.`;
-    advice = `Continue monitoring key metrics closely. Consider a growth audit to identify untapped opportunities in your current model.`;
+    summary = `Your business is in a good, balanced state. Steady progress with some room to grow.`;
+    advice = `Keep a close eye on your numbers. Look for untapped opportunities to grow even more.`;
   }
 
   return { summary, advice };

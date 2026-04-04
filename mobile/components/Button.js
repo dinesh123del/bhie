@@ -14,8 +14,8 @@ const Button = ({ onPress, title, style, textStyle, type = 'primary' }) => {
   }));
 
   const handlePressIn = () => {
-    scale.value = withSpring(0.96);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    scale.value = withSpring(0.95);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
   const handlePressOut = () => {
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: '900',
-    letterSpacing: -0.2,
+    letterSpacing: -0.8,
   },
   secondaryText: {
     color: '#38BDF8',

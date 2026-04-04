@@ -1,44 +1,121 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight, Check, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import MarketingLayout from '../components/marketing/MarketingLayout';
-
-const plans = [
-  {
-    name: 'Starter',
-    price: 'Free',
-    description: 'For early teams that want a sharper view of business health.',
-    features: ['Core analytics workspace', 'Weekly intelligence summary', 'Up to 5 uploads'],
-  },
-  {
-    name: 'Pro',
-    price: '₹99',
-    period: '/month',
-    description: 'For scaling companies that need live planning, forecasting, and advanced assistance.',
-    features: ['Unlimited uploads', 'Smart insights', 'Advanced analytics', 'Priority support', 'Export data'],
-    featured: true,
-  },
-  {
-    name: 'Premium',
-    price: '₹299',
-    period: '/month',
-    description: 'For organizations with advanced governance, integrations, and executive workflows.',
-    features: ['Everything in Pro', 'Custom integrations', 'Advanced reporting', 'Dedicated support', 'API access'],
-  },
-];
+import { useEffect, useState } from 'react';
+import api from '../lib/axios';
+import { useTranslation } from 'react-i18next';
 
 export default function PricingPage() {
+  const { t } = useTranslation();
+  const [pricingData, setPricingData] = useState({
+    country: 'US',
+    currency: 'USD',
+    price: 5
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPricing = async () => {
+      try {
+        const cachedPricing = localStorage.getItem('userPricing');
+        if (cachedPricing) {
+          setPricingData(JSON.parse(cachedPricing));
+          setLoading(false);
+          // Still fetch in background to verify/update
+        }
+
+        const response = await api.get('/pricing');
+        
+        if (response.data.success) {
+          setPricingData(response.data.data);
+          localStorage.setItem('userPricing', JSON.stringify(response.data.data));
+        }
+      } catch (error) {
+        console.error("Failed to fetch pricing", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPricing();
+  }, []);
+
+  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const country = e.target.value;
+    const mockConfig: Record<string, { currency: string, price: number }> = {
+      IN: { currency: "INR", price: 99 },
+      US: { currency: "USD", price: 5 },
+      GB: { currency: "GBP", price: 4 },
+      DEFAULT: { currency: "USD", price: 5 }
+    };
+    
+    const newPricing = mockConfig[country] || mockConfig['DEFAULT'];
+    const updatedData = { country, ...newPricing };
+    setPricingData(updatedData);
+    localStorage.setItem('userPricing', JSON.stringify(updatedData));
+  };
+
+  const getCurrencySymbol = (currency: string) => {
+    switch(currency) {
+      case 'INR': return '₹';
+      case 'GBP': return '£';
+      case 'USD': default: return '$';
+    }
+  };
+
+  const plans = [
+    {
+      name: 'Starter',
+      price: 'Free',
+      description: 'For early teams that want a sharper view of business health.',
+      features: ['Core analytics workspace', 'Weekly intelligence summary', 'Up to 5 uploads'],
+    },
+    {
+      name: 'Pro',
+      price: loading ? '...' : `${getCurrencySymbol(pricingData.currency)}${pricingData.price}`,
+      period: '/month',
+      description: 'For scaling companies that need live planning, forecasting, and advanced assistance.',
+      features: ['Unlimited uploads', 'Smart insights', 'Advanced analytics', 'Priority support', 'Export data'],
+      featured: true,
+    },
+    {
+      name: 'Premium',
+      price: loading ? '...' : `${getCurrencySymbol(pricingData.currency)}${pricingData.price * 3}`, 
+      period: '/month',
+      description: 'For organizations with advanced governance, integrations, and executive workflows.',
+      features: ['Everything in Pro', 'Custom integrations', 'Advanced reporting', 'Dedicated support', 'API access'],
+    },
+  ];
+
   return (
     <MarketingLayout>
       <section className="px-4 pb-8 pt-12 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-5xl text-center">
+        <div className="mx-auto max-w-5xl text-center relative">
+          
+          <div className="absolute right-0 top-0 hidden md:flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2 backdrop-blur-md">
+            <Globe className="w-4 h-4 text-emerald-400" />
+            <select 
+              value={pricingData.country}
+              onChange={handleCountryChange}
+              className="bg-transparent text-white text-sm outline-none cursor-pointer appearance-none pr-4"
+            >
+              <option value="US" className="text-black">United States (USD)</option>
+              <option value="IN" className="text-black">India (INR)</option>
+              <option value="GB" className="text-black">United Kingdom (GBP)</option>
+            </select>
+            <span className="text-xs text-white/40 border-l border-white/10 pl-2 ml-1">
+              Smart Pricing Active
+            </span>
+          </div>
+
           <motion.span
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55 }}
             className="section-kicker"
           >
-            Pricing
+            {t('pricing')}
           </motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
@@ -103,14 +180,14 @@ export default function PricingPage() {
                 </div>
 
                 <Link
-                  to={plan.name === 'Premium' ? '/payments' : '/login'}
+                  to={plan.price === 'Free' ? '/login' : '/payments'}
                   className={`mt-10 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition hover:scale-[1.02] ${
                     plan.featured
                       ? 'bg-white text-slate-950'
                       : 'border border-white/15 bg-white/5 text-white'
                   }`}
                 >
-                  {plan.name === 'Premium' ? 'Get Premium' : 'Get started'}
+                  {plan.price === 'Free' ? 'Get started' : `Get ${plan.name}`}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
@@ -118,6 +195,21 @@ export default function PricingPage() {
           ))}
         </div>
       </section>
+      
+      <div className="md:hidden flex justify-center mt-4">
+          <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2 backdrop-blur-md">
+            <Globe className="w-4 h-4 text-emerald-400" />
+            <select 
+              value={pricingData.country}
+              onChange={handleCountryChange}
+              className="bg-transparent text-white text-sm outline-none cursor-pointer pr-4"
+            >
+              <option value="US" className="text-black">US (USD)</option>
+              <option value="IN" className="text-black">IN (INR)</option>
+              <option value="GB" className="text-black">UK (GBP)</option>
+            </select>
+          </div>
+      </div>
 
       <section className="px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl rounded-[40px] border border-white/10 bg-white/[0.035] p-8 shadow-[0_30px_90px_rgba(2,6,23,0.4)] backdrop-blur-xl sm:p-12">

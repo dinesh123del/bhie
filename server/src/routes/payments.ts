@@ -1,4 +1,4 @@
- import crypto from 'crypto';
+import crypto from 'crypto';
 import express, { Response, Router } from 'express';
 import Payment from '../models/Payment.js';
 import User from '../models/User.js';
@@ -9,7 +9,7 @@ import { AuthRequest } from '../types';
 import { env } from '../config/env.js';
 import { AppError } from '../utils/appError.js';
 import { requireUser } from '../utils/request.js';
-import { PLAN_CONFIG, isPaidPlan, type PaidPlanType } from '../utils/planConfig.js';
+import { PLAN_CONFIG, RAZORPAY_PLAN_IDS, isPaidPlan, type PaidPlanType } from '../utils/planConfig.js';
 import { getRazorpayClient } from '../utils/razorpay.js';
 
 const router: Router = express.Router();
@@ -92,16 +92,7 @@ router.post(
     const { plan } = req.body as CreateOrderRequest;
 
     if (!plan || !isPaidPlan(plan)) {
-      throw new AppError(400, 'Valid paid plan (pro/enterprise) required');
-    }
-
-    const account = await User.findById(user.userId).select('plan isActive planExpiry');
-    if (!account) {
-      throw new AppError(404, 'User not found');
-    }
-
-    if (typeof account.refreshSubscriptionStatus === 'function') {
-      await account.refreshSubscriptionStatus();
+      throw new AppError(400, 'Valid paid plan required');
     }
 
     const razorpay = getRazorpayClient();
@@ -112,10 +103,7 @@ router.post(
       amount: config.amount,
       currency: config.currency,
       receipt,
-      notes: {
-        userId: user.userId,
-        plan,
-      },
+      notes: { userId: user.userId, plan },
     });
 
     await Payment.create({
@@ -123,7 +111,6 @@ router.post(
       amount: config.amount,
       currency: config.currency,
       razorpayOrderId: razorpayOrder.id,
-      razorpayPaymentId: '',
       receipt,
       plan,
       status: 'created',
@@ -134,7 +121,55 @@ router.post(
       amount: razorpayOrder.amount,
       currency: razorpayOrder.currency,
       plan,
-      label: config.label,
+      key: env.RAZORPAY_KEY_ID,
+    });
+  })
+);
+
+router.post(
+  '/create-subscription',
+  asyncHandler(async (req: AuthRequest, res: Response) => {
+    const user = requireUser(req);
+    const { plan } = req.body as CreateOrderRequest;
+
+    if (!plan || !isPaidPlan(plan)) {
+      throw new AppError(400, 'Valid paid plan required');
+    }
+
+    const razorpay = getRazorpayClient();
+    const config = PLAN_CONFIG[plan];
+    const planId = (RAZORPAY_PLAN_IDS as any)[plan];
+
+    if (!planId || planId.startsWith('plan_placeholder')) {
+       throw new AppError(400, `Razorpay Recurring Plan for ${plan} is not configured.`);
+    }
+
+    // Create Razorpay Subscription
+    const subscription = await razorpay.subscriptions.create({
+      plan_id: planId,
+      customer_notify: 1,
+      total_count: 12, // 1 year of recurring billing
+      notes: {
+        userId: user.userId,
+        plan
+      }
+    });
+
+    await Payment.create({
+      userId: user.userId,
+      amount: config.amount,
+      currency: config.currency,
+      razorpayOrderId: subscription.id, // We'll store subscription ID here for easier lookup
+      receipt: `sub_${subscription.id}`,
+      plan,
+      status: 'created',
+    });
+
+    res.json({
+      subscriptionId: subscription.id,
+      amount: config.amount,
+      currency: 'INR',
+      plan,
       key: env.RAZORPAY_KEY_ID,
     });
   })
@@ -149,15 +184,16 @@ router.post(
       throw new AppError(503, 'Payments are not configured');
     }
 
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+    const { razorpay_order_id, razorpay_subscription_id, razorpay_payment_id, razorpay_signature } =
       req.body as VerifyPaymentRequest;
 
-    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+    if (!(razorpay_order_id || razorpay_subscription_id) || !razorpay_payment_id || !razorpay_signature) {
       throw new AppError(400, 'Payment verification payload is incomplete');
     }
 
+    const verificationId = razorpay_order_id || razorpay_subscription_id;
     const shasum = crypto.createHmac('sha256', env.RAZORPAY_KEY_SECRET);
-    shasum.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+    shasum.update(`${verificationId}|${razorpay_payment_id}`);
     const digest = shasum.digest('hex');
 
     if (digest !== razorpay_signature) {
@@ -165,29 +201,12 @@ router.post(
     }
 
     const payment = await Payment.findOne({ 
-      razorpayOrderId: razorpay_order_id,
+      razorpayOrderId: verificationId,
       verifiedAt: { $exists: false } 
     });
+
     if (!payment) {
       throw new AppError(400, 'Invalid or already processed order');
-    }
-    const razorpay = getRazorpayClient();
-    const razorpayPayment = await razorpay.payments.fetch(razorpay_payment_id);
-
-    if (!razorpayPayment) {
-      throw new AppError(400, 'Unable to fetch payment from gateway');
-    }
-
-    if (razorpayPayment.order_id !== razorpay_order_id) {
-      throw new AppError(400, 'Payment does not match the requested order');
-    }
-
-    if (!['authorized', 'captured'].includes(razorpayPayment.status)) {
-      throw new AppError(400, 'Payment is not authorized');
-    }
-
-    if (Number(razorpayPayment.amount) !== payment.amount) {
-      throw new AppError(400, 'Payment amount mismatch');
     }
 
     const user = await User.findById(payment.userId);
@@ -195,7 +214,7 @@ router.post(
       throw new AppError(404, 'User not found');
     }
 
-    await user.upgradePlan(payment.plan as PaidPlanType);
+    await user.upgradePlan(payment.plan as PaidPlanType, razorpay_subscription_id);
 
     payment.razorpayPaymentId = razorpay_payment_id;
     payment.razorpaySignature = razorpay_signature;
@@ -206,9 +225,8 @@ router.post(
 
     res.json({
       success: true,
-      message: 'Payment verified and subscription activated',
+      message: 'Subscription activated',
       plan: user.plan,
-      subscriptionStatus: user.isActive ? 'active' : 'inactive',
       expiryDate: user.planExpiry?.toISOString() || null,
     });
   })
@@ -222,10 +240,10 @@ router.post(
       throw new AppError(503, 'Payments are not configured');
     }
 
-    const signature = req.headers['x-razorpay-signature'];
-    const rawBody = Buffer.isBuffer(req.body)
+    const signature = req.headers['x-razorpay-signature'] as string;
+    const rawBody = (req as any).rawBody || (Buffer.isBuffer(req.body)
       ? req.body
-      : Buffer.from(typeof req.body === 'string' ? req.body : JSON.stringify(req.body ?? {}));
+      : Buffer.from(typeof req.body === 'string' ? req.body : JSON.stringify(req.body ?? {})));
 
     const shasum = crypto.createHmac('sha256', env.RAZORPAY_KEY_SECRET);
     shasum.update(rawBody);
@@ -237,6 +255,7 @@ router.post(
 
     const event = JSON.parse(rawBody.toString('utf8'));
 
+    // Handle One-time order failure
     if (event.event === 'payment.failed') {
       const orderId = event.payload.payment.entity.order_id;
       const payment = await Payment.findOne({ razorpayOrderId: orderId });
@@ -246,14 +265,40 @@ router.post(
       }
     }
 
-    if (event.event === 'payment.captured') {
-      const paymentId = event.payload.payment.entity.id;
-      const payment = await Payment.findOne({ razorpayPaymentId: paymentId });
-      if (payment && payment.status !== 'paid') {
-        payment.status = 'paid';
-        payment.verifiedAt = new Date();
-        await payment.save();
+    // Handle Recurring Subscription charges
+    if (event.event === 'subscription.charged') {
+      const subscriptionId = event.payload.subscription.entity.id;
+      const user = await User.findOne({ subscriptionId });
+      
+      if (user) {
+        // Extend plan by 30 days
+        const newExpiry = new Date(user.planExpiry || Date.now());
+        newExpiry.setDate(newExpiry.getDate() + 30);
+        user.planExpiry = newExpiry;
+        user.isActive = true;
+        await user.save();
+        
+        // Record payment
+        await Payment.create({
+           userId: user.id,
+           amount: event.payload.payment.entity.amount,
+           currency: 'INR',
+           razorpayOrderId: subscriptionId,
+           razorpayPaymentId: event.payload.payment.entity.id,
+           plan: user.plan,
+           status: 'paid',
+           verifiedAt: new Date()
+        });
       }
+    }
+
+    if (event.event === 'subscription.cancelled' || event.event === 'subscription.expired') {
+       const subscriptionId = event.payload.subscription.entity.id;
+       const user = await User.findOne({ subscriptionId });
+       if (user) {
+         user.subscriptionStatus = 'cancelled';
+         await user.save();
+       }
     }
 
     res.json({ received: true });

@@ -1,4 +1,4 @@
-import { Suspense, lazy, useState, useEffect } from 'react';
+import { Suspense, lazy, useState, useEffect, useRef } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
@@ -27,6 +27,7 @@ const Records = lazy(() => import('./pages/RecordsPremium'));
 const SystemHealth = lazy(() => import('./pages/SystemHealth'));
 const Payments = lazy(() => import('./pages/Payments'));
 const ScanBill = lazy(() => import('./pages/ScanBill'));
+const DataScienceHub = lazy(() => import('./pages/DataScienceHub'));
 
 const Pricing = lazy(() => import('./pages/Pricing'));
 const Profile = lazy(() => import('./pages/Home')); // Using Home as Profile placeholder
@@ -39,21 +40,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
 
 function MainApp() {
   const location = useLocation();
-  const [routeLoading, setRouteLoading] = useState(false);
-
-  // Route Transition Loading (Advanced)
-  useEffect(() => {
-    // Show loading during route changes
-    setRouteLoading(true);
-    
-    // Simulate brief transition handling or wait for component mount
-    const timer = setTimeout(() => {
-      setRouteLoading(false);
-    }, 600); 
-
-    return () => clearTimeout(timer);
-  }, [location.pathname]);
-
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [onboardingStep, setOnboardingStep] = useState(1);
 
@@ -90,19 +76,7 @@ function MainApp() {
 
   return (
     <PremiumBackground>
-      <AnimatePresence mode="wait">
-        {routeLoading && (
-          <motion.div
-            key="route-loading"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.4 } }}
-            className="fixed inset-0 z-[10000] pointer-events-none"
-          >
-            <LoadingScreen />
-          </motion.div>
-        )}
-      </AnimatePresence>
+
 
       <AnimatePresence>
         {showOnboarding && (
@@ -132,6 +106,7 @@ function MainApp() {
               <Route path="/analysis-report" element={<ProtectedRoute><AnalysisReport /></ProtectedRoute>} />
               <Route path="/system-health" element={<ProtectedRoute><SystemHealth /></ProtectedRoute>} />
               <Route path="/scan-bill" element={<ProtectedRoute><ScanBill /></ProtectedRoute>} />
+              <Route path="/ds-hub" element={<ProtectedRoute><DataScienceHub /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
 
               {/* Support Modules */}
@@ -157,22 +132,35 @@ function App() {
   useEffect(() => {
     let isMounted = true;
 
+
     const initializeApp = async () => {
-      try {
-        setLoading(true);
-        // Simulate or wait for data/API readiness
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // Check API health briefly without blocking
-        const API = import.meta.env.VITE_API_URL || "https://bhie-api.onrender.com";
-        fetch(`${API}/api/health`).catch(() => {});
-          
-      } catch (err) {
-        console.error("Failed during initialization:", err);
-      } finally {
-        // Prevent infinite loading by ensuring loading always turns false
+      // Safety timeout to prevent permanent blank screen
+      const safetyTimeout = setTimeout(() => {
         if (isMounted) {
           setLoading(false);
+        }
+      }, 3500);
+
+      try {
+        setLoading(true);
+        // Minimum visible loading time for brand experience
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        // Attempt system sync but don't block
+        const API_URL = import.meta.env.VITE_API_URL || "https://bhie-api.onrender.com";
+        try {
+          await fetch(`${API_URL}/api/health`, { signal: AbortSignal.timeout(2000) });
+        } catch (e) {
+          // Backend unreachable, running in offline mode.
+        }
+          
+      } catch (err) {
+        console.error("❌ Failed during initialization:", err);
+      } finally {
+        if (isMounted) {
+          clearTimeout(safetyTimeout);
+          setLoading(false);
+
         }
       }
     };
@@ -196,7 +184,7 @@ function App() {
               exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
               className="fixed inset-0 z-[10000]"
             >
-              <LoadingScreen />
+              <FullscreenLogoLoader label="Business Health & Intelligence Hub" />
             </motion.div>
           ) : (
             <motion.div

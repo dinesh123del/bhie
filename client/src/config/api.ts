@@ -4,8 +4,6 @@ if (!API) {
   console.error("VITE_API_URL is undefined. API calls may fail.");
 }
 
-console.log("API URL:", API);
-
 const envApiUrl = (API || '').trim();
 
 const trimTrailingSlash = (value: string) => value.replace(/\/+$/, '');

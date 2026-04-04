@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Logo from './Logo';
 
@@ -8,6 +9,49 @@ interface FullscreenLogoLoaderProps {
 const FullscreenLogoLoader = ({
   label = 'Preparing your workspace',
 }: FullscreenLogoLoaderProps) => {
+  useEffect(() => {
+    // Premium startup sound (Rich Harmonic Layer)
+    const playStartupSound = () => {
+      try {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        
+        const playTone = (freq: number, start: number, duration: number, volume: number) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + start);
+          
+          // Soft attack and long release for "premium" feel
+          gain.gain.setValueAtTime(0, audioCtx.currentTime + start);
+          gain.gain.linearRampToValueAtTime(volume, audioCtx.currentTime + start + 0.8);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + start + duration);
+          
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          
+          osc.start(audioCtx.currentTime + start);
+          osc.stop(audioCtx.currentTime + start + duration + 0.1);
+        };
+
+        // A Major 9th (Peaceful & Sophisticated)
+        // A2, E3, A3, C#4, G#4, B4 (Spaced out for richness)
+        playTone(110.00, 0.0, 3.5, 0.08); // A2 (Deep Foundation)
+        playTone(164.81, 0.2, 3.2, 0.06); // E3 (Fifth)
+        playTone(220.00, 0.4, 2.9, 0.05); // A3 (Octave)
+        playTone(277.18, 0.6, 2.6, 0.04); // C#4 (Major Third)
+        playTone(415.30, 0.8, 2.3, 0.03); // G#4 (Major Seventh)
+        playTone(493.88, 1.0, 2.0, 0.02); // B4 (Ninth)
+        
+      } catch (e) {
+        console.warn('Audio feedback not supported or blocked by browser');
+      }
+    };
+
+    // Attempt to play sound (browsers might block without interaction, but worth a try)
+    playStartupSound();
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}

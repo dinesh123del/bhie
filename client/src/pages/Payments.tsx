@@ -14,6 +14,7 @@ import { useAuth } from '../hooks/useAuth';
 import { PremiumBadge, PremiumButton, PremiumCard } from '../components/ui/PremiumComponents';
 import paymentService, { SubscriptionResponse } from '../services/paymentService';
 import { PLAN_DETAILS, getPlanLabel, getRemainingUploads, hasPremiumAccess, type AppPlan } from '../utils/plan';
+import { premiumFeedback } from '../utils/premiumFeedback';
 
 
 type PaidPlan = Exclude<AppPlan, 'free'>;
@@ -106,21 +107,24 @@ const Payments = () => {
   const handleUpgrade = async () => {
     if (!user) {
       toast.error('Please login first');
+      premiumFeedback.error();
       return;
     }
 
     if (selectedPlan === 'free') {
       toast.success('Free plan is already available');
       navigate('/dashboard');
+      premiumFeedback.click();
       return;
     }
 
     setPaymentLoading(true);
+    premiumFeedback.click();
 
     try {
       await paymentService.ensureRazorpayLoaded();
 
-      const order = await paymentService.createOrder(selectedPlan as PaidPlan);
+      const order = await paymentService.createSubscription(selectedPlan as PaidPlan);
       const razorpayKey = order.key || import.meta.env.VITE_RAZORPAY_KEY;
 
       if (!razorpayKey) {
@@ -133,12 +137,10 @@ const Payments = () => {
 
       const razorpayInstance = new window.Razorpay({
         key: razorpayKey,
-        amount: order.amount,
-        currency: order.currency,
+        subscription_id: order.subscriptionId,
         name: 'BHIE',
-        description: `Upgrade to ${currentSelection.name}`,
-        order_id: order.orderId,
-        handler: async (response) => {
+        description: `${currentSelection.name} Subscription (Auto-pay)`,
+        handler: async (response: any) => {
           try {
             const verification = await paymentService.verify(response);
             if (verification.success) {
@@ -146,9 +148,11 @@ const Payments = () => {
               const latestSubscription = await paymentService.getSubscription();
               setSubscription(latestSubscription);
               toast.success(`${currentSelection.name} plan activated`);
+              premiumFeedback.success();
             }
           } catch (error: any) {
             toast.error(error?.response?.data?.message || 'Payment verification failed');
+            premiumFeedback.error();
           } finally {
             setPaymentLoading(false);
           }
@@ -164,6 +168,7 @@ const Payments = () => {
           ondismiss: () => {
             setPaymentLoading(false);
             toast('Payment cancelled');
+            premiumFeedback.click();
           },
         },
       });
@@ -172,6 +177,7 @@ const Payments = () => {
     } catch (error: any) {
       setPaymentLoading(false);
       toast.error(error?.response?.data?.message || error?.message || 'Unable to start payment');
+      premiumFeedback.error();
     }
   };
 
@@ -181,7 +187,10 @@ const Payments = () => {
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <PremiumButton
             variant="secondary"
-            onClick={() => navigate('/dashboard')}
+            onClick={() => {
+              navigate('/dashboard');
+              premiumFeedback.click();
+            }}
             icon={<ArrowLeft className="h-4 w-4" />}
           >
             Back to dashboard
@@ -294,7 +303,10 @@ const Payments = () => {
                 )}
 
                 <PremiumButton
-                  onClick={() => setSelectedPlan(plan.code)}
+                  onClick={() => {
+                    setSelectedPlan(plan.code);
+                    premiumFeedback.click();
+                  }}
                   variant={isSelected ? 'primary' : 'secondary'}
                   className="mt-6 w-full"
                   icon={plan.code === 'free' ? <Lock className="h-4 w-4" /> : <Crown className="h-4 w-4" />}

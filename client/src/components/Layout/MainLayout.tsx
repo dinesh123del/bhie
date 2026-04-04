@@ -11,6 +11,7 @@ import {
 import { HiChevronDoubleLeft, HiChevronDoubleRight, HiSparkles } from 'react-icons/hi';
 import { useTheme } from '../../contexts/ThemeContext';
 import Logo from '../Logo';
+import { premiumFeedback } from '../../utils/premiumFeedback';
 
 interface SidebarItem {
   icon: React.ReactNode;
@@ -42,9 +43,13 @@ const ThemeToggleButton = () => {
   return (
     <motion.button
       aria-label="Toggle theme"
-      onClick={toggleTheme}
+      onClick={() => {
+        toggleTheme();
+        premiumFeedback.click();
+      }}
       whileHover={{ scale: 1.01, rotate: 2 }}
       whileTap={{ scale: 0.96 }}
+      onMouseEnter={() => premiumFeedback.haptic(5)}
       className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-ink-100 transition-all duration-300 ease-premium hover:bg-white/[0.08]"
     >
       {resolvedTheme === 'dark' ? <Sun className="h-5 w-5 text-amber-300" /> : <Moon className="h-5 w-5 text-ink-200" />}
@@ -80,9 +85,13 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center gap-3">
           <motion.button
             aria-label="Open sidebar"
-            onClick={onMobileToggle}
+            onClick={() => {
+              onMobileToggle();
+              premiumFeedback.click();
+            }}
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.96 }}
+            onMouseEnter={() => premiumFeedback.haptic(5)}
             className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white transition-all duration-300 ease-premium hover:bg-white/[0.08] lg:hidden"
           >
             <Menu className="h-5 w-5" />
@@ -90,9 +99,13 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <motion.button
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            onClick={onCollapseToggle}
+            onClick={() => {
+              onCollapseToggle();
+              premiumFeedback.click();
+            }}
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.96 }}
+            onMouseEnter={() => premiumFeedback.haptic(5)}
             className="hidden h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white transition-all duration-300 ease-premium hover:bg-white/[0.08] lg:flex"
           >
             {collapsed ? <HiChevronDoubleRight className="text-lg" /> : <HiChevronDoubleLeft className="text-lg" />}
@@ -133,9 +146,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => {
                 setNotificationsOpen((current) => !current);
                 setProfileOpen(false);
+                premiumFeedback.click();
               }}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.96 }}
+              onMouseEnter={() => premiumFeedback.haptic(5)}
               className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white transition-all duration-300 ease-premium hover:bg-white/[0.08]"
               aria-label="Show notifications"
             >
@@ -295,7 +310,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onClick={() => {
                   onNavigate(item.href);
                   onMobileClose();
+                  premiumFeedback.click();
                 }}
+                onMouseEnter={() => premiumFeedback.haptic(5)}
                 className={`group relative flex w-full items-center rounded-2xl border px-4 py-3 text-left transition-all duration-300 ease-premium ${
                   selected
                     ? 'border-sky-300/18 bg-white/[0.07] text-white shadow-brand-glow'

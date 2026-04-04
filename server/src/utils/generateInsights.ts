@@ -99,17 +99,17 @@ function buildRuleBasedInsights(input: GenerateInsightsInput): DashboardInsight[
       insights.push({
         type: 'warning',
         metric: 'general',
-        message: 'High Structural Friction Detected (Drift)',
-        detail: `The system is detecting 'Capital Exhaust'. Your operational activity is outstripping your yield efficiency. Structural drift is occurring at a rate of ${formatPercent(100 - resonanceIndex)}.`,
-        value: 'Drift Detected',
+        message: 'High Spending Relative to Profit',
+        detail: `Your spending is significantly higher than your profit yield. Profitability is currently low compared to your business activity.`,
+        value: 'Low Yield',
       });
     } else if (resonanceIndex > 45) {
       insights.push({
         type: 'positive',
         metric: 'general',
-        message: 'Optimal Quantum Resonance (Sync)',
-        detail: 'The business is in a state of high-yield harmony. Operational entropy is at record lows, with each transaction node delivering maximum capital resonance.',
-        value: 'Resonance High',
+        message: 'Optimal Business Health',
+        detail: 'The business is performing very efficiently. Each transaction is contributing well to your net profit.',
+        value: 'Healthy Yield',
       });
     }
   }
@@ -216,12 +216,13 @@ async function enhanceInsightsWithAI(
   baseInsights: DashboardInsight[]
 ): Promise<DashboardInsight[]> {
   const prompt = [
-    'You are refining business dashboard insights for BHIE.',
-    'Do not invent numbers or facts.',
+    'You are a professional Business Analyst and Strategic Consultant for BHIE.',
+    'Your goal is to provide clear, actionable business advice to small and medium business owners.',
+    'Do not use technical AI jargon or complex financial engineering terms.',
     'Keep the same meaning as the provided rule-based insights.',
     'Return valid JSON with this exact shape: {"insights":[{"type":"positive|warning|info","message":"...","detail":"...","metric":"revenue|expenses|profit|activity|general","value":"..."}]}',
     'Return at most 5 insights.',
-    'Make the message concise, realistic, and useful for a non-technical business user.',
+    'Make the message concise, realistic, and useful for a regular business user.',
     '',
     `Business summary: ${JSON.stringify({
       revenue: input.revenue,

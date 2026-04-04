@@ -39,7 +39,7 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
         >
           <RefreshCw className="w-12 h-12 text-sky-400" />
         </motion.div>
-        <p className="text-white/40 font-black uppercase tracking-[0.3em] text-sm italic">Synthesizing Data Streams...</p>
+        <p className="text-white/40 font-black uppercase tracking-[0.3em] text-sm italic">Analyzing Business Data...</p>
       </div>
     );
   }
@@ -49,10 +49,10 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
       <div className="p-10 bg-red-500/5 border border-red-500/20 rounded-3xl backdrop-blur-xl">
         <div className="flex items-center gap-4 mb-4">
            <AlertTriangle className="w-6 h-6 text-red-400" />
-           <p className="text-xl font-bold text-white">Analysis Disrupted</p>
+           <p className="text-xl font-bold text-white">Analysis Interrupted</p>
         </div>
         <p className="text-red-200/60 font-medium">
-          {analysisResult?.message || 'The neural engine encountered an unexpected error during synthesis. Please re-initiate the protocol.'}
+          {analysisResult?.message || 'The AI analyst encountered an unexpected issue. Please try again.'}
         </p>
       </div>
     );
@@ -74,9 +74,9 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-4">
              <Sparkles className="w-5 h-5 text-white/80" />
-             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/70">Intelligence Finalized</span>
+             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/70">Expert Analysis Complete</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-4 leading-none">Command Briefing.</h1>
+          <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-4 leading-none">Business Summary.</h1>
           <div className="flex items-center gap-2 text-white/70 font-medium bg-black/10 w-fit px-4 py-2 rounded-full backdrop-blur-md">
              <Calendar className="w-4 h-4" />
              {new Date(analysisResult.timestamp).toLocaleString()}
@@ -91,14 +91,29 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
           { label: 'Operational Burn', value: analysisResult.businessData.expenses, icon: <Wallet />, color: 'amber' },
           { label: 'User Base', value: analysisResult.businessData.customerCount, icon: <Users />, color: 'purple' }
         ].map((kpi, i) => (
-          <PremiumCard key={i} extreme={kpi.color === 'sky'} className="p-8 bg-white/[0.02]">
+          <PremiumCard key={i} extreme={kpi.color === 'sky'} className="relative p-8 bg-white/[0.02] overflow-hidden">
             <div className={`w-10 h-10 rounded-xl bg-${kpi.color}-500/10 flex items-center justify-center mb-6`}>
                {React.cloneElement(kpi.icon as React.ReactElement, { className: `w-5 h-5 text-${kpi.color}-400` })}
             </div>
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mb-1">{kpi.label}</p>
-            <p className="text-3xl font-black text-white tracking-tighter">
+            <p className="text-3xl font-black text-white tracking-tighter z-10 relative">
                {kpi.label.includes('Count') ? kpi.value?.toLocaleString() : `₹${kpi.value?.toLocaleString()}`}
             </p>
+            {/* Professional Sparkline (PowerBI Style) */}
+            <div className="absolute bottom-0 left-0 right-0 h-16 opacity-20 pointer-events-none">
+              <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 40">
+                <path 
+                  d={i === 0 ? "M0 35 L20 25 L40 30 L60 15 L80 10 L100 5 L100 40 L0 40 Z" : i === 1 ? "M0 5 L20 15 L40 12 L60 25 L80 18 L100 35 L100 40 L0 40 Z" : "M0 25 L20 20 L40 28 L60 10 L80 15 L100 5 L100 40 L0 40 Z"} 
+                  fill={`url(#gradient-${i})`} 
+                />
+                <defs>
+                  <linearGradient id={`gradient-${i}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={kpi.color === 'sky' ? '#38bdf8' : kpi.color === 'amber' ? '#fbbf24' : '#a855f7'} />
+                    <stop offset="100%" stopColor="transparent" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
           </PremiumCard>
         ))}
       </div>

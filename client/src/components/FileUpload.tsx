@@ -13,6 +13,7 @@ import { toast } from 'react-hot-toast';
 import { useAuth } from '../hooks/useAuth';
 import { uploadService, UploadedImageRecord } from '../services/uploadService';
 import { canUploadMore, getRemainingUploads, hasPremiumAccess } from '../utils/plan';
+import { premiumFeedback } from '../utils/premiumFeedback';
 
 const acceptedFormats = ['JPG', 'PNG', 'WEBP', 'HEIC', 'PDF', 'DOCX', 'ZIP'];
 
@@ -34,6 +35,7 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
   const processFiles = useCallback(async (files: File[]) => {
     try {
       if (uploadsLocked) {
+        premiumFeedback.error();
         toast.error('Free upload limit reached. Upgrade to Pro for unlimited uploads.');
         return;
       }
@@ -46,6 +48,7 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
       }
 
       setLatestResults(response.items);
+      premiumFeedback.success();
       toast.success(`${response.items.length} file(s) processed and saved`);
 
       window.dispatchEvent(
@@ -56,6 +59,7 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
 
       onUploadComplete?.(response.items);
     } catch (error: any) {
+      premiumFeedback.error();
       toast.error(error?.response?.data?.message || 'Upload failed');
     } finally {
       setUploading(false);
@@ -89,15 +93,18 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
     }
 
     if (uploadsLocked) {
+      premiumFeedback.error();
       toast.error('Free upload limit reached. Upgrade to Pro for unlimited uploads.');
       return;
     }
 
     if (droppedFiles.some((file) => file.size > 10 * 1024 * 1024)) {
+      premiumFeedback.error();
       toast.error('File too large (max 10MB each)');
       return;
     }
 
+    premiumFeedback.click();
     setPreviewFiles(droppedFiles);
     void processFiles(droppedFiles);
   }, [processFiles, uploadsLocked]);
@@ -115,10 +122,12 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
     }
 
     if (selectedFiles.some((file) => file.size > 10 * 1024 * 1024)) {
+      premiumFeedback.error();
       toast.error('File too large (max 10MB each)');
       return;
     }
 
+    premiumFeedback.click();
     setPreviewFiles(selectedFiles);
     void processFiles(selectedFiles);
   }, [processFiles, uploadsLocked]);
@@ -137,6 +146,8 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
       onDragOver={handleDrag}
       onDrop={handleDrop}
       whileHover={{ y: -2, scale: 1.005 }}
+      whileTap={{ scale: 0.995 }}
+      onMouseEnter={() => premiumFeedback.haptic(5)}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(129,140,248,0.14),transparent_26%),radial-gradient(circle_at_bottom_left,rgba(125,211,252,0.1),transparent_24%)]" />
@@ -156,12 +167,12 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
           <div className="space-y-3">
             <div className="section-kicker">
               <Sparkles className="h-3.5 w-3.5" />
-              Smart Upload
+              Scan Files
             </div>
             <div>
-              <h3 className="text-2xl font-semibold tracking-[-0.05em] text-white md:text-3xl">Upload business files</h3>
+              <h3 className="text-2xl font-semibold tracking-[-0.05em] text-white md:text-3xl">Upload Bills & Receipts</h3>
               <p className="max-w-lg text-sm leading-7 text-ink-300">
-                Upload images, PDF, DOCX, or ZIP archives. BHIE extracts text, finds amount, detects income or expense, and creates records automatically.
+                Upload images, PDF, or DOCX files. BHIE finds the amount, category, and date, then creates your records automatically.
               </p>
               <p className="mt-2 text-xs font-semibold uppercase tracking-[0.18em] text-ink-400">
                 {premiumAccess ? 'Unlimited uploads active' : `${remainingUploads} free uploads remaining`}
@@ -246,11 +257,11 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
 
         <div className="grid gap-3 md:grid-cols-3">
           {[
-            { label: 'Extraction', value: uploading ? 'Reading files' : 'Ready' },
-            { label: 'Record', value: uploading ? 'Creating entries' : 'Auto-save enabled' },
+            { label: 'Reading', value: uploading ? 'Reading files...' : 'Ready' },
+            { label: 'Saving', value: uploading ? 'Creating entries...' : 'Auto-save on' },
             {
-              label: 'Payload',
-              value: previewFiles.length > 0 ? `${(totalSize / 1024 / 1024).toFixed(1)} MB selected` : 'No files staged',
+              label: 'Total Size',
+              value: previewFiles.length > 0 ? `${(totalSize / 1024 / 1024).toFixed(1)} MB` : '0 MB',
             },
           ].map((item) => (
             <div

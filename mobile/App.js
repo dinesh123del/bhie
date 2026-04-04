@@ -29,19 +29,17 @@ const TabNavigator = () => {
                     else if (route.name === 'Profile') iconName = focused ? 'person' : 'person-outline';
                     return <Ionicons name={iconName} size={size} color={color} />;
                 },
-                tabBarActiveTintColor: '#007AFF',
-                tabBarInactiveTintColor: '#8E8E93',
+                tabBarActiveTintColor: '#38BDF8',
+                tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.35)',
                 tabBarStyle: {
                     borderTopWidth: 0,
                     elevation: 0,
-                    backgroundColor: '#FFFFFF',
+                    backgroundColor: '#0F1219',
                     height: 90,
                     paddingBottom: 30,
                     paddingTop: 10,
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: -2 },
-                    shadowOpacity: 0.05,
-                    shadowRadius: 10,
+                    borderTopColor: 'rgba(255, 255, 255, 0.05)',
+                    borderTopWidth: 1,
                 }
             })}
         >
@@ -52,14 +50,22 @@ const TabNavigator = () => {
     );
 };
 
+import * as Haptics from 'expo-haptics';
+import { playStartupSound } from './utils/audio';
+
 export default function App() {
     React.useEffect(() => {
-        // No-op for now
+        // Elite Startup Sequence
+        const startUp = async () => {
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+            await playStartupSound();
+        };
+        startUp();
     }, []);
 
     return (
         <NavigationContainer>
-            <StatusBar style="dark" />
+            <StatusBar style="light" />
             <Stack.Navigator 
                 screenOptions={{
                     headerShown: false,

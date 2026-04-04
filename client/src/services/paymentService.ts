@@ -19,7 +19,8 @@ export interface SubscriptionResponse {
 }
 
 export interface CreateOrderResponse {
-  orderId: string;
+  orderId?: string;
+  subscriptionId?: string;
   amount: number;
   currency: string;
   plan: 'pro' | 'premium';
@@ -28,18 +29,20 @@ export interface CreateOrderResponse {
 }
 
 export interface VerifyPaymentPayload {
-  razorpay_order_id: string;
+  razorpay_order_id?: string;
+  razorpay_subscription_id?: string;
   razorpay_payment_id: string;
   razorpay_signature: string;
 }
 
 export interface RazorpayCheckoutOptions {
   key: string;
-  amount: number;
-  currency: string;
+  amount?: number;
+  currency?: string;
   name: string;
   description: string;
-  order_id: string;
+  order_id?: string;
+  subscription_id?: string;
   handler: (response: VerifyPaymentPayload) => void | Promise<void>;
   prefill?: {
     name?: string;
@@ -66,6 +69,11 @@ export const paymentService = {
 
   async createOrder(plan: 'pro' | 'premium') {
     const response = await api.post<CreateOrderResponse>('/payment/create-order', { plan });
+    return response.data;
+  },
+
+  async createSubscription(plan: 'pro' | 'premium') {
+    const response = await api.post<CreateOrderResponse>('/payment/create-subscription', { plan });
     return response.data;
   },
 

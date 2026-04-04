@@ -39,15 +39,16 @@ class FeedbackEngine {
     this.playTone(800, 'sine', 0.1, 0.04);
   }
 
-  // Light "chime" for success
+  // Elegant Success Chime (A Major Shimmer)
   chime() {
-    this.playTone(1200, 'sine', 0.3, 0.05);
-    setTimeout(() => this.playTone(1500, 'sine', 0.4, 0.03), 50);
+    this.playTone(880.00, 'sine', 0.8, 0.04);  // A5
+    setTimeout(() => this.playTone(1108.73, 'sine', 0.6, 0.03), 100); // C#6
+    setTimeout(() => this.playTone(1318.51, 'sine', 0.4, 0.02), 200); // E6
   }
 
-  // Soft low tone for errors
+  // Smooth, low-frequency failure chime
   low() {
-    this.playTone(150, 'triangle', 0.4, 0.08);
+    this.playTone(120, 'sine', 0.6, 0.04);
   }
 
   vibrate(ms: number | number[] = 10) {

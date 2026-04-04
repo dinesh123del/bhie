@@ -16,6 +16,7 @@ import {
   CheckCircle,
 } from 'lucide-react';
 import { PremiumCard } from '../components/ui/PremiumComponents';
+import { premiumFeedback } from '../utils/premiumFeedback';
 
 // ======================= NETFLIX-STYLE INTRO =======================
 const CinematicIntro = ({ onComplete }: { onComplete: () => void }) => {
@@ -83,7 +84,12 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-center gap-4">
           <Link to="/login" className="text-sm font-bold text-white hover:text-white/80 transition-colors">Sign In</Link>
-          <Link to="/register" className="px-5 py-2 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white text-sm font-bold rounded transiton-all shadow-[0_0_20px_rgba(56,189,248,0.3)]">
+          <Link 
+            to="/register" 
+            onClick={() => premiumFeedback.click()}
+            onMouseEnter={() => premiumFeedback.haptic(5)}
+            className="px-5 py-2 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white text-sm font-bold rounded transiton-all shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+          >
             Start Free
           </Link>
         </div>
@@ -105,7 +111,14 @@ const Navbar = () => {
             <a href="#features" onClick={() => setMobileOpen(false)} className="text-white text-lg font-medium">Features</a>
             <a href="#pricing" onClick={() => setMobileOpen(false)} className="text-white text-lg font-medium">Pricing</a>
             <a href="#faq" onClick={() => setMobileOpen(false)} className="text-white text-lg font-medium">FAQ</a>
-            <Link to="/register" onClick={() => setMobileOpen(false)} className="py-3 bg-[#E50914] text-center text-white font-bold rounded">
+            <Link 
+              to="/register" 
+              onClick={() => {
+                setMobileOpen(false);
+                premiumFeedback.click();
+              }} 
+              className="py-3 bg-sky-500 text-center text-white font-bold rounded"
+            >
               Start Free
             </Link>
           </motion.div>
@@ -138,17 +151,25 @@ const Hero = () => (
       >
         <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-6 drop-shadow-[0_0_30px_rgba(255,255,255,0.15)]">
           TRACK EXPENSES<br/>
-          <span className="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(56,189,248,0.4)]">INSTANTLY FROM RECEIPTS</span>
+          <span className="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(56,189,248,0.4)]">AUTOMATICALLY FROM RECEIPTS</span>
         </h1>
         <p className="text-lg md:text-2xl text-white/60 max-w-3xl mx-auto mb-10 font-medium">
-          Stop wasting hours on spreadsheets. Scan any receipt, and let BHIE handle the rest with AI-powered categorization and real-time insights.
+          Save time on your accounts. Scan any receipt, and BHIE organizes your business spending with real-time reports and insights.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link to="/register" className="w-full sm:w-auto px-10 py-4 bg-white text-slate-950 hover:bg-white/90 text-lg font-black rounded transition-all flex items-center justify-center gap-2 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.3)]">
+          <Link 
+            to="/register" 
+            onClick={() => premiumFeedback.click()}
+            onMouseEnter={() => premiumFeedback.haptic(5)}
+            className="w-full sm:w-auto px-10 py-4 bg-white text-slate-950 hover:bg-white/90 text-lg font-black rounded transition-all flex items-center justify-center gap-2 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.3)]"
+          >
             Get Started Free <ArrowRight className="w-5 h-5" />
           </Link>
-          <button className="w-full sm:w-auto px-10 py-4 bg-white/5 hover:bg-white/10 text-white text-lg font-bold rounded transition-all flex items-center justify-center gap-2 border border-white/10 backdrop-blur-md">
+          <button 
+            onClick={() => premiumFeedback.click()}
+            className="w-full sm:w-auto px-10 py-4 bg-white/5 hover:bg-white/10 text-white text-lg font-bold rounded transition-all flex items-center justify-center gap-2 border border-white/10 backdrop-blur-md"
+          >
             <Play className="w-5 h-5 fill-current" /> Watch Demo
           </button>
         </div>
@@ -260,7 +281,7 @@ const Features = () => {
   return (
     <section id="features" className="py-24 px-6 bg-[#0a0a0a]/95 border-y border-[#222]">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl text-center md:text-5xl font-black text-white mb-16">The Intelligence <span className="text-[#E50914]">Suite</span></h2>
+        <h2 className="text-4xl text-center md:text-5xl font-black text-white mb-16">The Business <span className="text-[#E50914]">Features</span></h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {cards.map((f, i) => (
              <PremiumCard 
@@ -286,7 +307,7 @@ const Features = () => {
 const HowItWorks = () => (
   <section id="how-it-works" className="py-24 px-6 bg-black relative">
     <div className="max-w-7xl mx-auto">
-      <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16">Sequence of <span className="text-[#E50914]">Execution</span></h2>
+      <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16">How it <span className="text-[#E50914]">Works</span></h2>
       <div className="flex flex-col md:flex-row justify-between gap-12 relative">
         <div className="hidden md:block absolute top-[28px] left-[10%] right-[10%] h-[2px] bg-[#333] z-0" />
         
@@ -311,9 +332,9 @@ const HowItWorks = () => (
 // ======================= PRICING =======================
 const Pricing = () => {
   const planData = [
-    { name: "FREE", price: "0", features: ["Basic Analytics", "Manual Entry", "Standard Dashboard", "Community Support"], highlight: false },
-    { name: "PRO", price: "59", features: ["Insights & Predictions", "Today's Action Engine", "File OCR Uploads", "Priority Engine Queue"], highlight: true },
-    { name: "BUSINESS", price: "119", features: ["Unlimited Event Ingestion", "Multi-Tenant Access", "Custom Webhooks", "Dedicated Architect"], highlight: false },
+    { name: "FREE", price: "0", features: ["Business Analytics", "Manual Entry", "Simple Dashboard", "Basic Support"], highlight: false },
+    { name: "PRO", price: "59", features: ["Insights & Advice", "Daily Action List", "File Uploads", "Priority Support"], highlight: true },
+    { name: "BUSINESS", price: "119", features: ["Unlimited Records", "Team Access", "Custom Reports", "Dedicated Support"], highlight: false },
   ];
 
   return (
@@ -345,13 +366,15 @@ const Pricing = () => {
                </ul>
                <Link 
                  to="/register" 
+                 onClick={() => premiumFeedback.click()}
+                 onMouseEnter={() => premiumFeedback.haptic(5)}
                  className={`w-full py-4 rounded-xl font-bold transition-all block text-center text-sm tracking-tight ${
                    plan.highlight 
                      ? 'bg-white text-black hover:bg-white/90 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.2)]' 
                      : 'bg-white/5 text-white hover:bg-white/10'
                  }`}
                >
-                 Deploy Now
+                 Choose Plan
                </Link>
             </PremiumCard>
           ))}
@@ -392,9 +415,9 @@ const Testimonials = () => (
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const questions = [
-    { q: "Is my corporate data secure?", a: "Affirmative. BHIE employs strict tenant isolation, at-rest encryption, and JSON Web Tokens. PII is scrubbed before any processing." },
-    { q: "Do I require engineering resources to deploy?", a: "Negative. The dashboard activates out-of-the-box. Integrate your banking or begin via manual OCR drops immediately." },
-    { q: "Which verticals does the engine support?", a: "The foundational engine has been fine-tuned to synthesize logic across E-Commerce, Logistics, SaaS, and conventional Retail environments." }
+    { q: "Is my business data secure?", a: "Yes. BHIE uses bank-level encryption and secure tokens. Your private info is never shared or stored insecurely." },
+    { q: "Do I need a developer to set it up?", a: "No. The system works as soon as you log in. You can start by uploading a receipt immediately." },
+    { q: "Which businesses can use BHIE?", a: "The system works for all types of businesses, including Retail, Freelance, Agencies, and E-commerce." }
   ];
 
   return (
@@ -431,10 +454,15 @@ const CTA = () => (
   <section className="py-32 px-6 bg-[#E50914] text-center relative overflow-hidden">
      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center mix-blend-multiply opacity-20" />
      <div className="relative z-10 max-w-3xl mx-auto">
-       <h2 className="text-5xl md:text-7xl font-black text-white mb-6 uppercase tracking-tighter leading-none">Initiate System Upgrade</h2>
-       <p className="text-xl text-white/80 font-medium mb-10">Cease manual operations. Deploy BHIE today and reclaim complete command over your business health.</p>
-       <Link to="/register" className="inline-block px-12 py-5 bg-black hover:bg-[#111] text-white text-lg font-black tracking-widest uppercase rounded shadow-2xl transition-all border border-black hover:border-white/20">
-         Start Growing Free
+       <h2 className="text-5xl md:text-7xl font-black text-white mb-6 uppercase tracking-tighter leading-none">Start Today</h2>
+       <p className="text-xl text-white/80 font-medium mb-10">Stop tracking manually. Start your trial today and take control of your business.</p>
+       <Link 
+         to="/register" 
+         onClick={() => premiumFeedback.click()}
+         onMouseEnter={() => premiumFeedback.haptic(5)}
+         className="inline-block px-12 py-5 bg-black hover:bg-[#111] text-white text-lg font-black tracking-widest uppercase rounded shadow-2xl transition-all border border-black hover:border-white/20"
+       >
+         Start Free Now
        </Link>
      </div>
   </section>

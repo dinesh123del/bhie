@@ -13,6 +13,8 @@ import { AuthRequest, UserRole } from '../types/index.js';
 import { AppError } from '../utils/appError.js';
 import { requireUser } from '../utils/request.js';
 
+import { sensitiveLimiter } from '../middleware/rateLimiter.js';
+
 const router = express.Router();
 
 const loginSchema = z.object({
@@ -110,6 +112,7 @@ const generateToken = (userId: string, role: UserRole): string => {
 
 router.post(
   '/login',
+  sensitiveLimiter,
   asyncHandler(async (req: Request, res: Response) => {
     const { email, password } = loginSchema.parse(req.body);
     const user = await User.findOne({ email });
@@ -144,7 +147,7 @@ import {
   register as registerController, 
 } from '../controllers/authController.js';
 
-router.post('/register', registerController);
+router.post('/register', sensitiveLimiter, registerController);
 
 router.get('/google', (req, res, next) => {
   if (!googleOAuthEnabled) {
@@ -182,6 +185,7 @@ router.get('/google/callback', (req, res, next) => {
 
 router.post(
   '/google',
+  sensitiveLimiter,
   asyncHandler(async (req: Request, res: Response) => {
     const { token: googleToken } = req.body;
     

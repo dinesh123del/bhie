@@ -23,7 +23,7 @@ import { PremiumCard, PremiumButton } from '../components/ui/PremiumComponents';
 import InsightCard from '../components/analytics/InsightCard';
 import { useAnalyticsStore } from '../store/useAnalyticsStore';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../lib/axios';
 import toast from 'react-hot-toast';
 
 // --- Types ---
@@ -48,11 +48,11 @@ const AnalyticsIntelligence = () => {
       setLoading(true);
       try {
         const [rev, pc, cust, inv, pred] = await Promise.all([
-          axios.get(`/api/analytics/intel/revenue?days=${filters.range}`),
-          axios.get('/api/analytics/intel/profit-cost'),
-          axios.get('/api/analytics/intel/customers'),
-          axios.get('/api/analytics/intel/inventory'),
-          axios.get('/api/analytics/intel/predictions'),
+          api.get(`/analytics/intel/revenue?days=${filters.range}`),
+          api.get('/analytics/intel/profit-cost'),
+          api.get('/analytics/intel/customers'),
+          api.get('/analytics/intel/inventory'),
+          api.get('/analytics/intel/predictions'),
         ]);
 
         setData({

@@ -43,62 +43,62 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
         this.size = Math.random() * 2.2 + 0.5;
         this.color = colors[Math.floor(Math.random() * colors.length)];
         this.density = Math.random() * 20 + 1;
-        this.opacity = Math.random() * 0.7 + 0.1;
-        this.twinkle = (Math.random() * 0.015) + 0.005;
-        this.speedY = (Math.random() * -0.4) - 0.1; // Slow upward drift
-        this.speedX = (Math.random() * 0.2) - 0.1;
+        this.opacity = Math.random() * 0.6 + 0.1;
+        this.twinkle = (Math.random() * 0.008) + 0.002; // Slower, softer twinkle
+        this.speedY = (Math.random() * -0.2) - 0.05; // Ultra-slow upward drift
+        this.speedX = (Math.random() * 0.1) - 0.05;
       }
 
       draw() {
         if (!ctx) return;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
         
-        // Anti-gravity Twinkle
+        // Anti-gravity Smooth Twinkle - Fast calculation
         this.opacity += this.twinkle;
-        if (this.opacity > 0.9 || this.opacity < 0.1) this.twinkle = -this.twinkle;
+        if (this.opacity > 0.8 || this.opacity < 0.1) this.twinkle = -this.twinkle;
         
         ctx.globalAlpha = this.opacity;
-        ctx.fill();
-        
-        if (this.color === '#ffffff') {
-          ctx.shadowBlur = 20;
-          ctx.shadowColor = '#ffffff';
+        ctx.fillStyle = this.color;
+
+        if (this.size < 0.8) {
+          // Pixel Stars optimization: Use fast rects instead of expensive arcs
+          ctx.fillRect(this.x, this.y, this.size, this.size);
+        } else {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
         }
+        
+        // CRITICAL PERFORMANCE FIX: Removed shadowBlur. 
+        // It's the #1 cause of Canvas lag.
       }
 
       update() {
-        // Constant drift
+        // Constant ultra-slow drift
         this.x += this.speedX;
         this.y += this.speedY;
 
-        // Wrap around screen
-        if (this.y < -10) {
-          this.y = (canvas?.height || 1080) + 10;
-          this.x = Math.random() * (canvas?.width || 1920);
-        }
+        // Efficient wrapping
+        const w = (canvas?.width || 1920);
+        const h = (canvas?.height || 1080);
+        
+        if (this.y < -20) this.y = h + 20;
+        if (this.y > h + 20) this.y = -20;
+        if (this.x < -20) this.x = w + 20;
+        if (this.x > w + 20) this.x = -20;
 
-        // Proximity interaction (Hover feel)
+        // Proximity interaction (Hover feel) - Lightweight distance check
         const dx = mouseRef.current.x - this.x;
         const dy = mouseRef.current.y - this.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const maxDistance = 180;
-        
-        if (distance < maxDistance) {
-          const force = (maxDistance - distance) / maxDistance;
-          const directionX = (dx / distance) * force * this.density * 0.3;
-          const directionY = (dy / distance) * force * this.density * 0.3;
-
-          if (mouseRef.current.active) {
-             // Push on click/touch
-             this.x -= directionX * 5;
-             this.y -= directionY * 5;
-          } else {
-             // Gentle pull on hover
-             this.x += directionX;
-             this.y += directionY;
-          }
+        if (Math.abs(dx) < 150 && Math.abs(dy) < 150) {
+           const distance = Math.sqrt(dx * dx + dy * dy);
+           const maxDistance = 150;
+           
+           if (distance < maxDistance) {
+             const force = (maxDistance - distance) / maxDistance;
+             const push = mouseRef.current.active ? 3 : 0.5;
+             this.x += (dx / distance) * force * this.density * push;
+             this.y += (dy / distance) * force * this.density * push;
+           }
         }
       }
     }
@@ -107,30 +107,34 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
       particles = [];
       const w = window.innerWidth;
       const h = window.innerHeight;
-      canvas.width = w * window.devicePixelRatio;
-      canvas.height = h * window.devicePixelRatio;
-      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      const dpr = window.devicePixelRatio || 1;
       
-      // Triple layering for depth
-      // 1. Pixel Stars (very small, many)
-      for (let i = 0; i < 280; i++) {
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.scale(dpr, dpr);
+      
+      // Target: 109 + 73 + 2003 = 2185
+      
+      // 1. Optimized Tiny Stars (1500)
+      for (let i = 0; i < 1500; i++) {
         const p = new Particle();
-        p.size = Math.random() * 0.8 + 0.1;
-        p.twinkle *= 1.2;
-        particles.push(p);
-      }
-      // 2. Main Glitter
-      for (let i = 0; i < 150; i++) {
-        const p = new Particle();
-        p.size = Math.random() * 1.5 + 0.8;
-        particles.push(p);
-      }
-      // 3. Bokeh Foreground (large, blurry)
-      for (let i = 0; i < 25; i++) {
-        const p = new Particle();
-        p.size = Math.random() * 4 + 2;
-        p.opacity = 0.15;
+        p.size = Math.random() * 0.6 + 0.05;
         p.twinkle *= 0.5;
+        p.speedY *= 0.4;
+        particles.push(p);
+      }
+      // 2. High Quality Glitter (500)
+      for (let i = 0; i < 500; i++) {
+        const p = new Particle();
+        p.size = Math.random() * 1.5 + 0.5;
+        particles.push(p);
+      }
+      // 3. Cinematic Bokeh (185)
+      for (let i = 0; i < 185; i++) {
+        const p = new Particle();
+        p.size = Math.random() * 4 + 1;
+        p.opacity = 0.1;
+        p.twinkle *= 0.3;
         particles.push(p);
       }
     };

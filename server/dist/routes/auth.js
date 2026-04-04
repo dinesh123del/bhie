@@ -10,6 +10,7 @@ import { authenticateToken } from '../middleware/auth.js';
 import User from '../models/User.js';
 import { AppError } from '../utils/appError.js';
 import { requireUser } from '../utils/request.js';
+import { sensitiveLimiter } from '../middleware/rateLimiter.js';
 const router = express.Router();
 const loginSchema = z.object({
     email: z.string().email('Invalid email'),
@@ -88,7 +89,7 @@ const generateToken = (userId, role) => {
     };
     return jwt.sign({ userId, role }, env.JWT_SECRET, signOptions);
 };
-router.post('/login', asyncHandler(async (req, res) => {
+router.post('/login', sensitiveLimiter, asyncHandler(async (req, res) => {
     const { email, password } = loginSchema.parse(req.body);
     const user = await User.findOne({ email });
     if (!user || !(await user.comparePassword(password))) {
@@ -113,7 +114,7 @@ router.post('/login', asyncHandler(async (req, res) => {
     });
 }));
 import { register as registerController, } from '../controllers/authController.js';
-router.post('/register', registerController);
+router.post('/register', sensitiveLimiter, registerController);
 router.get('/google', (req, res, next) => {
     if (!googleOAuthEnabled) {
         next(new AppError(503, 'Google OAuth is not configured'));
@@ -142,7 +143,7 @@ router.get('/google/callback', (req, res, next) => {
         res.redirect(redirectUrl.toString());
     })(req, res, next);
 });
-router.post('/google', asyncHandler(async (req, res) => {
+router.post('/google', sensitiveLimiter, asyncHandler(async (req, res) => {
     const { token: googleToken } = req.body;
     if (!googleToken) {
         throw new AppError(400, 'Google token is required');

@@ -6,6 +6,7 @@ import { authService } from '../services/authService';
 import { useAuth } from '../hooks/useAuth';
 import axios from 'axios';
 import { GoogleButton } from '../components/auth/GoogleButton';
+import { premiumFeedback } from '../utils/premiumFeedback';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -49,16 +50,19 @@ const Register = () => {
     
     if (!formData.name.trim() || !formData.email.trim() || !formData.password.trim()) {
       setError('All fields are required');
+      premiumFeedback.error();
       return;
     }
 
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters');
+      premiumFeedback.error();
       return;
     }
 
     setLoading(true);
     setError('');
+    premiumFeedback.click();
 
     try {
       const response = await authService.register(formData);
@@ -69,7 +73,9 @@ const Register = () => {
       }
 
       login(response.token, response.user);
+      premiumFeedback.success();
     } catch (err: any) {
+      premiumFeedback.error();
       let message = 'Registration failed';
       if (axios.isAxiosError(err)) {
         message = err.response?.data?.message || err.message || 'Unable to connect to server';
@@ -234,7 +240,10 @@ const Register = () => {
               Already have an account?{' '}
               <motion.button
                 whileHover={{ scale: 1.05 }}
-                onClick={() => navigate('/login')}
+                onClick={() => {
+                  navigate('/login');
+                  premiumFeedback.click();
+                }}
                 className="text-indigo-300 hover:text-indigo-200 font-bold transition-colors"
               >
                 Sign in

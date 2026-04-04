@@ -90,8 +90,13 @@ export const subscriptionController = {
     const shasum = crypto.createHmac('sha256', env.RAZORPAY_KEY_SECRET);
     shasum.update(`${razorpay_payment_id}|${razorpay_subscription_id}`);
     const expectedSignature = shasum.digest('hex');
+    const expectedSignatureBuf = Buffer.from(expectedSignature);
+    const signatureBuf = Buffer.from(razorpay_signature);
 
-    if (expectedSignature !== razorpay_signature) {
+    const isValid = expectedSignatureBuf.length === signatureBuf.length && 
+                   crypto.timingSafeEqual(expectedSignatureBuf, signatureBuf);
+
+    if (!isValid) {
       return res.status(400).json({ success: false, message: 'Invalid payment signature' });
     }
 

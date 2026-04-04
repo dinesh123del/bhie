@@ -124,7 +124,7 @@ async function openaiVisionFallback(buffer: Buffer, ocrText: string): Promise<st
 function cleanText(text: string): string {
   return text
     .replace(/\s+/g, ' ')
-    .replace(/[^a-zA-Z0-9₹.,:\-/%()$#@+\s]/g, ' ') // Allow decimals and symbols
+    .replace(/[^a-zA-Z0-9₹.,:\-/%()$#@+*!&|'\"[\]{}\s]/g, '') // Expanded allowed set
     .replace(/([0-9])o([0-9])/g, '$10$2') 
     .replace(/\|/g, '1')
     .trim();
@@ -250,12 +250,13 @@ export async function processDocument(input: Buffer | string): Promise<DocumentI
     }
     
     // 4. Synthesis
+    const exactText = rawText; // Preserve the actual OCR output
     const cleanedText = cleanText(rawText);
     const amountData = extractAmount(cleanedText);
     const type = detectType(cleanedText);
     const category = detectCategory(cleanedText, type);
     const date = extractDate(cleanedText);
-    const items = extractItems(rawText); // Use raw for items to preserve formatting
+    const items = extractItems(rawText); 
     
     // 5. Final Confidence Calculation
     let finalConfidence = (ocrConfidence * 0.5) + (amountData.confidence * 0.5);
@@ -267,6 +268,7 @@ export async function processDocument(input: Buffer | string): Promise<DocumentI
       category,
       confidence: parseFloat(finalConfidence.toFixed(2)),
       rawText: cleanedText,
+      exactText, // Returning the exact text as requested
       items,
       date,
     };

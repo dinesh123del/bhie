@@ -91,16 +91,16 @@ export function buildStoryBullets(input: {
 }): StoryBullet[] {
   return [
     {
-      title: 'Strategic Capital Velocity',
-      body: `Operational health sustained at ${Math.round(input.healthScore)} INDEX. Current yield reflects ${formatCurrency(input.profit)} net profit from a ${formatCurrency(input.revenue)} revenue stream.`,
+      title: 'Cash Flow Overview',
+      body: `Operational health sustained at ${Math.round(input.healthScore)} score. Current results show ${formatCurrency(input.profit)} net profit from ${formatCurrency(input.revenue)} revenue.`,
     },
     {
-      title: 'Tactical Expenditure Analysis',
-      body: `Outflows normalized at ${formatCurrency(input.expenses)} with a ${percentFormatter.format(input.growthRate)}% momentum shift. Current capital efficiency stands at ${percentFormatter.format(input.profitMargin)}% margin.`,
+      title: 'Expense Overview',
+      body: `Total expenses are ${formatCurrency(input.expenses)} with a ${percentFormatter.format(input.growthRate)}% change. Current profit margin stands at ${percentFormatter.format(input.profitMargin)}%.`,
     },
     {
-      title: 'System Node Integrity',
-      body: `${input.activeRecords} of ${input.totalRecords} intelligence nodes are functional. Real-time data synthesis confirmed at ${input.lastUpdated.toLocaleTimeString('en-IN', {
+      title: 'Data Status',
+      body: `${input.activeRecords} of ${input.totalRecords} records are being analyzed. Last system update confirmed at ${input.lastUpdated.toLocaleTimeString('en-IN', {
         hour: 'numeric',
         minute: '2-digit',
       })}.`,
@@ -123,45 +123,45 @@ export function buildRecommendations(input: {
 
   if (input.expenseRatio > 60) {
     recommendations.push({
-      title: 'Optimize Variable Expenditure',
-      description: 'Capital consumption is exceeding optimal thresholds. Initiate a deep audit of high-density expense categories to restore liquidity.',
-      impact: 'Immediate margin recovery',
+      title: 'Optimize Variable Costs',
+      description: 'Spending is higher than usual. Review your main expense categories to improve available cash.',
+      impact: 'Immediate profit improvement',
       priority: 'high',
     });
   }
 
   if (input.profitMargin < 20) {
     recommendations.push({
-      title: 'Calibrate Pricing Strategy',
-      description: 'Net margins are below industry benchmarks. Consider defensive pricing adjustments or high-yield service bundling.',
-      impact: 'Direct bottom-line expansion',
+      title: 'Review Pricing Strategy',
+      description: 'Profit margins are below average. Consider adjusting prices or bundling services to increase value.',
+      impact: 'Direct profit growth',
       priority: 'high',
     });
   }
 
   if (input.growthRate < 10) {
     recommendations.push({
-      title: 'Accelerate Client Acquisition',
-      description: 'Market momentum has decelerated. Deploy growth-focused tactics and optimize the sales conversion funnel.',
-      impact: 'Scales revenue trajectory',
+      title: 'Increase Sales Activity',
+      description: 'Growth has slowed down. Focus on new customer acquisition and improving your sales process.',
+      impact: 'Increases revenue growth',
       priority: 'medium',
     });
   }
 
   if (input.latestUpload) {
     recommendations.push({
-      title: `Validate ${input.latestUpload.record.category} Intelligence`,
-      description: `New data detected: ${formatCurrency(input.latestUpload.record.amount)}. Synchronize this input with your current fiscal projections.`,
-      impact: 'Ensures data synchronicity',
+      title: `Check ${input.latestUpload.record.category} Entry`,
+      description: `New entry detected: ${formatCurrency(input.latestUpload.record.amount)}. Ensure this matches your latest records.`,
+      impact: 'Ensures data accuracy',
       priority: 'low',
     });
   }
 
   if (recommendations.length === 0) {
     recommendations.push({
-      title: 'Maintain Operational Excellence',
-      description: 'System metrics indicate top-tier performance. Continue high-frequency data ingestion to preserve market advantage.',
-      impact: 'Secures elite status',
+      title: 'Maintain Current Performance',
+      description: 'Your business metrics are looking great. Continue tracking your records regularly to stay on top.',
+      impact: 'Secures business health',
       priority: 'low',
     });
   }
@@ -178,12 +178,12 @@ export function buildDailyStatus(input: {
 }): DailyStatusItem[] {
   return [
     {
-      label: 'Core Protocol',
-      value: input.loadError ? 'TERMINAL ERROR' : input.isRefreshing ? 'SYNCHRONIZING' : 'ACTIVE',
+      label: 'System Status',
+      value: input.loadError ? 'ERROR' : input.isRefreshing ? 'UPDATING' : 'ACTIVE',
       tone: input.loadError ? 'warning' : 'positive',
     },
     {
-      label: 'Data Integrity',
+      label: 'Last Sync',
       value: input.lastUpdated.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' }),
       tone: 'brand',
     },
@@ -193,8 +193,8 @@ export function buildDailyStatus(input: {
       tone: input.healthScore >= 80 ? 'positive' : 'warning',
     },
     {
-      label: 'Intelligence Node',
-      value: input.latestUpload ? 'DATA INGESTED' : 'AWAITING INPUT',
+      label: 'Data Input',
+      value: input.latestUpload ? 'DATA ADDED' : 'READY FOR DATA',
       tone: input.latestUpload ? 'positive' : 'brand',
     },
   ];
@@ -213,23 +213,23 @@ export function buildPlainReport(input: {
   lastUpdated: Date;
 }): string {
   const lines = [
-    `BHIE ELITE INTELLIGENCE REPORT`,
+    `BHIE BUSINESS INTELLIGENCE REPORT`,
     `=============================`,
-    `Organization: ${input.companyName || 'BHIE Primary Node'}`,
-    `Synthesis Date: ${input.lastUpdated.toLocaleString('en-IN')}`,
+    `Organization: ${input.companyName || 'Main Account'}`,
+    `Report Date: ${input.lastUpdated.toLocaleString('en-IN')}`,
     ``,
-    `CRITICAL METRICS:`,
-    `- Health Index: ${Math.round(input.healthScore)}/100`,
-    `- Revenue Velocity: ${formatCurrency(input.revenue)}`,
-    `- Capital Outflow: ${formatCurrency(input.expenses)}`,
-    `- Net Yield: ${formatCurrency(input.profit)}`,
-    `- Growth Momentum: ${percentFormatter.format(input.growthRate)}%`,
-    `- Operational Margin: ${percentFormatter.format(input.profitMargin)}%`,
+    `KEY METRICS:`,
+    `- Health Score: ${Math.round(input.healthScore)}/100`,
+    `- Total Revenue: ${formatCurrency(input.revenue)}`,
+    `- Total Expenses: ${formatCurrency(input.expenses)}`,
+    `- Net Profit: ${formatCurrency(input.profit)}`,
+    `- Growth Rate: ${percentFormatter.format(input.growthRate)}%`,
+    `- Profit Margin: ${percentFormatter.format(input.profitMargin)}%`,
     ``,
-    `STRATEGIC NARRATIVE:`,
+    `BUSINESS OVERVIEW:`,
     ...input.storyBullets.map((item) => `▶ ${item.title.toUpperCase()}: ${item.body}`),
     ``,
-    `RECOMMENDED PROTOCOLS:`,
+    `RECOMMENDED ACTIONS:`,
     ...input.recommendations.map((item, index) => `[${index + 1}] ${item.title} - ${item.description}`),
     `=============================`,
   ];
@@ -239,4 +239,16 @@ export function buildPlainReport(input: {
 
 function clamp(value: number, min = 0, max = 100): number {
   return Math.max(min, Math.min(max, Number.isFinite(value) ? value : min));
+}
+
+export function exportReport(content: string = "Business Intelligence Report"): void {
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `BHIE-Report-${new Date().toISOString().split('T')[0]}.txt`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }

@@ -130,6 +130,15 @@ const ScanBill = () => {
                       <p className="text-sm text-gray-500 pl-7">No individual items identified</p>
                     )}
                   </div>
+
+                  {data.exactText && (
+                    <div className="p-3 bg-white/[0.03] rounded-xl space-y-2">
+                      <div className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Exact Extracted Text</div>
+                      <div className="text-[10px] leading-relaxed text-gray-500 font-mono bg-black/20 p-3 rounded-lg max-h-40 overflow-y-auto whitespace-pre-wrap border border-white/5">
+                        {data.exactText}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <PremiumButton className="w-full" variant="primary" onClick={handleSave}>

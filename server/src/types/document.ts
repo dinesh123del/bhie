@@ -4,6 +4,7 @@ export interface DocumentIntelligenceResult {
   category: string;
   confidence: number;
   rawText: string;
+  exactText?: string;
   items: string[];
   date: string | Date;
 }

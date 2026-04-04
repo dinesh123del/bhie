@@ -12,7 +12,8 @@ import {
   Zap,
   ShieldCheck,
   CreditCard,
-  Activity
+  Activity,
+  GraduationCap
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { premiumFeedback } from '../utils/premiumFeedback';
@@ -27,6 +28,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { id: 'dashboard', name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+  { id: 'ds-hub', name: 'Data Hub', path: '/ds-hub', icon: GraduationCap },
   { id: 'analysis', name: 'Analysis', path: '/analysis-report', icon: BrainCircuit },
   { id: 'analytics', name: 'Performance', path: '/analytics', icon: BarChart4 },
   { id: 'health', name: 'System Health', path: '/system-health', icon: Activity },

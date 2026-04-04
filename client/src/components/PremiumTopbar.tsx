@@ -14,6 +14,7 @@ import {
   Crown
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import { premiumFeedback } from '../utils/premiumFeedback';
 
 const PremiumTopbar = () => {
@@ -61,6 +62,7 @@ const PremiumTopbar = () => {
 
         {/* Global Toolbar */}
         <div className="flex items-center gap-3">
+          <LanguageSwitcher />
           <ThemeToggle />
 
           <button

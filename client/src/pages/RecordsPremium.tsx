@@ -43,9 +43,8 @@ const sidebarItems = [
   { icon: <BarChart3 className="h-5 w-5" />, label: 'Dashboard', href: '/dashboard' },
   { icon: <FileText className="h-5 w-5" />, label: 'Records', href: '/records' },
   { icon: <TrendingUp className="h-5 w-5" />, label: 'Analytics', href: '/analytics' },
-  { icon: <Users className="h-5 w-5" />, label: 'Admin', href: '/admin' },
-  { icon: <Wallet className="h-5 w-5" />, label: 'Billing', href: '/pricing' },
-  { icon: <ScanSearch className="h-5 w-5" />, label: 'Analysis', href: '/analysis-report' },
+  { icon: <ScanSearch className="h-5 w-5" />, label: 'AI Deep Dive', href: '/analysis-report' },
+  { icon: <Wallet className="h-5 w-5" />, label: 'Pro Plan', href: '/pricing' },
 ];
 
 const statusToneMap = {
@@ -170,17 +169,17 @@ const PremiumRecords = () => {
 
   const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!window.confirm('Terminate this data node?')) {
+    if (!window.confirm('Delete this record?')) {
       return;
     }
 
     try {
       await recordsAPI.delete(id);
       setRecords((current) => current.filter((record) => record._id !== id));
-      toast.success('Node terminated');
+      toast.success('Record deleted');
       window.dispatchEvent(new CustomEvent('bhie:records-updated'));
     } catch {
-      toast.error('Termination sequence failed');
+      toast.error('Failed to delete record');
     }
   };
 
@@ -215,13 +214,13 @@ const PremiumRecords = () => {
                  className="section-kicker flex items-center gap-2 mb-6"
               >
                 <div className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Strategic Intel Hub</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">All Records</span>
               </motion.div>
               <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-none">
-                Capital <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-white to-indigo-300">Resonance</span> Node.
+                Business <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-white to-indigo-300">Records.</span>
               </h1>
               <p className="mt-8 max-w-2xl text-xl text-white/40 font-medium leading-relaxed">
-                Autonomous data orchestration for elite strategic command. Interrogate your capital nodes in real-time.
+                Track all your business income and expenses in one place. Search and filter your data easily.
               </p>
             </div>
 
@@ -232,14 +231,14 @@ const PremiumRecords = () => {
                 icon={<Download className="h-5 w-5" />}
                 onClick={() => exportRecords(filteredRecords)}
               >
-                Data Export
+                Export CSV
               </PremiumButton>
               <PremiumButton
                 size="lg"
                 icon={<Plus className="h-5 w-5" />}
                 onClick={() => navigate('/dashboard')}
               >
-                Ingest Node
+                Add Record
               </PremiumButton>
             </div>
           </div>
@@ -298,7 +297,7 @@ const PremiumRecords = () => {
                    <Search className="absolute left-6 top-4.5 h-6 w-6 text-white/30 group-focus-within:text-sky-400 transition-colors" />
                    <input
                      type="text"
-                     placeholder="Search Intelligence Core..."
+                     placeholder="Search Records..."
                      value={search}
                      onChange={(event) => setSearch(event.target.value)}
                      className="w-full rounded-[1.5rem] border border-white/5 bg-white/[0.02] py-5 pl-16 pr-6 text-xl text-white placeholder:text-white/10 focus:border-sky-400/50 backdrop-blur-3xl focus:outline-none focus:ring-4 focus:ring-sky-400/5 transition-all"

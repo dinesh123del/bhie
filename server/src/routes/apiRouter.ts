@@ -17,6 +17,8 @@ import subscriptionRoutes from './subscription.js';
 import eventRoutes from './events.js';
 import analyticsIntelRoutes from './analyticsIntelligence.js';
 import notificationRoutes from './notifications.js';
+import dataScienceRoutes from './dataScience.js';
+import pricingRoutes from './pricing.js';
 
 import healthRoutes from './health.js';
 
@@ -30,6 +32,7 @@ router.get('/', (_req, res) => {
 router.use('/system', healthRoutes);
 router.use('/events', eventRoutes);
 router.use('/analytics/intel', analyticsIntelRoutes);
+router.use('/ds', dataScienceRoutes); // New Route for Data Science Analysis
 
 
 router.get('/health', (_req, res) => {
@@ -59,5 +62,6 @@ router.use('/insights', insightsRoutes);
 router.use('/transactions', transactionsRoutes);
 router.use('/subscription', subscriptionRoutes);
 router.use('/notifications', notificationRoutes);
+router.use('/pricing', pricingRoutes);
 
 export default router;

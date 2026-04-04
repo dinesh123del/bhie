@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Download, Sparkles, Wand2 } from 'lucide-react';
 import { PremiumBadge, PremiumButton, PremiumCard } from './ui/PremiumComponents';
 import { ActionRecommendation } from '../utils/dashboardIntelligence';
+import { premiumFeedback } from '../utils/premiumFeedback';
 
 interface ActionCenterProps {
   recommendations: ActionRecommendation[];
@@ -37,10 +38,26 @@ export default function ActionCenter({
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <PremiumButton variant="primary" onClick={onAskWhatShouldIDo} icon={<Sparkles className="h-4 w-4" />}>
+            <PremiumButton 
+              variant="primary" 
+              onClick={() => {
+                onAskWhatShouldIDo();
+                premiumFeedback.click();
+              }} 
+              onMouseEnter={() => premiumFeedback.haptic(5)}
+              icon={<Sparkles className="h-4 w-4" />}
+            >
               What should I do?
             </PremiumButton>
-            <PremiumButton variant="secondary" onClick={onExport} icon={<Download className="h-4 w-4" />}>
+            <PremiumButton 
+              variant="secondary" 
+              onClick={() => {
+                onExport();
+                premiumFeedback.click();
+              }} 
+              onMouseEnter={() => premiumFeedback.haptic(5)}
+              icon={<Download className="h-4 w-4" />}
+            >
               Export report
             </PremiumButton>
           </div>

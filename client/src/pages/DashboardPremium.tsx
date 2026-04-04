@@ -47,7 +47,9 @@ import {
   buildRecommendations,
   buildStoryBullets,
   formatCurrency,
+  exportReport,
 } from '../utils/dashboardIntelligence';
+import { premiumFeedback } from '../utils/premiumFeedback';
 
 interface MetricsSummary {
   kpis?: {
@@ -108,9 +110,9 @@ const DASHBOARD_REFRESH_INTERVAL = 7000;
 const sidebarItems = [
   { icon: <BarChart3 className="h-5 w-5" />, label: 'Dashboard', href: '/dashboard' },
   { icon: <FileText className="h-5 w-5" />, label: 'Records', href: '/records' },
-  { icon: <UploadCloud className="h-5 w-5" />, label: 'Uploads', href: '/uploads' },
   { icon: <TrendingUp className="h-5 w-5" />, label: 'Analytics', href: '/analytics' },
-  { icon: <Settings className="h-5 w-5" />, label: 'Settings', href: '/settings' },
+  { icon: <Sparkles className="h-5 w-5" />, label: 'AI Deep Dive', href: '/analysis-report' },
+  { icon: <Wallet className="h-5 w-5" />, label: 'Pro Plan', href: '/pricing' },
 ];
 
 const dateFormatter = new Intl.DateTimeFormat('en-IN', {
@@ -367,15 +369,15 @@ const DashboardPremium = () => {
                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md"
             >
               <Sparkles className="w-4 h-4 text-sky-400" />
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Intelligence Hub</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Business Overview</span>
             </motion.div>
             
             <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-[0.9]">
-              Elite <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-white to-purple-300">Financial</span> Command.
+              Your Business <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-white to-purple-300">Financials.</span>
             </h1>
             
             <p className="max-w-2xl text-xl text-white/40 font-medium leading-relaxed">
-              Synthesizing complex data streams into actionable intelligence. Your organization's health, monitored in real-time.
+              Simple insights to help you grow your business and track your performance daily.
             </p>
           </div>
 
@@ -434,8 +436,8 @@ const DashboardPremium = () => {
             <PremiumSection delay={0.3}>
                 <PremiumCard className="p-8 h-full bg-white/[0.01]">
                     <div className="flex justify-between items-center mb-10">
-                        <h3 className="text-xl font-bold text-white tracking-tight">Revenue Trajectory</h3>
-                        <PremiumBadge tone="brand">Real-time sync</PremiumBadge>
+                        <h3 className="text-xl font-bold text-white tracking-tight">Revenue Trends</h3>
+                        <PremiumBadge tone="brand">Updated live</PremiumBadge>
                     </div>
                     <RevenueLineChart data={apiData?.metrics?.monthlyData || []} loading={loading} />
                 </PremiumCard>
@@ -459,7 +461,7 @@ const DashboardPremium = () => {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
             <PremiumSection delay={0.5}>
                 <PremiumCard className="p-8 bg-white/[0.01]">
-                    <h3 className="text-xl font-bold text-white tracking-tight mb-8">Asset Allocation</h3>
+                    <h3 className="text-xl font-bold text-white tracking-tight mb-8">Expense Breakdown</h3>
                     <ExpensePieChart 
                         data={[
                             { name: 'Operations', value: 45, color: '#0EA5E9' },
@@ -474,7 +476,7 @@ const DashboardPremium = () => {
 
             <PremiumSection delay={0.6}>
                 <PremiumCard className="p-8 bg-white/[0.01]">
-                    <h3 className="text-xl font-bold text-white tracking-tight mb-8">Growth Momentum</h3>
+                    <h3 className="text-xl font-bold text-white tracking-tight mb-8">Growth Overview</h3>
                     <GrowthAreaChart 
                         data={apiData?.trends?.map((t: any) => ({ name: t.name, value: t.value })) || []}
                         loading={loading}
@@ -488,8 +490,14 @@ const DashboardPremium = () => {
             <PremiumSection delay={0.7}>
                 <ActionCenter
                     recommendations={recommendations}
-                    onAskWhatShouldIDo={() => {}}
-                    onExport={() => {}}
+                    onAskWhatShouldIDo={() => {
+                        navigate('/analysis-report');
+                        premiumFeedback.click();
+                    }}
+                    onExport={() => {
+                        exportReport();
+                        premiumFeedback.success();
+                    }}
                 />
             </PremiumSection>
 
@@ -508,7 +516,7 @@ const DashboardPremium = () => {
                             <RiSparkling2Fill className="w-6 h-6" />
                         </div>
                         <div>
-                            <p className="text-sm font-black text-white uppercase tracking-widest">System Protocol</p>
+                            <p className="text-sm font-black text-white uppercase tracking-widest">System Status</p>
                             <p className="text-xs text-white/40">{confirmationMessage}</p>
                         </div>
                     </div>

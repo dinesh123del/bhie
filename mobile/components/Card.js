@@ -19,19 +19,21 @@ const Card = ({ children, style, onPress, delay = 0 }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    marginVertical: 8,
+    backgroundColor: '#11141B',
+    borderRadius: 24,
+    marginVertical: 10,
     marginHorizontal: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.04)',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 8,
     overflow: 'hidden',
   },
   inner: {
-    padding: 20,
+    padding: 24,
   }
 });
 

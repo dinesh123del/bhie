@@ -1,7 +1,6 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 export const API = import.meta.env.VITE_API_URL || "https://bhie-api.onrender.com";
-console.log("API URL:", API);
 
 type RetryableConfig = InternalAxiosRequestConfig & {
   __retryCount?: number;

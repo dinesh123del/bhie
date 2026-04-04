@@ -6,6 +6,7 @@ import { authService } from '../services/authService';
 import { useAuth } from '../hooks/useAuth';
 import axios from 'axios';
 import { GoogleButton } from '../components/auth/GoogleButton';
+import { premiumFeedback } from '../utils/premiumFeedback';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -46,11 +47,13 @@ const Login = () => {
     
     if (!email.trim() || !password.trim()) {
       setError('Email and password are required');
+      premiumFeedback.error();
       return;
     }
 
     setLoading(true);
     setError('');
+    premiumFeedback.click();
 
     try {
       const response = await authService.login({ email, password });
@@ -61,7 +64,9 @@ const Login = () => {
       }
 
       login(response.token, response.user);
+      premiumFeedback.success();
     } catch (error: any) {
+      premiumFeedback.error();
       let message = 'Login failed';
       if (axios.isAxiosError(error)) {
         message = error.response?.data?.message || error.message || 'Unable to connect to server';
@@ -204,7 +209,10 @@ const Login = () => {
             <div className="mt-4 text-center">
               <button
                 type="button"
-                onClick={() => navigate('/forgot-password')}
+                onClick={() => {
+                  navigate('/forgot-password');
+                  premiumFeedback.click();
+                }}
                 className="text-sm text-indigo-400 hover:text-indigo-300 font-medium transition-colors"
               >
                 Forgot your password?
@@ -223,7 +231,10 @@ const Login = () => {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => navigate('/otp-login')}
+            onClick={() => {
+              navigate('/otp-login');
+              premiumFeedback.click();
+            }}
             className="w-full py-3 px-4 bg-white/8 border border-white/20 hover:border-indigo-400/50 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 mb-4"
           >
             Login with OTP
@@ -240,7 +251,10 @@ const Login = () => {
               Don't have an account?{' '}
               <motion.button
                 whileHover={{ scale: 1.05 }}
-                onClick={() => navigate('/register')}
+                onClick={() => {
+                  navigate('/register');
+                  premiumFeedback.click();
+                }}
                 className="text-indigo-300 hover:text-indigo-200 font-bold transition-colors"
               >
                 Sign up

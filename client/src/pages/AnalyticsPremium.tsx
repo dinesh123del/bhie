@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  BarChart, Bar, LineChart, Line, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip,
+  BarChart, Bar, LineChart, Line, AreaChart, Area, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend
 } from 'recharts';
 import {
-  TrendingUp, MoreHorizontal, ArrowUpRight, Download, Filter, Sparkles,
+  TrendingUp, MoreHorizontal, ArrowUpRight, Download, Filter, Sparkles, Wallet, FileText, BarChart2, PieChart as PieIcon, Activity, Zap
 } from 'lucide-react';
 import { MainLayout } from '../components/Layout/MainLayout';
 import { PremiumCard, PremiumButton, KPICard } from '../components/ui/PremiumComponents';
@@ -83,17 +83,39 @@ const PremiumAnalytics = () => {
   };
 
   const sidebarItems = [
-    { icon: <BarChart className="w-5 h-5" />, label: 'Dashboard', href: '/dashboard' },
+    { icon: <BarChart2 className="w-5 h-5" />, label: 'Dashboard', href: '/dashboard' },
+    { icon: <FileText className="w-5 h-5" />, label: 'Records', href: '/records' },
     { icon: <TrendingUp className="w-5 h-5" />, label: 'Analytics', href: '/analytics' },
+    { icon: <Sparkles className="w-5 h-5" />, label: 'AI Deep Dive', href: '/analysis-report' },
+    { icon: <Wallet className="w-5 h-5" />, label: 'Pro Plan', href: '/pricing' },
   ];
 
-  const chartData = [
-    { name: 'Jan', value: 4000, prediction: 2400 },
-    { name: 'Feb', value: 3000, prediction: 1398 },
-    { name: 'Mar', value: 2000, prediction: 9800 },
-    { name: 'Apr', value: 2780, prediction: 3908 },
-    { name: 'May', value: 1890, prediction: 4800 },
-    { name: 'Jun', value: 2390, prediction: 3800 },
+  const cashFlowData = [
+    { name: 'Jan', revenue: 45000, expenses: 32000, profit: 13000 },
+    { name: 'Feb', revenue: 52000, expenses: 34000, profit: 18000 },
+    { name: 'Mar', revenue: 48000, expenses: 38000, profit: 10000 },
+    { name: 'Apr', revenue: 61000, expenses: 42000, profit: 19000 },
+    { name: 'May', revenue: 55000, expenses: 40000, profit: 15000 },
+    { name: 'Jun', revenue: 67000, expenses: 45000, profit: 22000 },
+  ];
+
+  const radarData = [
+    { subject: 'Marketing', A: 120, B: 110, fullMark: 150 },
+    { subject: 'Payroll', A: 98, B: 130, fullMark: 150 },
+    { subject: 'Software', A: 86, B: 130, fullMark: 150 },
+    { subject: 'Rent', A: 99, B: 100, fullMark: 150 },
+    { subject: 'Travel', A: 85, B: 90, fullMark: 150 },
+    { subject: 'Operations', A: 65, B: 85, fullMark: 150 },
+  ];
+
+  const performanceData = [
+    { name: 'Mon', active: 400, target: 240 },
+    { name: 'Tue', active: 300, target: 139 },
+    { name: 'Wed', active: 200, target: 980 },
+    { name: 'Thu', active: 278, target: 390 },
+    { name: 'Fri', active: 189, target: 480 },
+    { name: 'Sat', active: 239, target: 380 },
+    { name: 'Sun', active: 349, target: 430 },
   ];
 
   if (loading) {
@@ -133,147 +155,163 @@ const PremiumAnalytics = () => {
           className="flex items-center justify-between flex-wrap gap-4"
         >
           <div>
-            <h1 className="text-4xl font-bold text-white mb-2">Advanced Analytics</h1>
-            <p className="text-gray-400">In-depth analysis and predictions</p>
+             <div className="flex items-center gap-3 mb-2 text-sky-400">
+                <div className="p-2 rounded-lg bg-sky-500/10 border border-sky-500/20">
+                   <Activity className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-black uppercase tracking-[0.3em]">Institutional Grade</span>
+             </div>
+            <h1 className="text-5xl font-black text-white tracking-tighter">Business Intelligence<span className="text-sky-500">.</span></h1>
+            <p className="text-gray-400 mt-1 font-medium">Real-time financial synthesis for scaled operations</p>
           </div>
           <motion.div className="flex gap-3">
             <PremiumButton variant="secondary" size="md" icon={<Filter className="w-4 h-4" />}>
-              Filter
+              Parameters
             </PremiumButton>
             <PremiumButton size="md" icon={<Download className="w-4 h-4" />}>
-              Export
+              Full Export
             </PremiumButton>
           </motion.div>
         </motion.div>
 
         {/* KPIs */}
-        <motion.div
-          initial="initial"
-          animate="animate"
-          variants={{
-            initial: { opacity: 0 },
-            animate: { opacity: 1, transition: { staggerChildren: 0.1 } }
-          }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { icon: <BarChart className="w-8 h-8 text-sky-400" />, label: "Total Records", value: metrics?.kpis?.totalRecords || 0, trend: "+15.2%" },
-            { icon: <TrendingUp className="w-8 h-8 text-indigo-400" />, label: "Avg. Performance", value: "94.2%", trend: "+3.1%" },
-            { icon: <ArrowUpRight className="w-8 h-8 text-emerald-400" />, label: "Prediction Accuracy", value: "87.5%", trend: "+5.2%" }
+            { icon: <Zap className="w-6 h-6 text-yellow-400" />, label: "Cash Velocity", value: "8.4x", trend: "+12.2%", color: "yellow" },
+            { icon: <TrendingUp className="w-6 h-6 text-emerald-400" />, label: "Gross Margin", value: "64.8%", trend: "+2.4%", color: "emerald" },
+            { icon: <Wallet className="w-6 h-6 text-sky-400" />, label: "Burn Rate", value: "₹4.2L", trend: "-5.1%", color: "sky" },
+            { icon: <PieIcon className="w-6 h-6 text-indigo-400" />, label: "EBITDA Margin", value: "31.2%", trend: "+1.8%", color: "indigo" }
           ].map((kpi, i) => (
             <motion.div 
               key={i}
-              variants={{
-                initial: { opacity: 0, y: 20, scale: 0.95 },
-                animate: { opacity: 1, y: 0, scale: 1 }
-              }}
-              whileHover={{ y: -5, scale: 1.02 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              whileHover={{ y: -5 }}
+              className="relative group"
             >
+              <div className={`absolute -inset-1 bg-${kpi.color}-500/20 rounded-3xl blur opacity-0 group-hover:opacity-100 transition duration-500`} />
               <KPICard
                 icon={kpi.icon}
                 label={kpi.label}
                 value={kpi.value}
-                trend={{ val: kpi.trend, positive: true }}
+                trend={{ val: kpi.trend, positive: kpi.trend.startsWith('+') }}
               />
             </motion.div>
           ))}
-        </motion.div>
+        </div>
 
-        {/* Charts with Glass Overlays */}
+        {/* Major Visualizations */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Cash Flow Area Chart */}
           <motion.div 
             initial={{ opacity: 0, scale: 0.98 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="group relative"
           >
-            <div className="absolute -inset-1 bg-gradient-to-r from-sky-400/20 to-indigo-500/20 rounded-[2.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000" />
-            <PremiumCard className="relative bg-white/[0.01] backdrop-blur-3xl border-white/10 p-8">
+            <PremiumCard className="relative p-8 h-full">
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <h3 className="text-xl font-black text-white tracking-tight">Performance Metrics</h3>
-                  <p className="text-xs text-white/30 uppercase tracking-[0.2em] mt-1 font-bold">Historical data</p>
+                  <h3 className="text-xl font-black text-white tracking-tight">Cumulative Cash Flow</h3>
+                  <p className="text-xs text-white/30 uppercase tracking-widest mt-1">Revenue vs Operating Expenses</p>
                 </div>
-                <motion.button whileHover={{ scale: 1.1 }} className="p-2 hover:bg-white/10 rounded-xl transition-colors">
-                  <MoreHorizontal className="w-5 h-5 text-gray-500" />
-                </motion.button>
               </div>
-              <div className="h-[300px] w-full">
+              <div className="h-[350px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData}>
+                  <AreaChart data={cashFlowData}>
                     <defs>
-                      <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#38bdf8" stopOpacity={0.8}/>
-                        <stop offset="100%" stopColor="#818cf8" stopOpacity={0.3}/>
+                      <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#10b828" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#10b828" stopOpacity={0}/>
+                      </linearGradient>
+                      <linearGradient id="colorExp" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#f43f5e" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                    <XAxis dataKey="name" stroke="#64748b" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600 }} dy={10} />
-                    <YAxis stroke="#64748b" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600 }} />
+                    <XAxis dataKey="name" stroke="#64748b" axisLine={false} tickLine={false} />
+                    <YAxis stroke="#64748b" axisLine={false} tickLine={false} />
                     <Tooltip 
-                      cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                      contentStyle={{
-                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        borderRadius: '16px',
-                        backdropFilter: 'blur(12px)',
-                        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)'
-                      }} 
+                      contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
                     />
-                    <Bar dataKey="value" fill="url(#barGradient)" radius={[6, 6, 0, 0]} />
-                  </BarChart>
+                    <Area type="monotone" dataKey="revenue" stroke="#10b828" fillOpacity={1} fill="url(#colorRev)" strokeWidth={3} />
+                    <Area type="monotone" dataKey="expenses" stroke="#f43f5e" fillOpacity={1} fill="url(#colorExp)" strokeWidth={3} />
+                  </AreaChart>
                 </ResponsiveContainer>
               </div>
             </PremiumCard>
           </motion.div>
 
+          {/* Radar Chart for Resource Allocation */}
           <motion.div 
             initial={{ opacity: 0, scale: 0.98 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="group relative"
           >
-             <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-[2.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000" />
-            <PremiumCard className="relative bg-white/[0.01] backdrop-blur-3xl border-white/10 p-8">
+            <PremiumCard className="relative p-8 h-full">
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <h3 className="text-xl font-black text-white tracking-tight">Predictive Insights</h3>
-                  <p className="text-xs text-white/30 uppercase tracking-[0.2em] mt-1 font-bold">Future projections</p>
+                  <h3 className="text-xl font-black text-white tracking-tight">Resource Synthesis</h3>
+                  <p className="text-xs text-white/30 uppercase tracking-widest mt-1">Variance across structural domains</p>
                 </div>
-                <motion.button whileHover={{ scale: 1.1 }} className="p-2 hover:bg-white/10 rounded-xl transition-colors">
-                  <MoreHorizontal className="w-5 h-5 text-gray-500" />
-                </motion.button>
               </div>
-              <div className="h-[300px] w-full">
+              <div className="h-[350px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData}>
-                    <defs>
-                      <linearGradient id="lineColor" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#6366f1" stopOpacity={0.8}/>
-                        <stop offset="100%" stopColor="#a855f7" stopOpacity={0.3}/>
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                    <XAxis dataKey="name" stroke="#64748b" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600 }} dy={10} />
-                    <YAxis stroke="#64748b" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600 }} />
-                    <Tooltip 
-                      contentStyle={{
-                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        borderRadius: '16px',
-                        backdropFilter: 'blur(12px)',
-                        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)'
-                      }} 
+                  <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+                    <PolarGrid stroke="rgba(255,255,255,0.1)" />
+                    <PolarAngleAxis dataKey="subject" tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                    <PolarRadiusAxis stroke="rgba(255,255,255,0.1)" />
+                    <Radar
+                      name="Current"
+                      dataKey="A"
+                      stroke="#38bdf8"
+                      fill="#38bdf8"
+                      fillOpacity={0.6}
                     />
-                    <Line type="monotone" dataKey="value" stroke="#6366f1" strokeWidth={4} dot={{ r: 4, fill: '#6366f1', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 6, strokeWidth: 0 }} />
-                    <Line type="monotone" dataKey="prediction" stroke="#a855f7" strokeWidth={2} strokeDasharray="8 8" dot={false} />
-                  </LineChart>
+                    <Radar
+                      name="Prior Period"
+                      dataKey="B"
+                      stroke="#818cf8"
+                      fill="#818cf8"
+                      fillOpacity={0.3}
+                    />
+                    <Legend />
+                  </RadarChart>
                 </ResponsiveContainer>
               </div>
             </PremiumCard>
           </motion.div>
         </div>
+
+        {/* Weekly Performance Bar Chart */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <PremiumCard className="p-8">
+             <div className="flex items-center justify-between mb-8">
+                <div>
+                  <h3 className="text-xl font-black text-white tracking-tight">Operational Performance</h3>
+                  <p className="text-xs text-white/30 uppercase tracking-widest mt-1">Active vs Target Benchmark</p>
+                </div>
+              </div>
+              <div className="h-[300px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={performanceData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <XAxis dataKey="name" stroke="#64748b" axisLine={false} tickLine={false} />
+                    <YAxis stroke="#64748b" axisLine={false} tickLine={false} />
+                    <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }} />
+                    <Bar dataKey="active" fill="#38bdf8" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="target" fill="#1e293b" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+          </PremiumCard>
+        </motion.div>
 
         {/* AI Insights with Premium Overlay */}
         <motion.div
