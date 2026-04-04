@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, StyleSheet, Animated } from 'react-native';
+import { View, TextInput, Text, StyleSheet } from 'react-native';
 
 const Input = ({ label, placeholder, value, onChangeText, secureTextEntry, error }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -15,13 +15,13 @@ const Input = ({ label, placeholder, value, onChangeText, secureTextEntry, error
         <TextInput
           style={styles.input}
           placeholder={placeholder}
-          placeholderTextColor="#A0A0A0"
+          placeholderTextColor="rgba(255, 255, 255, 0.3)"
           value={value}
           onChangeText={onChangeText}
           secureTextEntry={secureTextEntry}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          selectionColor="#007AFF"
+          selectionColor="#38BDF8"
         />
       </View>
       {error && <Text style={styles.errorText}>{error}</Text>}
@@ -31,48 +31,45 @@ const Input = ({ label, placeholder, value, onChangeText, secureTextEntry, error
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 10,
+    marginVertical: 12,
     width: '100%',
   },
   label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#333333',
-    marginBottom: 8,
+    fontSize: 12,
+    fontWeight: '900',
+    color: 'rgba(255, 255, 255, 0.4)',
+    marginBottom: 10,
     marginLeft: 4,
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
   },
   inputContainer: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: '#E8E8E8',
-    height: 56,
-    paddingHorizontal: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    height: 64,
+    paddingHorizontal: 20,
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
   },
   focusedInput: {
-    borderColor: '#007AFF',
-    backgroundColor: '#F5FAFF',
+    borderColor: '#38BDF8',
+    backgroundColor: 'rgba(56, 189, 248, 0.05)',
   },
   errorInput: {
-    borderColor: '#FF3B30',
+    borderColor: '#EF4444',
   },
   input: {
     fontSize: 16,
-    color: '#1A1A1A',
-    fontWeight: '500',
+    color: '#FFFFFF',
+    fontWeight: '600',
   },
   errorText: {
-    color: '#FF3B30',
+    color: '#EF4444',
     fontSize: 12,
-    marginTop: 4,
+    marginTop: 6,
     marginLeft: 4,
-    fontWeight: '500',
+    fontWeight: '700',
   },
 });
 

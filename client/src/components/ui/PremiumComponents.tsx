@@ -59,9 +59,10 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
         <motion.div
           className="absolute -inset-[1px] -z-10 bg-gradient-to-r from-sky-400 via-purple-500 to-orange-500 rounded-[2.5rem]"
           animate={{
-            rotate: [0, 360],
+            opacity: [0.7, 1, 0.7],
+            scale: [1, 1.01, 1],
           }}
-          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         />
       )}
       

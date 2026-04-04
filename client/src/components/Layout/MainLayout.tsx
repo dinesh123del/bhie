@@ -74,7 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       initial={{ opacity: 0, y: -14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-      className={`fixed right-0 top-0 z-40 h-20 border-b border-white/10 bg-[rgba(11,15,25,0.72)] backdrop-blur-xl ${collapsed ? 'lg:left-[6.5rem]' : 'lg:left-[18rem]'} left-0`}
+      className={`fixed right-0 top-0 z-40 h-20 border-b border-white/5 bg-white/[0.02] backdrop-blur-2xl ${collapsed ? 'lg:left-[6.5rem]' : 'lg:left-[18rem]'} left-0`}
     >
       <div className="flex h-full items-center justify-between gap-4 px-4 md:px-6">
         <div className="flex items-center gap-3">
@@ -150,7 +150,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute right-0 top-14 z-50 w-72 rounded-3xl border border-white/10 bg-slate-950/95 p-4 shadow-2xl backdrop-blur-xl"
+                  className="absolute right-0 top-14 z-50 w-72 rounded-3xl border border-white/10 bg-white/[0.03] p-4 shadow-2xl backdrop-blur-3xl"
                   onMouseLeave={() => setNotificationsOpen(false)}
                 >
                   <p className="text-sm font-semibold text-white">Notifications</p>
@@ -183,7 +183,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute right-0 top-14 z-50 w-56 rounded-3xl border border-white/10 bg-slate-950/95 p-4 shadow-2xl backdrop-blur-xl"
+                  className="absolute right-0 top-14 z-50 w-56 rounded-3xl border border-white/10 bg-white/[0.03] p-4 shadow-2xl backdrop-blur-3xl"
                   onMouseLeave={() => setProfileOpen(false)}
                 >
                   <p className="text-sm font-semibold text-white">{userName}</p>
@@ -245,7 +245,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           width: collapsed ? 104 : 288,
         }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed left-0 top-0 z-50 flex h-screen flex-col ${widthClass} border-r border-white/10 bg-slate-950/95 backdrop-blur-3xl shadow-[0_0_100px_rgba(0,0,0,0.5)] lg:translate-x-0 ${mobileOpen ? 'rounded-r-[3rem]' : ''}`}
+        className={`fixed left-0 top-0 z-50 flex h-screen flex-col ${widthClass} border-r border-white/5 bg-white/[0.02] backdrop-blur-3xl shadow-[0_0_100px_rgba(0,0,0,0.5)] lg:translate-x-0 ${mobileOpen ? 'rounded-r-[3rem]' : ''}`}
         style={{ transformOrigin: 'left center' }}
       >
         <div className="flex items-center justify-between border-b border-white/10 px-5 py-5">
@@ -353,7 +353,7 @@ export const MainLayout: React.FC<{
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="app-shell-bg min-h-screen text-white">
+    <div className="min-h-screen text-white bg-transparent">
       <Sidebar
         items={sidebarItems}
         active={activePage}
@@ -377,7 +377,7 @@ export const MainLayout: React.FC<{
         <motion.nav 
           initial={{ y: 80 }}
           animate={{ y: 0 }}
-          className="mx-auto flex h-16 max-w-md items-center justify-around gap-1 rounded-2xl border border-white/10 bg-slate-950/80 p-2 shadow-2xl backdrop-blur-2xl"
+          className="mx-auto flex h-16 max-w-md items-center justify-around gap-1 rounded-2xl border border-white/10 bg-white/[0.03] p-2 shadow-2xl backdrop-blur-3xl"
         >
           {sidebarItems.slice(0, 4).map((item) => {
              const selected = activePage === item.href;

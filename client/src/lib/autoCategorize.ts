@@ -56,16 +56,16 @@ const categoryPatterns = {
     /wage/i,
     /employee.*payment/i,
     /pay.*stub/i,
-    /w[\-]?2/i,
+    /w-?2/i,
     /1099/i
   ],
   tax: [
-    /tax[\-]?return/i,
+    /tax-?return/i,
     /tax.*form/i,
-    /form[\s]?[\d]{3,4}/i,
+    /form\s?[\d]{3,4}/i,
     /schedule.*[a-z]/i,
     /deduction/i,
-    /write[\-]?off/i,
+    /write-?off/i,
     /irs/i
   ]
 };

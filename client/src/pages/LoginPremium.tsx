@@ -89,7 +89,7 @@ const PremiumLogin = () => {
   const googleAuthEnabled = Boolean(clientId);
 
   const loginContent = (
-    <div className="min-h-screen bg-[#0A0D14] flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-transparent flex items-center justify-center p-4 relative overflow-hidden">
       {/* Animated Gradient Background */}
       <motion.div
         className="absolute top-0 left-0 w-96 h-96 bg-blue-600/10 rounded-full filter blur-3xl mix-blend-screen"

@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   CheckCircle,
 } from 'lucide-react';
+import { PremiumCard } from '../components/ui/PremiumComponents';
 
 // ======================= NETFLIX-STYLE INTRO =======================
 const CinematicIntro = ({ onComplete }: { onComplete: () => void }) => {
@@ -45,9 +46,9 @@ const CinematicIntro = ({ onComplete }: { onComplete: () => void }) => {
         <span 
           className="text-[8rem] md:text-[16rem] font-black tracking-tighter"
           style={{
-            color: '#E50914',
-            textShadow: '0 0 50px rgba(229,9,20,0.8), 0 0 100px rgba(229,9,20,0.4)',
-            fontFamily: '"Bebas Neue", "Arial Black", sans-serif' // Standard heavy cinematic font
+            color: '#38bdf8',
+            textShadow: '0 0 50px rgba(56,189,248,0.8), 0 0 100px rgba(56,189,248,0.4)',
+            fontFamily: '"Bebas Neue", "Arial Black", sans-serif'
           }}
         >
           BHIE
@@ -71,7 +72,7 @@ const Navbar = () => {
   return (
     <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'bg-black/90 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <Link to="/" className="text-3xl font-black text-[#E50914] tracking-tighter">BHIE</Link>
+        <Link to="/" className="text-3xl font-black text-white tracking-tighter">BHIE<span className="text-sky-500">.</span></Link>
         
         <nav className="hidden md:flex gap-8 text-sm font-medium text-white/80">
           <a href="#features" className="hover:text-white transition-colors">Features</a>
@@ -82,7 +83,7 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-center gap-4">
           <Link to="/login" className="text-sm font-bold text-white hover:text-white/80 transition-colors">Sign In</Link>
-          <Link to="/register" className="px-5 py-2 bg-[#E50914] hover:bg-[#b80710] text-white text-sm font-bold rounded transiton-all">
+          <Link to="/register" className="px-5 py-2 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white text-sm font-bold rounded transiton-all shadow-[0_0_20px_rgba(56,189,248,0.3)]">
             Start Free
           </Link>
         </div>
@@ -114,29 +115,41 @@ const Navbar = () => {
   );
 };
 
-// ======================= HERO =======================
+const floatingVariant = {
+  animate: {
+    y: [0, -12, 0],
+    transition: {
+      duration: 3.5,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }
+  }
+};
+
 const Hero = () => (
   <section className="relative min-h-[100svh] flex items-center justify-center pt-20 px-6 overflow-hidden">
     <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center">
       <motion.div
+        variants={floatingVariant}
+        animate="animate"
         initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 4.0 }} // after intro
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
       >
-        <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-6">
+        <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-6 drop-shadow-[0_0_30px_rgba(255,255,255,0.15)]">
           TRACK EXPENSES<br/>
-          <span className="text-[#E50914]">INSTANTLY FROM RECEIPTS</span>
+          <span className="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(56,189,248,0.4)]">INSTANTLY FROM RECEIPTS</span>
         </h1>
         <p className="text-lg md:text-2xl text-white/60 max-w-3xl mx-auto mb-10 font-medium">
           Stop wasting hours on spreadsheets. Scan any receipt, and let BHIE handle the rest with AI-powered categorization and real-time insights.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link to="/register" className="w-full sm:w-auto px-10 py-4 bg-[#E50914] hover:bg-[#b80710] text-white text-lg font-bold rounded transition-all flex items-center justify-center gap-2">
+          <Link to="/register" className="w-full sm:w-auto px-10 py-4 bg-white text-slate-950 hover:bg-white/90 text-lg font-black rounded transition-all flex items-center justify-center gap-2 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.3)]">
             Get Started Free <ArrowRight className="w-5 h-5" />
           </Link>
-          <button className="w-full sm:w-auto px-10 py-4 bg-white/10 hover:bg-white/20 text-white text-lg font-bold rounded transition-all flex items-center justify-center gap-2 border border-white/10">
-            <Play className="w-5 h-5" fill="currentColor" /> Watch Demo
+          <button className="w-full sm:w-auto px-10 py-4 bg-white/5 hover:bg-white/10 text-white text-lg font-bold rounded transition-all flex items-center justify-center gap-2 border border-white/10 backdrop-blur-md">
+            <Play className="w-5 h-5 fill-current" /> Watch Demo
           </button>
         </div>
       </motion.div>
@@ -145,10 +158,10 @@ const Hero = () => (
       <motion.div
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, delay: 4.4, ease: "easeOut" }}
+        transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
         className="mt-20 w-full max-w-4xl relative"
       >
-        <div className="absolute inset-0 bg-[#E50914] blur-[100px] opacity-20" />
+        <div className="absolute inset-0 bg-sky-500 blur-[100px] opacity-20" />
         <div className="relative rounded-t-xl bg-[#0a0a0a] border border-[#333] border-b-0 overflow-hidden shadow-2xl">
            <div className="h-6 bg-[#1a1a1a] flex items-center px-4 gap-2">
              <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
@@ -165,10 +178,10 @@ const Hero = () => (
 
 // ======================= PROBLEM =======================
 const Problem = () => (
-  <section className="py-24 px-6 bg-[#0a0a0a] border-t border-[#222]">
+  <section className="py-24 px-6 bg-[#0a0a0a]/95 border-t border-[#222]">
     <div className="max-w-7xl mx-auto">
       <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-5xl font-black text-white">The old way is <span className="text-[#E50914]">broken</span>.</h2>
+        <h2 className="text-3xl md:text-5xl font-black text-white">The old way is <span className="text-sky-400">broken</span>.</h2>
       </div>
       <div className="grid md:grid-cols-3 gap-8">
          {[
@@ -176,20 +189,18 @@ const Problem = () => (
            { title: "Tax Compliance Stress", desc: "You struggle to find that one specific receipt during tax season." },
            { title: "Spending Blindness", desc: "You don't know your real-time budget until it's too late." },
          ].map((item, i) => (
-           <motion.div 
+           <PremiumCard 
+             extreme
              key={i}
-             initial={{ opacity: 0, y: 20 }}
-             whileInView={{ opacity: 1, y: 0 }}
-             viewport={{ once: true }}
-             transition={{ delay: i * 0.1 }}
-             className="p-8 bg-[#111] rounded-xl border border-[#222]"
+             delay={i * 0.15}
+             className="backdrop-blur-3xl bg-white/[0.01]"
            >
-              <div className="w-12 h-12 bg-red-950/40 border border-red-500/20 flex items-center justify-center rounded flex-shrink-0 mb-6">
-                <X className="text-[#E50914] w-6 h-6" />
+              <div className="w-12 h-12 bg-sky-950/40 border border-sky-500/20 flex items-center justify-center rounded-xl flex-shrink-0 mb-6">
+                <X className="text-sky-400 w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
               <p className="text-white/50">{item.desc}</p>
-           </motion.div>
+           </PremiumCard>
          ))}
       </div>
     </div>
@@ -247,22 +258,23 @@ const Features = () => {
   ];
 
   return (
-    <section id="features" className="py-24 px-6 bg-[#0a0a0a] border-y border-[#222]">
+    <section id="features" className="py-24 px-6 bg-[#0a0a0a]/95 border-y border-[#222]">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl text-center md:text-5xl font-black text-white mb-16">The Intelligence <span className="text-[#E50914]">Suite</span></h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {cards.map((f, i) => (
-             <motion.div 
+             <PremiumCard 
                key={i}
-               whileHover={{ y: -5 }}
-               className={`p-8 bg-black/40 border border-[#222] rounded-xl group transition-colors hover:border-[#E50914]/50 ${i === 0 ? 'lg:col-span-2' : ''}`}
+               hoverable
+               delay={i * 0.1}
+               className={`bg-black/40 border-white/5 transition-colors hover:border-[#E50914]/50 ${i === 0 ? 'lg:col-span-2' : ''}`}
              >
-               <div className="w-12 h-12 rounded bg-white/5 flex items-center justify-center mb-6 group-hover:bg-[#E50914]/10 transition-colors">
+               <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-[#E50914]/10 transition-colors">
                  <f.icon className="w-6 h-6 text-white group-hover:text-[#E50914] transition-colors" />
                </div>
                <h3 className="text-xl font-bold text-white mb-2">{f.title}</h3>
                <p className="text-white/50 leading-relaxed">{f.desc}</p>
-             </motion.div>
+             </PremiumCard>
           ))}
         </div>
       </div>
@@ -297,36 +309,57 @@ const HowItWorks = () => (
 );
 
 // ======================= PRICING =======================
-const Pricing = () => (
-  <section id="pricing" className="py-24 px-6 bg-[#0a0a0a] border-t border-[#222]">
-    <div className="max-w-7xl mx-auto">
-      <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16">Select Your <span className="text-[#E50914]">Tier</span></h2>
-      <div className="grid md:grid-cols-3 gap-8 items-center">
-         {[
-           { name: "FREE", price: "0", features: ["Basic Analytics", "Manual Entry", "Standard Dashboard", "Community Support"], color: "border-[#333]" },
-           { name: "PRO", price: "59", features: ["Insights & Predictions", "Today's Action Engine", "File OCR Uploads", "Priority Engine Queue"], color: "border-[#E50914] shadow-[0_0_50px_rgba(229,9,20,0.2)] bg-[#E50914]/5 scale-105", highlight: true },
-           { name: "BUSINESS", price: "119", features: ["Unlimited Event Ingestion", "Multi-Tenant Access", "Custom Webhooks", "Dedicated Architect"], color: "border-[#333]" },
-         ].map((plan, i) => (
-           <div key={i} className={`p-8 rounded-xl border bg-black ${plan.color} relative`}>
-              {plan.highlight && <div className="absolute top-0 right-8 -translate-y-1/2 px-4 py-1 bg-[#E50914] text-white text-xs font-bold tracking-widest uppercase rounded">Popular</div>}
-              <h3 className="text-lg font-medium text-white/50 tracking-widest mb-4">{plan.name}</h3>
-              <div className="text-5xl font-black text-white mb-8">₹{plan.price}<span className="text-lg text-white/30 font-medium">/mo</span></div>
-              <ul className="space-y-4 mb-8">
-                {plan.features.map((f, j) => (
-                  <li key={j} className="flex items-center gap-3 text-white/70">
-                    <CheckCircle className={`w-5 h-5 ${plan.highlight ? 'text-[#E50914]' : 'text-white/30'}`} /> {f}
-                  </li>
-                ))}
-              </ul>
-              <Link to="/register" className={`w-full py-4 rounded font-bold transition-all block text-center ${plan.highlight ? 'bg-[#E50914] text-white hover:bg-[#b80710]' : 'bg-white/5 text-white hover:bg-white/10'}`}>
-                Deploy Now
-              </Link>
-           </div>
-         ))}
+const Pricing = () => {
+  const planData = [
+    { name: "FREE", price: "0", features: ["Basic Analytics", "Manual Entry", "Standard Dashboard", "Community Support"], highlight: false },
+    { name: "PRO", price: "59", features: ["Insights & Predictions", "Today's Action Engine", "File OCR Uploads", "Priority Engine Queue"], highlight: true },
+    { name: "BUSINESS", price: "119", features: ["Unlimited Event Ingestion", "Multi-Tenant Access", "Custom Webhooks", "Dedicated Architect"], highlight: false },
+  ];
+
+  return (
+    <section id="pricing" className="py-24 px-6 bg-[#0a0a0a]/95 border-t border-[#222]">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16">Select Your <span className="text-[#E50914]">Tier</span></h2>
+        <div className="grid md:grid-cols-3 gap-8 items-center">
+          {planData.map((plan, i) => (
+            <PremiumCard 
+              key={i}
+              extreme={plan.highlight}
+              className={`relative border ${plan.highlight ? 'border-transparent' : 'border-white/5'} bg-black group`}
+            >
+               {plan.highlight && (
+                 <div className="absolute top-0 right-8 -translate-y-1/2 px-4 py-1 bg-[#E50914] text-white text-[10px] font-black tracking-widest uppercase rounded-full z-20">
+                   Popular
+                 </div>
+               )}
+               <h3 className="text-sm font-black text-white/40 tracking-[0.2em] uppercase mb-4">{plan.name}</h3>
+               <div className="text-5xl font-black text-white mb-8 tracking-tighter">
+                 ₹{plan.price}<span className="text-lg text-white/20 font-medium tracking-normal ml-1">/mo</span>
+               </div>
+               <ul className="space-y-4 mb-8">
+                 {plan.features.map((f, j) => (
+                   <li key={j} className="flex items-center gap-3 text-white/60 text-sm font-medium">
+                     <CheckCircle className={`w-5 h-5 ${plan.highlight ? 'text-[#E50914]' : 'text-white/20'}`} /> {f}
+                   </li>
+                 ))}
+               </ul>
+               <Link 
+                 to="/register" 
+                 className={`w-full py-4 rounded-xl font-bold transition-all block text-center text-sm tracking-tight ${
+                   plan.highlight 
+                     ? 'bg-white text-black hover:bg-white/90 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.2)]' 
+                     : 'bg-white/5 text-white hover:bg-white/10'
+                 }`}
+               >
+                 Deploy Now
+               </Link>
+            </PremiumCard>
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 // ======================= TESTIMONIALS =======================
 const Testimonials = () => (
@@ -365,7 +398,7 @@ const FAQ = () => {
   ];
 
   return (
-    <section id="faq" className="py-24 px-6 bg-[#0a0a0a] border-t border-[#222]">
+    <section id="faq" className="py-24 px-6 bg-[#0a0a0a]/95 border-t border-[#222]">
       <div className="max-w-3xl mx-auto">
         <h2 className="text-4xl font-black text-white text-center mb-16">Briefings</h2>
         <div className="space-y-4">
@@ -425,14 +458,8 @@ const Footer = () => (
 
 // ======================= MAIN ASSEMBLY =======================
 export default function LandingPremium() {
-  const [introFinished, setIntroFinished] = useState(false);
-
   return (
     <div className="min-h-screen text-white font-sans selection:bg-[#E50914] selection:text-white">
-      <AnimatePresence>
-        {!introFinished && <CinematicIntro onComplete={() => setIntroFinished(true)} />}
-      </AnimatePresence>
-
       <Navbar />
       <main>
         <Hero />

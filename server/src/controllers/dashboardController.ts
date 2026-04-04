@@ -184,6 +184,12 @@ export const dashboardController = {
     const growthRate = company?.growthRate ?? estimateGrowth(summary.currentMonthRevenue, summary.previousMonthRevenue);
     const profitMargin = company?.profitMargin ?? (revenue > 0 ? round((profit / revenue) * 100) : 0);
     const efficiency = revenue > 0 ? clamp(100 - (expenses / revenue) * 100, 0, 100) : totalRecords > 0 ? 55 : 0;
+    
+    // RESONANCE ENGINE INTEGRATION
+    const activityDensity = totalRecords > 0 ? (expenses + revenue) / totalRecords : 0;
+    const yieldEfficiency = totalRecords > 0 ? profit / totalRecords : 0;
+    const resonanceIndex = activityDensity > 0 ? clamp((yieldEfficiency / activityDensity) * 100, 0, 100) : 50;
+
     const score = Math.round(
       clamp(profitMargin, 0, 100) * 0.38 +
       clamp(growthRate, 0, 100) * 0.34 +
@@ -239,6 +245,7 @@ export const dashboardController = {
       scoreData: {
         score: Math.min(score, 100),
         status: score > 80 ? 'Excellent' : score > 60 ? 'Good' : score > 40 ? 'Average' : 'Poor',
+        resonanceIndex,
         breakdown: {
           profitability: clamp(profitMargin * 1.8, 0, 100),
           growth: clamp(growthRate * 2.2, 0, 100),

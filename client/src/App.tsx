@@ -161,7 +161,7 @@ function App() {
       try {
         setLoading(true);
         // Simulate or wait for data/API readiness
-        await new Promise(resolve => setTimeout(resolve, 2500));
+        await new Promise(resolve => setTimeout(resolve, 1500));
         
         // Check API health briefly without blocking
         const API = import.meta.env.VITE_API_URL || "https://bhie-api.onrender.com";

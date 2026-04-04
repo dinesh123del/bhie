@@ -60,7 +60,7 @@ const ScanBill = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 p-8 pt-28">
+    <div className="min-h-screen bg-transparent p-8 pt-28">
       <div className="max-w-4xl mx-auto space-y-8">
         <h1 className="text-3xl font-bold text-white flex items-center gap-3">
           <Scan className="text-indigo-400" /> Receipt Scanner

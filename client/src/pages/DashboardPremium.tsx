@@ -71,6 +71,7 @@ interface Breakdown {
 interface ScoreData {
   score: number;
   status: string;
+  resonanceIndex: number;
   breakdown: Breakdown;
 }
 
@@ -357,10 +358,6 @@ const DashboardPremium = () => {
 
       <div className="relative mx-auto max-w-7xl space-y-20 px-6 py-12">
         
-        {/* Background Decorative Elements */}
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-sky-500/5 rounded-full blur-[120px] pointer-events-none -z-10" />
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[150px] pointer-events-none -z-10" />
-
         {/* Header Section */}
         <PremiumSection className="grid gap-12 xl:grid-cols-[1fr_auto]">
           <div className="space-y-6">
@@ -406,6 +403,7 @@ const DashboardPremium = () => {
           <BusinessHealthEngine
             score={healthScore}
             status={scoreData?.status ?? (healthScore >= 80 ? 'Elite' : healthScore >= 60 ? 'Optimal' : 'Needs Insight')}
+            resonanceIndex={scoreData?.resonanceIndex ?? 50}
             breakdown={healthBreakdown}
           />
         </PremiumSection>

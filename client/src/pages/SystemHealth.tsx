@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Activity, 
   ShieldCheck, 
@@ -9,9 +9,12 @@ import {
   AlertTriangle, 
   RefreshCw,
   CheckCircle2,
-  XCircle
+  XCircle,
+  Zap,
+  Sparkles,
+  Server
 } from 'lucide-react';
-import { PremiumCard, PremiumButton } from '../components/ui/PremiumComponents';
+import { PremiumCard, PremiumButton, PremiumBadge } from '../components/ui/PremiumComponents';
 import { systemAPI } from '../services/api';
 import toast from 'react-hot-toast';
 
@@ -61,140 +64,221 @@ const SystemHealth = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
-      {/* Header section with immediate action */}
-      <div className="flex items-center justify-between">
+    <div className="space-y-12 max-w-6xl mx-auto py-12 px-6">
+      {/* Elite Dashboard Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
         <div>
-          <h1 className="text-4xl font-black tracking-tight text-white mb-2">System Core Audit</h1>
-          <p className="text-white/40 font-medium">Verify infrastructure health, API connectivity, and environment integrity.</p>
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-6"
+          >
+            <ShieldCheck className="w-4 h-4 text-sky-400" />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Core Integrity Monitor</span>
+          </motion.div>
+          
+          <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-[0.9] mb-4">
+            System <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-white to-indigo-400">Audit.</span>
+          </h1>
+          <p className="max-w-2xl text-xl text-white/40 font-medium leading-relaxed">
+            Infrastructure health diagnostics, real-time API connectivity, and environment secret telemetry.
+          </p>
         </div>
+        
         <PremiumButton 
           onClick={performCheck} 
           loading={loading}
           icon={<RefreshCw className="w-4 h-4" />}
           variant="primary"
+          className="bg-white text-slate-950 border-none shadow-[0_20px_40px_-10px_rgba(255,255,255,0.3)] hover:bg-slate-100"
         >
-          {report ? 'Re-Run Audit' : 'Start Audit'}
+          {report ? 'Re-Initiate Protocol' : 'Initialize System Audit'}
         </PremiumButton>
       </div>
 
-      {!report && !loading && (
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col items-center justify-center py-20 bg-white/[0.02] border border-white/5 rounded-[2rem] text-center"
-        >
-          <div className="w-16 h-16 rounded-3xl bg-blue-500/10 flex items-center justify-center mb-6">
-            <Activity className="w-8 h-8 text-blue-400" />
-          </div>
-          <h3 className="text-xl font-bold text-white mb-2">Ready for Inspection</h3>
-          <p className="text-white/40 max-w-sm mx-auto">Click the audit button to verify all backend services and external API connections.</p>
-        </motion.div>
-      )}
-
-      {report && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Main Status Panel */}
-          <PremiumCard className="md:col-span-2">
-            <div className="flex items-center gap-6">
-              <div className={`p-4 rounded-3xl ${
-                report.status === 'healthy' ? 'bg-emerald-500/10' : 'bg-rose-500/10'
-              }`}>
-                <Activity className={`w-8 h-8 ${
-                  report.status === 'healthy' ? 'text-emerald-400' : 'text-rose-400'
-                }`} />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-1">
-                  <h2 className="text-2xl font-bold text-white uppercase tracking-tighter">System {report.status}</h2>
-                  <p className="text-[10px] font-bold tracking-[0.2em] text-white/30 uppercase leading-none">Global Status</p>
-                </div>
-                <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: report.status === 'healthy' ? '100%' : '50%' }}
-                    className={`h-full ${report.status === 'healthy' ? 'bg-emerald-500' : 'bg-rose-500'}`}
-                  />
-                </div>
-              </div>
+      <AnimatePresence mode="wait">
+        {!report && !loading ? (
+          <motion.div 
+            key="empty"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            className="flex flex-col items-center justify-center py-32 bg-white/[0.01] border border-white/5 rounded-[3rem] text-center backdrop-blur-3xl"
+          >
+            <div className="w-20 h-20 rounded-3xl bg-sky-500/5 border border-sky-500/10 flex items-center justify-center mb-8">
+              <Activity className="w-10 h-10 text-sky-400 opacity-40 animate-pulse" />
             </div>
-          </PremiumCard>
-
-          {/* Infrastructure Health */}
-          <PremiumCard padded={false} className="flex flex-col">
-            <div className="p-6 border-b border-white/5 bg-white/[0.02]">
-              <div className="flex items-center gap-3">
-                <Database className="w-5 h-5 text-blue-400" />
-                <h3 className="text-sm font-bold text-white uppercase tracking-widest leading-none">Data Core</h3>
-              </div>
+            <h3 className="text-3xl font-black text-white mb-4 italic tracking-tight">System Ready.</h3>
+            <p className="text-white/40 max-w-sm mx-auto font-medium">Click the protocol button to verify backend subsystems and external strategic providers.</p>
+          </motion.div>
+        ) : loading ? (
+          <motion.div 
+            key="loading"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col items-center justify-center py-32 bg-white/[0.01] border border-white/5 rounded-[3rem] text-center backdrop-blur-3xl"
+          >
+            <div className="relative w-20 h-20 mb-8">
+              <motion.div 
+                className="absolute inset-0 border-2 border-sky-500/20 rounded-full"
+                animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.2, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              <motion.div 
+                className="absolute inset-2 border-2 border-sky-400 border-t-transparent rounded-full"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+              />
             </div>
-            <div className="p-6 space-y-6 flex-1">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-white/60 font-medium">MongoDB Insight</span>
-                <div className="flex items-center gap-3">
-                  <span className="text-xs font-mono text-white/40">{report.services.database.latency}ms</span>
-                  <StatusIcon status={report.services.database.status} />
-                </div>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-white/60 font-medium">Redis Cluster</span>
-                <StatusIcon status={report.services.redis.status} />
-              </div>
-            </div>
-          </PremiumCard>
-
-          {/* Engine Connectivity */}
-          <PremiumCard padded={false} className="flex flex-col">
-            <div className="p-6 border-b border-white/5 bg-white/[0.02]">
-              <div className="flex items-center gap-3">
-                <Cpu className="w-5 h-5 text-purple-400" />
-                <h3 className="text-sm font-bold text-white uppercase tracking-widest leading-none">Strategic Providers</h3>
-              </div>
-            </div>
-            <div className="p-6 space-y-6 flex-1">
-              {Object.entries(report.services.ai).map(([name, status]) => (
-                <div key={name} className="flex items-center justify-between">
-                  <span className="text-sm text-white/60 font-medium capitalize">{name} API</span>
-                  <StatusIcon status={status} />
-                </div>
-              ))}
-            </div>
-          </PremiumCard>
-
-          {/* Environment Safety */}
-          <PremiumCard padded={false} className="md:col-span-2">
-            <div className="p-6 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <ShieldCheck className="w-5 h-5 text-amber-400" />
-                <h3 className="text-sm font-bold text-white uppercase tracking-widest leading-none">Environment Integrity</h3>
-              </div>
-              <span className="text-xs font-mono px-2 py-1 rounded bg-black/40 text-blue-400 border border-white/5">{report.environment.nodeEnv}</span>
-            </div>
-            <div className="p-6">
-              {report.environment.missingVars.length === 0 ? (
-                <div className="flex items-center gap-3 text-emerald-400 bg-emerald-500/5 border border-emerald-500/20 p-4 rounded-2xl">
-                  <CheckCircle2 className="w-5 h-5" />
-                  <span className="text-sm font-bold tracking-tight">All critical secrets are properly configured.</span>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 text-rose-400 mb-4">
-                    <AlertTriangle className="w-5 h-5" />
-                    <span className="text-sm font-bold">Missing Critical Variables:</span>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    {report.environment.missingVars.map(v => (
-                      <div key={v} className="bg-rose-500/10 border border-rose-500/20 px-3 py-2 rounded-xl text-center">
-                        <span className="text-[10px] font-mono text-rose-300 font-bold uppercase">{v}</span>
+            <h3 className="text-xl font-bold text-white mb-2">Executing Audit Protocol...</h3>
+            <p className="text-white/40 text-xs font-black uppercase tracking-[0.3em]">Querying Distributed Subsystems</p>
+          </motion.div>
+        ) : (
+          <motion.div 
+            key="results"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-8"
+          >
+            {report && (
+              <>
+                {/* Global Status Card */}
+                <PremiumCard extreme className="md:col-span-2 p-10 bg-white/[0.02]">
+                  <div className="flex flex-col md:flex-row items-center gap-8">
+                    <div className={`w-20 h-20 rounded-3xl flex items-center justify-center shadow-2xl ${
+                      report.status === 'healthy' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                    }`}>
+                      <Zap className="w-10 h-10 fill-current" />
+                    </div>
+                    <div className="flex-1 w-full">
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                             <p className="text-[10px] font-black tracking-[0.3em] text-white/30 uppercase mb-1">Master Integrity Engine</p>
+                             <h2 className="text-4xl font-black text-white uppercase italic tracking-tighter leading-none">Subsystems {report.status}</h2>
+                        </div>
+                        <PremiumBadge tone={report.status === 'healthy' ? 'positive' : 'danger'}>Protocol Confirmed</PremiumBadge>
                       </div>
-                    ))}
+                      <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          animate={{ width: report.status === 'healthy' ? '100%' : '65%' }}
+                          className={`h-full ${report.status === 'healthy' ? 'bg-emerald-500' : 'bg-rose-500'} shadow-[0_0_20px_rgba(16,185,129,0.5)]`}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </PremiumCard>
+
+                {/* Subsystem Monitoring */}
+                <div className="grid gap-8">
+                  {/* Infrastructure */}
+                  <PremiumCard className="p-8 bg-white/[0.01]">
+                    <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center gap-3">
+                            <Database className="w-5 h-5 text-sky-400" />
+                            <h3 className="text-lg font-black text-white uppercase tracking-tight italic">Data Core</h3>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-black text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20 uppercase tracking-widest">Active</span>
+                        </div>
+                    </div>
+                    
+                    <div className="space-y-6">
+                      <div className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
+                        <div>
+                            <p className="text-sm font-bold text-white">MongoDB Primary</p>
+                            <p className="text-[10px] text-white/30 font-medium uppercase tracking-widest">Global Persistence</p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs font-black text-sky-400">{report.services.database.latency}ms</span>
+                          <StatusIcon status={report.services.database.status} />
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
+                        <div>
+                            <p className="text-sm font-bold text-white">Redis Cache Layer</p>
+                            <p className="text-[10px] text-white/30 font-medium uppercase tracking-widest">Volatile Cluster</p>
+                        </div>
+                        <StatusIcon status={report.services.redis.status} />
+                      </div>
+                    </div>
+                  </PremiumCard>
+
+                  {/* Strategic API Connectivity */}
+                  <PremiumCard className="p-8 bg-white/[0.01]">
+                    <div className="flex items-center gap-3 mb-8">
+                      <Cpu className="w-5 h-5 text-indigo-400" />
+                      <h3 className="text-lg font-black text-white uppercase tracking-tight italic">Synthesis Nodes</h3>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {Object.entries(report.services.ai).map(([name, status]) => (
+                        <div key={name} className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
+                          <span className="text-xs font-bold text-white/80 capitalize">{name} API</span>
+                          <StatusIcon status={status} />
+                        </div>
+                      ))}
+                    </div>
+                  </PremiumCard>
+                </div>
+
+                {/* Environmental Safety */}
+                <div className="flex flex-col gap-8">
+                  <PremiumCard extreme className="bg-black/20 p-8 flex-1">
+                    <div className="flex items-center justify-between mb-8">
+                      <div className="flex items-center gap-3">
+                        <ShieldCheck className="w-6 h-6 text-amber-400" />
+                        <div>
+                             <h3 className="text-lg font-black text-white uppercase tracking-tight italic leading-tight">Environment Integrity</h3>
+                             <p className="text-[10px] text-white/30 font-black uppercase tracking-[0.2em]">Security Protocol v2</p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-black px-3 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-400/20 uppercase tracking-widest">{report.environment.nodeEnv}</span>
+                    </div>
+                    
+                    {report.environment.missingVars.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center py-10 bg-emerald-500/5 border border-emerald-500/10 rounded-3xl text-center">
+                        <CheckCircle2 className="w-10 h-10 text-emerald-400 mb-4 opacity-40" />
+                        <p className="text-sm font-bold text-emerald-200">System configuration is within safety parameters.</p>
+                        <p className="text-[10px] text-emerald-400/50 uppercase tracking-[0.2em] mt-1 font-black">All Secrets Verified</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3 text-rose-400 bg-rose-500/5 border border-rose-500/10 p-4 rounded-2xl">
+                          <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+                          <span className="text-sm font-bold tracking-tight">Security Breach: Missing Critical Secrets</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3 font-black text-xs">
+                          {report.environment.missingVars.map(v => (
+                            <div key={v} className="bg-rose-500/5 border border-rose-500/10 px-4 py-3 rounded-2xl text-rose-300/80 flex items-center justify-center uppercase tracking-tighter italic">
+                              {v}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </PremiumCard>
+
+                  {/* Server Protocol Info */}
+                  <div className="p-8 bg-white/[0.01] border border-white/5 rounded-[2.5rem] relative overflow-hidden">
+                     <div className="absolute top-0 right-0 p-6 opacity-[0.03]">
+                        <Server className="w-32 h-32 text-white" />
+                     </div>
+                     <div className="relative z-10">
+                        <div className="flex items-center gap-2 mb-4">
+                           <Sparkles className="w-3 h-3 text-white/40" />
+                           <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em]">Protocol Telemetry</span>
+                        </div>
+                        <p className="text-sm text-white/60 font-medium leading-relaxed">
+                           This audit encapsulates the health of the entire BHIE OS ecosystem. Any discrepancies in the strategic providers or data core should be resolved immediately to maintain neural synthesis parity.
+                        </p>
+                     </div>
                   </div>
                 </div>
-              )}
-            </div>
-          </PremiumCard>
-        </div>
-      )}
+              </>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

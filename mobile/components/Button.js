@@ -1,10 +1,10 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, Pressable } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import { playClick } from '../services/soundHelper';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const Button = ({ onPress, title, style, textStyle, type = 'primary' }) => {
   const scale = useSharedValue(1);
@@ -14,60 +14,75 @@ const Button = ({ onPress, title, style, textStyle, type = 'primary' }) => {
   }));
 
   const handlePressIn = () => {
-    scale.value = withSpring(0.95);
-    playClick();
+    scale.value = withSpring(0.96);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   const handlePressOut = () => {
     scale.value = withSpring(1);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onPress?.();
   };
 
+  if (type === 'secondary') {
+    return (
+      <AnimatedPressable
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        style={[styles.button, styles.secondary, style, animatedStyle]}
+      >
+        <Text style={[styles.text, styles.secondaryText, textStyle]}>
+          {title}
+        </Text>
+      </AnimatedPressable>
+    );
+  }
+
   return (
-    <AnimatedTouchableOpacity
-      activeOpacity={0.8}
+    <AnimatedPressable
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      style={[
-        styles.button, 
-        type === 'primary' ? styles.primary : styles.secondary, 
-        style, 
-        animatedStyle
-      ]}
+      style={[styles.button, style, animatedStyle]}
     >
-      <Text style={[styles.text, textStyle, type === 'secondary' && styles.secondaryText]}>
+      <LinearGradient
+        colors={['#38BDF8', '#4F46E5']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={StyleSheet.absoluteFill}
+      />
+      <Text style={[styles.text, textStyle]}>
         {title}
       </Text>
-    </AnimatedTouchableOpacity>
+    </AnimatedPressable>
   );
 };
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 14,
-    paddingHorizontal: 28,
-    borderRadius: 12,
+    height: 62,
+    borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 10,
-  },
-  primary: {
-    backgroundColor: '#007AFF', // Premium blue
+    marginVertical: 12,
+    overflow: 'hidden',
+    shadowColor: '#38BDF8',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 4,
   },
   secondary: {
-    backgroundColor: 'transparent',
-    borderWidth: 1.5,
-    borderColor: '#007AFF',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   text: {
     color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-    letterSpacing: 0.5,
+    fontSize: 18,
+    fontWeight: '900',
+    letterSpacing: -0.2,
   },
   secondaryText: {
-    color: '#007AFF',
+    color: '#38BDF8',
   },
 });
 

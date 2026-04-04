@@ -1,7 +1,8 @@
+/* global window */
 export const API = import.meta.env.VITE_API_URL || "https://bhie-api.onrender.com";
 
 export const registerUser = async (data) => {
-  const res = await fetch(`${API}/api/auth/register`, {
+  const res = await window.fetch(`${API}/api/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

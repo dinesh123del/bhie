@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 
 /**
  * PremiumBackground Component
@@ -18,8 +19,8 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
 
     let animationFrameId: number;
     let particles: Particle[] = [];
-    const particleCount = 180;
-    const colors = ['#38bdf8', '#818cf8', '#a855f7', '#fb923c', '#f43f5e'];
+    const particleCount = 350;
+    const colors = ['#38bdf8', '#818cf8', '#a855f7', '#fb923c', '#f43f5e', '#ffffff'];
 
     class Particle {
       x: number;
@@ -31,17 +32,21 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
       density: number;
       opacity: number;
       twinkle: number;
+      speedY: number;
+      speedX: number;
 
       constructor() {
         this.x = Math.random() * (canvas?.width || 1920);
         this.y = Math.random() * (canvas?.height || 1080);
         this.baseX = this.x;
         this.baseY = this.y;
-        this.size = Math.random() * 2 + 0.5;
+        this.size = Math.random() * 2.2 + 0.5;
         this.color = colors[Math.floor(Math.random() * colors.length)];
-        this.density = Math.random() * 30 + 1;
-        this.opacity = Math.random() * 0.5 + 0.2;
-        this.twinkle = Math.random() * 0.1;
+        this.density = Math.random() * 20 + 1;
+        this.opacity = Math.random() * 0.7 + 0.1;
+        this.twinkle = (Math.random() * 0.015) + 0.005;
+        this.speedY = (Math.random() * -0.4) - 0.1; // Slow upward drift
+        this.speedX = (Math.random() * 0.2) - 0.1;
       }
 
       draw() {
@@ -50,43 +55,49 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         
-        // Twinkle effect
+        // Anti-gravity Twinkle
         this.opacity += this.twinkle;
-        if (this.opacity > 0.8 || this.opacity < 0.2) this.twinkle = -this.twinkle;
+        if (this.opacity > 0.9 || this.opacity < 0.1) this.twinkle = -this.twinkle;
         
         ctx.globalAlpha = this.opacity;
         ctx.fill();
         
-        // Dynamic glow
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = this.color;
+        if (this.color === '#ffffff') {
+          ctx.shadowBlur = 20;
+          ctx.shadowColor = '#ffffff';
+        }
       }
 
       update() {
-        // Interaction logic
+        // Constant drift
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        // Wrap around screen
+        if (this.y < -10) {
+          this.y = (canvas?.height || 1080) + 10;
+          this.x = Math.random() * (canvas?.width || 1920);
+        }
+
+        // Proximity interaction (Hover feel)
         const dx = mouseRef.current.x - this.x;
         const dy = mouseRef.current.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
+        const maxDistance = 180;
         
-        if (distance > 0 && distance < 150 && mouseRef.current.active) {
-          const forceDirectionX = dx / distance;
-          const forceDirectionY = dy / distance;
-          const maxDistance = 150;
+        if (distance < maxDistance) {
           const force = (maxDistance - distance) / maxDistance;
-          
-          const directionX = forceDirectionX * force * this.density;
-          const directionY = forceDirectionY * force * this.density;
+          const directionX = (dx / distance) * force * this.density * 0.3;
+          const directionY = (dy / distance) * force * this.density * 0.3;
 
-          this.x -= directionX;
-          this.y -= directionY;
-        } else {
-          if (this.x !== this.baseX) {
-            const dxBack = this.x - this.baseX;
-            this.x -= dxBack / 20;
-          }
-          if (this.y !== this.baseY) {
-            const dyBack = this.y - this.baseY;
-            this.y -= dyBack / 20;
+          if (mouseRef.current.active) {
+             // Push on click/touch
+             this.x -= directionX * 5;
+             this.y -= directionY * 5;
+          } else {
+             // Gentle pull on hover
+             this.x += directionX;
+             this.y += directionY;
           }
         }
       }
@@ -100,8 +111,27 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
       canvas.height = h * window.devicePixelRatio;
       ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
       
-      for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
+      // Triple layering for depth
+      // 1. Pixel Stars (very small, many)
+      for (let i = 0; i < 280; i++) {
+        const p = new Particle();
+        p.size = Math.random() * 0.8 + 0.1;
+        p.twinkle *= 1.2;
+        particles.push(p);
+      }
+      // 2. Main Glitter
+      for (let i = 0; i < 150; i++) {
+        const p = new Particle();
+        p.size = Math.random() * 1.5 + 0.8;
+        particles.push(p);
+      }
+      // 3. Bokeh Foreground (large, blurry)
+      for (let i = 0; i < 25; i++) {
+        const p = new Particle();
+        p.size = Math.random() * 4 + 2;
+        p.opacity = 0.15;
+        p.twinkle *= 0.5;
+        particles.push(p);
       }
     };
 
@@ -168,8 +198,22 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
 
       {/* Ambient Gradients - Multi-color Antigravity Feel */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute -left-[5%] -top-[5%] h-[70%] w-[70%] rounded-full bg-sky-500/5 blur-[120px] animate-pulse" />
-        <div className="absolute -right-[5%] bottom-[10%] h-[60%] w-[60%] rounded-full bg-orange-500/5 blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
+        <motion.div 
+          className="absolute -left-[5%] -top-[5%] h-[70%] w-[70%] rounded-full bg-sky-500/5 blur-[120px] pointer-events-none" 
+          animate={{ 
+            opacity: [0.1, 0.2, 0.1],
+            filter: ["blur(120px) hue-rotate(0deg)", "blur(120px) hue-rotate(45deg)", "blur(120px) hue-rotate(0deg)"]
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div 
+          className="absolute -right-[5%] bottom-[10%] h-[60%] w-[60%] rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none" 
+          animate={{ 
+            opacity: [0.1, 0.3, 0.1],
+            filter: ["blur(120px) hue-rotate(0deg)", "blur(120px) hue-rotate(-45deg)", "blur(120px) hue-rotate(0deg)"]
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        />
         <div className="absolute left-[30%] top-[40%] h-[40%] w-[40%] rounded-full bg-purple-500/3 blur-[120px] animate-pulse" style={{ animationDelay: '4s' }} />
       </div>
 

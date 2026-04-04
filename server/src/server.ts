@@ -75,10 +75,8 @@ app.get("/api/health", (req, res) => {
 app.use('/api', apiLimiter, apiRouter);
 
 // --- Global Error Handler ---
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error(err);
-  res.status(500).json({ message: "Server error" });
-});
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 // --- Server Lifecycle ---
 let server: any = null;

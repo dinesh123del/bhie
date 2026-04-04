@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  BrainCircuit, 
+  Target, 
+  TrendingUp, 
+  AlertCircle, 
+  RefreshCw, 
+  ArrowRight,
+  Sparkles,
+  PieChart,
+  Activity,
+  Zap
+} from 'lucide-react';
 import { useAIAnalysis } from '../hooks/useAIAnalysis';
 import { AnalysisDashboard } from '../components/AIAnalysisDashboard';
+import { PremiumCard, PremiumButton, PremiumInput } from '../components/ui/PremiumComponents';
 import type { BusinessData } from '../types/ai';
 
-/**
- * AI Analysis Page
- * Main entry point for users to trigger AI analysis
- */
 export const AnalysisReportPage: React.FC = () => {
   const [formData, setFormData] = useState<BusinessData>({
     revenue: 0,
@@ -21,7 +31,7 @@ export const AnalysisReportPage: React.FC = () => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'customerCount' ? parseInt(value) : parseFloat(value),
+      [name]: name === 'customerCount' ? parseInt(value) || 0 : parseFloat(value) || 0,
     }));
   };
 
@@ -41,179 +51,208 @@ export const AnalysisReportPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-transparent py-12 px-6">
       <div className="max-w-7xl mx-auto">
-        {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Business Analysis Report</h1>
-          <p className="text-gray-600">
-            Get comprehensive insights powered by our analysis engine
+        {/* Elite Header */}
+        <div className="mb-12">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-6"
+          >
+            <BrainCircuit className="w-4 h-4 text-sky-400" />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Neural Engine v4.2</span>
+          </motion.div>
+          
+          <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-[0.9] mb-4">
+            Intelligence <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-white to-indigo-400">Synthesis.</span>
+          </h1>
+          <p className="max-w-2xl text-xl text-white/40 font-medium leading-relaxed">
+            Deploy deep-learning models to analyze your business metrics. Extract actionable intelligence from raw data streams.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Input Form */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow p-6 sticky top-8">
-              <h2 className="text-2xl font-bold mb-6 text-gray-800">Enter Your Data</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-10">
+          {/* Input Side */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="lg:sticky lg:top-24 h-fit"
+          >
+            <PremiumCard extreme className="p-8 backdrop-blur-3xl bg-white/[0.02]">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center text-sky-400 border border-sky-400/20">
+                    <Target className="w-5 h-5" />
+                </div>
+                <div>
+                   <h2 className="text-xl font-bold text-white tracking-tight">Data Ingestion</h2>
+                   <p className="text-xs text-white/40 uppercase tracking-widest font-black">Manual Entry Node</p>
+                </div>
+              </div>
 
               {error && (
-                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
-                  {error}
-                </div>
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                  <p className="text-xs text-red-200 font-medium">{error}</p>
+                </motion.div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Revenue */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Current Revenue ($)
-                  </label>
-                  <input
-                    type="number"
-                    name="revenue"
-                    value={formData.revenue}
-                    onChange={handleInputChange}
-                    placeholder="e.g., 50000"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    required
-                  />
-                </div>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <PremiumInput
+                  label="Current Revenue (₹)"
+                  type="number"
+                  name="revenue"
+                  value={formData.revenue}
+                  onChange={handleInputChange}
+                  icon={<Activity className="w-4 h-4 text-sky-400" />}
+                  placeholder="0.00"
+                  floating
+                />
 
-                {/* Expenses */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Monthly Expenses ($)
-                  </label>
-                  <input
-                    type="number"
-                    name="expenses"
-                    value={formData.expenses}
-                    onChange={handleInputChange}
-                    placeholder="e.g., 30000"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    required
-                  />
-                </div>
+                <PremiumInput
+                  label="Monthly Expenses (₹)"
+                  type="number"
+                  name="expenses"
+                  value={formData.expenses}
+                  onChange={handleInputChange}
+                  icon={<Zap className="w-4 h-4 text-amber-300" />}
+                  placeholder="0.00"
+                  floating
+                />
 
-                {/* Customer Count */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Customer Count
-                  </label>
-                  <input
-                    type="number"
-                    name="customerCount"
-                    value={formData.customerCount}
-                    onChange={handleInputChange}
-                    placeholder="e.g., 100"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    required
-                  />
-                </div>
+                <PremiumInput
+                  label="Total Customer Count"
+                  type="number"
+                  name="customerCount"
+                  value={formData.customerCount}
+                  onChange={handleInputChange}
+                  icon={<PieChart className="w-4 h-4 text-indigo-400" />}
+                  placeholder="0"
+                  floating
+                />
 
-                {/* Previous Revenue */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Previous Revenue ($)
-                  </label>
-                  <input
-                    type="number"
-                    name="previousRevenue"
-                    value={formData.previousRevenue}
-                    onChange={handleInputChange}
-                    placeholder="e.g., 45000"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
+                <PremiumInput
+                  label="Baseline Revenue (₹)"
+                  type="number"
+                  name="previousRevenue"
+                  value={formData.previousRevenue}
+                  onChange={handleInputChange}
+                  icon={<TrendingUp className="w-4 h-4 text-emerald-400" />}
+                  placeholder="0.00"
+                  floating
+                />
 
-                {/* Buttons */}
-                <div className="flex gap-3 pt-4">
-                  <button
+                <div className="pt-6 flex flex-col gap-3">
+                  <PremiumButton
                     type="submit"
-                    disabled={loading}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                    variant="primary"
+                    size="lg"
+                    loading={loading}
+                    className="w-full bg-white text-slate-950 border-none shadow-[0_20px_40px_-10px_rgba(255,255,255,0.3)] hover:bg-slate-100"
                   >
-                    {loading ? (
-                      <>
-                        <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                            fill="none"
-                          />
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          />
-                        </svg>
-                        Processing...
-                      </>
-                    ) : (
-                      'Analyze'
-                    )}
-                  </button>
+                    Initiate Analysis
+                  </PremiumButton>
+                  
                   {analysisResult && (
                     <button
                       type="button"
                       onClick={handleReset}
-                      className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-200"
+                      className="w-full py-4 text-white/40 hover:text-white text-xs font-black uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2"
                     >
-                      Clear
+                      <RefreshCw className="w-3 h-3" /> Reset Node
                     </button>
                   )}
                 </div>
               </form>
 
-              {/* Info Box */}
-              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
-                <p className="font-semibold mb-2">💡 How it works:</p>
-                <ul className="list-disc list-inside space-y-1 text-xs">
-                  <li>Financial engine analyzes profitability & risks</li>
-                  <li>Market logic evaluates demand & competition</li>
-                  <li>Forecasting system predicts revenue trends</li>
-                  <li>Strategy engine generates actionable recommendations</li>
-                </ul>
+              {/* Protocol Monitor */}
+              <div className="mt-10 p-6 bg-sky-500/5 border border-sky-500/10 rounded-2xl">
+                 <div className="flex items-center gap-2 mb-4">
+                    <Sparkles className="w-3 h-3 text-sky-400" />
+                    <span className="text-[10px] font-black text-sky-400/80 uppercase tracking-widest">Synthesis Protocols</span>
+                 </div>
+                 <ul className="space-y-3">
+                   {[
+                     "Neural profitability modeling",
+                     "Risk interception matrices",
+                     "Velocity trend forecasting",
+                     "Competitive strategy logic"
+                   ].map((item, i) => (
+                     <li key={i} className="flex items-center gap-3 text-[10px] text-white/50 font-medium">
+                        <div className="w-1 h-1 rounded-full bg-sky-500/40" /> {item}
+                     </li>
+                   ))}
+                 </ul>
               </div>
-            </div>
-          </div>
+            </PremiumCard>
+          </motion.div>
 
-          {/* Results */}
-          <div className="lg:col-span-2">
-            {analysisResult ? (
-              <AnalysisDashboard
-                analysisResult={analysisResult}
-                loading={loading}
-              />
-            ) : loading ? (
-              <div className="bg-white rounded-lg shadow p-12">
-                <AnalysisDashboard
-                  analysisResult={{
-                    timestamp: new Date().toISOString(),
-                    businessData: {} as any,
-                    analysis: {} as any,
-                    status: 'error',
-                    message: '',
-                  }}
-                  loading={true}
-                />
-              </div>
-            ) : (
-              <div className="bg-white rounded-lg shadow p-12 text-center">
-                <div className="text-6xl mb-4">📊</div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                  Analysis Report Ready
-                </h3>
-                <p className="text-gray-600">
-                  Enter your business data and click "Analyze" to get started
-                </p>
-              </div>
-            )}
+          {/* Results Side */}
+          <div className="lg:col-span-1">
+            <AnimatePresence mode="wait">
+              {analysisResult ? (
+                <motion.div
+                  key="results"
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <AnalysisDashboard
+                    analysisResult={analysisResult}
+                    loading={loading}
+                  />
+                </motion.div>
+              ) : loading ? (
+                <motion.div
+                  key="loading"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="space-y-6"
+                >
+                   <PremiumCard className="p-12 bg-white/[0.01] flex flex-col items-center justify-center min-h-[600px] border-white/5">
+                      <div className="relative w-24 h-24 mb-8">
+                         <motion.div 
+                           className="absolute inset-0 border-2 border-sky-500/20 rounded-full"
+                           animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.2, 0.5] }}
+                           transition={{ duration: 2, repeat: Infinity }}
+                         />
+                         <motion.div 
+                           className="absolute inset-2 border-2 border-sky-400 border-t-transparent rounded-full"
+                           animate={{ rotate: 360 }}
+                           transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                         />
+                         <div className="absolute inset-0 flex items-center justify-center">
+                            <BrainCircuit className="w-8 h-8 text-sky-400" />
+                         </div>
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-2">Synthesizing Logic...</h3>
+                      <p className="text-white/40 text-sm tracking-widest uppercase font-black">Executing Deep Analysis Protocol</p>
+                   </PremiumCard>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="empty"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  <PremiumCard className="p-12 text-center bg-white/[0.01] border-white/5 flex flex-col items-center justify-center min-h-[600px]">
+                    <div className="w-24 h-24 rounded-3xl bg-sky-500/5 border border-sky-500/10 flex items-center justify-center text-sky-400 mb-8">
+                       <PieChart className="w-10 h-10 opacity-40" />
+                    </div>
+                    <h3 className="text-3xl font-black text-white mb-4">Awaiting Data Streams</h3>
+                    <p className="text-white/40 max-w-sm mb-8 font-medium">
+                      The intelligence engine is on standby. Input your business metrics to initialize the synthesis protocol.
+                    </p>
+                    <div className="flex gap-2">
+                       <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[9px] font-black text-white/50 uppercase tracking-widest">Ready</div>
+                       <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[9px] font-black text-white/50 uppercase tracking-widest">Optimized</div>
+                       <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[9px] font-black text-white/50 uppercase tracking-widest">Secure</div>
+                    </div>
+                  </PremiumCard>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>

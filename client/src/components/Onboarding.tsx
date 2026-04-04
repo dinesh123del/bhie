@@ -42,7 +42,7 @@ const Onboarding = () => {
         </div>
       ),
       placement: 'center',
-      // @ts-ignore
+      // @ts-expect-error - Beacon disabling
       disableBeacon: true,
     },
     {

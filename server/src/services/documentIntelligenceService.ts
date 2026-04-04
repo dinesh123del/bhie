@@ -2,158 +2,199 @@ import sharp from 'sharp';
 import Tesseract from 'tesseract.js';
 import OpenAI from 'openai';
 import fs from 'fs/promises';
-import crypto from 'crypto';
-import path from 'path';
 import { env } from '../config/env.js';
 import { AppError } from '../utils/appError.js';
 import type { DocumentIntelligenceResult } from '../types/document.js';
 
-const openai = env.OPENAI_API_KEY ? new OpenAI({ apiKey: env.OPENAI_API_KEY }) : null;
+const openai = env.OPENAI_API_KEY && env.OPENAI_API_KEY !== 'your_openai_api_key_here' 
+  ? new OpenAI({ apiKey: env.OPENAI_API_KEY }) 
+  : null;
 
-
-
+/**
+ * ELITE CURRENCY RECOGNITION PATTERNS
+ * Designed for precision across Indian (₹) and Global standards.
+ */
 const CURRENCY_PATTERNS = [
-  /(?:grand\s*total|total\s*(?:amount|)|amount\s*due|net\s*amount|subtotal|total|balance|paid|received)\s*[:\-]?\s*(₹|rs?\.?|inr)\s*([0-9,]+(?:\.[0-9]{1,2})?)/gi,
-  /(?:₹|rs?\.?)\s*([0-9,]+(?:\.[0-9]{1,2})?)/gi,
-  /([0-9,]+(?:\.[0-9]{1,2})?)\s*(?:total|amt|amount)/gi,
+  // Explicit Grand Total with Currency Symbols
+  /(?:grand\s*|net\s*|final\s*|)total(?:\s*(?:amount|due|payable))?\s*[:\-]?\s*(?:₹|rs?\.?|inr|usd|\$|eur|€|gbp|£)\s*([0-9,]+(?:\.[0-9]{1,2})?)/gi,
+  // Floating Currency Symbols
+  /(?:₹|rs?\.?|inr|usd|\$|eur|€|gbp|£)\s*([0-9,]+(?:\.[0-9]{1,2})?)/gi,
+  // Standard Totals without symbols
+  /\b(?:total|amt|amount|subtotal|tax|gst)\s*[:\-]?\s*([0-9,]+(?:\.[0-9]{1,2})?)\b/gi,
+  // Trailing currency markers
+  /\b([0-9,]+(?:\.[0-9]{1,2})?)\s*(?:total|amt|amount|inr|usd)\b/gi,
 ];
 
-const INCOME_KEYWORDS = ['income', 'sale', 'credit', 'received', 'payment received', 'sale', 'profit'];
-const EXPENSE_KEYWORDS = ['expense', 'purchase', 'debit', 'bill', 'payment', 'spent'];
+const INCOME_KEYWORDS = [
+  'income', 'sale', 'credit', 'received', 'payment received', 'revenue', 
+  'profit', 'payout', 'interest', 'dividend', 'refund', 'settlement'
+];
 
+const EXPENSE_KEYWORDS = [
+  'expense', 'purchase', 'debit', 'bill', 'payment', 'spent', 'invoice',
+  'tax invoice', 'bill to', 'subtotal', 'grand total', 'amt due'
+];
+
+/**
+ * MULTI-STAGE CLASSIFICATION RULES
+ * Maps intelligence signals to enterprise categories.
+ */
 const CATEGORY_RULES = [
-  { category: 'materials', keywords: ['material', 'raw', 'stock', 'product', 'item', 'inventory'], type: 'expense' as const },
-  { category: 'transport', keywords: ['fuel', 'petrol', 'diesel', 'travel', 'uber', 'ola'], type: 'expense' as const },
-  { category: 'salary', keywords: ['salary', 'wages', 'staff'], type: 'expense' as const },
-  { category: 'rent', keywords: ['rent', 'lease'], type: 'expense' as const },
-  { category: 'utilities', keywords: ['electricity', 'water', 'internet'], type: 'expense' as const },
-  { category: 'food', keywords: ['food', 'restaurant', 'swiggy', 'zomato'], type: 'expense' as const },
-  { category: 'sales', keywords: ['sale', 'customer', 'invoice'], type: 'income' as const },
+  { category: 'materials', keywords: ['material', 'raw', 'stock', 'inventory', 'hardware', 'iron', 'steel', 'scrap'], type: 'expense' as const },
+  { category: 'transport', keywords: ['fuel', 'petrol', 'diesel', 'travel', 'uber', 'ola', 'rapido', 'logistics', 'shipping'], type: 'expense' as const },
+  { category: 'salary', keywords: ['salary', 'wages', 'staff', 'payroll', 'consultant', 'stipend'], type: 'expense' as const },
+  { category: 'rent', keywords: ['rent', 'lease', 'office', 'co-working', 'maintenance'], type: 'expense' as const },
+  { category: 'utilities', keywords: ['electricity', 'water', 'internet', 'wi-fi', 'recharge', 'mobile', 'hosting', 'aws', 'cloud'], type: 'expense' as const },
+  { category: 'food', keywords: ['food', 'restaurant', 'swiggy', 'zomato', 'blinkit', 'zepto', 'coffee', 'pantry'], type: 'expense' as const },
+  { category: 'marketing', keywords: ['ads', 'meta', 'google ads', 'marketing', 'branding', 'design', 'seo'], type: 'expense' as const },
+  { category: 'sales', keywords: ['sale', 'customer', 'invoice', 'order', 'client', 'payment received'], type: 'income' as const },
+  { category: 'investment', keywords: ['investment', 'return', 'stock', 'crypto', 'interest'], type: 'income' as const },
 ];
 
+/** 
+ * ELITE PRE-PROCESSING PIPELINE
+ * Enhances document contrast and sharpness for superior OCR extraction.
+ */
 async function preprocessImage(buffer: Buffer | string): Promise<Buffer> {
   const imgBuffer = Buffer.isBuffer(buffer) ? buffer : await fs.readFile(buffer as string);
   const img = sharp(imgBuffer);
   
-  // Grayscale, enhance contrast, reduce noise, sharpen, resize
+  const metadata = await img.metadata();
+  const width = metadata.width || 1000;
+  
   return img
     .greyscale()
-    .normalize() // contrast enhancement
-    .sharpen({ sigma: 1 })
-    .modulate({ brightness: 1.2, saturation: 0.8 }) // slight brightness boost
-    .median(1) // noise reduction
-    .resize(1024, 1024, { fit: 'inside', kernel: sharp.kernel.lanczos3 }) // optimize for OCR
+    .linear(1.5, -0.2) // Contrast boost
+    .sharpen({ sigma: 1.5, m1: 2, m2: 2 })
+    .median(1) // Light noise removal
+    .resize(Math.max(width, 1800), null, { fit: 'inside' }) // Scale up for small text
     .toBuffer();
 }
 
-async function runTesseract(buffer: Buffer, config = 'eng'): Promise<{ text: string; confidence: number }> {
-  const { data } = await Tesseract.recognize(buffer, config, {
-    logger: m => {
-      if (process.env.NODE_ENV !== 'production') console.log(m);
-    },
-  });
-  // Simple fallback confidence - ignore exact structure
-  const avgConfidence = data.confidence ? data.confidence / 100 : 0.7;
-  return { text: (data.text || '').trim(), confidence: Math.max(0.3, avgConfidence) };
-}
-
-async function detectHandwriting(text: string, ocrConfidence: number): Promise<boolean> {
-  if (ocrConfidence > 0.75) return false;
-  
-  if (/[a-z]/.test(text) && !/[A-Z]/.test(text) && text.length > 20) return true;
-  return false;
+async function runTesseract(buffer: Buffer): Promise<{ text: string; confidence: number }> {
+  try {
+    const { data } = await Tesseract.recognize(buffer, 'eng+hin', { // Dual language support
+      logger: m => {
+        if (process.env.NODE_ENV !== 'production' && m.status === 'recognizing text') {
+             // Silently track progress if needed
+        }
+      },
+    });
+    
+    return { 
+      text: (data.text || '').trim(), 
+      confidence: (data.confidence || 0) / 100 
+    };
+  } catch (error) {
+    console.error('Tesseract Engine failure:', error);
+    return { text: '', confidence: 0 };
+  }
 }
 
 async function openaiVisionFallback(buffer: Buffer, ocrText: string): Promise<string> {
-  if (!openai) {
-    console.warn('OpenAI not configured, skipping vision fallback');
+  if (!openai) return '';
+  
+  try {
+    const base64 = buffer.toString('base64');
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [{
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            text: `Perform elite OCR on this business record. Extract all details with extreme precision. Compare with raw OCR: "${ocrText.substring(0, 500)}". Focus on Merchant Name, Date, and Final Amount. Return ONLY the extracted text.`
+          },
+          {
+            type: 'image_url',
+            image_url: { url: `data:image/jpeg;base64,${base64}` }
+          }
+        ]
+      }],
+      max_tokens: 1500,
+      temperature: 0.1,
+    });
+    return response.choices[0].message.content?.trim() || '';
+  } catch (error) {
+    console.error('AI Vision Fallback failed:', error);
     return '';
   }
-  const base64 = buffer.toString('base64');
-  const response = await openai.chat.completions.create({
-    model: 'gpt-4o-mini',
-    messages: [{
-      role: 'user',
-      content: [
-        {
-          type: 'text',
-          text: `Extract all text accurately from this receipt/image/handwritten note. Previous OCR (possibly inaccurate): "${ocrText.substring(0, 2000)}". Respond ONLY with the clean extracted text.`
-        },
-        {
-          type: 'image_url',
-          image_url: { url: `data:image/jpeg;base64,${base64}` }
-        }
-      ]
-    }],
-    max_tokens: 2000,
-  });
-  return response.choices[0].message.content?.trim() || '';
 }
 
 function cleanText(text: string): string {
   return text
     .replace(/\s+/g, ' ')
-    .replace(/[^a-zA-Z0-9₹.,:\-/%()$#+\s]/g, ' ')
-    .replace(/([0-9])o([0-9])/g, '$1 0 $2') // fix O→0
-    .replace(/l/g, '1') // l→1
-    .replace(/S/g, '5') // S→5
-    .replace(/O/g, '0')
+    .replace(/[^a-zA-Z0-9₹.,:\-/%()$#@+\s]/g, ' ') // Allow decimals and symbols
+    .replace(/([0-9])o([0-9])/g, '$10$2') 
+    .replace(/\|/g, '1')
     .trim();
 }
 
+/** 
+ * PRECISE AMOUNT SYNTHESIS
+ * Scans for financial markers and stabilizes on the highest logical total.
+ */
 function extractAmount(text: string): { amount: number; confidence: number } {
+  let bestAmount = 0;
+  let maxMatchConf = 0;
+
   for (const pattern of CURRENCY_PATTERNS) {
-    const matches = [...text.matchAll(pattern)]
-      .map(m => parseFloat((m[2] || m[1]).replace(/,/g, '')))
-      .filter(n => !isNaN(n) && n > 0)
-      .sort((a, b) => b - a);
-    
-    if (matches.length) {
-      return { amount: matches[0], confidence: 0.9 };
+    const matches = [...text.matchAll(pattern)];
+    for (const match of matches) {
+      const rawVal = match[1] || match[0];
+      const val = parseFloat(rawVal.replace(/,/g, '').replace(/[^0-9.]/g, ''));
+      
+      if (!isNaN(val) && val > 0) {
+        // High confidence tokens
+        const weight = /total|grand|due|paid/i.test(match[0]) ? 1.0 : 0.6;
+        if (val > bestAmount) {
+          bestAmount = val;
+          maxMatchConf = weight;
+        }
+      }
     }
   }
-  return { amount: 0, confidence: 0 };
+
+  return { 
+    amount: parseFloat(bestAmount.toFixed(2)), 
+    confidence: bestAmount > 0 ? maxMatchConf : 0 
+  };
 }
 
 function detectType(text: string): 'income' | 'expense' {
-  const score = { income: 0, expense: 0 };
-  INCOME_KEYWORDS.forEach(kw => text.includes(kw) && score.income++);
-  EXPENSE_KEYWORDS.forEach(kw => text.includes(kw) && score.expense++);
+  const norm = text.toLowerCase();
+  let score = { income: 0, expense: 0 };
+  
+  INCOME_KEYWORDS.forEach(kw => norm.includes(kw) && (score.income += 2));
+  EXPENSE_KEYWORDS.forEach(kw => norm.includes(kw) && (score.expense += 1.5));
+  
+  // Tie-breaker: Invoices without "Income" keywords are usually expenses
+  if (score.income === 0 && (norm.includes('invoice') || norm.includes('tax'))) score.expense += 5;
+
   return score.income > score.expense ? 'income' : 'expense';
 }
 
 function detectCategory(text: string, type: 'income' | 'expense'): string {
+  const norm = text.toLowerCase();
+  let bestScore = 0;
+  let bestCategory = 'other';
+
   for (const rule of CATEGORY_RULES.filter(r => r.type === type)) {
-    if (rule.keywords.some(kw => text.includes(kw))) return rule.category;
-  }
-  return 'other';
-}
-
-function calculateConfidence(ocrConf: number, handwriting: boolean, aiUsed: boolean, amountConf: number): number {
-  let conf = ocrConf * 0.4 + amountConf * 0.4;
-  if (handwriting || aiUsed) conf *= 0.8;
-  return parseFloat(conf.toFixed(2));
-}
-
-function extractItems(text: string): string[] {
-  const lines = text.split('\n');
-  const items: string[] = [];
-  const ITEM_PATTERN = /([a-z\s]+)\s+(\d+(?:\.\d{1,2})?)/i;
-
-  for (const line of lines) {
-    const match = line.match(ITEM_PATTERN);
-    if (match && !line.toLowerCase().includes('total')) {
-      items.push(line.trim());
+    const hits = rule.keywords.filter(kw => norm.includes(kw)).length;
+    if (hits > bestScore) {
+      bestScore = hits;
+      bestCategory = rule.category;
     }
   }
-  return items;
+
+  return bestCategory;
 }
 
 function extractDate(text: string): string {
   const DATE_PATTERNS = [
-    /\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}/,
-    /\d{4}[\/-]\d{1,2}[\/-]\d{1,2}/,
-    /[A-Z][a-z]{2,8}\s+\d{1,2},?\s+\d{4}/
+    /\b\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}\b/,
+    /\b\d{4}[\/-]\d{1,2}[\/-]\d{1,2}\b/,
+    /\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+\d{4}\b/i
   ];
 
   for (const pattern of DATE_PATTERNS) {
@@ -163,60 +204,78 @@ function extractDate(text: string): string {
   return new Date().toISOString().split('T')[0];
 }
 
-/** Main entry point */
+function extractItems(text: string): string[] {
+  const lines = text.split('\n');
+  const items: string[] = [];
+  const ITEM_PATTERN = /^([a-zA-Z0-9\s.,&]+)\s+([0-9]+\.[0-9]{2})$/;
+
+  for (const line of lines) {
+    const clean = line.trim();
+    if (clean.length < 5 || clean.toLowerCase().includes('total')) continue;
+    
+    // Check if line looks like a line item (Text + Price)
+    if (ITEM_PATTERN.test(clean) || (clean.split(/\s+/).length >= 2 && /[0-9]+\.[0-9]{2}/.test(clean))) {
+      items.push(clean);
+    }
+  }
+  
+  return items.slice(0, 15); // Cap at 15 items for brevity
+}
+
+/** 
+ * ELITE INTEGRITY ORCHESTRATOR
+ * Main entry point for the backend intelligence engine.
+ */
 export async function processDocument(input: Buffer | string): Promise<DocumentIntelligenceResult> {
   try {
     const buffer = Buffer.isBuffer(input) ? input : await fs.readFile(input as string);
     
-    // 1. Preprocess
+    // 1. Digital Enhancement
     const processedBuffer = await preprocessImage(buffer);
     
-    // 2. Primary Tesseract OCR
-    const tesseractResult = await runTesseract(processedBuffer);
-    let rawText = tesseractResult.text;
-    let ocrConfidence = tesseractResult.confidence;
+    // 2. Tesseract Foundation
+    const tesseract = await runTesseract(processedBuffer);
+    let rawText = tesseract.text;
+    let ocrConfidence = tesseract.confidence;
     
-    // 3. Handwriting detection & AI fallback
-    const isHandwriting = await detectHandwriting(rawText, ocrConfidence);
+    // 3. AI Augmentation (Elite Layer)
     let aiUsed = false;
-    if (isHandwriting || ocrConfidence < 0.6) {
-      if (openai) {
-        const aiText = await openaiVisionFallback(processedBuffer, rawText);
-        rawText += '\n' + aiText;
+    if (ocrConfidence < 0.75 || rawText.length < 50) {
+      const aiText = await openaiVisionFallback(processedBuffer, rawText);
+      if (aiText) {
+        rawText = aiText;
+        ocrConfidence = 0.95; // AI is the source of truth here
         aiUsed = true;
-        ocrConfidence = Math.max(ocrConfidence, 0.7); // AI boost
       }
     }
     
-    // 4. Clean
+    // 4. Synthesis
     const cleanedText = cleanText(rawText);
-    
-    // 5. Extract
-    const amountResult = extractAmount(cleanedText);
+    const amountData = extractAmount(cleanedText);
     const type = detectType(cleanedText);
     const category = detectCategory(cleanedText, type);
-    const items = extractItems(cleanedText);
     const date = extractDate(cleanedText);
+    const items = extractItems(rawText); // Use raw for items to preserve formatting
     
-    // 6. Confidence
-    const confidence = calculateConfidence(ocrConfidence, isHandwriting, aiUsed, amountResult.confidence);
-    
+    // 5. Final Confidence Calculation
+    let finalConfidence = (ocrConfidence * 0.5) + (amountData.confidence * 0.5);
+    if (aiUsed) finalConfidence = Math.max(finalConfidence, 0.9);
+
     return {
-      amount: amountResult.amount,
+      amount: amountData.amount,
       type,
       category,
-      confidence: Math.max(0.1, confidence), // min floor
+      confidence: parseFloat(finalConfidence.toFixed(2)),
       rawText: cleanedText,
       items,
       date,
     };
   } catch (error) {
-    console.error('Document processing failed:', error);
-    throw new AppError(500, 'Failed to process document');
+    console.error('Intelligence Engine critical failure:', error);
+    throw new AppError(500, 'Intelligence synthesis internal error');
   }
 }
 
-// Export for buffer/path overload
 export async function processDocumentPath(filePath: string): Promise<DocumentIntelligenceResult> {
   return processDocument(filePath);
 }

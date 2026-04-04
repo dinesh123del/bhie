@@ -43,13 +43,17 @@ router.get(
     let dbStatus: 'up' | 'down' = 'down';
     try {
       if (mongoose.connection.readyState === 1) dbStatus = 'up';
-    } catch {}
+    } catch (err) {
+      dbStatus = 'down';
+    }
 
     // 3. Redis Check
     let redisStatus: 'up' | 'down' = 'down';
     try {
       if (redisClient.isReady) redisStatus = 'up';
-    } catch {}
+    } catch (err) {
+      redisStatus = 'down';
+    }
 
     // 4. Build Report
     const report: HealthReport = {

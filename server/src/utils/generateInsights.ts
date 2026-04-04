@@ -88,6 +88,32 @@ function buildRuleBasedInsights(input: GenerateInsightsInput): DashboardInsight[
   }
 
   const insights: DashboardInsight[] = [];
+  
+  // ELITE INNOVATION: CAPITAL EXHAUST & RESONANCE ENGINE
+  const activityDensity = totalRecords > 0 ? (expenses + revenue) / totalRecords : 0;
+  const yieldEfficiency = totalRecords > 0 ? profit / totalRecords : 0;
+  const resonanceIndex = activityDensity > 0 ? (yieldEfficiency / activityDensity) * 100 : 0;
+  
+  if (totalRecords > 10) {
+    if (resonanceIndex < 15) {
+      insights.push({
+        type: 'warning',
+        metric: 'general',
+        message: 'High Structural Friction Detected (Drift)',
+        detail: `The system is detecting 'Capital Exhaust'. Your operational activity is outstripping your yield efficiency. Structural drift is occurring at a rate of ${formatPercent(100 - resonanceIndex)}.`,
+        value: 'Drift Detected',
+      });
+    } else if (resonanceIndex > 45) {
+      insights.push({
+        type: 'positive',
+        metric: 'general',
+        message: 'Optimal Quantum Resonance (Sync)',
+        detail: 'The business is in a state of high-yield harmony. Operational entropy is at record lows, with each transaction node delivering maximum capital resonance.',
+        value: 'Resonance High',
+      });
+    }
+  }
+
   const revenueChange = calculateChange(currentPeriod.revenue, previousPeriod.revenue);
   const expenseChange = calculateChange(currentPeriod.expenses, previousPeriod.expenses);
   const profitChange = calculateChange(currentPeriod.profit, previousPeriod.profit);

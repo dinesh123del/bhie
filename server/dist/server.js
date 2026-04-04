@@ -4,6 +4,7 @@ import express from 'express';
 import rateLimit from 'express-rate-limit';
 import { connectDB, disconnectDB } from './config/db.js';
 import { env } from './config/env.js';
+import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import { ensureUploadDir } from './utils/uploads.js';
 import apiRouter from './routes/apiRouter.js';
 import { disconnectRedis } from './config/redisClient.js';
@@ -57,10 +58,8 @@ app.get("/api/health", (req, res) => {
 // Original routes
 app.use('/api', apiLimiter, apiRouter);
 // --- Global Error Handler ---
-app.use((err, req, res, next) => {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-});
+app.use(notFoundHandler);
+app.use(errorHandler);
 // --- Server Lifecycle ---
 let server = null;
 async function startServer() {
