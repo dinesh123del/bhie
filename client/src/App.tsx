@@ -111,8 +111,8 @@ function App() {
         await new Promise(resolve => setTimeout(resolve, 2500));
         
         // --- PRODUCTION API TEST LOGIC ---
-        const API = import.meta.env.VITE_API_URL;
-        console.log("API:", import.meta.env.VITE_API_URL);
+        const API = import.meta.env.VITE_API_URL || "https://bhie-server.onrender.com";
+        console.log("API:", API);
         if (!API) console.error("VITE_API_URL is undefined. API calls may fail.");
 
         fetch(`${API}/api/health`)
