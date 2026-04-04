@@ -1,9 +1,10 @@
 export const API = import.meta.env.VITE_API_URL;
-const envApiUrl = (import.meta.env.VITE_API_URL || '').trim();
 
-if (!import.meta.env.DEV && !envApiUrl) {
-  throw new Error('VITE_API_URL is required in production');
+if (!API) {
+  console.error("VITE_API_URL is undefined. API calls may fail.");
 }
+
+const envApiUrl = (API || '').trim();
 
 const trimTrailingSlash = (value: string) => value.replace(/\/+$/, '');
 const normalizeApiBaseUrl = (value: string): string => {

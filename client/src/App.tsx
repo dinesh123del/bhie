@@ -112,8 +112,11 @@ function App() {
         
         // --- PRODUCTION API TEST LOGIC ---
         const API = import.meta.env.VITE_API_URL;
-        fetch(`${API}`)
-          .then(res => res.text()) // Use text() first as it returns "API Running" String, not strictly JSON initially unless formatted. Wait, we return res.send('API Running') which is text.
+        console.log("API:", import.meta.env.VITE_API_URL);
+        if (!API) console.error("VITE_API_URL is undefined. API calls may fail.");
+
+        fetch(`${API}/api/health`)
+          .then(res => res.json())
           .then(data => console.log("✅ API Connected:", data))
           .catch(err => console.error("❌ API Error:", err));
           

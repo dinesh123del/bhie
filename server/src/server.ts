@@ -35,26 +35,10 @@ const apiLimiter = rateLimit({
 
 // CORS Configuration as per requirements
 const corsOptions: cors.CorsOptions = {
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-    
-    // Allow localhost for dev
-    if (origin.startsWith('http://localhost:')) {
-      return callback(null, true);
-    }
-    
-    // Add explicitly required origins
-    if (origin === 'http://localhost:5173' || origin === 'https://client-zeta-teal.vercel.app') {
-      return callback(null, true);
-    }
-    
-    // Allow Vercel and configured frontend URLs
-    if (origin.includes('vercel.app') || (env.CLIENT_URL && env.CLIENT_URL.includes(origin))) {
-      return callback(null, true);
-    }
-    
-    callback(null, true); // Fallback to allowing standard origins to prevent strict blocks initially, but in strict production replace this with Error!
-  },
+  origin: [
+    'http://localhost:5173',
+    'https://client-zeta-teal.vercel.app'
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'],

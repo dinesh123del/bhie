@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 
 dotenv.config();
 
@@ -13,21 +14,37 @@ app.use(cors({
     "http://localhost:5173",
     "https://client-zeta-teal.vercel.app"
   ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
 
-// ✅ ADD THIS ROOT ROUTE
+const authRoutes = express.Router();
+authRoutes.post("/register", (req, res) => res.json({ message: "User registered" }));
+authRoutes.post("/login", (req, res) => res.json({ token: "fake-token" }));
+app.use("/api/auth", authRoutes);
+
 app.get("/", (req, res) => {
   res.send("Backend is LIVE 🚀");
 });
 
-// ✅ HEALTH CHECK
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-const PORT = process.env.PORT || 5000;
+const connectDB = async () => {
+  try {
+    if (process.env.MONGO_URI) {
+      await mongoose.connect(process.env.MONGO_URI);
+      console.log("MongoDB Connected");
+    }
+  } catch (error) {
+    console.error("MongoDB error (Server continuing):", error.message);
+  }
+};
 
+connectDB();
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server running on ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

@@ -80,7 +80,7 @@ api.interceptors.response.use(
         }
       }
     } else if (error.request) {
-      errorMessage = 'Network connection issue. Please check your internet.';
+      errorMessage = 'Unable to connect to server';
     }
 
     // Attach human-readable message for easy UI consumption
