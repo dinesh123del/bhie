@@ -11,6 +11,7 @@ import {
   RefreshCw,
   BarChart3,
   Plus,
+  Scan,
 } from 'lucide-react';
 import { MainLayout } from '../components/Layout/MainLayout';
 import { PremiumCard, PremiumButton, PremiumBadge } from '../components/ui/PremiumComponents';
@@ -410,6 +411,9 @@ const DashboardRestructured = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
+          <PremiumButton onClick={() => navigate('/scan-bill')} variant="secondary" icon={<Scan className="w-4 h-4" />}>
+            Scan Bill
+          </PremiumButton>
           <PremiumButton onClick={() => navigate('/uploads')} variant="primary">
             Upload Files
           </PremiumButton>

@@ -135,6 +135,34 @@ function calculateConfidence(ocrConf: number, handwriting: boolean, aiUsed: bool
   return parseFloat(conf.toFixed(2));
 }
 
+function extractItems(text: string): string[] {
+  const lines = text.split('\n');
+  const items: string[] = [];
+  const ITEM_PATTERN = /([a-z\s]+)\s+(\d+(?:\.\d{1,2})?)/i;
+
+  for (const line of lines) {
+    const match = line.match(ITEM_PATTERN);
+    if (match && !line.toLowerCase().includes('total')) {
+      items.push(line.trim());
+    }
+  }
+  return items;
+}
+
+function extractDate(text: string): string {
+  const DATE_PATTERNS = [
+    /\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}/,
+    /\d{4}[\/-]\d{1,2}[\/-]\d{1,2}/,
+    /[A-Z][a-z]{2,8}\s+\d{1,2},?\s+\d{4}/
+  ];
+
+  for (const pattern of DATE_PATTERNS) {
+    const match = text.match(pattern);
+    if (match) return match[0];
+  }
+  return new Date().toISOString().split('T')[0];
+}
+
 /** Main entry point */
 export async function processDocument(input: Buffer | string): Promise<DocumentIntelligenceResult> {
   try {
@@ -152,10 +180,12 @@ export async function processDocument(input: Buffer | string): Promise<DocumentI
     const isHandwriting = await detectHandwriting(rawText, ocrConfidence);
     let aiUsed = false;
     if (isHandwriting || ocrConfidence < 0.6) {
-      const aiText = await openaiVisionFallback(processedBuffer, rawText);
-      rawText += '\n' + aiText;
-      aiUsed = true;
-      ocrConfidence = Math.max(ocrConfidence, 0.7); // AI boost
+      if (openai) {
+        const aiText = await openaiVisionFallback(processedBuffer, rawText);
+        rawText += '\n' + aiText;
+        aiUsed = true;
+        ocrConfidence = Math.max(ocrConfidence, 0.7); // AI boost
+      }
     }
     
     // 4. Clean
@@ -165,6 +195,8 @@ export async function processDocument(input: Buffer | string): Promise<DocumentI
     const amountResult = extractAmount(cleanedText);
     const type = detectType(cleanedText);
     const category = detectCategory(cleanedText, type);
+    const items = extractItems(cleanedText);
+    const date = extractDate(cleanedText);
     
     // 6. Confidence
     const confidence = calculateConfidence(ocrConfidence, isHandwriting, aiUsed, amountResult.confidence);
@@ -175,6 +207,8 @@ export async function processDocument(input: Buffer | string): Promise<DocumentI
       category,
       confidence: Math.max(0.1, confidence), // min floor
       rawText: cleanedText,
+      items,
+      date,
     };
   } catch (error) {
     console.error('Document processing failed:', error);

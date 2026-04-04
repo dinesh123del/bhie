@@ -23,6 +23,7 @@ const Settings = lazy(() => import('./pages/Admin'));
 const Records = lazy(() => import('./pages/RecordsPremium'));
 const SystemHealth = lazy(() => import('./pages/SystemHealth'));
 const Payments = lazy(() => import('./pages/Payments'));
+const ScanBill = lazy(() => import('./pages/ScanBill'));
 
 const Pricing = lazy(() => import('./pages/Pricing'));
 const Profile = lazy(() => import('./pages/Home')); // Using Home as Profile placeholder
@@ -80,6 +81,7 @@ function MainApp() {
             <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
             <Route path="/ai-analysis" element={<ProtectedRoute><AIAnalysis /></ProtectedRoute>} />
             <Route path="/system-health" element={<ProtectedRoute><SystemHealth /></ProtectedRoute>} />
+<Route path="/scan-bill" element={<ProtectedRoute><ScanBill /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
 
             {/* Support Modules */}

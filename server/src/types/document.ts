@@ -4,6 +4,8 @@ export interface DocumentIntelligenceResult {
   category: string;
   confidence: number;
   rawText: string;
+  items: string[];
+  date: string | Date;
 }
 
 export type UploadedImageType = 'income' | 'expense' | 'unknown';
