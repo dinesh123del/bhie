@@ -1,5 +1,7 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
-import { apiBaseUrl } from '../config/api';
+
+export const API = import.meta.env.VITE_API_URL || "https://bhie-server.onrender.com";
+console.log("API URL:", API);
 
 type RetryableConfig = InternalAxiosRequestConfig & {
   __retryCount?: number;
@@ -10,7 +12,7 @@ const MAX_RETRIES = 2;
 const BASE_RETRY_DELAY_MS = 1000;
 
 const api: AxiosInstance = axios.create({
-  baseURL: apiBaseUrl,
+  baseURL: `${API}/api`,
   withCredentials: true,
   timeout: 15000,
 });
