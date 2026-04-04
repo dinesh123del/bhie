@@ -1,0 +1,15 @@
+{
+  "watch": [
+    "server.js",
+    "src",
+    ".env"
+  ],
+  "ignore": [
+    "dist/**",
+    "node_modules/**",
+    "uploads/**"
+  ],
+  "ext": "js,mjs,cjs,json,ts",
+  "delay": "200",
+  "legacyWatch": true
+}

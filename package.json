@@ -1,0 +1,25 @@
+{
+  "name": "bhie",
+  "version": "1.0.0",
+  "scripts": {
+    "predev": "./kill-port.sh || true",
+    "dev": "node scripts/dev.mjs",
+    "ci:client": "npm --prefix client run typecheck && npm --prefix client run lint && npm --prefix client run test && npm --prefix client run build",
+    "ci:server": "npm --prefix server run typecheck && npm --prefix server run lint && npm --prefix server run test && npm --prefix server run build",
+    "ci": "npm run ci:client && npm run ci:server",
+    "install": "cd client && npm install --legacy-peer-deps && cd ../server && npm install --legacy-peer-deps",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev -- --host 0.0.0.0 --port 5173 --strictPort",
+    "build:client": "npm --prefix client run build",
+    "build:server": "npm --prefix server run build",
+    "build": "npm run build:client && npm run build:server"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "acorn": "^8.16.0",
+    "chalk": "^5.6.2",
+    "commander": "^14.0.3",
+    "concurrently": "^8.2.2",
+    "glob": "^13.0.6"
+  }
+}

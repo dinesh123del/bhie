@@ -1,0 +1,455 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import {
+  Menu,
+  X,
+  Play,
+  ArrowRight,
+  BarChart2,
+  BrainCircuit,
+  MessageSquare,
+  FileText,
+  Activity,
+  ChevronDown,
+  ShieldCheck,
+  CheckCircle,
+} from 'lucide-react';
+
+// ======================= NETFLIX-STYLE INTRO =======================
+const CinematicIntro = ({ onComplete }: { onComplete: () => void }) => {
+  useEffect(() => {
+    // We intentionally don't play actual audio here as modern browsers block un-interacted autoplay,
+    // but the visual scale-up provides the haptic/mental "tadum" feeling.
+    const timer = setTimeout(onComplete, 4500);
+    return () => clearTimeout(timer);
+  }, [onComplete]);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black overflow-hidden pointer-events-none"
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 0 }}
+      transition={{ duration: 0.8, delay: 3.5, ease: 'easeOut' }}
+    >
+      <motion.div
+        className="relative flex items-center justify-center"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: [0.8, 1, 1, 150], opacity: [0, 1, 1, 0] }}
+        transition={{ 
+          duration: 3.8, 
+          times: [0, 0.15, 0.7, 1], 
+          ease: [0.11, 0, 0.5, 0] // Expo-in-out feel
+        }}
+      >
+        <span 
+          className="text-[8rem] md:text-[16rem] font-black tracking-tighter"
+          style={{
+            color: '#E50914',
+            textShadow: '0 0 50px rgba(229,9,20,0.8), 0 0 100px rgba(229,9,20,0.4)',
+            fontFamily: '"Bebas Neue", "Arial Black", sans-serif' // Standard heavy cinematic font
+          }}
+        >
+          BHIE
+        </span>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+// ======================= NAVIGATION =======================
+const Navbar = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'bg-black/90 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
+      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <Link to="/" className="text-3xl font-black text-[#E50914] tracking-tighter">BHIE</Link>
+        
+        <nav className="hidden md:flex gap-8 text-sm font-medium text-white/80">
+          <a href="#features" className="hover:text-white transition-colors">Features</a>
+          <a href="#how-it-works" className="hover:text-white transition-colors">How it Works</a>
+          <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+          <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
+        </nav>
+
+        <div className="hidden md:flex items-center gap-4">
+          <Link to="/login" className="text-sm font-bold text-white hover:text-white/80 transition-colors">Sign In</Link>
+          <Link to="/register" className="px-5 py-2 bg-[#E50914] hover:bg-[#b80710] text-white text-sm font-bold rounded transiton-all">
+            Start Free
+          </Link>
+        </div>
+
+        <button className="md:hidden text-white" onClick={() => setMobileOpen(!mobileOpen)}>
+          {mobileOpen ? <X /> : <Menu />}
+        </button>
+      </div>
+
+      {/* Mobile Nav */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="md:hidden absolute top-20 inset-x-0 bg-black border-b border-white/10 flex flex-col p-6 gap-6 shadow-2xl"
+          >
+            <a href="#features" onClick={() => setMobileOpen(false)} className="text-white text-lg font-medium">Features</a>
+            <a href="#pricing" onClick={() => setMobileOpen(false)} className="text-white text-lg font-medium">Pricing</a>
+            <a href="#faq" onClick={() => setMobileOpen(false)} className="text-white text-lg font-medium">FAQ</a>
+            <Link to="/register" onClick={() => setMobileOpen(false)} className="py-3 bg-[#E50914] text-center text-white font-bold rounded">
+              Start Free
+            </Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+};
+
+// ======================= HERO =======================
+const Hero = () => (
+  <section className="relative min-h-[100svh] flex items-center justify-center pt-20 px-6 overflow-hidden">
+    {/* Cinematic Gradient Vignette */}
+    <div className="absolute inset-0 bg-gradient-to-b from-black via-[#111] to-black z-0" />
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(229,9,20,0.15)_0%,rgba(0,0,0,0)_60%)] z-0" />
+
+    <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 4.0 }} // after intro
+      >
+        <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-6">
+          RUN YOUR BUSINESS<br/>
+          <span className="text-[#E50914]">SMARTER WITH AI</span>
+        </h1>
+        <p className="text-lg md:text-2xl text-white/60 max-w-3xl mx-auto mb-10 font-medium">
+          Automatically track, analyze, and grow your business with daily actionable insights delivered straight from your cinematic command center.
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link to="/register" className="w-full sm:w-auto px-10 py-4 bg-[#E50914] hover:bg-[#b80710] text-white text-lg font-bold rounded transition-all flex items-center justify-center gap-2">
+            Get Started Free <ArrowRight className="w-5 h-5" />
+          </Link>
+          <button className="w-full sm:w-auto px-10 py-4 bg-white/10 hover:bg-white/20 text-white text-lg font-bold rounded transition-all flex items-center justify-center gap-2 border border-white/10">
+            <Play className="w-5 h-5" fill="currentColor" /> Watch Demo
+          </button>
+        </div>
+      </motion.div>
+
+      {/* Cinematic Dashboard Mockup */}
+      <motion.div
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.2, delay: 4.4, ease: "easeOut" }}
+        className="mt-20 w-full max-w-4xl relative"
+      >
+        <div className="absolute inset-0 bg-[#E50914] blur-[100px] opacity-20" />
+        <div className="relative rounded-t-xl bg-[#0a0a0a] border border-[#333] border-b-0 overflow-hidden shadow-2xl">
+           <div className="h-6 bg-[#1a1a1a] flex items-center px-4 gap-2">
+             <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
+             <div className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+           </div>
+           <div className="aspect-[16/9] bg-[url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-50 contrast-125 saturate-50 mix-blend-luminosity" />
+           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+        </div>
+      </motion.div>
+    </div>
+  </section>
+);
+
+// ======================= PROBLEM =======================
+const Problem = () => (
+  <section className="py-24 px-6 bg-[#0a0a0a] border-t border-[#222]">
+    <div className="max-w-7xl mx-auto">
+      <div className="text-center mb-16">
+        <h2 className="text-3xl md:text-5xl font-black text-white">The old way is <span className="text-[#E50914]">broken</span>.</h2>
+      </div>
+      <div className="grid md:grid-cols-3 gap-8">
+         {[
+           { title: "Profit Blindness", desc: "You don't know your daily net profit until the end of the month." },
+           { title: "Paralyzing Manual Work", desc: "You waste hours in spreadsheets instead of growing the business." },
+           { title: "Data Without Direction", desc: "You have charts, but no clear decisions on what action to take." },
+         ].map((item, i) => (
+           <motion.div 
+             key={i}
+             initial={{ opacity: 0, y: 20 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ delay: i * 0.1 }}
+             className="p-8 bg-[#111] rounded-xl border border-[#222]"
+           >
+              <div className="w-12 h-12 bg-red-950/40 border border-red-500/20 flex items-center justify-center rounded flex-shrink-0 mb-6">
+                <X className="text-[#E50914] w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
+              <p className="text-white/50">{item.desc}</p>
+           </motion.div>
+         ))}
+      </div>
+    </div>
+  </section>
+);
+
+// ======================= SOLUTION =======================
+const Solution = () => (
+  <section className="py-24 px-6 bg-black relative overflow-hidden">
+    <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+      <div className="w-full md:w-1/2">
+        <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+          <h2 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">Your AI-Powered<br/>Business Assistant</h2>
+          <p className="text-xl text-white/50 mb-8 max-w-lg">
+            BHIE shifts your business from manual tracking to automated execution, surfacing actionable insights out of the noise.
+          </p>
+          <ul className="space-y-4">
+             {[
+               "Auto Tracks Revenue & Expenses",
+               "Generates Real-time AI Insights",
+               "Provides 3 Daily Revenue-Boosting Actions"
+             ].map((str, i) => (
+               <li key={i} className="flex items-center gap-4 text-white text-lg font-medium">
+                 <CheckCircle className="text-[#E50914] w-6 h-6 flex-shrink-0" /> {str}
+               </li>
+             ))}
+          </ul>
+        </motion.div>
+      </div>
+      <div className="w-full md:w-1/2 relative">
+         <div className="absolute inset-0 bg-[#E50914] blur-[120px] opacity-10 rounded-full" />
+         <motion.div 
+           initial={{ opacity: 0, scale: 0.9 }} 
+           whileInView={{ opacity: 1, scale: 1 }} 
+           viewport={{ once: true }}
+           className="relative aspect-square bg-[#111] border border-[#333] rounded-2xl flex items-center justify-center p-8 overflow-hidden shadow-2xl"
+         >
+            {/* Abstract visual of AI Assistant */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(229,9,20,0.1)_0%,rgba(0,0,0,1)_100%)]" />
+            <BrainCircuit className="w-32 h-32 text-[#E50914] opacity-80" />
+         </motion.div>
+      </div>
+    </div>
+  </section>
+);
+
+// ======================= FEATURES =======================
+const Features = () => {
+  const cards = [
+    { icon: Activity, title: "Auto Data Tracking", desc: "Connect sources and let data ingest silently in the background." },
+    { icon: BarChart2, title: "Cinematic Dashboard", desc: "High-performance interface mapping your entire financial health." },
+    { icon: BrainCircuit, title: "Today's Action AI", desc: "Every morning, receive up to 3 strategic actions to grow revenue." },
+    { icon: MessageSquare, title: "WhatsApp Input", desc: "Record expenses directly from a simple text message." },
+    { icon: FileText, title: "OCR Document Parsing", desc: "Upload chaotic PDFs or receipts, and watch them become structured data." },
+  ];
+
+  return (
+    <section id="features" className="py-24 px-6 bg-[#0a0a0a] border-y border-[#222]">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-4xl text-center md:text-5xl font-black text-white mb-16">The Intelligence <span className="text-[#E50914]">Suite</span></h2>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {cards.map((f, i) => (
+             <motion.div 
+               key={i}
+               whileHover={{ y: -5 }}
+               className={`p-8 bg-black/40 border border-[#222] rounded-xl group transition-colors hover:border-[#E50914]/50 ${i === 0 ? 'lg:col-span-2' : ''}`}
+             >
+               <div className="w-12 h-12 rounded bg-white/5 flex items-center justify-center mb-6 group-hover:bg-[#E50914]/10 transition-colors">
+                 <f.icon className="w-6 h-6 text-white group-hover:text-[#E50914] transition-colors" />
+               </div>
+               <h3 className="text-xl font-bold text-white mb-2">{f.title}</h3>
+               <p className="text-white/50 leading-relaxed">{f.desc}</p>
+             </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ======================= HOW IT WORKS =======================
+const HowItWorks = () => (
+  <section id="how-it-works" className="py-24 px-6 bg-black relative">
+    <div className="max-w-7xl mx-auto">
+      <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16">Sequence of <span className="text-[#E50914]">Execution</span></h2>
+      <div className="flex flex-col md:flex-row justify-between gap-12 relative">
+        <div className="hidden md:block absolute top-[28px] left-[10%] right-[10%] h-[2px] bg-[#333] z-0" />
+        
+        {[
+          { icon: ShieldCheck, title: "1. Integrate", desc: "Connect banking or upload via OCR." },
+          { icon: Activity, title: "2. Process", desc: "Our engine structure and analyzes the raw inputs." },
+          { icon: BrainCircuit, title: "3. Execute", desc: "You receive intelligence ready for immediate deployment." }
+        ].map((item, i) => (
+          <div key={i} className="relative z-10 flex flex-col items-center text-center w-full md:w-1/3">
+             <div className="w-16 h-16 rounded-full bg-black border-[4px] border-[#333] flex items-center justify-center mb-6 text-white font-black text-xl shadow-[0_0_30px_rgba(0,0,0,0.8)]">
+               <item.icon className="w-6 h-6 text-[#E50914]" />
+             </div>
+             <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
+             <p className="text-white/50">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+// ======================= PRICING =======================
+const Pricing = () => (
+  <section id="pricing" className="py-24 px-6 bg-[#0a0a0a] border-t border-[#222]">
+    <div className="max-w-7xl mx-auto">
+      <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16">Select Your <span className="text-[#E50914]">Tier</span></h2>
+      <div className="grid md:grid-cols-3 gap-8 items-center">
+         {[
+           { name: "FREE", price: "0", features: ["Basic Analytics", "Manual Entry", "Standard Dashboard", "Community Support"], color: "border-[#333]" },
+           { name: "PRO", price: "49", features: ["AI Insights & Predictions", "Today's Action Engine", "File OCR Uploads", "Priority Engine Queue"], color: "border-[#E50914] shadow-[0_0_50px_rgba(229,9,20,0.2)] bg-[#E50914]/5 scale-105", highlight: true },
+           { name: "BUSINESS", price: "199", features: ["Unlimited Event Ingestion", "Multi-Tenant Access", "Custom Webhooks", "Dedicated Architect"], color: "border-[#333]" },
+         ].map((plan, i) => (
+           <div key={i} className={`p-8 rounded-xl border bg-black ${plan.color} relative`}>
+              {plan.highlight && <div className="absolute top-0 right-8 -translate-y-1/2 px-4 py-1 bg-[#E50914] text-white text-xs font-bold tracking-widest uppercase rounded">Popular</div>}
+              <h3 className="text-lg font-medium text-white/50 tracking-widest mb-4">{plan.name}</h3>
+              <div className="text-5xl font-black text-white mb-8">${plan.price}<span className="text-lg text-white/30 font-medium">/mo</span></div>
+              <ul className="space-y-4 mb-8">
+                {plan.features.map((f, j) => (
+                  <li key={j} className="flex items-center gap-3 text-white/70">
+                    <CheckCircle className={`w-5 h-5 ${plan.highlight ? 'text-[#E50914]' : 'text-white/30'}`} /> {f}
+                  </li>
+                ))}
+              </ul>
+              <Link to="/register" className={`w-full py-4 rounded font-bold transition-all block text-center ${plan.highlight ? 'bg-[#E50914] text-white hover:bg-[#b80710]' : 'bg-white/5 text-white hover:bg-white/10'}`}>
+                Deploy Now
+              </Link>
+           </div>
+         ))}
+      </div>
+    </div>
+  </section>
+);
+
+// ======================= TESTIMONIALS =======================
+const Testimonials = () => (
+  <section className="py-24 px-6 bg-black">
+    <div className="max-w-7xl mx-auto">
+      <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16">Classified <span className="text-[#E50914]">Success</span></h2>
+      <div className="grid md:grid-cols-3 gap-8">
+        {[
+          { name: "M. Torres", role: "Logistics Director", initial: "M", text: "The predictive alerts intercepted a massive stock shortage before it cascaded down to client deliveries." },
+          { name: "S. Jenkins", role: "Retail Operations", initial: "S", text: "Finally, an analytics engine that doesn't just show charts, but issues direct execution commands." },
+          { name: "J. Chang", role: "Agency Founder", initial: "J", text: "BHIE’s webhook ingestion completely eliminated manual data entry. We are moving 100x faster." }
+        ].map((t, i) => (
+          <div key={i} className="p-8 border border-[#222] bg-[#050505] rounded-xl flex flex-col justify-between">
+            <p className="text-white/60 italic leading-relaxed mb-8">"{t.text}"</p>
+            <div className="flex items-center gap-4">
+               <div className="w-10 h-10 rounded-full bg-[#E50914] flex items-center justify-center text-white font-bold">{t.initial}</div>
+               <div>
+                  <h4 className="text-white font-bold">{t.name}</h4>
+                  <p className="text-xs text-[#E50914] tracking-widest uppercase">{t.role}</p>
+               </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+// ======================= FAQ =======================
+const FAQ = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const questions = [
+    { q: "Is my corporate data secure?", a: "Affirmative. BHIE employs strict tenant isolation, at-rest encryption, and JSON Web Tokens. PII is scrubbed before any AI ingestion." },
+    { q: "Do I require engineering resources to deploy?", a: "Negative. The dashboard activates out-of-the-box. Integrate your banking or begin via manual OCR drops immediately." },
+    { q: "Which verticals does the AI support?", a: "The foundational LLM has been fine-tuned to synthesize logic across E-Commerce, Logistics, SaaS, and conventional Retail environments." }
+  ];
+
+  return (
+    <section id="faq" className="py-24 px-6 bg-[#0a0a0a] border-t border-[#222]">
+      <div className="max-w-3xl mx-auto">
+        <h2 className="text-4xl font-black text-white text-center mb-16">Briefings</h2>
+        <div className="space-y-4">
+          {questions.map((faq, i) => (
+            <div key={i} className="border border-[#333] bg-black rounded-xl overflow-hidden">
+               <button 
+                  onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                  className="w-full px-6 py-5 flex items-center justify-between text-left text-white font-bold"
+               >
+                 {faq.q}
+                 <ChevronDown className={`w-5 h-5 transition-transform ${openIndex === i ? 'rotate-180 text-[#E50914]' : 'text-white/50'}`} />
+               </button>
+               <AnimatePresence>
+                  {openIndex === i && (
+                    <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
+                       <p className="px-6 pb-5 text-white/50 leading-relaxed">{faq.a}</p>
+                    </motion.div>
+                  )}
+               </AnimatePresence>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ======================= FINAL CTA =======================
+const CTA = () => (
+  <section className="py-32 px-6 bg-[#E50914] text-center relative overflow-hidden">
+     <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center mix-blend-multiply opacity-20" />
+     <div className="relative z-10 max-w-3xl mx-auto">
+       <h2 className="text-5xl md:text-7xl font-black text-white mb-6 uppercase tracking-tighter leading-none">Initiate System Upgrade</h2>
+       <p className="text-xl text-white/80 font-medium mb-10">Cease manual operations. Deploy BHIE today and reclaim complete command over your business health.</p>
+       <Link to="/register" className="inline-block px-12 py-5 bg-black hover:bg-[#111] text-white text-lg font-black tracking-widest uppercase rounded shadow-2xl transition-all border border-black hover:border-white/20">
+         Start Growing Free
+       </Link>
+     </div>
+  </section>
+);
+
+// ======================= FOOTER =======================
+const Footer = () => (
+  <footer className="py-12 px-6 bg-black border-t border-[#222]">
+    <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="text-2xl font-black text-[#E50914] tracking-tighter">BHIE</div>
+      <div className="flex gap-6 text-sm text-white/50">
+        <a href="#features" className="hover:text-white transition-colors">Features</a>
+        <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+        <a href="#" className="hover:text-white transition-colors">Terms</a>
+        <a href="#" className="hover:text-white transition-colors">Privacy</a>
+      </div>
+      <div className="text-sm text-white/30">© 2026 ANTIGRAVITY. All rights reserved.</div>
+    </div>
+  </footer>
+);
+
+// ======================= MAIN ASSEMBLY =======================
+export default function LandingPremium() {
+  const [introFinished, setIntroFinished] = useState(false);
+
+  return (
+    <div className="bg-black min-h-screen text-white font-sans selection:bg-[#E50914] selection:text-white">
+      <AnimatePresence>
+        {!introFinished && <CinematicIntro onComplete={() => setIntroFinished(true)} />}
+      </AnimatePresence>
+
+      <Navbar />
+      <main>
+        <Hero />
+        <Problem />
+        <Solution />
+        <Features />
+        <HowItWorks />
+        <Pricing />
+        <Testimonials />
+        <FAQ />
+        <CTA />
+      </main>
+      <Footer />
+    </div>
+  );
+}

@@ -1,0 +1,11 @@
+import express from 'express';
+import { recordsController } from '../controllers/recordsController.js';
+import { authenticateToken } from '../middleware/auth';
+const router = express.Router();
+router.use(authenticateToken);
+router.get('/recent', recordsController.getRecent);
+router.get('/', recordsController.getAll);
+router.post('/', recordsController.create);
+router.put('/:id', recordsController.update);
+router.delete('/:id', recordsController.delete);
+export default router;

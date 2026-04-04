@@ -1,0 +1,16 @@
+
+> bhie-client@0.0.0 dev
+> vite --host 0.0.0.0 --port 5173 --strictPort
+
+
+  VITE v5.4.21  ready in 123 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.0.3:5173/
+11:46:08 AM [vite] page reload src/components/SimpleModeUI.tsx
+11:46:17 AM [vite] page reload src/components/SimpleModeUI.tsx
+11:46:28 AM [vite] page reload src/services/recordsService.ts
+11:46:34 AM [vite] page reload src/pages/Dashboard.tsx
+11:46:38 AM [vite] page reload src/pages/Dashboard.tsx
+11:46:46 AM [vite] page reload src/services/recordsService.ts
+11:46:46 AM [vite] page reload src/pages/Dashboard.tsx

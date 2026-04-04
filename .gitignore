@@ -1,0 +1,64 @@
+# -----------------------------
+# Node modules
+# -----------------------------
+node_modules/
+
+# -----------------------------
+# Build outputs
+# -----------------------------
+dist/
+build/
+client/dist/
+server/dist/
+.vite/
+server/uploads/
+uploads/
+
+# -----------------------------
+# Environment variables (VERY IMPORTANT)
+# -----------------------------
+.env
+.env.local
+.env.*.local
+client/.env
+client/.env.*
+server/.env
+server/.env.*
+ml-service/.env
+ml-service/.env.*
+
+# -----------------------------
+# Logs
+# -----------------------------
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+backend.log
+
+# -----------------------------
+# System files
+# -----------------------------
+.DS_Store
+
+# -----------------------------
+# Coverage
+# -----------------------------
+coverage/
+
+# -----------------------------
+# Deployment
+# -----------------------------
+.vercel/
+
+# -----------------------------
+# Optional (TypeScript cache)
+# -----------------------------
+*.tsbuildinfo
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules

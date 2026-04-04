@@ -1,0 +1,39 @@
+<parameter name="content"># MERN SaaS Performance Optimization TODO
+
+Status: In Progress
+
+## 1. Install Dependencies [PENDING]
+- cd server && npm i redis compression @types/compression
+- Verify no breaking changes.
+
+## 2. Add Database Indexes [PENDING]
+- Edit server/src/models/Record.ts: Add compound index {userId:1, date:-1}, {userId:1}
+- Edit server/src/models/Image.ts: {userId:1, createdAt:-1}
+- Edit server/src/models/Company.ts: {userId:1}
+- Run mongo migration: db.records.createIndex(...)
+
+## 3. Optimize Dashboard Controller [PENDING]
+- server/src/controllers/dashboardController.ts: Add $limit to aggregates, .lean(), minimal select.
+- Add Redis caching (5min TTL per user).
+
+## 4. Paginate Records [PENDING]
+- recordsController.ts getAll: Add limit/page.
+- routes/records.ts: Query params.
+
+## 5. Server Compression [PENDING]
+- server/src/server.ts: app.use(compression())
+
+## 6. Frontend Optimizations [PENDING]
+- Dashboard.tsx: React.memo on heavy children.
+- api.ts: Env-based baseURL.
+
+## 7. New Cache Utils [PENDING]
+- Create server/src/utils/cache.ts (Redis client)
+
+## 8. Testing & Verification [PENDING]
+- Benchmark API times (<500ms).
+- Load test dashboard.
+- Check charts smooth.
+
+## 9. Complete [PENDING]
+- attempt_completion</parameter>

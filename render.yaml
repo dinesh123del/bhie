@@ -1,0 +1,48 @@
+services:
+  - type: web
+    name: bhie-api
+    runtime: node
+    rootDir: server
+    branch: main
+    autoDeployTrigger: commit
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        fromDatabase:
+          name: bhie-db
+          property: connectionString
+      - key: JWT_SECRET
+        scope: run_and_build
+        isFile: false
+      - key: CLIENT_URL
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 24h
+      - key: BODY_LIMIT
+        value: 2mb
+      - key: MAX_UPLOAD_FILE_SIZE_MB
+        value: 10
+      - key: RAZORPAY_KEY_ID
+        scope: run_and_build
+        isFile: false
+      - key: RAZORPAY_KEY_SECRET
+        scope: run_and_build
+        isFile: false
+      - key: OPENAI_API_KEY
+        scope: run_and_build
+        isFile: false
+    healthCheckPath: /api/health
+
+databases:
+  - name: bhie-db
+    plan: free
+    ipAllowList: []
+
+envVarGroups:
+  - name: production
+    envVars:
+      - key: NODE_ENV
+        value: production
