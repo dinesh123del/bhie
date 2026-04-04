@@ -195,5 +195,66 @@ export const NumberTicker: React.FC<{
     animate();
   }, [value, duration, decimals]);
 
-  return <span ref={ref}>{value}</span>;
+  export const Shake: React.FC<{ children: React.ReactNode; trigger?: any }> = ({ children, trigger }) => (
+  <motion.div
+    animate={trigger ? { x: [-10, 10, -10, 10, 0] } : {}}
+    transition={{ duration: 0.4 }}
+  >
+    {children}
+  </motion.div>
+);
+
+export const SuccessCheck: React.FC = () => (
+  <motion.svg
+    viewBox="0 0 52 52"
+    className="h-16 w-16 text-emerald-400"
+    initial="hidden"
+    animate="visible"
+  >
+    <motion.circle
+      cx="26"
+      cy="26"
+      r="25"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      variants={{
+        hidden: { pathLength: 0, opacity: 0 },
+        visible: { pathLength: 1, opacity: 1, transition: { duration: 0.5 } },
+      }}
+    />
+    <motion.path
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3"
+      d="M14.1 27.2l7.1 7.2 16.7-16.8"
+      variants={{
+        hidden: { pathLength: 0, opacity: 0 },
+        visible: { pathLength: 1, opacity: 1, transition: { duration: 0.3, delay: 0.5 } },
+      }}
+    />
+  </motion.svg>
+);
+
+export const CursorParallax: React.FC<{ children: React.ReactNode; factor?: number }> = ({ children, factor = 20 }) => {
+  const [position, setPosition] = React.useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+    const x = (clientX - innerWidth / 2) / factor;
+    const y = (clientY - innerHeight / 2) / factor;
+    setPosition({ x, y });
+  };
+
+  return (
+    <motion.div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => setPosition({ x: 0, y: 0 })}
+      animate={{ x: position.x, y: position.y }}
+      transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+    >
+      {children}
+    </motion.div>
+  );
 };

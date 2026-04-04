@@ -29,14 +29,14 @@ const ScanBill = () => {
     const formData = new FormData();
     formData.append('bill', file);
 
-    try {
+      try {
       const res = await api.post('/ai/scan-bill', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setData(res.data.data);
-      toast.success('Bill scanned successfully!');
+      toast.success('Details detected successfully');
     } catch (err) {
-      toast.error('Failed to scan bill');
+      toast.error('Failed to scan receipt');
     } finally {
       setScanning(false);
     }
@@ -45,14 +45,14 @@ const ScanBill = () => {
   const handleSave = async () => {
     try {
       await recordsAPI.create({
-        title: `Bill Scan - ${data.date}`,
+        title: `Receipt - ${data.date}`,
         amount: data.totalAmount,
         type: 'expense',
         category: 'bill',
         date: data.date,
-        description: `Scanned Items: ${data.items.join(', ')}`
+        description: `Items: ${data.items.join(', ')}`
       });
-      toast.success('Transaction saved!');
+      toast.success('Saved successfully');
       navigate('/records');
     } catch (err) {
       toast.error('Failed to save transaction');
@@ -63,7 +63,7 @@ const ScanBill = () => {
     <div className="min-h-screen bg-slate-950 p-8 pt-28">
       <div className="max-w-4xl mx-auto space-y-8">
         <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-          <Scan className="text-indigo-400" /> AI Bill Scanner
+          <Scan className="text-indigo-400" /> Receipt Scanner
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -71,11 +71,11 @@ const ScanBill = () => {
           <PremiumCard className="p-6 space-y-6">
             <div className="border-2 border-dashed border-white/10 rounded-2xl p-8 text-center bg-white/[0.02]">
               {preview ? (
-                <img src={preview} alt="Bill Preview" className="max-h-64 mx-auto rounded-lg mb-4" />
+                <img src={preview} alt="Receipt Preview" className="max-h-64 mx-auto rounded-lg mb-4" />
               ) : (
                 <div className="py-12">
                   <Upload className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-                  <p className="text-gray-400">Upload an image of your bill</p>
+                  <p className="text-gray-400">Upload an image of your receipt</p>
                 </div>
               )}
               <input type="file" id="bill-upload" className="hidden" onChange={onFileChange} accept="image/*" />
@@ -90,7 +90,7 @@ const ScanBill = () => {
               disabled={!file || scanning}
               loading={scanning}
             >
-              {scanning ? 'Scanning AI...' : 'Scan Bill Now'}
+              {scanning ? 'Reading receipt...' : 'Scan Receipt Now'}
             </PremiumButton>
           </PremiumCard>
 
@@ -98,7 +98,10 @@ const ScanBill = () => {
           {data && (
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
               <PremiumCard className="p-6 space-y-6 border-indigo-500/30">
-                <h2 className="text-xl font-bold text-white mb-4">Extracted Details</h2>
+                <div className="flex justify-between items-center">
+                  <h2 className="text-xl font-bold text-white">Detected Details</h2>
+                  <span className="text-xs font-medium text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded">Ready to save</span>
+                </div>
                 
                 <div className="space-y-4">
                   <div className="flex items-center justify-between p-3 bg-white/[0.03] rounded-xl">
@@ -130,7 +133,7 @@ const ScanBill = () => {
                 </div>
 
                 <PremiumButton className="w-full" variant="primary" onClick={handleSave}>
-                  Confirm & Save Transaction
+                  Save Transaction
                 </PremiumButton>
               </PremiumCard>
             </motion.div>

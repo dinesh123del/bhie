@@ -20,7 +20,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { PremiumCard, PremiumButton } from '../components/ui/PremiumComponents';
-import AIInsightCard from '../components/analytics/AIInsightCard';
+import InsightCard from '../components/analytics/InsightCard';
 import { useAnalyticsStore } from '../store/useAnalyticsStore';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -28,10 +28,10 @@ import toast from 'react-hot-toast';
 
 // --- Types ---
 interface AnalyticsData {
-  revenue: { data: any[]; metrics: { totalRevenue: number; growth: number }; aiInsight: string };
-  profitCost: { comparison: any[]; breakdown: any[]; aiInsight: string };
-  customers: { topCustomers: any[]; metrics: { newCustomers: number; repeatRate: number }; aiInsight: string };
-  inventory: { topProducts: any[]; lowStock: any[]; aiInsight: string };
+  revenue: { data: any[]; metrics: { totalRevenue: number; growth: number }; insight: string };
+  profitCost: { comparison: any[]; breakdown: any[]; insight: string };
+  customers: { topCustomers: any[]; metrics: { newCustomers: number; repeatRate: number }; insight: string };
+  inventory: { topProducts: any[]; lowStock: any[]; insight: string };
   predictions: { forecast: any[]; risks: any[] };
 }
 
@@ -109,8 +109,8 @@ const AnalyticsIntelligence = () => {
       {/* Header & Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-black text-white tracking-tight mb-2">Business Health Analytics</h1>
-          <p className="text-white/40 font-medium italic">Intelligent surveillance of your financial perimeter.</p>
+          <h1 className="text-4xl font-black text-white tracking-tight mb-2">Performance Analytics</h1>
+          <p className="text-white/40 font-medium italic">Comprehensive analysis of your financial health.</p>
         </div>
         <div className="flex items-center gap-2 bg-white/5 p-1.5 rounded-[1.25rem] border border-white/10 backdrop-blur-2xl self-start md:self-auto">
           {[7, 30, 90].map((r) => (
@@ -137,7 +137,7 @@ const AnalyticsIntelligence = () => {
               <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400">
                 <DollarSign className="w-5 h-5" />
               </div>
-              <h3 className="text-sm font-bold text-white tracking-widest uppercase">Revenue Perception</h3>
+              <h3 className="text-sm font-bold text-white tracking-widest uppercase">Revenue Analysis</h3>
             </div>
           </div>
           <div className="p-6 flex-1">
@@ -161,9 +161,9 @@ const AnalyticsIntelligence = () => {
               </ResponsiveContainer>
             </div>
             <div className="mt-6">
-                <AIInsightCard 
+                <InsightCard 
                     title="Revenue Insight" 
-                    message={data.revenue.aiInsight} 
+                    message={data.revenue.insight} 
                     impactLevel="medium"
                 />
             </div>
@@ -175,7 +175,7 @@ const AnalyticsIntelligence = () => {
             <div className="p-6 border-b border-white/5 bg-blue-600/5">
                 <div className="flex items-center gap-3">
                     <Zap className="w-5 h-5 text-yellow-400" />
-                    <h3 className="text-sm font-bold text-white tracking-widest uppercase">Predictive Edge</h3>
+                    <h3 className="text-sm font-bold text-white tracking-widest uppercase">Growth Forecast</h3>
                 </div>
             </div>
             <div className="p-6 flex-1 space-y-6">
@@ -195,7 +195,7 @@ const AnalyticsIntelligence = () => {
                         </div>
                     ))}
                     <button 
-                        onClick={() => navigate('/ai-analysis')}
+                        onClick={() => navigate('/analysis-report')}
                         className="w-full py-4 px-6 rounded-2xl bg-white/5 border border-white/10 text-white text-xs font-bold uppercase tracking-widest flex items-center justify-between hover:bg-white/10 transition-all group"
                     >
                         Mitigate Risks
@@ -208,7 +208,7 @@ const AnalyticsIntelligence = () => {
         {/* Profit vs Expenses */}
         <PremiumCard className="h-full" padded={false}>
             <div className="p-6 border-b border-white/5">
-                <h3 className="text-sm font-bold text-white tracking-widest uppercase">Profit Vector</h3>
+                <h3 className="text-sm font-bold text-white tracking-widest uppercase">Net Balance</h3>
             </div>
             <div className="p-6 space-y-6">
                 <div className="h-[200px]">

@@ -40,7 +40,7 @@ const sidebarItems = [
   { icon: <TrendingUp className="h-5 w-5" />, label: 'Analytics', href: '/analytics' },
   { icon: <Users className="h-5 w-5" />, label: 'Admin', href: '/admin' },
   { icon: <Wallet className="h-5 w-5" />, label: 'Billing', href: '/pricing' },
-  { icon: <ScanSearch className="h-5 w-5" />, label: 'Image Search', href: '/image-intelligence' },
+  { icon: <ScanSearch className="h-5 w-5" />, label: 'Analysis', href: '/analysis-report' },
 ];
 
 const statusToneMap = {
@@ -228,7 +228,7 @@ const PremiumRecords = () => {
           <PremiumCard hoverable={false} className="border border-white/10">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-400">Income tracked</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-400">Revenue</p>
                 <p className="mt-3 text-3xl font-black tracking-[-0.08em] text-white">{formatCurrency(totals.income)}</p>
               </div>
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-200">
@@ -240,7 +240,7 @@ const PremiumRecords = () => {
           <PremiumCard hoverable={false} className="border border-white/10">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-400">Expenses tracked</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-400">Expenses</p>
                 <p className="mt-3 text-3xl font-black tracking-[-0.08em] text-white">{formatCurrency(totals.expenses)}</p>
               </div>
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-rose-400/20 bg-rose-500/10 text-rose-200">

@@ -14,8 +14,8 @@ const plans = [
     name: 'Pro',
     price: '₹99',
     period: '/month',
-    description: 'For scaling companies that need live planning, forecasting, and AI assistance.',
-    features: ['Unlimited uploads', 'AI-powered insights', 'Advanced analytics', 'Priority support', 'Export data'],
+    description: 'For scaling companies that need live planning, forecasting, and advanced assistance.',
+    features: ['Unlimited uploads', 'Smart insights', 'Advanced analytics', 'Priority support', 'Export data'],
     featured: true,
   },
   {
@@ -54,7 +54,7 @@ export default function PricingPage() {
             transition={{ duration: 0.65, delay: 0.08 }}
             className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-300"
           >
-            Start free, move fast with Growth, or design an enterprise rollout with BHIE specialists.
+            Our platform aligns planning, reporting, and insight generation inside one premium workflow.
           </motion.p>
         </div>
       </section>

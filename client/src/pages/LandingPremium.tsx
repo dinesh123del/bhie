@@ -129,7 +129,7 @@ const Hero = () => (
       >
         <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-6">
           RUN YOUR BUSINESS<br/>
-          <span className="text-[#E50914]">SMARTER WITH AI</span>
+          <span className="text-[#E50914]">SMARTER INSIGHTS</span>
         </h1>
         <p className="text-lg md:text-2xl text-white/60 max-w-3xl mx-auto mb-10 font-medium">
           Automatically track, analyze, and grow your business with daily actionable insights delivered straight from your cinematic command center.
@@ -206,14 +206,14 @@ const Solution = () => (
     <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
       <div className="w-full md:w-1/2">
         <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">Your AI-Powered<br/>Business Assistant</h2>
+          <h2 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">Your Professional<br/>Business Assistant</h2>
           <p className="text-xl text-white/50 mb-8 max-w-lg">
             BHIE shifts your business from manual tracking to automated execution, surfacing actionable insights out of the noise.
           </p>
           <ul className="space-y-4">
              {[
                "Auto Tracks Revenue & Expenses",
-               "Generates Real-time AI Insights",
+               "Generates Real-time Insights",
                "Provides 3 Daily Revenue-Boosting Actions"
              ].map((str, i) => (
                <li key={i} className="flex items-center gap-4 text-white text-lg font-medium">
@@ -245,7 +245,7 @@ const Features = () => {
   const cards = [
     { icon: Activity, title: "Auto Data Tracking", desc: "Connect sources and let data ingest silently in the background." },
     { icon: BarChart2, title: "Cinematic Dashboard", desc: "High-performance interface mapping your entire financial health." },
-    { icon: BrainCircuit, title: "Today's Action AI", desc: "Every morning, receive up to 3 strategic actions to grow revenue." },
+    { icon: BrainCircuit, title: "Today's Actions", desc: "Every morning, receive up to 3 strategic actions to grow revenue." },
     { icon: MessageSquare, title: "WhatsApp Input", desc: "Record expenses directly from a simple text message." },
     { icon: FileText, title: "OCR Document Parsing", desc: "Upload chaotic PDFs or receipts, and watch them become structured data." },
   ];
@@ -308,7 +308,7 @@ const Pricing = () => (
       <div className="grid md:grid-cols-3 gap-8 items-center">
          {[
            { name: "FREE", price: "0", features: ["Basic Analytics", "Manual Entry", "Standard Dashboard", "Community Support"], color: "border-[#333]" },
-           { name: "PRO", price: "59", features: ["AI Insights & Predictions", "Today's Action Engine", "File OCR Uploads", "Priority Engine Queue"], color: "border-[#E50914] shadow-[0_0_50px_rgba(229,9,20,0.2)] bg-[#E50914]/5 scale-105", highlight: true },
+           { name: "PRO", price: "59", features: ["Insights & Predictions", "Today's Action Engine", "File OCR Uploads", "Priority Engine Queue"], color: "border-[#E50914] shadow-[0_0_50px_rgba(229,9,20,0.2)] bg-[#E50914]/5 scale-105", highlight: true },
            { name: "BUSINESS", price: "119", features: ["Unlimited Event Ingestion", "Multi-Tenant Access", "Custom Webhooks", "Dedicated Architect"], color: "border-[#333]" },
          ].map((plan, i) => (
            <div key={i} className={`p-8 rounded-xl border bg-black ${plan.color} relative`}>
@@ -363,9 +363,9 @@ const Testimonials = () => (
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const questions = [
-    { q: "Is my corporate data secure?", a: "Affirmative. BHIE employs strict tenant isolation, at-rest encryption, and JSON Web Tokens. PII is scrubbed before any AI ingestion." },
+    { q: "Is my corporate data secure?", a: "Affirmative. BHIE employs strict tenant isolation, at-rest encryption, and JSON Web Tokens. PII is scrubbed before any processing." },
     { q: "Do I require engineering resources to deploy?", a: "Negative. The dashboard activates out-of-the-box. Integrate your banking or begin via manual OCR drops immediately." },
-    { q: "Which verticals does the AI support?", a: "The foundational LLM has been fine-tuned to synthesize logic across E-Commerce, Logistics, SaaS, and conventional Retail environments." }
+    { q: "Which verticals does the engine support?", a: "The foundational engine has been fine-tuned to synthesize logic across E-Commerce, Logistics, SaaS, and conventional Retail environments." }
   ];
 
   return (

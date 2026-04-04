@@ -138,9 +138,9 @@ const InnovativeDashboard = () => {
           {/* Summary Stats */}
           <SimpleSummary
             stats={[
-              { label: 'This Month', value: `$${dashData?.profit?.toLocaleString() || 0}`, change: dashData?.growthRate },
-              { label: 'Total Income', value: `$${dashData?.totalIncome?.toLocaleString() || 0}` },
-              { label: 'Avg. Spending', value: `$${dashData?.totalExpenses?.toLocaleString() || 0}` }
+              { label: 'Net Balance', value: `$${dashData?.profit?.toLocaleString() || 0}`, change: dashData?.growthRate },
+              { label: 'Revenue', value: `$${dashData?.totalIncome?.toLocaleString() || 0}` },
+              { label: 'Expenses', value: `$${dashData?.totalExpenses?.toLocaleString() || 0}` }
             ]}
           />
 
@@ -170,9 +170,9 @@ const InnovativeDashboard = () => {
               {prediction.shouldAlert && (
                 <SimplifiedInsight
                   emoji="🔴"
-                  title="Loss Predicted"
+                  title="Loss Forecast"
                   stat={`$${prediction.predictedLoss}`}
-                  insight={`AI predicts loss of $${prediction.predictedLoss} next month (${prediction.confidence}% confidence)`}
+                  insight={`System predicts potential deficit of $${prediction.predictedLoss} next month (${prediction.confidence}% confidence)`}
                   action={{
                     label: 'How to prevent',
                     onClick: () => alert('Prevention steps')
@@ -239,7 +239,7 @@ const InnovativeDashboard = () => {
           {/* Prediction Warning */}
           {prediction.shouldAlert && (
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">🔮 Loss Prediction</h2>
+              <h2 className="text-2xl font-bold text-white mb-4">🔮 Loss Forecast</h2>
               <PredictionWarning
                 predictedLoss={prediction.predictedLoss}
                 confidence={prediction.confidence}

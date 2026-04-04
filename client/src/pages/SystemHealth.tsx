@@ -143,12 +143,12 @@ const SystemHealth = () => {
             </div>
           </PremiumCard>
 
-          {/* AI Connectivity */}
+          {/* Engine Connectivity */}
           <PremiumCard padded={false} className="flex flex-col">
             <div className="p-6 border-b border-white/5 bg-white/[0.02]">
               <div className="flex items-center gap-3">
                 <Cpu className="w-5 h-5 text-purple-400" />
-                <h3 className="text-sm font-bold text-white uppercase tracking-widest leading-none">Intelligence Providers</h3>
+                <h3 className="text-sm font-bold text-white uppercase tracking-widest leading-none">Strategic Providers</h3>
               </div>
             </div>
             <div className="p-6 space-y-6 flex-1">

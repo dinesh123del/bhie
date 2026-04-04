@@ -20,7 +20,7 @@ const principles = [
 
 const milestones = [
   'Unified finance, ops, and growth signals into one decision surface.',
-  'Created AI-assisted analysis flows for leadership and revenue teams.',
+  'Created automated analysis flows for leadership and revenue teams.',
   'Built enterprise-ready monitoring for scaling, forecasting, and planning.',
 ];
 
@@ -77,7 +77,7 @@ export default function About() {
                 <div className="rounded-[24px] border border-white/10 bg-white/5 p-5">
                   <Orbit className="mb-4 h-6 w-6 text-cyan-300" />
                   <p className="text-sm leading-7 text-slate-300">
-                    Our platform aligns planning, reporting, and AI insight generation inside one premium workflow.
+                    Our platform aligns planning, reporting, and insight generation inside one premium workflow.
                   </p>
                 </div>
                 <div className="rounded-[24px] border border-white/10 bg-white/5 p-5">

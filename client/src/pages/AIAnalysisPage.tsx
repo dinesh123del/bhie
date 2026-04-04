@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useAIAnalysis } from '../hooks/useAIAnalysis';
-import { AIAnalysisDashboard } from '../components/AIAnalysisDashboard';
+import { AnalysisDashboard } from '../components/AIAnalysisDashboard';
 import type { BusinessData } from '../types/ai';
 
 /**
  * AI Analysis Page
  * Main entry point for users to trigger AI analysis
  */
-export const AIAnalysisPage: React.FC = () => {
+export const AnalysisReportPage: React.FC = () => {
   const [formData, setFormData] = useState<BusinessData>({
     revenue: 0,
     expenses: 0,
@@ -45,9 +45,9 @@ export const AIAnalysisPage: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">AI Business Analysis</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Business Analysis Report</h1>
           <p className="text-gray-600">
-            Get comprehensive insights powered by multi-agent AI system
+            Get comprehensive insights powered by our analysis engine
           </p>
         </div>
 
@@ -152,10 +152,10 @@ export const AIAnalysisPage: React.FC = () => {
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                           />
                         </svg>
-                        Analyzing...
+                        Processing...
                       </>
                     ) : (
-                      '🚀 Analyze'
+                      'Analyze'
                     )}
                   </button>
                   {analysisResult && (
@@ -174,10 +174,10 @@ export const AIAnalysisPage: React.FC = () => {
               <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
                 <p className="font-semibold mb-2">💡 How it works:</p>
                 <ul className="list-disc list-inside space-y-1 text-xs">
-                  <li>Financial AI analyzes profitability & risks</li>
-                  <li>Market AI evaluates demand & competition</li>
-                  <li>Prediction AI forecasts revenue trends</li>
-                  <li>Strategy AI generates actionable recommendations</li>
+                  <li>Financial engine analyzes profitability & risks</li>
+                  <li>Market logic evaluates demand & competition</li>
+                  <li>Forecasting system predicts revenue trends</li>
+                  <li>Strategy engine generates actionable recommendations</li>
                 </ul>
               </div>
             </div>
@@ -186,13 +186,13 @@ export const AIAnalysisPage: React.FC = () => {
           {/* Results */}
           <div className="lg:col-span-2">
             {analysisResult ? (
-              <AIAnalysisDashboard
+              <AnalysisDashboard
                 analysisResult={analysisResult}
                 loading={loading}
               />
             ) : loading ? (
               <div className="bg-white rounded-lg shadow p-12">
-                <AIAnalysisDashboard
+                <AnalysisDashboard
                   analysisResult={{
                     timestamp: new Date().toISOString(),
                     businessData: {} as any,
@@ -205,9 +205,9 @@ export const AIAnalysisPage: React.FC = () => {
               </div>
             ) : (
               <div className="bg-white rounded-lg shadow p-12 text-center">
-                <div className="text-6xl mb-4">🤖</div>
+                <div className="text-6xl mb-4">📊</div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                  AI Analysis Ready
+                  Analysis Report Ready
                 </h3>
                 <p className="text-gray-600">
                   Enter your business data and click "Analyze" to get started
@@ -221,4 +221,4 @@ export const AIAnalysisPage: React.FC = () => {
   );
 };
 
-export default AIAnalysisPage;
+export default AnalysisReportPage;

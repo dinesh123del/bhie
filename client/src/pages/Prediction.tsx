@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Brain, Info } from 'lucide-react';
-import AIPredictionCard from '../components/AIPredictionCard';
+import { Activity, Info, TrendingUp } from 'lucide-react';
+import PredictionCard from '../components/AIPredictionCard';
 import api from '../lib/axios';
 
-const AIPredictor: React.FC = () => {
+const ForecastEngine: React.FC = () => {
   const [recordCount, setRecordCount] = useState(0);
 
   useEffect(() => {
@@ -39,12 +39,12 @@ const AIPredictor: React.FC = () => {
         <div className="mb-12 animate-fadeIn">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-3 bg-blue-600/20 border border-blue-500/30 rounded-lg">
-              <Brain className="text-blue-400" size={28} />
+              <TrendingUp className="text-blue-400" size={28} />
             </div>
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold">AI Predictor</h1>
+              <h1 className="text-4xl md:text-5xl font-bold">Forecast Engine</h1>
               <p className="text-gray-400 text-lg mt-1">
-                Advanced analytics & intelligent forecasting
+                Advanced analytics & strategic forecasting
               </p>
             </div>
           </div>
@@ -64,7 +64,7 @@ const AIPredictor: React.FC = () => {
           />
           <InfoCard
             icon="💡"
-            title="Smart Suggestions"
+            title="Strategic Insights"
             description="Actionable recommendations to improve performance"
           />
         </div>
@@ -84,7 +84,7 @@ const AIPredictor: React.FC = () => {
         )}
 
         {/* Main Prediction Component */}
-        <AIPredictionCard key={recordCount} />
+        <PredictionCard key={recordCount} />
 
         {/* How It Works Section */}
         <div className="mt-12">
@@ -98,9 +98,9 @@ const AIPredictor: React.FC = () => {
             />
             <ProcessCard
               step={2}
-              title="Intelligent Analysis"
-              description="Applies ML algorithms to predict performance"
-              icon="🧠"
+              title="Predictive Analysis"
+              description="Applies proprietary algorithms to forecast performance"
+              icon="📈"
             />
             <ProcessCard
               step={3}
@@ -223,4 +223,4 @@ const MetricExplanation: React.FC<MetricExplanationProps> = ({
   </div>
 );
 
-export default AIPredictor;
+export default ForecastEngine;

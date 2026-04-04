@@ -210,21 +210,21 @@ const Analytics = () => {
       {/* Summary Metrics */}
       <ScrollableSection title="Key Metrics">
         <AnalyticsCard
-          title="Total Income"
+          title="Revenue"
           value={`$${(data.totalIncome || 0).toLocaleString()}`}
           trend={12}
           icon={DollarSign}
           color="bg-green-600"
         />
         <AnalyticsCard
-          title="Total Expenses"
+          title="Expenses"
           value={`$${(data.totalExpenses || 0).toLocaleString()}`}
           trend={-5}
           icon={DollarSign}
           color="bg-red-600"
         />
         <AnalyticsCard
-          title="Net Profit"
+          title="Net Balance"
           value={`$${(data.profit || 0).toLocaleString()}`}
           trend={18}
           icon={TrendingUp}
@@ -239,8 +239,8 @@ const Analytics = () => {
         />
       </ScrollableSection>
 
-      {/* Income Trends (Mini Charts) */}
-      <ScrollableSection title="Income Trends">
+      {/* Revenue Trends (Mini Charts) */}
+      <ScrollableSection title="Revenue Trends">
         {mockMonthlyData.map((item, idx) => (
           <motion.div
             key={idx}
@@ -283,8 +283,8 @@ const Analytics = () => {
         ))}
       </ScrollableSection>
 
-      {/* Profit Analysis */}
-      <ScrollableSection title="Profit Analysis">
+      {/* Net Balance Analysis */}
+      <ScrollableSection title="Net Balance Analysis">
         {mockMonthlyData.map((item, idx) => {
           const isProfitable = (item.profit || 0) >= 0;
           return (
@@ -326,7 +326,7 @@ const Analytics = () => {
         <ul className="space-y-3 text-slate-300">
           <li className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-blue-500 mt-2" />
-            <span>Your Income is trending upward with a 12% increase compared to last week</span>
+            <span>Your Revenue is trending upward with a 12% increase compared to last week</span>
           </li>
           <li className="flex items-start gap-3">
             <div className="w-2 h-2 rounded-full bg-green-500 mt-2" />

@@ -18,7 +18,7 @@ const PremiumLanding = lazy(() => import('./pages/LandingPremium'));
 const Dashboard = lazy(() => import('./pages/DashboardRestructured'));
 const Analytics = lazy(() => import('./pages/AnalyticsIntelligence'));
 
-const AIAnalysis = lazy(() => import('./pages/AIAnalysisPage'));
+const AnalysisReport = lazy(() => import('./pages/AIAnalysisPage'));
 const Settings = lazy(() => import('./pages/Admin')); 
 const Records = lazy(() => import('./pages/RecordsPremium'));
 const SystemHealth = lazy(() => import('./pages/SystemHealth'));
@@ -79,7 +79,7 @@ function MainApp() {
             {/* Core Dashboard Experience */}
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-            <Route path="/ai-analysis" element={<ProtectedRoute><AIAnalysis /></ProtectedRoute>} />
+            <Route path="/analysis-report" element={<ProtectedRoute><AnalysisReport /></ProtectedRoute>} />
             <Route path="/system-health" element={<ProtectedRoute><SystemHealth /></ProtectedRoute>} />
 <Route path="/scan-bill" element={<ProtectedRoute><ScanBill /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />

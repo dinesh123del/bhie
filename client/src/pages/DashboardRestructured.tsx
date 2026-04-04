@@ -172,7 +172,7 @@ const DashboardRestructured = () => {
             <PremiumCard className="border border-green-500/20 bg-gradient-to-br from-green-500/10 to-transparent">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold uppercase text-gray-400">Total Income</span>
+                  <span className="text-xs font-semibold uppercase text-gray-400">Revenue</span>
                   <IndianRupee className="h-4 w-4 text-green-400" />
                 </div>
                 <div>
@@ -196,7 +196,7 @@ const DashboardRestructured = () => {
             <PremiumCard className="border border-red-500/20 bg-gradient-to-br from-red-500/10 to-transparent">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold uppercase text-gray-400">Total Expenses</span>
+                  <span className="text-xs font-semibold uppercase text-gray-400">Expenses</span>
                   <IndianRupee className="h-4 w-4 text-red-400" />
                 </div>
                 <div>
@@ -219,7 +219,7 @@ const DashboardRestructured = () => {
             <PremiumCard className="border border-blue-500/20 bg-gradient-to-br from-blue-500/10 to-transparent">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold uppercase text-gray-400">Your Profit</span>
+                  <span className="text-xs font-semibold uppercase text-gray-400">Net Balance</span>
                   <TrendingUp className="h-4 w-4 text-blue-400" />
                 </div>
                 <div>
@@ -281,7 +281,7 @@ const DashboardRestructured = () => {
             >
               <div className="flex items-center gap-3">
                 <BarChart3 className="h-5 w-5 text-blue-400" />
-                <span className="font-semibold text-white">Recent Income & Expenses</span>
+                <span className="font-semibold text-white">Recent Activity</span>
               </div>
               <motion.div
                 animate={{ rotate: expandedSections.recentTransactions ? 180 : 0 }}
@@ -338,7 +338,7 @@ const DashboardRestructured = () => {
             </motion.div>
           </motion.div>
 
-          {/* AI INSIGHTS SECTION */}
+          {/* INSIGHTS SECTION */}
           <motion.div
             variants={itemVariants}
             className="tour-step-insights rounded-2xl border border-white/10 bg-white/[0.05] backdrop-blur-sm"
@@ -412,7 +412,7 @@ const DashboardRestructured = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <PremiumButton onClick={() => navigate('/scan-bill')} variant="secondary" icon={<Scan className="w-4 h-4" />}>
-            Scan Bill
+            Scan Receipt
           </PremiumButton>
           <PremiumButton onClick={() => navigate('/uploads')} variant="primary">
             Upload Files

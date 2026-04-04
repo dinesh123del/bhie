@@ -26,8 +26,8 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { id: 'dashboard', name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-  { id: 'ai', name: 'AI Intelligence', path: '/ai-analysis', icon: BrainCircuit, badge: 'AI' },
-  { id: 'analytics', name: 'Intelligence Analytics', path: '/analytics', icon: BarChart4 },
+  { id: 'analysis', name: 'Analysis', path: '/analysis-report', icon: BrainCircuit },
+  { id: 'analytics', name: 'Performance', path: '/analytics', icon: BarChart4 },
 
   { id: 'health', name: 'System Health', path: '/system-health', icon: Activity },
   { id: 'settings', name: 'Settings', path: '/settings', icon: Settings },

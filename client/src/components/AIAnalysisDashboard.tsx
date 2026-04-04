@@ -2,16 +2,16 @@ import React from 'react';
 import type { AnalysisResult, Strategy } from '../types/ai';
 import type { AIAnalysisResponse } from '../services/aiService';
 
-interface AIAnalysisDashboardProps {
+interface AnalysisDashboardProps {
   analysisResult: AnalysisResult | AIAnalysisResponse;
   loading?: boolean;
 }
 
 /**
- * AI Analysis Dashboard Component
- * Displays all AI insights, predictions, and strategic recommendations
+ * Analysis Dashboard Component
+ * Displays all insights, predictions, and strategic recommendations
  */
-export const AIAnalysisDashboard: React.FC<AIAnalysisDashboardProps> = ({
+export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
   analysisResult,
   loading = false,
 }) => {
@@ -20,7 +20,7 @@ export const AIAnalysisDashboard: React.FC<AIAnalysisDashboardProps> = ({
       <div className="flex items-center justify-center p-8">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Analyzing your business data...</p>
+          <p className="text-gray-600">Processing your business data...</p>
         </div>
       </div>
     );
@@ -42,7 +42,7 @@ export const AIAnalysisDashboard: React.FC<AIAnalysisDashboardProps> = ({
     <div className="space-y-6">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-6 rounded-lg">
-        <h1 className="text-3xl font-bold mb-2">AI Business Analysis</h1>
+        <h1 className="text-3xl font-bold mb-2">Business Analysis</h1>
         <p className="opacity-90">
           {new Date(analysisResult.timestamp).toLocaleString()}
         </p>
@@ -293,4 +293,4 @@ export const AIAnalysisDashboard: React.FC<AIAnalysisDashboardProps> = ({
   );
 };
 
-export default AIAnalysisDashboard;
+export default AnalysisDashboard;

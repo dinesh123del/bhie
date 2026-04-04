@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiMiniSparkles } from 'react-icons/hi2';
+import { premiumFeedback } from '../../utils/premiumFeedback';
 
 interface PremiumCardProps {
   children: React.ReactNode;
@@ -8,7 +9,11 @@ interface PremiumCardProps {
   hoverable?: boolean;
   gradient?: boolean;
   padded?: boolean;
+  floating?: boolean;
+  delay?: number;
 }
+
+const springConfig = { type: 'spring', stiffness: 200, damping: 15 };
 
 export const PremiumCard: React.FC<PremiumCardProps> = ({
   children,
@@ -16,16 +21,34 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
   hoverable = true,
   gradient = false,
   padded = true,
+  floating = false,
+  delay = 0,
 }) => {
   return (
     <motion.section
-      whileHover={hoverable ? { y: -5, scale: 1.01, boxShadow: '0 30px 60px -12px rgba(0,0,0,0.5), 0 18px 36px -18px rgba(0,0,0,0.5)' } : undefined}
-      whileTap={hoverable ? { scale: 0.99 } : undefined}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className={`relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] backdrop-blur-2xl ${padded ? 'p-8' : ''} ${className}`}
+      initial={{ opacity: 0, scale: 0.98, y: 15 }}
+      animate={{ 
+        opacity: 1, 
+        scale: 1, 
+        y: floating ? [0, -5, 0] : 0 
+      }}
+      whileHover={hoverable ? { 
+        y: -8, 
+        scale: 1.03, 
+        boxShadow: '0 40px 80px -15px rgba(0,0,0,0.6)' 
+      } : undefined}
+      whileTap={hoverable ? { scale: 0.98 } : undefined}
+      transition={{ 
+        ...springConfig,
+        animate: floating ? {
+          y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+          default: { delay }
+        } : { delay }
+      }}
+      className={`relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.04] backdrop-blur-2xl ${padded ? 'p-8' : ''} ${className}`}
     >
       {gradient && (
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-indigo-500/5 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/15 via-transparent to-purple-500/10 pointer-events-none" />
       )}
       <div className="relative z-10">{children}</div>
     </motion.section>
@@ -58,8 +81,14 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
   icon,
   className = '',
   children,
+  onClick,
   ...props
 }) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    premiumFeedback.click();
+    if (onClick) onClick(e);
+  };
+
   const baseStyles = "relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl font-bold tracking-tight transition-all duration-400 group active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed";
   
   const sizeClasses = {
@@ -69,16 +98,18 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
   };
 
   const variantClasses = {
-    primary: 'bg-white text-black hover:bg-white/90 shadow-xl shadow-white/10',
-    secondary: 'bg-white/5 border border-white/10 text-white hover:bg-white/10 backdrop-blur-xl',
-    ghost: 'text-white/60 hover:text-white hover:bg-white/5',
-    danger: 'bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20',
+    primary: 'bg-white text-black hover:bg-white/90 shadow-2xl shadow-white/10',
+    secondary: 'bg-white/5 border border-white/15 text-white hover:bg-white/10 backdrop-blur-xl',
+    ghost: 'text-white/60 hover:text-white hover:bg-white/8',
+    danger: 'bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/25',
   };
 
   return (
     <motion.button
-      whileHover={{ y: -2 }}
-      whileTap={{ scale: 0.97 }}
+      whileHover={{ y: -4, scale: 1.03 }}
+      whileTap={{ scale: 0.95 }}
+      transition={springConfig}
+      onClick={handleClick}
       className={`${baseStyles} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
       disabled={loading}
       {...props}
@@ -87,19 +118,19 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
         {loading ? (
           <motion.div
             key="loader"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
             className="w-5 h-5 border-2 border-current/30 border-t-current rounded-full animate-spin"
           />
         ) : (
           <motion.div
             key="content"
-            initial={{ opacity: 0, y: 5 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-2"
           >
-            {icon && <span className="text-current/70 group-hover:text-current transition-colors">{icon}</span>}
+            {icon && <span className="group-hover:rotate-12 transition-transform duration-300">{icon}</span>}
             {children}
           </motion.div>
         )}

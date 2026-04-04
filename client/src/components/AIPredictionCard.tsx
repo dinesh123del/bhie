@@ -63,7 +63,7 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ recommendation 
   );
 };
 
-const AIPredictionCard: React.FC = () => {
+const PredictionCard: React.FC = () => {
   const [prediction, setPrediction] = useState<PredictionData | null>(null);
   const [recommendationsData, setRecommendationsData] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
@@ -161,7 +161,7 @@ const AIPredictionCard: React.FC = () => {
       <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8">
         <div className="flex items-center justify-center gap-3">
           <Loader className="animate-spin text-blue-400" size={24} />
-          <p className="text-gray-300">Analyzing your records...</p>
+          <p className="text-gray-300">Processing your records...</p>
         </div>
       </div>
     );
@@ -327,14 +327,14 @@ const AIPredictionCard: React.FC = () => {
             </div>
           </div>
 
-          {/* SMART Recommendations */}
+          {/* Strategic Recommendations */}
           <div>
             <div className="flex items-center gap-2 mb-4">
               <TrendingUp className="text-emerald-400" size={18} />
               <h3 className="font-semibold text-white">Business Advisor</h3>
               {recommendationsData?.advisor && (
                 <div className="ml-auto text-xs bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-3 py-1 rounded-full font-medium">
-                  AI Consultant
+                  Strategy Advisor
                 </div>
               )}
               {recommendationsData && (
@@ -465,4 +465,4 @@ const MetricCard: React.FC<MetricCardProps> = ({
   );
 };
 
-export default AIPredictionCard;
+export default PredictionCard;

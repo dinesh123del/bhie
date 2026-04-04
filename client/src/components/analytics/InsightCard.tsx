@@ -9,14 +9,14 @@ import {
 
 export type ImpactLevel = 'low' | 'medium' | 'high';
 
-interface AIInsightCardProps {
+interface InsightCardProps {
   title?: string;
   message: string;
   impactLevel: ImpactLevel;
   category?: 'revenue' | 'expense' | 'customer' | 'inventory';
 }
 
-const AIInsightCard = ({ title, message, impactLevel, category }: AIInsightCardProps) => {
+const InsightCard = ({ title, message, impactLevel, category }: InsightCardProps) => {
   const getImpactStyles = (level: ImpactLevel) => {
     switch (level) {
       case 'high': return 'border-rose-500/20 bg-rose-500/5 text-rose-400';
@@ -52,4 +52,4 @@ const AIInsightCard = ({ title, message, impactLevel, category }: AIInsightCardP
   );
 };
 
-export default AIInsightCard;
+export default InsightCard;
