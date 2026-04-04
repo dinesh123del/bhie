@@ -140,40 +140,9 @@ router.post(
   })
 );
 
-router.post(
-  '/register',
-  asyncHandler(async (req: Request, res: Response) => {
-    const { name, email, password } = registerSchema.parse(req.body);
-    const existingUser = await User.findOne({ email });
+import { register as registerController } from '../controllers/authController.js';
 
-    if (existingUser) {
-      throw new AppError(409, 'User already exists');
-    }
-
-    const user = await User.create({
-      name,
-      email,
-      password,
-      role: 'user',
-    });
-
-    const token = generateToken(user._id.toString(), user.role as UserRole);
-
-    res.status(201).json({
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        plan: ('getEffectivePlan' in user && typeof user.getEffectivePlan === 'function') ? user.getEffectivePlan() : user.plan,
-        subscriptionStatus: user.isActive ? 'active' : 'inactive',
-        expiryDate: user.planExpiry?.toISOString() || null,
-        usageCount: user.usageCount,
-      },
-    });
-  })
-);
+router.post('/register', registerController);
 
 router.get('/google', (req, res, next) => {
   if (!googleOAuthEnabled) {

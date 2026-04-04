@@ -33,9 +33,12 @@ const apiLimiter = rateLimit({
   message: { message: 'Too many requests. Please try again later.' },
 });
 
-// CORS Fix (ALLOW EVERYTHING)
+// 1. Secure CORS
 app.use(cors({
-  origin: "*",
+  origin: [
+    "http://localhost:5173",
+    "https://client-p21fg3h4c-bhies-projects.vercel.app"
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
@@ -43,7 +46,10 @@ app.use(cors({
 // Body Parser
 app.use(express.json());
 
-// --- Mandatory Routes ---
+// --- Structured Routes ---
+import authRoutes from './routes/auth.js';
+app.use("/api/auth", authRoutes);
+
 app.get("/", (req, res) => {
   res.send("Backend is LIVE 🚀");
 });
@@ -52,16 +58,14 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-app.post("/api/auth/register", (req, res) => {
-  res.json({ success: true, message: "Hard Fix: Registration Success" });
-});
-
-// Original routes below keep functionality
+// Original routes
 app.use('/api', apiLimiter, apiRouter);
 
-// Error Handling
-app.use(notFoundHandler);
-app.use(errorHandler);
+// --- Global Error Handler ---
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error(err);
+  res.status(500).json({ message: "Server error" });
+});
 
 // --- Server Lifecycle ---
 let server: any = null;

@@ -3,10 +3,9 @@ import { useSearchParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { User, Mail, Lock, ArrowRight, AlertCircle, CheckCircle } from 'lucide-react';
-import { authService } from '../services/authService';
+import { registerUser } from '../api';
 import { PremiumButton, PremiumCard } from '../components/ui/PremiumComponents';
 import { useAuth } from '../hooks/useAuth';
-import axios from 'axios';
 import Logo from '../components/Logo';
 
 const PremiumRegister = () => {
@@ -30,12 +29,12 @@ const PremiumRegister = () => {
     e.preventDefault();
 
     if (!formData.name.trim() || !formData.email.trim() || !formData.password.trim()) {
-      setError('All fields are required');
+      setError('Please fill in all required fields.');
       return;
     }
 
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
+    if (formData.password.length < 8) {
+      setError('Password must be at least 8 characters long.');
       return;
     }
 
@@ -43,15 +42,15 @@ const PremiumRegister = () => {
     setError('');
 
     try {
-      const response = await authService.register(formData);
+      const response = await registerUser(formData);
       setSuccess(true);
-      setTimeout(() => login(response.token, response.user), 1200);
-    } catch (error: any) {
-      let message = 'Registration failed';
-      if (axios.isAxiosError(error)) {
-        message = error.response?.data?.message || 'Unable to connect to server';
+      // Assuming registerUser returns { token, user } as per original logic
+      if (response.token && response.user) {
+        setTimeout(() => login(response.token, response.user), 1200);
       }
-      setError(message);
+    } catch (err: any) {
+      console.error('Registration Technical Error:', err);
+      setError('We encountered an issue creating your account. Please try again or contact support.');
     } finally {
       setLoading(false);
     }
