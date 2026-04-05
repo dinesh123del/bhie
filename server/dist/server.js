@@ -25,12 +25,32 @@ app.use(compression());
 app.use(cookieParser());
 app.use(morgan(env.IS_PRODUCTION ? 'combined' : 'dev'));
 // CORS Configuration
+const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "https://bhie-frontend.vercel.app",
+    "https://client-phi-woad.vercel.app",
+    "https://dinesh123del-bhie.vercel.app",
+];
 app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        "https://bhie-frontend.vercel.app"
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: (origin, callback) => {
+        // Allow requests with no origin (mobile apps, curl, etc.)
+        if (!origin)
+            return callback(null, true);
+        // Allow exact matches
+        if (allowedOrigins.includes(origin))
+            return callback(null, true);
+        // Allow any Vercel preview URL for this project
+        if (origin.match(/https:\/\/.*bhie.*\.vercel\.app$/))
+            return callback(null, true);
+        if (origin.match(/https:\/\/client.*\.vercel\.app$/))
+            return callback(null, true);
+        // Allow localtunnel URLs (for testing)
+        if (origin.endsWith('.loca.lt'))
+            return callback(null, true);
+        callback(null, false);
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true
 }));
 // Body Parser with Safety Limits & Verification
