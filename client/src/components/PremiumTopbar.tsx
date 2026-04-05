@@ -16,6 +16,7 @@ import {
 import { ThemeToggle } from './ThemeToggle';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { premiumFeedback } from '../utils/premiumFeedback';
+import { Logo } from './Logo';
 
 const PremiumTopbar = () => {
   const { user, logout } = useAuth();
@@ -38,24 +39,29 @@ const PremiumTopbar = () => {
     <motion.header
       className={`fixed top-0 right-0 z-40 px-8 transition-all duration-300 h-20 ${
         isScrolled 
-          ? 'bg-white/70 dark:bg-[#0f172a]/70 backdrop-blur-xl border-b border-black/[0.03] dark:border-white/5' 
+          ? 'bg-[#0A0A0A]/80 backdrop-blur-xl border-b border-white/[0.08] dark:bg-[#0A0A0A]/80 dark:border-white/[0.08]' 
           : 'bg-transparent'
       }`}
       style={{ left: 'var(--sidebar-width, auto)' }}
     >
       <div className="flex items-center h-full justify-between gap-8">
-        {/* Modern Search */}
-        <div className="flex-1 max-w-lg hidden md:block">
-          <div className="relative group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black/20 dark:text-white/20 transition-colors group-focus-within:text-brand-500" />
-            <input
-              type="text"
-              placeholder="Quick search..."
-              className="w-full bg-black/[0.01] dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-2xl py-2.5 pl-11 pr-12 text-sm text-black dark:text-white placeholder-black/20 dark:placeholder-white/20 focus:outline-none focus:ring-4 focus:ring-brand-500/5 focus:border-brand-500/20 transition-all font-medium"
-            />
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 px-2 py-0.5 rounded-lg bg-black/[0.02] dark:bg-white/[0.02] text-[10px] font-bold text-black/20 dark:text-white/20 border border-black/5 dark:border-white/5">
-              <Command className="w-3 h-3" />
-              <span>K</span>
+        
+        {/* Left Side: Logo & Modern Search */}
+        <div className="flex items-center gap-8 flex-1 max-w-2xl">
+          <Logo size="sm" showSubtitle={false} className="border-none shadow-none bg-transparent" />
+          
+          <div className="flex-1 hidden md:block">
+            <div className="relative group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black/20 dark:text-white/20 transition-colors group-focus-within:text-brand-500" />
+              <input
+                type="text"
+                placeholder="Quick search..."
+                className="w-full bg-black/[0.01] dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-2xl py-2.5 pl-11 pr-12 text-sm text-black dark:text-white placeholder-black/20 dark:placeholder-white/20 focus:outline-none focus:ring-4 focus:ring-brand-500/5 focus:border-brand-500/20 transition-all font-medium"
+              />
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 px-2 py-0.5 rounded-lg bg-black/[0.02] dark:bg-white/[0.02] text-[10px] font-bold text-black/20 dark:text-white/20 border border-black/5 dark:border-white/5">
+                <Command className="w-3 h-3" />
+                <span>K</span>
+              </div>
             </div>
           </div>
         </div>

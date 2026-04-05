@@ -14,8 +14,8 @@ interface PremiumCardProps {
   extreme?: boolean;
 }
 
-const springConfig = { type: 'spring', stiffness: 200, damping: 20 };
-const inertiaConfig = { type: 'spring', stiffness: 100, damping: 10, mass: 1 };
+const springConfig = { type: 'spring', stiffness: 110, damping: 26, mass: 1.2 };
+const inertiaConfig = { type: 'spring', stiffness: 80, damping: 25, mass: 1.5 };
 
 export const PremiumCard: React.FC<PremiumCardProps> = ({
   children,
@@ -36,13 +36,14 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
         y: floating ? [0, -5, 0] : 0 
       }}
       whileHover={hoverable ? { 
-        y: -10, 
-        scale: extreme ? 1.05 : 1.03, 
+        y: -4, 
+        scale: extreme ? 1.02 : 1.01, 
         boxShadow: extreme 
-          ? '0 40px 80px -12px rgba(168,85,247,0.25), 0 20px 40px -20px rgba(56,189,248,0.3)' 
-          : '0 30px 60px -12px rgba(0,0,0,0.4), 0 18px 36px -18px rgba(0,0,0,0.45)' 
+          ? '0 40px 80px -12px rgba(168,85,247,0.15), 0 20px 40px -15px rgba(56,189,248,0.2)' 
+          : '0 30px 60px -12px rgba(0,0,0,0.3), 0 16px 32px -16px rgba(0,0,0,0.4)',
+        borderColor: 'rgba(255,255,255,0.15)'
       } : undefined}
-      whileTap={hoverable ? { scale: 0.98, y: -4 } : undefined}
+      whileTap={hoverable ? { scale: 0.99, y: -1 } : undefined}
       onMouseEnter={() => hoverable && premiumFeedback.haptic(5)}
       transition={{ 
         ...springConfig,
@@ -53,7 +54,7 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
       }}
       whileInView={{ opacity: 1, scale: 1, y: 0 }}
       viewport={{ once: true, margin: "-10px" }}
-      className={`relative overflow-hidden rounded-[2.5rem] border ${extreme ? 'border-transparent' : 'border-white/10'} bg-white/[0.04] backdrop-blur-3xl ${padded ? 'p-8' : ''} ${className}`}
+      className={`relative overflow-hidden rounded-[2.5rem] border transition-colors duration-700 ${extreme ? 'border-transparent' : 'border-white/[0.06] hover:border-white/[0.12]'} bg-white/[0.02] backdrop-blur-[40px] ${padded ? 'p-8' : ''} ${className}`}
     >
       {extreme && (
         <motion.div
@@ -107,9 +108,22 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
   onClick,
   ...props
 }) => {
+  const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = React.useState(false);
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     premiumFeedback.click();
     if (onClick) onClick(e);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    setMousePosition({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
   };
 
   const baseStyles = "relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl font-bold tracking-tight transition-all duration-400 group disabled:opacity-50 disabled:cursor-not-allowed";
@@ -121,28 +135,51 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
   };
 
   const variantClasses = {
-    primary: 'bg-white text-black hover:shadow-2xl shadow-white/10',
-    secondary: 'bg-white/5 border border-white/15 text-white hover:bg-white/8 backdrop-blur-xl',
-    ghost: 'text-white/60 hover:text-white hover:bg-white/6',
+    primary: 'bg-white text-black hover:shadow-[0_20px_40px_-12px_rgba(255,255,255,0.2)] shadow-white/10',
+    secondary: 'bg-white/5 border border-white/15 text-white hover:bg-white/10 backdrop-blur-xl',
+    ghost: 'text-white/60 hover:text-white hover:bg-white/5',
     danger: 'bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20',
   };
 
   return (
     <motion.button
-      whileHover={{ y: -4, scale: 1.05, boxShadow: '0 20px 40px -12px rgba(0,0,0,0.5)' }}
+      ref={buttonRef}
+      whileHover={{ y: -4, scale: 1.05 }}
       whileTap={{ scale: 0.96 }}
-      onMouseEnter={() => premiumFeedback.haptic(5)}
+      onMouseEnter={() => {
+        setIsHovered(true);
+        premiumFeedback.haptic(5);
+      }}
+      onMouseLeave={() => setIsHovered(false)}
+      onMouseMove={handleMouseMove}
       transition={springConfig}
       onClick={handleClick}
       className={`${baseStyles} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
       disabled={loading}
       {...props}
     >
+      {/* Dynamic Cursor Spotlight Glow */}
+      <AnimatePresence>
+        {isHovered && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: variant === 'primary' ? 0.15 : 0.4 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 pointer-events-none z-0"
+            style={{
+              background: `radial-gradient(circle 80px at ${mousePosition.x}px ${mousePosition.y}px, ${
+                variant === 'primary' ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.4)'
+              }, transparent 100%)`,
+            }}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Ripple/Pulse Effect */}
       <motion.div
-        className="absolute inset-0 bg-white opacity-0 pointer-events-none"
+        className="absolute inset-0 bg-white opacity-0 pointer-events-none z-0"
         initial={false}
-        whileTap={{ opacity: 0.2, scale: 1.5, transition: { duration: 0.4 } }}
+        whileTap={{ opacity: variant === 'primary' ? 0.3 : 0.1, scale: 1.5, transition: { duration: 0.4 } }}
       />
       
       <AnimatePresence mode="wait">

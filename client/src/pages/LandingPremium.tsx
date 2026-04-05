@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import WatchDemoModal from '../components/WatchDemoModal';
 import {
   Menu,
   X,
@@ -139,7 +140,7 @@ const floatingVariant = {
   }
 };
 
-const Hero = () => (
+const Hero = ({ onWatchDemo }: { onWatchDemo?: () => void }) => (
   <section className="relative min-h-[100svh] flex items-center justify-center pt-20 px-6 overflow-hidden">
     <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center">
       <motion.div
@@ -169,7 +170,7 @@ const Hero = () => (
           <button 
             onClick={() => {
               premiumFeedback.click();
-              document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+              onWatchDemo?.();
             }}
             className="w-full sm:w-auto px-10 py-4 bg-white/5 hover:bg-white/10 text-white text-lg font-bold rounded transition-all flex items-center justify-center gap-2 border border-white/10 backdrop-blur-md"
           >
@@ -489,11 +490,14 @@ const Footer = () => (
 
 // ======================= MAIN ASSEMBLY =======================
 export default function LandingPremium() {
+  const [demoOpen, setDemoOpen] = useState(false);
+
   return (
     <div className="min-h-screen text-white font-sans selection:bg-[#E50914] selection:text-white">
+      <WatchDemoModal isOpen={demoOpen} onClose={() => setDemoOpen(false)} />
       <Navbar />
       <main>
-        <Hero />
+        <Hero onWatchDemo={() => setDemoOpen(true)} />
         <Problem />
         <Solution />
         <Features />

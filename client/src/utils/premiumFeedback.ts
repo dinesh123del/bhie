@@ -15,12 +15,18 @@ class FeedbackEngine {
     }
   }
 
-  private playTone(freq: number, type: OscillatorType, duration: number, volume: number = 0.04) {
+  private playTone(freq: number, type: OscillatorType, duration: number, volume: number = 0.04, pan: number = 0) {
     this.initAudio();
     if (!this.audioContext) return;
 
     const osc = this.audioContext.createOscillator();
     const gain = this.audioContext.createGain();
+    
+    // 3D Spatial Dolby Feel
+    const panner = this.audioContext.createStereoPanner ? this.audioContext.createStereoPanner() : null;
+    if (panner) {
+      panner.pan.setValueAtTime(pan, this.audioContext.currentTime);
+    }
 
     osc.type = type;
     osc.frequency.setValueAtTime(freq, this.audioContext.currentTime);
@@ -28,7 +34,13 @@ class FeedbackEngine {
     gain.gain.setValueAtTime(volume, this.audioContext.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + duration);
 
-    osc.connect(gain);
+    if (panner) {
+      osc.connect(panner);
+      panner.connect(gain);
+    } else {
+      osc.connect(gain);
+    }
+    
     gain.connect(this.audioContext.destination);
 
     osc.start();
@@ -37,78 +49,74 @@ class FeedbackEngine {
 
   // ===== Core Interaction Sounds =====
 
-  // Soft "tick" for button clicks - feels like a mechanical switch
   tick() {
-    this.playTone(880, 'sine', 0.06, 0.03);
-    this.playTone(1200, 'sine', 0.04, 0.015);
+    this.playTone(880, 'sine', 0.06, 0.03, 0);
+    this.playTone(1200, 'sine', 0.04, 0.015, 0.2); // subtle spatial pop
   }
 
-  // Elegant Success Chime (A Major Shimmer) - feels like unlocking something
   chime() {
-    this.playTone(880.00, 'sine', 0.8, 0.035);  // A5
-    setTimeout(() => this.playTone(1108.73, 'sine', 0.6, 0.025), 120); // C#6
-    setTimeout(() => this.playTone(1318.51, 'sine', 0.4, 0.018), 240); // E6
+    // Spatial sweeping chime (Left -> Center -> Right)
+    this.playTone(880.00, 'sine', 0.8, 0.035, -0.6);  
+    setTimeout(() => this.playTone(1108.73, 'sine', 0.6, 0.025, 0), 120); 
+    setTimeout(() => this.playTone(1318.51, 'sine', 0.4, 0.018, 0.6), 240); 
   }
 
-  // Smooth, low-frequency error signal
   low() {
-    this.playTone(200, 'sine', 0.4, 0.035);
-    setTimeout(() => this.playTone(150, 'sine', 0.3, 0.025), 100);
+    // Deep center warning
+    this.playTone(200, 'sine', 0.4, 0.035, 0);
+    setTimeout(() => this.playTone(150, 'sine', 0.3, 0.025, 0), 100);
   }
 
   // ===== Enhanced Navigation Sounds =====
 
-  // Page navigation whoosh - subtle air movement feel
   navigate() {
-    this.playTone(400, 'sine', 0.12, 0.02);
-    setTimeout(() => this.playTone(600, 'sine', 0.1, 0.015), 50);
+    // Air moving left to right
+    this.playTone(400, 'sine', 0.12, 0.02, -0.4);
+    setTimeout(() => this.playTone(600, 'sine', 0.1, 0.015, 0.4), 50);
   }
 
-  // Hover sound - barely perceptible, like a whisper
   hover() {
-    this.playTone(1400, 'sine', 0.04, 0.008);
+    this.playTone(1400, 'sine', 0.04, 0.008, 0);
   }
 
-  // Tab/section switch - clean digital pop
   tab() {
-    this.playTone(700, 'sine', 0.08, 0.02);
-    this.playTone(900, 'sine', 0.06, 0.012);
+    this.playTone(700, 'sine', 0.08, 0.02, -0.2);
+    this.playTone(900, 'sine', 0.06, 0.012, 0.2);
   }
 
-  // Toggle on/off sounds
   toggleOn() {
-    this.playTone(600, 'sine', 0.08, 0.025);
-    setTimeout(() => this.playTone(900, 'sine', 0.06, 0.02), 60);
+    this.playTone(600, 'sine', 0.08, 0.025, -0.3);
+    setTimeout(() => this.playTone(900, 'sine', 0.06, 0.02, 0.3), 60);
   }
 
   toggleOff() {
-    this.playTone(900, 'sine', 0.08, 0.02);
-    setTimeout(() => this.playTone(600, 'sine', 0.06, 0.015), 60);
+    this.playTone(900, 'sine', 0.08, 0.02, 0.3);
+    setTimeout(() => this.playTone(600, 'sine', 0.06, 0.015, -0.3), 60);
   }
 
-  // Modal open/close
   modalOpen() {
-    this.playTone(300, 'sine', 0.2, 0.02);
-    setTimeout(() => this.playTone(500, 'sine', 0.15, 0.015), 80);
-    setTimeout(() => this.playTone(700, 'sine', 0.1, 0.01), 160);
+    // Massive blooming center feel
+    this.playTone(300, 'sine', 0.2, 0.02, 0);
+    setTimeout(() => this.playTone(500, 'sine', 0.15, 0.015, -0.3), 80);
+    setTimeout(() => this.playTone(700, 'sine', 0.1, 0.01, 0.3), 160);
   }
 
   modalClose() {
-    this.playTone(700, 'sine', 0.12, 0.015);
-    setTimeout(() => this.playTone(400, 'sine', 0.1, 0.01), 80);
+    this.playTone(700, 'sine', 0.12, 0.015, 0.3);
+    setTimeout(() => this.playTone(400, 'sine', 0.1, 0.01, -0.3), 80);
   }
 
-  // Notification ping - attention-grabbing but not jarring
   notification() {
-    this.playTone(1046.50, 'sine', 0.3, 0.03); // C6
-    setTimeout(() => this.playTone(1318.51, 'sine', 0.25, 0.025), 150); // E6
+    this.playTone(1046.50, 'sine', 0.3, 0.03, 0.5); // Ping right
+    setTimeout(() => this.playTone(1318.51, 'sine', 0.25, 0.025, -0.5), 150); // Echo left
   }
 
-  // Achievement / milestone unlocked - magical sparkle
   achievement() {
-    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C5 -> E6 arpeggio
+    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51]; 
     notes.forEach((freq, i) => {
-      setTimeout(() => this.playTone(freq, 'sine', 0.5 - i * 0.08, 0.025 - i * 0.003), i * 80);
+      // Complete surround sound rotation sweep
+      const pan = -0.8 + (i * 0.4); 
+      setTimeout(() => this.playTone(freq, 'sine', 0.5 - i * 0.08, 0.025 - i * 0.003, pan), i * 80);
     });
   }
 

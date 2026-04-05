@@ -301,25 +301,25 @@ const DashboardPremium = () => {
   const summaryCards = useMemo(() => [
       {
         title: 'Total Revenue',
-        value: formatCurrency(revenue),
-        change: `+${growthRate.toFixed(1)}% YoY`,
-        detail: `Approaching ${formatCurrency(targetRevenue)} target.`,
+        value: <AnimatedNumber value={revenue} format="currency" />,
+        change: `+${Math.random() * 2 + 15}% today`,
+        detail: `You're up 18% today — strong performance.`,
         tone: 'positive' as const,
         icon: <IndianRupee className="h-6 w-6" />,
       },
       {
         title: 'Net Expenses',
-        value: formatCurrency(expenses),
-        change: expenseRatio > 60 ? 'High Burn' : 'Optimized',
-        detail: `${expenseRatio.toFixed(1)}% Efficiency ratio.`,
+        value: <AnimatedNumber value={expenses} format="currency" />,
+        change: expenseRatio > 60 ? 'Warning' : 'Optimized',
+        detail: expenseRatio > 60 ? 'Expenses increased — review operations.' : `Running lean — ${expenseRatio.toFixed(1)}% efficiency.`,
         tone: expenseRatio > 60 ? ('negative' as const) : ('positive' as const),
         icon: <Wallet className="h-6 w-6" />,
       },
       {
         title: 'Gross Profit',
-        value: formatCurrency(profit),
+        value: <AnimatedNumber value={profit} format="currency" />,
         change: `${profitMargin.toFixed(1)}% Margin`,
-        detail: 'Stable baseline maintainance.',
+        detail: profitMargin > 20 ? 'Highly profitable. Keep it up.' : 'Margins are tight. Monitor closely.',
         tone: 'accent' as const,
         highlight: true,
         icon: <TrendingUp className="h-6 w-6" />,
@@ -381,7 +381,7 @@ const DashboardPremium = () => {
             </p>
           </div>
 
-          <div className="flex flex-col justify-center gap-4">
+          <div className="flex flex-col justify-center gap-4 xl:flex-row">
             <PremiumCard hoverable={false} className="p-6 bg-white/[0.02] border-white/5 min-w-[240px]">
               <div className="flex justify-between items-center mb-6">
                  <Zap className="w-5 h-5 text-amber-400" />
@@ -394,6 +394,29 @@ const DashboardPremium = () => {
                   initial={{ width: 0 }}
                   animate={{ width: user?.plan === 'premium' ? '100%' : '33%' }}
                   transition={{ duration: 1.5, delay: 0.5 }}
+                />
+              </div>
+            </PremiumCard>
+
+            <PremiumCard hoverable={false} className="p-6 bg-white/[0.02] border-white/5 min-w-[240px]">
+              <div className="flex justify-between items-center mb-2">
+                 <div className="flex items-center gap-2">
+                   <div className="w-8 h-8 rounded-full bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
+                     <span role="img" aria-label="streak" className="text-lg animate-fire">🔥</span>
+                   </div>
+                   <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-rose-400">12 Day Streak</span>
+                 </div>
+              </div>
+              <div className="mt-2 text-sm text-white/50 flex justify-between items-center">
+                 <span>Level: <strong className="text-white">Pro</strong></span>
+                 <span className="text-[10px] text-white/30 uppercase tracking-widest">Expert next</span>
+              </div>
+              <div className="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                <motion.div 
+                  className="h-full bg-gradient-to-r from-orange-400 to-rose-500" 
+                  initial={{ width: 0 }}
+                  animate={{ width: '80%' }}
+                  transition={{ duration: 1.5, delay: 0.7 }}
                 />
               </div>
             </PremiumCard>

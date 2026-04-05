@@ -7,6 +7,7 @@ import {
   Moon,
   Search,
   Sun,
+  TrendingUp,
 } from 'lucide-react';
 import { HiChevronDoubleLeft, HiChevronDoubleRight, HiSparkles } from 'react-icons/hi';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -161,15 +162,33 @@ export const Navbar: React.FC<NavbarProps> = ({
             <AnimatePresence>
               {notificationsOpen ? (
                 <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
+                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute right-0 top-14 z-50 w-72 rounded-3xl border border-white/10 bg-white/[0.03] p-4 shadow-2xl backdrop-blur-3xl"
+                  className="absolute right-0 top-14 z-50 w-80 rounded-3xl border border-white/10 bg-[#111]/90 p-4 shadow-2xl backdrop-blur-3xl"
                   onMouseLeave={() => setNotificationsOpen(false)}
                 >
-                  <p className="text-sm font-semibold text-white">Notifications</p>
-                  <p className="mt-3 text-sm leading-6 text-ink-300">No new alerts right now. Your dashboard is up to date.</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm font-semibold text-white">Notifications</p>
+                    <span className="text-xs text-sky-400 bg-sky-400/10 px-2 py-1 rounded-md font-black uppercase tracking-widest">2 New</span>
+                  </div>
+                  <div className="space-y-2 mt-4">
+                     <div className="flex gap-3 items-center p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all cursor-pointer">
+                        <TrendingUp className="w-5 h-5 text-emerald-400" />
+                        <div>
+                          <p className="text-sm font-semibold text-white">Profit increased</p>
+                          <p className="text-xs text-emerald-100/60 mt-0.5">You're up 8% this week! 🔥</p>
+                        </div>
+                     </div>
+                     <div className="flex gap-3 items-center p-3 rounded-2xl bg-orange-500/10 border border-orange-500/20 hover:bg-orange-500/20 transition-all cursor-pointer">
+                        <span role="img" aria-label="warning" className="text-lg">📉</span>
+                        <div>
+                          <p className="text-sm font-semibold text-white">Expense warning</p>
+                          <p className="text-xs text-orange-200/60 mt-0.5">Software costs rose by 12%.</p>
+                        </div>
+                     </div>
+                  </div>
                 </motion.div>
               ) : null}
             </AnimatePresence>

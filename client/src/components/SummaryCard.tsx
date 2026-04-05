@@ -5,7 +5,7 @@ import { PremiumCard } from './ui/PremiumComponents';
 
 interface SummaryCardProps {
   title: string;
-  value: string;
+  value: ReactNode;
   change: string;
   detail: string;
   icon: ReactNode;

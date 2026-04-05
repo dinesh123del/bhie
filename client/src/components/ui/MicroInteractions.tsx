@@ -9,11 +9,11 @@ import { premiumFeedback } from '../../utils/premiumFeedback';
 // Page Transition Component (Elite Spring Physics)
 export const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <motion.div
-    initial={{ opacity: 0, y: 30, scale: 0.98 }}
-    animate={{ opacity: 1, y: 0, scale: 1 }}
-    exit={{ opacity: 0, y: -20, scale: 0.98 }}
-    transition={{ type: 'spring', stiffness: 200, damping: 20, mass: 0.8 }}
-    className="w-full h-full min-h-screen"
+    initial={{ opacity: 0, y: 40, scale: 0.96, filter: 'blur(10px)' }}
+    animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+    exit={{ opacity: 0, y: -30, scale: 1.02, filter: 'blur(10px)' }}
+    transition={{ type: 'spring', stiffness: 110, damping: 25, mass: 1.2 }}
+    className="w-full h-full min-h-screen transform-gpu"
   >
     {children}
   </motion.div>
@@ -25,9 +25,9 @@ export const ScaleOnHover: React.FC<{ children: React.ReactNode; className?: str
   className = '',
 }) => (
   <motion.div
-    whileHover={{ scale: 1.03 }}
-    whileTap={{ scale: 0.95 }}
-    transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+    whileHover={{ scale: 1.015 }}
+    whileTap={{ scale: 0.98 }}
+    transition={{ type: 'spring', stiffness: 110, damping: 25, mass: 1.2 }}
     className={className}
     onMouseEnter={() => premiumFeedback.haptic(5)}
   >
@@ -200,3 +200,33 @@ export const TextProcessingFade: React.FC<{ text: string }> = ({ text }) => (
     </motion.span>
   </AnimatePresence>
 );
+
+// iPad OS Style Magnetic Interaction
+export const MagneticElement: React.FC<{ children: React.ReactNode, strength?: number, className?: string }> = ({ children, strength = 0.2, className = '' }) => {
+  const [position, setPosition] = React.useState({ x: 0, y: 0 });
+
+  const handleMouse = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { clientX, clientY } = e;
+    const { height, width, left, top } = e.currentTarget.getBoundingClientRect();
+    const middleX = clientX - (left + width / 2);
+    const middleY = clientY - (top + height / 2);
+    setPosition({ x: middleX * strength, y: middleY * strength });
+  };
+
+  const reset = () => {
+    setPosition({ x: 0, y: 0 });
+  };
+
+  return (
+    <motion.div
+      className={`relative inline-block ${className}`}
+      onMouseMove={handleMouse}
+      onMouseLeave={reset}
+      animate={{ x: position.x, y: position.y }}
+      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.5 }}
+    >
+      {children}
+    </motion.div>
+  );
+};
+

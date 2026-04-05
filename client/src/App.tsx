@@ -1,4 +1,4 @@
-import { Suspense, lazy, useState, useEffect, useRef } from 'react';
+import { Suspense, lazy, useState, useEffect, useCallback } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
@@ -8,35 +8,44 @@ import { AuthProvider, useAuth } from './hooks/useAuth';
 // Layout Components
 import PremiumLayout from './components/PremiumLayout';
 import LoadingScreen from './components/LoadingScreen';
-import FullscreenLogoLoader from './components/FullscreenLogoLoader';
+import CinematicSplash from './components/CinematicSplash';
 import { UpgradeModal } from './components/UpgradeModal';
 import { PageTransition } from './components/ui/MicroInteractions';
 import { OnboardingStep } from './components/ui/EliteUI';
 import { PremiumBackground } from './components/ui/PremiumBackground';
 
 // Dynamic Page Imports
-const PremiumLogin = lazy(() => import('./pages/LoginPremium'));
+const PremiumLogin    = lazy(() => import('./pages/LoginPremium'));
 const PremiumRegister = lazy(() => import('./pages/RegisterPremium'));
-const PremiumLanding = lazy(() => import('./pages/LandingPremium'));
-const Dashboard = lazy(() => import('./pages/DashboardPremium'));
-const Analytics = lazy(() => import('./pages/AnalyticsPremium'));
+const PremiumLanding  = lazy(() => import('./pages/LandingPremium'));
+const Dashboard       = lazy(() => import('./pages/DashboardPremium'));
+const Analytics       = lazy(() => import('./pages/AnalyticsPremium'));
 
-const AnalysisReport = lazy(() => import('./pages/AIAnalysisPage'));
-const Settings = lazy(() => import('./pages/Admin'));
-const AdminPanel = lazy(() => import('./pages/Admin'));
-const Records = lazy(() => import('./pages/RecordsPremium'));
-const SystemHealth = lazy(() => import('./pages/SystemHealth'));
-const Payments = lazy(() => import('./pages/Payments'));
-const ScanBill = lazy(() => import('./pages/ScanBill'));
-const DataScienceHub = lazy(() => import('./pages/DataScienceHub'));
+const AnalysisReport  = lazy(() => import('./pages/AIAnalysisPage'));
+const Settings        = lazy(() => import('./pages/Admin'));
+const AdminPanel      = lazy(() => import('./pages/Admin'));
+const Records         = lazy(() => import('./pages/RecordsPremium'));
+const SystemHealth    = lazy(() => import('./pages/SystemHealth'));
+const Payments        = lazy(() => import('./pages/Payments'));
+const ScanBill        = lazy(() => import('./pages/ScanBill'));
+const DataScienceHub  = lazy(() => import('./pages/DataScienceHub'));
 
 const Pricing = lazy(() => import('./pages/Pricing'));
-const Profile = lazy(() => import('./pages/Home')); // Using Home as Profile placeholder
+const Profile = lazy(() => import('./pages/Home'));
+
+// ── Mute preference key ──────────────────────────────────────
+const MUTE_KEY = 'bhie_sound_muted';
+
+function getMutePreference(): boolean {
+  try { return localStorage.getItem(MUTE_KEY) === 'true'; } catch { return false; }
+}
 
 const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
   const { user, loading } = useAuth();
   if (loading) return <LoadingScreen />;
-  return user ? <PremiumLayout>{children}</PremiumLayout> : <Navigate to="/login" replace />;
+  return user
+    ? <PremiumLayout>{children}</PremiumLayout>
+    : <Navigate to="/login" replace />;
 };
 
 function MainApp() {
@@ -62,30 +71,28 @@ function MainApp() {
 
   const onboardingSteps = [
     {
-      title: "Welcome to BHIE",
-      description: "Welcome to the future of expense tracking. Let's get your business automated in 60 seconds."
+      title: 'Welcome to BHIE',
+      description: "Welcome to the future of business intelligence. Let's get your finances automated in 60 seconds.",
     },
     {
-      title: "Snap & Automate",
-      description: "Snap a photo of any receipt. Our AI extracts the merchant, date, and amount instantly."
+      title: 'Snap & Automate',
+      description: 'Snap any receipt. AI extracts the merchant, date, and amount instantly — no manual entry.',
     },
     {
-      title: "Real-time Control",
-      description: "Watch your profit and loss dashboard update in real-time as you scan. Let's track your first expense."
-    }
+      title: 'Real-time Control',
+      description: 'Watch your profit and loss update live as you scan. Your first insight awaits.',
+    },
   ];
 
   return (
     <PremiumBackground>
-
-
       <AnimatePresence>
         {showOnboarding && (
           <OnboardingStep
             step={onboardingStep}
             total={3}
-            title={onboardingSteps[onboardingStep-1].title}
-            description={onboardingSteps[onboardingStep-1].description}
+            title={onboardingSteps[onboardingStep - 1].title}
+            description={onboardingSteps[onboardingStep - 1].description}
             onNext={handleNextOnboarding}
           />
         )}
@@ -96,25 +103,25 @@ function MainApp() {
           <PageTransition key={location.pathname}>
             <Routes location={location}>
               {/* Public Routes */}
-              <Route path="/" element={<PremiumLanding />} />
-              <Route path="/login" element={<PremiumLogin />} />
+              <Route path="/"        element={<PremiumLanding />} />
+              <Route path="/login"   element={<PremiumLogin />} />
               <Route path="/register" element={<PremiumRegister />} />
               <Route path="/pricing" element={<Pricing />} />
 
               {/* Core Dashboard Experience */}
-              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-              <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+              <Route path="/dashboard"       element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/analytics"       element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
               <Route path="/analysis-report" element={<ProtectedRoute><AnalysisReport /></ProtectedRoute>} />
-              <Route path="/system-health" element={<ProtectedRoute><SystemHealth /></ProtectedRoute>} />
-              <Route path="/scan-bill" element={<ProtectedRoute><ScanBill /></ProtectedRoute>} />
-              <Route path="/ds-hub" element={<ProtectedRoute><DataScienceHub /></ProtectedRoute>} />
-              <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-              <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+              <Route path="/system-health"   element={<ProtectedRoute><SystemHealth /></ProtectedRoute>} />
+              <Route path="/scan-bill"       element={<ProtectedRoute><ScanBill /></ProtectedRoute>} />
+              <Route path="/ds-hub"          element={<ProtectedRoute><DataScienceHub /></ProtectedRoute>} />
+              <Route path="/settings"        element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+              <Route path="/admin"           element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
 
               {/* Support Modules */}
-              <Route path="/records" element={<ProtectedRoute><Records /></ProtectedRoute>} />
+              <Route path="/records"  element={<ProtectedRoute><Records /></ProtectedRoute>} />
               <Route path="/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
-              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="/profile"  element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
               {/* Catch All */}
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
@@ -127,99 +134,77 @@ function MainApp() {
 }
 
 function App() {
-  // Global loading state
-  const [loading, setLoading] = useState(true);
+  const [splashDone, setSplashDone] = useState(false);
+  const [dataReady, setDataReady]   = useState(false);
+  const muted = getMutePreference();
 
-  // Initial Load Handling & API-Based Loading Control Example
+  // Preload backend during splash (non-blocking)
   useEffect(() => {
-    let isMounted = true;
-
-
-    const initializeApp = async () => {
-      // Safety timeout to prevent permanent blank screen
-      const safetyTimeout = setTimeout(() => {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }, 3500);
-
+    const preload = async () => {
       try {
-        setLoading(true);
-        // Minimum visible loading time for brand experience
-        await new Promise(resolve => setTimeout(resolve, 800));
-        
-        // Attempt system sync but don't block
-        const API_URL = import.meta.env.VITE_API_URL || "https://bhie-api.onrender.com";
-        try {
-          await fetch(`${API_URL}/api/health`, { signal: AbortSignal.timeout(2000) });
-        } catch (e) {
-          // Backend unreachable, running in offline mode.
-        }
-          
-      } catch (err) {
-        console.error("❌ Failed during initialization:", err);
+        const API_URL = import.meta.env.VITE_API_URL || 'https://bhie-api.onrender.com';
+        await fetch(`${API_URL}/api/health`, { signal: AbortSignal.timeout(2500) });
+      } catch {
+        // Backend unreachable — offline mode
       } finally {
-        if (isMounted) {
-          clearTimeout(safetyTimeout);
-          setLoading(false);
-
-        }
+        setDataReady(true);
       }
     };
-
-    initializeApp();
-
-    return () => {
-      isMounted = false;
-    };
+    void preload();
   }, []);
+
+  const handleSplashComplete = useCallback(() => {
+    setSplashDone(true);
+  }, []);
+
+  // Show app only when BOTH splash has played AND data is preloaded
+  const showApp = splashDone && dataReady;
 
   return (
     <AuthProvider>
       <ThemeProvider>
-        {/* Smooth exit animation for loading screen switch */}
         <AnimatePresence mode="wait">
-          {loading ? (
+          {!showApp ? (
             <motion.div
-              key="global-loading"
-              initial={{ opacity: 1 }}
-              exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
+              key="bhie-splash"
               className="fixed inset-0 z-[10000]"
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8, ease: 'easeInOut' }}
             >
-              <FullscreenLogoLoader label="Business Health & Intelligence Hub" />
+              <CinematicSplash
+                onComplete={handleSplashComplete}
+                duration={2700}
+                muted={muted}
+              />
             </motion.div>
           ) : (
             <motion.div
-              key="main-app"
+              key="bhie-app"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
+              transition={{ duration: 0.8, ease: 'easeInOut' }}
               className="h-full w-full"
             >
               <MainApp />
-              <Toaster 
+              <Toaster
                 position="top-right"
                 toastOptions={{
                   duration: 5000,
                   style: {
-                    background: 'rgba(15, 23, 42, 0.8)',
+                    background: 'rgba(10, 10, 10, 0.9)',
                     color: '#fff',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(79,70,229,0.2)',
                     backdropFilter: 'blur(20px)',
-                    borderRadius: '24px',
-                    padding: '16px 24px',
+                    borderRadius: '16px',
+                    padding: '14px 20px',
                     fontSize: '14px',
-                    fontWeight: '700',
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-                    letterSpacing: '-0.02em',
+                    fontWeight: '600',
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(79,70,229,0.1)',
                   },
                   success: {
-                    iconTheme: {
-                      primary: '#10b981',
-                      secondary: '#fff',
-                    },
+                    iconTheme: { primary: '#10b981', secondary: '#fff' },
                   },
-                }} 
+                }}
               />
               <UpgradeModal />
             </motion.div>
