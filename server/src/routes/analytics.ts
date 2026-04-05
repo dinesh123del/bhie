@@ -1,15 +1,15 @@
 import express, { Response, Router } from 'express';
-import Analytics from '../models/Analytics';
-import Company from '../models/Company';
-import Record from '../models/Record';
-import { asyncHandler } from '../middleware/asyncHandler';
-import { authenticateToken } from '../middleware/auth';
-import { cacheGet } from '../middleware/cacheGet';
-import { redisClient } from '../config/redisClient';
-import { AuthRequest } from '../types';
-import { AppError } from '../utils/appError';
-import { requireUser } from '../utils/request';
-import { PredictionsWithRecommendations } from '../types/ai';
+import Analytics from '../models/Analytics.js';
+import Company from '../models/Company.js';
+import Record from '../models/Record.js';
+import { asyncHandler } from '../middleware/asyncHandler.js';
+import { authenticateToken } from '../middleware/auth.js';
+import { cacheGet } from '../middleware/cacheGet.js';
+import { redisClient } from '../config/redisClient.js';
+import { AuthRequest } from '../types/index.js';
+import { AppError } from '../utils/appError.js';
+import { requireUser } from '../utils/request.js';
+import { PredictionsWithRecommendations } from '../types/ai.js';
 
 const router: Router = express.Router();
 

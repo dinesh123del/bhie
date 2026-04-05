@@ -117,7 +117,7 @@ const Register = () => {
           {/* Header */}
           <div className="mb-8">
             <h2 className="text-4xl font-bold text-white mb-2">Create Account</h2>
-            <p className="text-gray-300">Join BHIE and start optimizing your business</p>
+            <p className="secondary-text">Join BHIE and start optimizing your business</p>
           </div>
 
           {/* Error */}
@@ -135,7 +135,7 @@ const Register = () => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Name */}
             <div>
-              <label htmlFor="name" className="block text-sm font-semibold text-gray-200 mb-3">
+              <label htmlFor="name" className="block text-sm font-bold text-white mb-3">
                 Full Name
               </label>
               <input
@@ -144,14 +144,14 @@ const Register = () => {
                 required
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
-                className="w-full px-4 py-3 bg-white/8 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                className="w-full px-4 py-3 bg-white/[0.08] border border-white/20 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all"
                 placeholder="John Doe"
               />
             </div>
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-200 mb-3">
+              <label htmlFor="email" className="block text-sm font-bold text-white mb-3">
                 Email Address
               </label>
               <input
@@ -160,14 +160,14 @@ const Register = () => {
                 required
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
-                className="w-full px-4 py-3 bg-white/8 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                className="w-full px-4 py-3 bg-white/[0.08] border border-white/20 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all"
                 placeholder="you@example.com"
               />
             </div>
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-200 mb-3">
+              <label htmlFor="password" className="block text-sm font-bold text-white mb-3">
                 Password
               </label>
               <div className="relative">
@@ -178,13 +178,13 @@ const Register = () => {
                   minLength={6}
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  className="w-full px-4 py-3 pr-12 bg-white/8 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                  className="w-full px-4 py-3 pr-12 bg-white/[0.08] border border-white/20 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all"
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 secondary-text hover:text-white transition-colors"
                   title={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? (
@@ -226,7 +226,7 @@ const Register = () => {
           {/* Divider */}
           <div className="my-6 flex items-center gap-3">
             <div className="flex-1 h-px bg-white/10" />
-            <span className="text-xs text-gray-400 font-medium">OR</span>
+            <span className="text-xs tertiary-text font-medium">OR</span>
             <div className="flex-1 h-px bg-white/10" />
           </div>
 
@@ -236,7 +236,7 @@ const Register = () => {
 
           {/* Footer */}
           <div className="text-center">
-            <p className="text-gray-300">
+            <p className="secondary-text">
               Already have an account?{' '}
               <motion.button
                 whileHover={{ scale: 1.05 }}

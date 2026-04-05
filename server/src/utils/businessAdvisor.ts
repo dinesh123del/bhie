@@ -1,4 +1,4 @@
-import type { InputData } from './smartRecommendations';
+import type { InputData } from './smartRecommendations.js';
 
 export interface BusinessAdvisorOutput {
   summary: string;

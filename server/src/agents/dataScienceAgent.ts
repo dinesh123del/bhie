@@ -50,15 +50,15 @@ export class DataScienceAgent {
       console.error('Data Science Agent Error:', error);
       // Fallback response if AI fails
       return {
-        summary: "Data synthesis complete. We've identified key growth patterns in your records.",
+        summary: "Analysis of your records is done. We've found some interesting patterns that can help you grow.",
         statistics: [
-          { metric: "Average Growth", value: "12.4%", status: "positive" },
-          { metric: "Data Density", value: "High", status: "neutral" }
+          { metric: "Growth Trend", value: "12.4%", status: "positive" },
+          { metric: "Data Quality", value: "Excellent", status: "neutral" }
         ],
         correlations: ["Revenue shows strong positive correlation with Customer Acquisition"],
         outliers: ["None detected in this sample"],
         trends: ["Upward trajectory expected for next Q4"],
-        graduateAdvice: "We used Linear Regression to estimate your future revenue based on historical trends.",
+        graduateAdvice: "Our smart system looked at your past records to suggest where your business might go next.",
         profitabilityRoadmap: [
           { step: "Optimize Marketing Burn", rationale: "Current CAC is high relative to LTV in your segment.", impact: "high" },
           { step: "Streamline Operations", rationale: "We see overlapping resource allocation in vendor records.", impact: "medium" },
@@ -104,15 +104,15 @@ export class DataScienceAgent {
     } catch (error) {
       console.error('Data Science Agent Text Error:', error);
       return {
-        summary: "Synthetic analysis of document complete. Critical patterns verified.",
+        summary: "We've finished reading your document. Here's a simple look at what we've found.",
         statistics: [
-          { metric: "Content Volatility", value: "Mid-Range", status: "neutral" },
-          { metric: "Actionable Insights", value: "3 Found", status: "positive" }
+          { metric: "Info Detail", value: "High", status: "neutral" },
+          { metric: "Actionable Tips", value: "3 Found", status: "positive" }
         ],
         correlations: ["Document content shows qualitative alignment with operational goals."],
         outliers: ["None detected in initial scan."],
         trends: ["Maintain current trajectory for optimal strategic outcomes."],
-        graduateAdvice: "We used Natural Language Processing (NLP) to convert your unstructured document text into vector embeddings for analysis.",
+        graduateAdvice: "Our assistant translated your document's text into simple, easy-to-read business tips.",
         profitabilityRoadmap: [
           { step: "Operational Pivot", rationale: "Document text reveals a 15% wastage in material costs.", impact: "high" },
           { step: "Strategic Hiring", rationale: "High project volume mentioned suggests a need for junior automation.", impact: "medium" },

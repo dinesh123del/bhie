@@ -32,13 +32,28 @@ const shouldRetryRequest = (error: AxiosError): boolean => {
   return !status || status === 429 || status >= 500;
 };
 
+// --- Helper: Get cookie by name ---
+const getCookie = (name: string): string | undefined => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(';').shift();
+};
+
 // --- Request Interceptor ---
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    // 1. BANK-GRADE SECURITY: Anti-CSRF
+    const csrfToken = getCookie('XSRF-TOKEN');
+    if (csrfToken && config.headers) {
+      config.headers['X-XSRF-TOKEN'] = csrfToken;
+    }
+
+    // 2. Auth Token (Header fallback for mobile/legacy)
     const token = localStorage.getItem('token');
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    
     return config;
   },
   (error) => Promise.reject(error)
@@ -68,20 +83,28 @@ api.interceptors.response.use(
     // 2. Extract standardized error message
     let errorMessage = 'An unexpected error occurred';
     
-    if (response?.data && typeof response.data === 'object') {
-      const data = response.data as any;
-      errorMessage = data.message || data.error || errorMessage;
-      
-      // If there are validation details, keep them attached
-      if (data.details) {
-        (error as any).details = data.details;
+    if (response) {
+      if (response.data && typeof response.data === 'object') {
+        const data = response.data as any;
+        errorMessage = data.message || data.error || errorMessage;
         
-        if (response.status === 403 && data.details.limitReached && typeof window !== 'undefined') {
-          window.dispatchEvent(new CustomEvent('limitReached'));
+        if (data.details) {
+          (error as any).details = data.details;
+          if (response.status === 403 && data.details.limitReached && typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('limitReached'));
+          }
         }
+      } else if (typeof response.data === 'string') {
+        if (response.data.includes('<html') || response.data.includes('<!DOCTYPE')) {
+          errorMessage = `Server processing error (${response.status}). Please try again later.`;
+        } else {
+          errorMessage = response.data;
+        }
+      } else if (response.status >= 500) {
+        errorMessage = 'Our server encountered an issue. Please try again soon.';
       }
     } else if (error.request) {
-      errorMessage = 'Unable to connect to server';
+      errorMessage = 'Unable to connect to BHIE servers. Please check your internet connection.';
     }
 
     // Attach human-readable message for easy UI consumption

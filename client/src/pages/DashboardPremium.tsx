@@ -2,28 +2,25 @@ import { startTransition, useCallback, useEffect, useMemo, useRef, useState } fr
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
-  AlertTriangle,
-  BarChart3,
-  ChevronDown,
-  ChevronUp,
-  FileText,
   IndianRupee,
-  ScanSearch,
   Settings,
   TrendingUp,
-  UploadCloud,
-  Users,
   Wallet,
   Sparkles,
   Zap,
+  Plus,
+  Camera,
+  Database
 } from 'lucide-react';
 import {
   RiCalendarEventLine,
   RiSparkling2Fill,
+  RiFlashlightFill,
+  RiRobot2Line,
+  RiPieChart2Line,
+  RiHistoryLine
 } from 'react-icons/ri';
-import { MainLayout } from '../components/Layout/MainLayout';
-import { PremiumBadge, PremiumButton, PremiumCard } from '../components/ui/PremiumComponents';
-import { SkeletonGrid } from '../components/ui/Skeleton';
+import { PremiumBadge, PremiumCard } from '../components/ui/PremiumComponents';
 import SummaryCard from '../components/SummaryCard';
 import { AnimatedNumber } from '../components/AnimatedNumber';
 import RevenueLineChart from '../components/charts/RevenueLineChart';
@@ -37,19 +34,21 @@ import { FileUpload } from '../components/FileUpload';
 import QuickAdd from '../components/QuickAdd';
 import { UploadedImageRecord } from '../services/uploadService';
 import { dashboardAPI } from '../services/api';
-import { canUseAIInsights, getPlanLabel as getReadablePlanLabel, getRemainingUploads } from '../utils/plan';
+import { canUseAIInsights, getPlanLabel as getReadablePlanLabel } from '../utils/plan';
 import BusinessHealthEngine from '../components/BusinessHealthEngine';
 import ActionCenter from '../components/ActionCenter';
 import {
-  buildDailyStatus,
   buildHealthBreakdown,
-  buildPlainReport,
   buildRecommendations,
-  buildStoryBullets,
-  formatCurrency,
   exportReport,
 } from '../utils/dashboardIntelligence';
 import { premiumFeedback } from '../utils/premiumFeedback';
+import { 
+  NeuralSyncEngine, 
+  Scanlines, 
+  MagneticWrapper,
+  GlassShine
+} from '../components/ui/MicroEngines';
 
 interface MetricsSummary {
   kpis?: {
@@ -58,6 +57,7 @@ interface MetricsSummary {
     inactiveRatio?: number;
     growthRate?: number;
     revenue?: number;
+    expenses?: number;
     profitMargin?: number;
   };
   monthlyData?: Array<{ month: string; revenue: number; expenses: number; target: number }>;
@@ -106,25 +106,6 @@ interface DashboardResponse {
 }
 
 const DASHBOARD_REFRESH_INTERVAL = 7000;
-
-const sidebarItems = [
-  { icon: <BarChart3 className="h-5 w-5" />, label: 'Dashboard', href: '/dashboard' },
-  { icon: <FileText className="h-5 w-5" />, label: 'Records', href: '/records' },
-  { icon: <TrendingUp className="h-5 w-5" />, label: 'Analytics', href: '/analytics' },
-  { icon: <Sparkles className="h-5 w-5" />, label: 'AI Deep Dive', href: '/analysis-report' },
-  { icon: <Wallet className="h-5 w-5" />, label: 'Pro Plan', href: '/pricing' },
-];
-
-const dateFormatter = new Intl.DateTimeFormat('en-IN', {
-  weekday: 'long',
-  day: 'numeric',
-  month: 'long',
-});
-
-const timeFormatter = new Intl.DateTimeFormat('en-IN', {
-  hour: 'numeric',
-  minute: '2-digit',
-});
 
 const clamp = (value: number, min: number = 0, max: number = 100) =>
   Math.max(min, Math.min(max, Number.isFinite(value) ? value : min));
@@ -286,40 +267,40 @@ const DashboardPremium = () => {
 
   // Logic calculation (same as original to maintain data integrity)
   const revenue = company?.revenue ?? metrics?.kpis?.revenue ?? 0;
-  const expenses = company?.expenses ?? (revenue > 0 ? revenue * 0.58 : 92000);
+  const expenses = company?.expenses ?? metrics?.kpis?.expenses ?? 0;
   const profit = company?.profit ?? revenue - expenses;
-  const growthRate = company?.growthRate ?? metrics?.kpis?.growthRate ?? 12.5;
+  const growthRate = company?.growthRate ?? metrics?.kpis?.growthRate ?? 0;
   const profitMargin = company?.profitMargin ?? metrics?.kpis?.profitMargin ?? (revenue > 0 ? (profit / revenue) * 100 : 0);
   const totalRecords = metrics?.kpis?.totalRecords ?? user?.usageCount ?? 0;
-  const expenseRatio = revenue > 0 ? (expenses / revenue) * 100 : 58;
+  const expenseRatio = revenue > 0 ? (expenses / revenue) * 100 : 0;
   const aiInsightsEnabled = canUseAIInsights(user);
   
-  const previousRevenue = revenue > 0 ? revenue / Math.max(0.2, 1 + growthRate / 100) : 140000;
-  const targetRevenue = previousRevenue * 1.18;
-  const overallProgress = Math.round((clamp(revenue > 0 ? (revenue / targetRevenue) * 100 : 86) + clamp(125 - expenseRatio) + clamp(profitMargin * 1.45 + Math.max(growthRate, 0) * 0.95)) / 3);
+  const previousRevenue = revenue > 0 ? (revenue / Math.max(0.2, 1 + growthRate / 100)) : 0;
+  const targetRevenue = previousRevenue > 0 ? previousRevenue * 1.18 : 0;
+  const overallProgress = targetRevenue > 0 ? Math.round((clamp((revenue / targetRevenue) * 100) + clamp(revenue > 0 ? 125 - expenseRatio : 0) + clamp(profitMargin * 1.45 + Math.max(growthRate, 0) * 0.95)) / 3) : 0;
 
   const summaryCards = useMemo(() => [
       {
-        title: 'Total Revenue',
+        title: 'Money Made',
         value: <AnimatedNumber value={revenue} format="currency" />,
-        change: `+${Math.random() * 2 + 15}% today`,
-        detail: `You're up 18% today — strong performance.`,
+        change: growthRate > 0 ? `+${growthRate.toFixed(1)}% this month` : 'No growth data',
+        detail: `You've made more money this month! Great job.`,
         tone: 'positive' as const,
         icon: <IndianRupee className="h-6 w-6" />,
       },
       {
-        title: 'Net Expenses',
+        title: 'Money Spent',
         value: <AnimatedNumber value={expenses} format="currency" />,
-        change: expenseRatio > 60 ? 'Warning' : 'Optimized',
-        detail: expenseRatio > 60 ? 'Expenses increased — review operations.' : `Running lean — ${expenseRatio.toFixed(1)}% efficiency.`,
+        change: expenseRatio > 60 ? 'Spending High' : 'Doing Well',
+        detail: expenseRatio > 60 ? 'You are spending a lot of money. Try to save more.' : `Your spending is under control.`,
         tone: expenseRatio > 60 ? ('negative' as const) : ('positive' as const),
         icon: <Wallet className="h-6 w-6" />,
       },
       {
-        title: 'Gross Profit',
+        title: 'Leftover Profit',
         value: <AnimatedNumber value={profit} format="currency" />,
-        change: `${profitMargin.toFixed(1)}% Margin`,
-        detail: profitMargin > 20 ? 'Highly profitable. Keep it up.' : 'Margins are tight. Monitor closely.',
+        change: `${profitMargin.toFixed(1)}% Profit`,
+        detail: profitMargin > 20 ? 'Your business is healthy and growing.' : 'Your profit is a bit low. Watch your costs.',
         tone: 'accent' as const,
         highlight: true,
         icon: <TrendingUp className="h-6 w-6" />,
@@ -339,7 +320,6 @@ const DashboardPremium = () => {
 
   if (loading) {
     return (
-      <MainLayout sidebarItems={sidebarItems} activePage="/dashboard" onNavigate={(href) => navigate(href)} onLogout={logout} userName={user?.name}>
         <div className="p-8 space-y-12">
             <div className="h-20 w-2/3 bg-white/5 animate-pulse rounded-3xl" />
             <div className="grid grid-cols-3 gap-8">
@@ -349,206 +329,207 @@ const DashboardPremium = () => {
             </div>
             <div className="h-[400px] bg-white/5 animate-pulse rounded-[3rem]" />
         </div>
-      </MainLayout>
     );
   }
 
   return (
-    <MainLayout sidebarItems={sidebarItems} activePage="/dashboard" onNavigate={(href) => navigate(href)} onLogout={logout} userName={user?.name}>
-      {/* Scroll Progress Bar */}
-      <motion.div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 origin-left z-[100]" style={{ scaleX }} />
+    <>
+      <motion.div className="fixed top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 origin-left z-[100]" style={{ scaleX }} />
 
-      <div className="relative mx-auto max-w-7xl space-y-20 px-6 py-12">
+      <div className="relative mx-auto max-w-7xl px-6 md:px-12 py-10 md:py-20 space-y-16 md:space-y-24">
         
-        {/* Header Section */}
-        <PremiumSection className="grid gap-12 xl:grid-cols-[1fr_auto]">
-          <div className="space-y-6">
+        {/* APP HEADER: Compact & Personalized */}
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-10">
+          <div className="space-y-4">
             <motion.div 
-               initial={{ opacity: 0, x: -20 }}
-               animate={{ opacity: 1, x: 0 }}
-               className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md"
+               initial={{ opacity: 0, scale: 0.9 }}
+               animate={{ opacity: 1, scale: 1 }}
+               className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-xl border border-brand-500/10 bg-brand-500/5 backdrop-blur-3xl"
             >
-              <Sparkles className="w-4 h-4 text-sky-400" />
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Business Overview</span>
+              <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.5)] animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-[0.25em] text-brand-600 dark:text-brand-400">Tactical Intelligence Sync</span>
             </motion.div>
             
-            <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-[0.9]">
-              Your Business <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-white to-purple-300">Financials.</span>
+            <h1 className="text-5xl md:text-8xl font-black tracking-tighter text-gray-900 dark:text-white leading-[0.85]">
+              Hey {user?.name?.split(' ')[0] || 'Partner'}, <br className="hidden md:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-indigo-400 to-purple-500 filter drop-shadow-sm">Your financial story.</span>
             </h1>
-            
-            <p className="max-w-2xl text-xl text-white/40 font-medium leading-relaxed">
-              Simple insights to help you grow your business and track your performance daily.
-            </p>
           </div>
 
-          <div className="flex flex-col justify-center gap-4 xl:flex-row">
-            <PremiumCard hoverable={false} className="p-6 bg-white/[0.02] border-white/5 min-w-[240px]">
-              <div className="flex justify-between items-center mb-6">
-                 <Zap className="w-5 h-5 text-amber-400" />
-                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Active Plan</span>
-              </div>
-              <p className="text-2xl font-black text-white">{getReadablePlanLabel(user?.plan)}</p>
-              <div className="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                <motion.div 
-                  className="h-full bg-amber-400" 
-                  initial={{ width: 0 }}
-                  animate={{ width: user?.plan === 'premium' ? '100%' : '33%' }}
-                  transition={{ duration: 1.5, delay: 0.5 }}
-                />
-              </div>
-            </PremiumCard>
-
-            <PremiumCard hoverable={false} className="p-6 bg-white/[0.02] border-white/5 min-w-[240px]">
-              <div className="flex justify-between items-center mb-2">
-                 <div className="flex items-center gap-2">
-                   <div className="w-8 h-8 rounded-full bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
-                     <span role="img" aria-label="streak" className="text-lg animate-fire">🔥</span>
-                   </div>
-                   <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-rose-400">12 Day Streak</span>
-                 </div>
-              </div>
-              <div className="mt-2 text-sm text-white/50 flex justify-between items-center">
-                 <span>Level: <strong className="text-white">Pro</strong></span>
-                 <span className="text-[10px] text-white/30 uppercase tracking-widest">Expert next</span>
-              </div>
-              <div className="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                <motion.div 
-                  className="h-full bg-gradient-to-r from-orange-400 to-rose-500" 
-                  initial={{ width: 0 }}
-                  animate={{ width: '80%' }}
-                  transition={{ duration: 1.5, delay: 0.7 }}
-                />
-              </div>
-            </PremiumCard>
+          <div className="flex items-center gap-4 md:pb-4 overflow-x-auto no-scrollbar">
+             <div className="p-5 flex flex-col gap-2 min-w-[160px] bg-white dark:bg-white/[0.03] border border-black/5 dark:border-white/5 rounded-[2rem] shadow-xl">
+                <span className="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-[0.2em] flex items-center gap-1.5">
+                    <RiFlashlightFill className="text-amber-500" /> Goal Depth
+                </span>
+                <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-black text-gray-900 dark:text-white tracking-tighter tabular-nums">{overallProgress}%</span>
+                    <span className="text-xs text-emerald-600 dark:text-emerald-400 font-black">+2.4%</span>
+                </div>
+             </div>
+             
+             <div className="p-5 flex flex-col gap-2 min-w-[160px] bg-white dark:bg-white/[0.03] border border-black/5 dark:border-white/5 rounded-[2rem] shadow-xl">
+                <span className="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-[0.2em] flex items-center gap-1.5">
+                    <RiCalendarEventLine className="text-brand-500" /> Operational Day
+                </span>
+                <span className="text-3xl font-black text-gray-900 dark:text-white tracking-tighter tabular-nums text-right">Q1-28</span>
+             </div>
           </div>
-        </PremiumSection>
+        </header>
 
-        {/* Health Engine Section */}
-        <PremiumSection delay={0.1}>
-          <BusinessHealthEngine
-            score={healthScore}
-            status={scoreData?.status ?? (healthScore >= 80 ? 'Elite' : healthScore >= 60 ? 'Optimal' : 'Needs Insight')}
-            resonanceIndex={scoreData?.resonanceIndex ?? 50}
-            breakdown={healthBreakdown}
-          />
-        </PremiumSection>
-
-        {/* KPI Cards Section */}
-        <PremiumSection delay={0.2} className="grid grid-cols-1 gap-8 lg:grid-cols-2 xl:grid-cols-3">
-          {summaryCards.map((card, idx) => (
-            <motion.div
-              key={card.title}
-              whileHover={{ y: -10 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-                <SummaryCard
-                  title={card.title}
-                  value={card.value}
-                  change={card.change}
-                  detail={card.detail}
-                  tone={card.tone}
-                  highlight={card.highlight}
-                  icon={card.icon}
-                />
-            </motion.div>
-          ))}
-        </PremiumSection>
-
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-            <PremiumSection delay={0.3}>
-                <PremiumCard className="p-8 h-full bg-white/[0.01]">
-                    <div className="flex justify-between items-center mb-10">
-                        <h3 className="text-xl font-bold text-white tracking-tight">Revenue Trends</h3>
-                        <PremiumBadge tone="brand">Updated live</PremiumBadge>
+        {/* QUICK ACTION HUB */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+                { label: 'Capture Bill', icon: Camera, color: 'from-brand-500 to-indigo-600', path: '/scan-bill', desc: 'Scan any receipt' },
+                { label: 'Neural Intelligence', icon: RiRobot2Line, color: 'from-purple-500 to-pink-600', path: '/analysis-report', desc: 'Ask your assistant' },
+                { label: 'Data Hub', icon: Database, color: 'from-emerald-500 to-teal-600', path: '/ds-hub', desc: 'Global records' },
+                { label: 'Ledger History', icon: RiHistoryLine, color: 'from-orange-500 to-rose-600', path: '/records', desc: 'View transactions' },
+            ].map((action, i) => (
+                <button 
+                  key={i}
+                  onClick={() => {
+                    if (action.path) navigate(action.path);
+                    premiumFeedback.click();
+                  }}
+                  className="flex flex-col items-start p-6 rounded-[2.5rem] bg-white dark:bg-white/[0.03] border border-black/5 dark:border-white/5 hover:bg-white dark:hover:bg-white/10 hover:shadow-2xl transition-all group relative overflow-hidden text-left"
+                >
+                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${action.color} flex items-center justify-center mb-4 shadow-xl group-hover:scale-110 transition-transform`}>
+                        <action.icon className="w-6 h-6 text-white" />
                     </div>
-                    <RevenueLineChart data={apiData?.metrics?.monthlyData || []} loading={loading} />
-                </PremiumCard>
-            </PremiumSection>
-
-            <PremiumSection delay={0.4}>
-                <PremiumCard className="p-8 h-full bg-white/[0.01]">
-                    <div className="flex justify-between items-center mb-10">
-                        <h3 className="text-xl font-bold text-white tracking-tight">Profit Distribution</h3>
-                        <PremiumBadge tone="positive">High Margin</PremiumBadge>
-                    </div>
-                    <ProfitBarChart data={(apiData?.metrics?.monthlyData || []).map(item => ({
-                        ...item,
-                        profit: item.target
-                    }))} loading={loading} />
-                </PremiumCard>
-            </PremiumSection>
+                    <span className="text-base font-black text-gray-900 dark:text-white tracking-tight mb-1">{action.label}</span>
+                    <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{action.desc}</span>
+                    <Plus className="absolute top-6 right-6 w-5 h-5 text-gray-200 dark:text-white/5 group-hover:text-brand-500 group-hover:rotate-90 transition-all" />
+                </button>
+            ))}
         </div>
 
-        {/* Secondary Charts / Insights */}
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-            <PremiumSection delay={0.5}>
-                <PremiumCard className="p-8 bg-white/[0.01]">
-                    <h3 className="text-xl font-bold text-white tracking-tight mb-8">Expense Breakdown</h3>
-                    <ExpensePieChart 
-                        data={[
-                            { name: 'Operations', value: 45, color: '#0EA5E9' },
-                            { name: 'Research', value: 25, color: '#8B5CF6' },
-                            { name: 'Talent', value: 20, color: '#10B981' },
-                            { name: 'Infrastructure', value: 10, color: '#F59E0B' },
-                        ]}
-                        loading={loading}
+        {/* METRICS CAROUSEL */}
+        <div className="flex md:grid md:grid-cols-3 gap-8 overflow-x-auto no-scrollbar pb-8 px-1 -mx-4 md:mx-0 md:px-0 scroll-padding">
+            {summaryCards.map((card, i) => (
+                <div key={card.title} className="min-w-[85vw] md:min-w-0">
+                    <SummaryCard
+                        title={card.title}
+                        value={card.value}
+                        change={card.change}
+                        detail={card.detail}
+                        tone={card.tone}
+                        highlight={card.highlight}
+                        icon={card.icon}
                     />
-                </PremiumCard>
-            </PremiumSection>
-
-            <PremiumSection delay={0.6}>
-                <PremiumCard className="p-8 bg-white/[0.01]">
-                    <h3 className="text-xl font-bold text-white tracking-tight mb-8">Growth Overview</h3>
-                    <GrowthAreaChart 
-                        data={apiData?.trends?.map((t: any) => ({ name: t.name, value: t.value })) || []}
-                        loading={loading}
-                    />
-                </PremiumCard>
-            </PremiumSection>
+                </div>
+            ))}
         </div>
 
-        {/* Action Center & Uploads */}
-        <div className="grid grid-cols-1 gap-12 xl:grid-cols-[1.2fr_0.8fr]">
-            <PremiumSection delay={0.7}>
-                <ActionCenter
-                    recommendations={recommendations}
-                    onAskWhatShouldIDo={() => {
-                        navigate('/analysis-report');
-                        premiumFeedback.click();
-                    }}
-                    onExport={() => {
-                        exportReport();
-                        premiumFeedback.success();
-                    }}
-                />
-            </PremiumSection>
-
-            <PremiumSection delay={0.8} className="space-y-8">
-                <QuickAdd onRecordAdded={() => void loadDashboard()} />
-                <FileUpload
-                    onUploadComplete={(items) => {
-                        setLatestUpload(normalizeLatestUpload(items[0]));
-                        void loadDashboard();
-                    }}
+        {/* WINNING STRATEGY */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-12">
+            <PremiumSection className="space-y-12">
+                <BusinessHealthEngine
+                    score={healthScore}
+                    status={scoreData?.status ?? (healthScore >= 80 ? 'Elite' : healthScore >= 60 ? 'Optimal' : 'Standard')}
+                    resonanceIndex={scoreData?.resonanceIndex ?? 50}
+                    breakdown={healthBreakdown}
                 />
                 
-                <PremiumCard className="p-6 bg-gradient-to-br from-white/[0.04] to-transparent border-white/5">
-                    <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 rounded-2xl bg-sky-500/10 flex items-center justify-center text-sky-400 border border-sky-400/20">
-                            <RiSparkling2Fill className="w-6 h-6" />
-                        </div>
-                        <div>
-                            <p className="text-sm font-black text-white uppercase tracking-widest">System Status</p>
-                            <p className="text-xs text-white/40">{confirmationMessage}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="relative overflow-hidden rounded-[3rem] p-px bg-white/10 dark:bg-white/5 shadow-2xl">
+                        <div className="relative bg-white dark:bg-[#0A0A0B] rounded-[2.95rem] p-10 h-full backdrop-blur-3xl">
+                            <Scanlines />
+                            <div className="flex justify-between items-center mb-10">
+                                <h3 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2.5 tracking-tight">
+                                    <RiPieChart2Line className="text-brand-500" /> Capital Flux
+                                </h3>
+                                <div className="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">Real-time</div>
+                            </div>
+                            <RevenueLineChart data={apiData?.metrics?.monthlyData || []} loading={loading} />
                         </div>
                     </div>
-                </PremiumCard>
+
+                    <ActionCenter
+                        recommendations={recommendations}
+                        onAskWhatShouldIDo={() => {
+                            navigate('/analysis-report');
+                            premiumFeedback.click();
+                        }}
+                        onExport={() => {
+                            exportReport();
+                            premiumFeedback.success();
+                        }}
+                    />
+                </div>
             </PremiumSection>
+
+            {/* SIDEBAR WIDGETS */}
+            <aside className="space-y-8">
+                <div className="relative overflow-hidden rounded-[3rem] p-8 dark:bg-brand-500/5 border border-brand-500/10 shadow-xl">
+                    <div className="relative z-10 space-y-6">
+                        <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-500">Neural Sync</span>
+                            <NeuralSyncEngine />
+                        </div>
+                        <p className="text-lg font-bold leading-tight text-gray-900 dark:text-white tracking-tight">
+                            Engine is auditing <span className="text-brand-500 tabular-nums">{totalRecords}</span> entries.
+                        </p>
+                        <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 leading-relaxed uppercase tracking-widest">
+                            {confirmationMessage}
+                        </p>
+                    </div>
+                    <div className="absolute top-0 right-0 w-40 h-40 bg-brand-500/10 blur-[80px] rounded-full" />
+                </div >
+
+                <div className="space-y-4">
+                    <div className="flex items-center gap-2.5 px-2">
+                        <Plus className="w-3.5 h-3.5 text-brand-500" /> 
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400">Quick Authority Input</span>
+                    </div>
+                    <QuickAdd onRecordAdded={() => void loadDashboard()} className="w-full" />
+                </div>
+
+                <div className="relative overflow-hidden rounded-[3rem] bg-white dark:bg-white/[0.03] border border-black/5 dark:border-white/5 p-8 shadow-xl">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400 mb-8">Strategic Insights</h4>
+                    <div className="space-y-6">
+                        {insights.slice(0, 3).map((insight, idx) => (
+                            <div key={idx} className="flex gap-5 group cursor-pointer" onClick={() => navigate('/analysis-report')}>
+                                <div className="w-1.5 h-12 rounded-full bg-gray-100 dark:bg-white/5 group-hover:bg-brand-500 transition-all duration-500" />
+                                <div className="space-y-1">
+                                    <p className="text-xs font-black text-gray-900 dark:text-white group-hover:text-brand-500 transition-colors uppercase tracking-widest leading-none">{insight.message}</p>
+                                    <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">{insight.detail || 'Deep intelligence analysis available for this vector.'}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </aside>
         </div>
 
+        {/* FOOTER ACTION */}
+        <PremiumSection delay={0.2} className="pt-12 pb-12">
+            <div className="p-px rounded-[4rem] bg-gradient-to-r from-transparent via-brand-500/30 to-transparent shadow-2xl">
+                <div className="bg-white dark:bg-[#080809] rounded-[3.95rem] p-16 md:p-24 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_-20%,rgba(79,70,229,0.15),transparent)]" />
+                    <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start justify-between gap-20">
+                        <div className="space-y-8 text-center lg:text-left flex-1">
+                            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-xl border border-brand-500/20 bg-brand-500/5">
+                                <Camera className="w-4 h-4 text-brand-500" />
+                                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-brand-500">Optical Intelligence</span>
+                            </div>
+                            <h2 className="text-5xl md:text-8xl font-black tracking-tighter text-gray-900 dark:text-white leading-[0.85]">Turn paper<br className="hidden md:block" /> into <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-indigo-500 uppercase italic">Power.</span></h2>
+                            <p className="text-2xl font-semibold text-gray-500 dark:text-gray-400 max-w-xl leading-relaxed tracking-tight">Capture any document. Our vision engine processes the data with surgical accuracy and syncs it to your ledger instantly.</p>
+                        </div>
+                        
+                        <div className="w-full lg:w-[650px] shrink-0">
+                            <FileUpload
+                                onUploadComplete={(items) => {
+                                    setLatestUpload(normalizeLatestUpload(items[0]));
+                                    void loadDashboard();
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </PremiumSection>
+
       </div>
-    </MainLayout>
+    </>
   );
 };
 

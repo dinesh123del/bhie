@@ -1,6 +1,6 @@
 import Razorpay from 'razorpay';
-import { env } from '../config/env';
-import { AppError } from './appError';
+import { env } from '../config/env.js';
+import { AppError } from './appError.js';
 
 let razorpayClient: Razorpay | null = null;
 

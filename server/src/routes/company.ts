@@ -1,10 +1,10 @@
 import express, { Response } from 'express';
-import Company from '../models/Company';
-import { asyncHandler } from '../middleware/asyncHandler';
-import { authenticateToken } from '../middleware/auth';
-import { AuthRequest } from '../types';
-import { AppError } from '../utils/appError';
-import { requireUser } from '../utils/request';
+import Company from '../models/Company.js';
+import { asyncHandler } from '../middleware/asyncHandler.js';
+import { authenticateToken } from '../middleware/auth.js';
+import { AuthRequest } from '../types/index.js';
+import { AppError } from '../utils/appError.js';
+import { requireUser } from '../utils/request.js';
 
 interface CompanyData {
   name: string;

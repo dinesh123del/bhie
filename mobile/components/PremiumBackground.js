@@ -67,9 +67,9 @@ export const PremiumBackground = ({ children }) => {
         style={StyleSheet.absoluteFill}
       />
       
-      {/* Subtle Glows */}
-      <View style={[styles.glow, { top: -100, left: -100, backgroundColor: 'rgba(56, 189, 248, 0.08)' }]} />
-      <View style={[styles.glow, { bottom: -150, right: -150, backgroundColor: 'rgba(79, 70, 229, 0.08)' }]} />
+      {/* Subtle Glows - Toned down for visual comfort */}
+      <View style={[styles.glow, { top: -100, left: -100, backgroundColor: 'rgba(56, 189, 248, 0.04)' }]} />
+      <View style={[styles.glow, { bottom: -150, right: -150, backgroundColor: 'rgba(79, 70, 229, 0.04)' }]} />
 
       {glitters.map((g) => (
         <Glitter key={g.id} size={g.size} delay={g.delay} />
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     shadowColor: '#38BDF8',
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.8,
+    shadowOpacity: 0.3,
     shadowRadius: 4,
   },
   glow: {

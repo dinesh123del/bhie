@@ -3,7 +3,7 @@ import path from 'path';
 import AdmZip from 'adm-zip';
 import mammoth from 'mammoth';
 import { PDFParse } from 'pdf-parse';
-import { AppError } from '../utils/appError';
+import { AppError } from '../utils/appError.js';
 import { processDocument } from './documentIntelligenceService.js';
 import type { DocumentIntelligenceResult } from '../types/document.js';
 import type { UploadedImageType } from '../models/Image.js';
@@ -22,6 +22,12 @@ export interface ExtractedRecordPayload {
   rawText: string;
   extractedText: string;
   date: Date;
+  businessName?: string;
+  gstNumber?: string;
+  gstDetails?: any;
+  isUnclear?: boolean;
+  missingFields?: string[];
+  integrityScore?: number;
 }
 
 export const AMOUNT_EXTRACTION_REGEX =
@@ -218,6 +224,12 @@ async function buildPayload(sourceName: string, fileType: SupportedUploadKind, b
     rawText: intelResult.rawText,
     extractedText: intelResult.rawText,
     date,
+    businessName: intelResult.businessName,
+    gstNumber: intelResult.gstNumber,
+    gstDetails: intelResult.gstDetails,
+    isUnclear: intelResult.isUnclear,
+    missingFields: intelResult.missingFields,
+    integrityScore: intelResult.integrityScore,
   };
 }
 

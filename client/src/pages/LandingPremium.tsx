@@ -74,13 +74,16 @@ const Navbar = () => {
   return (
     <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'bg-black/90 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <Link to="/" className="text-3xl font-black text-white tracking-tighter">BHIE<span className="text-sky-500">.</span></Link>
+        <div className="flex flex-col">
+          <Link to="/" className="text-3xl font-black text-white tracking-tighter leading-none">BHIE<span className="text-sky-500">.</span></Link>
+          <span className="text-[10px] font-bold text-sky-400 uppercase tracking-widest mt-1 opacity-80 hidden md:block">Plain English Business</span>
+        </div>
         
         <nav className="hidden md:flex gap-8 text-sm font-medium text-white/80">
-          <a href="#features" className="hover:text-white transition-colors">Features</a>
+          <a href="#features" className="hover:text-white transition-colors">Our Features</a>
           <a href="#how-it-works" className="hover:text-white transition-colors">How it Works</a>
           <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
-          <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
+          <a href="#faq" className="hover:text-white transition-colors">Help</a>
         </nav>
 
         <div className="hidden md:flex items-center gap-4">
@@ -91,7 +94,7 @@ const Navbar = () => {
             onMouseEnter={() => premiumFeedback.haptic(5)}
             className="px-5 py-2 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white text-sm font-bold rounded transiton-all shadow-[0_0_20px_rgba(56,189,248,0.3)]"
           >
-            Start Free
+            Join Free
           </Link>
         </div>
 
@@ -151,11 +154,11 @@ const Hero = ({ onWatchDemo }: { onWatchDemo?: () => void }) => (
         transition={{ duration: 0.8, delay: 0.2 }}
       >
         <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-6 drop-shadow-[0_0_30px_rgba(255,255,255,0.15)]">
-          TRACK EXPENSES<br/>
-          <span className="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(56,189,248,0.4)]">AUTOMATICALLY FROM RECEIPTS</span>
+          STOP TYPING BILLS.<br/>
+          <span className="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(56,189,248,0.4)] uppercase">OUR SMART ASSISTANT READS THEM FOR YOU</span>
         </h1>
         <p className="text-lg md:text-2xl text-white/60 max-w-3xl mx-auto mb-10 font-medium">
-          Save time on your accounts. Scan any receipt, and BHIE organizes your business spending with real-time reports and insights.
+          Just snap a photo of any receipt. We'll handle the math and show you exactly where your money goes — in plain English.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -165,7 +168,7 @@ const Hero = ({ onWatchDemo }: { onWatchDemo?: () => void }) => (
             onMouseEnter={() => premiumFeedback.haptic(5)}
             className="w-full sm:w-auto px-10 py-4 bg-white text-slate-950 hover:bg-white/90 text-lg font-black rounded transition-all flex items-center justify-center gap-2 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.3)]"
           >
-            Get Started Free <ArrowRight className="w-5 h-5" />
+            Try It Free <ArrowRight className="w-5 h-5" />
           </Link>
           <button 
             onClick={() => {
@@ -174,7 +177,7 @@ const Hero = ({ onWatchDemo }: { onWatchDemo?: () => void }) => (
             }}
             className="w-full sm:w-auto px-10 py-4 bg-white/5 hover:bg-white/10 text-white text-lg font-bold rounded transition-all flex items-center justify-center gap-2 border border-white/10 backdrop-blur-md"
           >
-            <Play className="w-5 h-5 fill-current" /> Watch Demo
+            <Play className="w-5 h-5 fill-current" /> See How It Works
           </button>
         </div>
       </motion.div>
@@ -193,7 +196,7 @@ const Hero = ({ onWatchDemo }: { onWatchDemo?: () => void }) => (
              <div className="w-2.5 h-2.5 rounded-full bg-amber-500" />
              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
            </div>
-           <div className="aspect-[16/9] bg-[url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-50 contrast-125 saturate-50 mix-blend-luminosity" />
+           <div className="aspect-[16/9] bg-[url('/demo.png')] bg-cover bg-center opacity-90 contrast-110 saturate-100" />
            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
         </div>
       </motion.div>
@@ -206,13 +209,13 @@ const Problem = () => (
   <section className="py-24 px-6 bg-[#0a0a0a]/95 border-t border-[#222]">
     <div className="max-w-7xl mx-auto">
       <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-5xl font-black text-white">The old way is <span className="text-sky-400">broken</span>.</h2>
+        <h2 className="text-3xl md:text-5xl font-black text-white uppercase">Old spreadsheets are <span className="text-sky-400">boring and slow</span>.</h2>
       </div>
       <div className="grid md:grid-cols-3 gap-8">
          {[
-           { title: "Manual Entry Pain", desc: "You waste hours typing data from paper receipts into old spreadsheets." },
-           { title: "Tax Compliance Stress", desc: "You struggle to find that one specific receipt during tax season." },
-           { title: "Spending Blindness", desc: "You don't know your real-time budget until it's too late." },
+           { title: "Tired of Typing?", desc: "Stop wasting your evenings typing numbers from paper receipts. Let us do the work." },
+           { title: "No More Lost Bills", desc: "Never hunt for a missing receipt again. They are all organized in one safe place." },
+           { title: "Know Your Profit Now", desc: "Don't wait for your accountant to tell you how much money you have left." },
          ].map((item, i) => (
            <PremiumCard 
              extreme
@@ -238,25 +241,25 @@ const Solution = () => (
     <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
       <div className="w-full md:w-1/2">
         <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">Your Professional<br/>Business Assistant</h2>
+          <h2 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">Your Smart<br/>Business Buddy</h2>
           <p className="text-xl text-white/50 mb-8 max-w-lg">
-            BHIE shifts your business from manual tracking to automated execution, surfacing actionable insights out of the noise.
+            We turn your messy pile of receipts into a clear story. No jargon, just the facts you need to grow your business.
           </p>
           <ul className="space-y-4">
              {[
-               "AI-Powered Receipt Scanning",
-               "Automatic Expense Categorization",
-               "Real-time Profit & Loss Dashboard"
+               "Smart Photo Scanning",
+               "Auto-Sorting of Bills",
+               "Real-time Profit Updates"
              ].map((str, i) => (
                <li key={i} className="flex items-center gap-4 text-white text-lg font-medium">
-                 <CheckCircle className="text-[#E50914] w-6 h-6 flex-shrink-0" /> {str}
+                 <CheckCircle className="text-sky-500 w-6 h-6 flex-shrink-0" /> {str}
                </li>
              ))}
           </ul>
         </motion.div>
       </div>
       <div className="w-full md:w-1/2 relative">
-         <div className="absolute inset-0 bg-[#E50914] blur-[120px] opacity-10 rounded-full" />
+         <div className="absolute inset-0 bg-sky-500 blur-[120px] opacity-10 rounded-full" />
          <motion.div 
            initial={{ opacity: 0, scale: 0.9 }} 
            whileInView={{ opacity: 1, scale: 1 }} 
@@ -264,8 +267,8 @@ const Solution = () => (
            className="relative aspect-square bg-[#111] border border-[#333] rounded-2xl flex items-center justify-center p-8 overflow-hidden shadow-2xl"
          >
             {/* Abstract visual of AI Assistant */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(229,9,20,0.1)_0%,rgba(0,0,0,1)_100%)]" />
-            <BrainCircuit className="w-32 h-32 text-[#E50914] opacity-80" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.1)_0%,rgba(0,0,0,1)_100%)]" />
+            <BrainCircuit className="w-32 h-32 text-sky-500 opacity-80" />
          </motion.div>
       </div>
     </div>
@@ -275,27 +278,27 @@ const Solution = () => (
 // ======================= FEATURES =======================
 const Features = () => {
   const cards = [
-    { icon: Activity, title: "Instant Scan", desc: "Snap a photo of any receipt. Our AI extracts merchant, date, and amount in seconds." },
-    { icon: BarChart2, title: "Smart Categorization", desc: "Automatically groups spending into Tax, Business, and Personal categories." },
-    { icon: BrainCircuit, title: "Real-time Analytics", desc: "See your daily profit and loss at a glance with high-contrast charts." },
-    { icon: MessageSquare, title: "WhatsApp Input", desc: "Record expenses directly by texting our simple WhatsApp bot." },
-    { icon: FileText, title: "OCR Document Parsing", desc: "Upload chaotic PDFs or image folders and watch them become structured data." },
+    { icon: Activity, title: "Snap & Scan", desc: "Just take a photo. Our system reads the shop name, date, and price in a second." },
+    { icon: BarChart2, title: "Auto-Sorting", desc: "We automatically group your spending so you know what's for work and what's personal." },
+    { icon: BrainCircuit, title: "Simple Insights", desc: "See your daily money in and out with clear, easy-to-read charts." },
+    { icon: MessageSquare, title: "Chat to Add", desc: "Record expenses directly by texting our simple WhatsApp assistant." },
+    { icon: FileText, title: "Smart Reader", desc: "Upload messy PDFs or folders of photos and watch them turn into organized lists." },
   ];
 
   return (
     <section id="features" className="py-24 px-6 bg-[#0a0a0a]/95 border-y border-[#222]">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl text-center md:text-5xl font-black text-white mb-16">The Business <span className="text-[#E50914]">Features</span></h2>
+        <h2 className="text-4xl text-center md:text-5xl font-black text-white mb-16 uppercase">Built to <span className="text-sky-400">Help You</span></h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {cards.map((f, i) => (
              <PremiumCard 
                key={i}
                hoverable
                delay={i * 0.1}
-               className={`bg-black/40 border-white/5 transition-colors hover:border-[#E50914]/50 ${i === 0 ? 'lg:col-span-2' : ''}`}
+               className={`bg-black/40 border-white/5 transition-colors hover:border-sky-500/50 ${i === 0 ? 'lg:col-span-2' : ''}`}
              >
-               <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-[#E50914]/10 transition-colors">
-                 <f.icon className="w-6 h-6 text-white group-hover:text-[#E50914] transition-colors" />
+               <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-sky-500/10 transition-colors">
+                 <f.icon className="w-6 h-6 text-white group-hover:text-sky-400 transition-colors" />
                </div>
                <h3 className="text-xl font-bold text-white mb-2">{f.title}</h3>
                <p className="text-white/50 leading-relaxed">{f.desc}</p>
@@ -311,18 +314,18 @@ const Features = () => {
 const HowItWorks = () => (
   <section id="how-it-works" className="py-24 px-6 bg-black relative">
     <div className="max-w-7xl mx-auto">
-      <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16">How it <span className="text-[#E50914]">Works</span></h2>
+      <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16 uppercase">How it <span className="text-sky-400">Works</span></h2>
       <div className="flex flex-col md:flex-row justify-between gap-12 relative">
         <div className="hidden md:block absolute top-[28px] left-[10%] right-[10%] h-[2px] bg-[#333] z-0" />
         
         {[
-          { icon: ShieldCheck, title: "1. Snap", desc: "Take a photo of your receipt or upload a PDF." },
-          { icon: Activity, title: "2. Process", desc: "Our AI engines structure the data and categorize it." },
-          { icon: BrainCircuit, title: "3. Analyze", desc: "Watch your dashboard update with actionable insights." }
+          { icon: ShieldCheck, title: "1. Take a Pic", desc: "Snap a photo of your receipt with your phone." },
+          { icon: Activity, title: "2. We Read It", desc: "Our smart system fills in all the details for you." },
+          { icon: BrainCircuit, title: "3. You Grow", desc: "See exactly where your money goes and save more." }
         ].map((item, i) => (
           <div key={i} className="relative z-10 flex flex-col items-center text-center w-full md:w-1/3">
              <div className="w-16 h-16 rounded-full bg-black border-[4px] border-[#333] flex items-center justify-center mb-6 text-white font-black text-xl shadow-[0_0_30px_rgba(0,0,0,0.8)]">
-               <item.icon className="w-6 h-6 text-[#E50914]" />
+               <item.icon className="w-6 h-6 text-sky-500" />
              </div>
              <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
              <p className="text-white/50">{item.desc}</p>
@@ -336,15 +339,15 @@ const HowItWorks = () => (
 // ======================= PRICING =======================
 const Pricing = () => {
   const planData = [
-    { name: "FREE", price: "0", features: ["Business Analytics", "Manual Entry", "Simple Dashboard", "Basic Support"], highlight: false },
-    { name: "PRO", price: "59", features: ["Insights & Advice", "Daily Action List", "File Uploads", "Priority Support"], highlight: true },
-    { name: "BUSINESS", price: "119", features: ["Unlimited Records", "Team Access", "Custom Reports", "Dedicated Support"], highlight: false },
+    { name: "FREE", price: "0", features: ["Basic Analytics", "Scan 5 Bills/mo", "Simple Lists", "Help Desk"], highlight: false },
+    { name: "GOLD", price: "59", features: ["Smart Advice", "Daily Task List", "Unlimited Scans", "Priority Help"], highlight: true },
+    { name: "PLATINUM", price: "119", features: ["Team Access", "Custom Reports", "Deep Research", "VIP Support"], highlight: false },
   ];
 
   return (
     <section id="pricing" className="py-24 px-6 bg-[#0a0a0a]/95 border-t border-[#222]">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16">Select Your <span className="text-[#E50914]">Tier</span></h2>
+        <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16 uppercase">Pick Your <span className="text-sky-400">Plan</span></h2>
         <div className="grid md:grid-cols-3 gap-8 items-center">
           {planData.map((plan, i) => (
             <PremiumCard 
@@ -353,8 +356,8 @@ const Pricing = () => {
               className={`relative border ${plan.highlight ? 'border-transparent' : 'border-white/5'} bg-black group`}
             >
                {plan.highlight && (
-                 <div className="absolute top-0 right-8 -translate-y-1/2 px-4 py-1 bg-[#E50914] text-white text-[10px] font-black tracking-widest uppercase rounded-full z-20">
-                   Popular
+                 <div className="absolute top-0 right-8 -translate-y-1/2 px-4 py-1 bg-sky-500 text-white text-[10px] font-black tracking-widest uppercase rounded-full z-20">
+                   Best Value
                  </div>
                )}
                <h3 className="text-sm font-black text-white/40 tracking-[0.2em] uppercase mb-4">{plan.name}</h3>
@@ -364,7 +367,7 @@ const Pricing = () => {
                <ul className="space-y-4 mb-8">
                  {plan.features.map((f, j) => (
                    <li key={j} className="flex items-center gap-3 text-white/60 text-sm font-medium">
-                     <CheckCircle className={`w-5 h-5 ${plan.highlight ? 'text-[#E50914]' : 'text-white/20'}`} /> {f}
+                     <CheckCircle className={`w-5 h-5 ${plan.highlight ? 'text-sky-400' : 'text-white/20'}`} /> {f}
                    </li>
                  ))}
                </ul>
@@ -378,7 +381,7 @@ const Pricing = () => {
                      : 'bg-white/5 text-white hover:bg-white/10'
                  }`}
                >
-                 Choose Plan
+                 Get Started
                </Link>
             </PremiumCard>
           ))}
@@ -392,20 +395,20 @@ const Pricing = () => {
 const Testimonials = () => (
   <section className="py-24 px-6 bg-black">
     <div className="max-w-7xl mx-auto">
-      <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16">Classified <span className="text-[#E50914]">Success</span></h2>
+      <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16 uppercase">What <span className="text-sky-400">Owners Say</span></h2>
       <div className="grid md:grid-cols-3 gap-8">
         {[
-          { name: "M. Torres", role: "Logistics Director", initial: "M", text: "The predictive alerts intercepted a massive stock shortage before it cascaded down to client deliveries." },
-          { name: "S. Jenkins", role: "Retail Operations", initial: "S", text: "Finally, an analytics engine that doesn't just show charts, but issues direct execution commands." },
-          { name: "J. Chang", role: "Agency Founder", initial: "J", text: "BHIE’s webhook ingestion completely eliminated manual data entry. We are moving 100x faster." }
+          { name: "Rahul S.", role: "Shop Owner", initial: "R", text: "I used to spend 3 hours a week on bills. Now it takes 5 minutes. BHIE is magic." },
+          { name: "S. Priya", role: "Freelancer", initial: "S", text: "Finally, something that talks like a human. No big words, just my money info." },
+          { name: "Amit K.", role: "Café Founder", initial: "A", text: "I love the WhatsApp feature. Just text a photo and done. Best business tool yet." }
         ].map((t, i) => (
           <div key={i} className="p-8 border border-[#222] bg-[#050505] rounded-xl flex flex-col justify-between">
             <p className="text-white/60 italic leading-relaxed mb-8">"{t.text}"</p>
             <div className="flex items-center gap-4">
-               <div className="w-10 h-10 rounded-full bg-[#E50914] flex items-center justify-center text-white font-bold">{t.initial}</div>
+               <div className="w-10 h-10 rounded-full bg-sky-600 flex items-center justify-center text-white font-bold">{t.initial}</div>
                <div>
                   <h4 className="text-white font-bold">{t.name}</h4>
-                  <p className="text-xs text-[#E50914] tracking-widest uppercase">{t.role}</p>
+                  <p className="text-xs text-sky-400 tracking-widest uppercase">{t.role}</p>
                </div>
             </div>
           </div>
@@ -419,15 +422,15 @@ const Testimonials = () => (
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const questions = [
-    { q: "Is my business data secure?", a: "Yes. BHIE uses bank-level encryption and secure tokens. Your private info is never shared or stored insecurely." },
-    { q: "Do I need a developer to set it up?", a: "No. The system works as soon as you log in. You can start by uploading a receipt immediately." },
-    { q: "Which businesses can use BHIE?", a: "The system works for all types of businesses, including Retail, Freelance, Agencies, and E-commerce." }
+    { q: "Is my data safe?", a: "Yes. We use top-notch security to keep your business info private and locked away. We never share your secrets." },
+    { q: "Do I need to be a tech expert?", a: "Not at all. If you can take a photo, you can use our app. It's built for everyone." },
+    { q: "What kind of businesses use this?", a: "Everyone from local shops and freelancers to big agencies and online stores." }
   ];
 
   return (
     <section id="faq" className="py-24 px-6 bg-[#0a0a0a]/95 border-t border-[#222]">
       <div className="max-w-3xl mx-auto">
-        <h2 className="text-4xl font-black text-white text-center mb-16">Briefings</h2>
+        <h2 className="text-4xl font-black text-white text-center mb-16 uppercase">Common Questions</h2>
         <div className="space-y-4">
           {questions.map((faq, i) => (
             <div key={i} className="border border-[#333] bg-black rounded-xl overflow-hidden">
@@ -436,7 +439,7 @@ const FAQ = () => {
                   className="w-full px-6 py-5 flex items-center justify-between text-left text-white font-bold"
                >
                  {faq.q}
-                 <ChevronDown className={`w-5 h-5 transition-transform ${openIndex === i ? 'rotate-180 text-[#E50914]' : 'text-white/50'}`} />
+                 <ChevronDown className={`w-5 h-5 transition-transform ${openIndex === i ? 'rotate-180 text-sky-500' : 'text-white/50'}`} />
                </button>
                <AnimatePresence>
                   {openIndex === i && (
@@ -455,18 +458,18 @@ const FAQ = () => {
 
 // ======================= FINAL CTA =======================
 const CTA = () => (
-  <section className="py-32 px-6 bg-[#E50914] text-center relative overflow-hidden">
+  <section className="py-32 px-6 bg-sky-600 text-center relative overflow-hidden">
      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center mix-blend-multiply opacity-20" />
      <div className="relative z-10 max-w-3xl mx-auto">
        <h2 className="text-5xl md:text-7xl font-black text-white mb-6 uppercase tracking-tighter leading-none">Start Today</h2>
-       <p className="text-xl text-white/80 font-medium mb-10">Stop tracking manually. Start your trial today and take control of your business.</p>
+       <p className="text-xl text-white/80 font-medium mb-10">Stop the manual work. Join us today and take back your time.</p>
        <Link 
          to="/register" 
          onClick={() => premiumFeedback.click()}
          onMouseEnter={() => premiumFeedback.haptic(5)}
          className="inline-block px-12 py-5 bg-black hover:bg-[#111] text-white text-lg font-black tracking-widest uppercase rounded shadow-2xl transition-all border border-black hover:border-white/20"
        >
-         Start Free Now
+         Try It Free Now
        </Link>
      </div>
   </section>
@@ -476,14 +479,17 @@ const CTA = () => (
 const Footer = () => (
   <footer className="py-12 px-6 bg-black border-t border-[#222]">
     <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-      <div className="text-2xl font-black text-[#E50914] tracking-tighter">BHIE</div>
+      <div className="flex flex-col items-center md:items-start leading-none group">
+        <div className="text-2xl font-black text-sky-500 tracking-tighter">BHIE</div>
+        <span className="text-[8px] font-bold text-white/40 uppercase tracking-[0.2em] mt-1 group-hover:text-sky-400 transition-colors">Plain English Business</span>
+      </div>
       <div className="flex gap-6 text-sm text-white/50">
         <a href="#features" className="hover:text-white transition-colors">Features</a>
         <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
-        <a href="#" className="hover:text-white transition-colors">Terms</a>
-        <a href="#" className="hover:text-white transition-colors">Privacy</a>
+        <a href="/terms" className="hover:text-white transition-colors">Terms</a>
+        <a href="/about" className="hover:text-white transition-colors">Privacy</a>
       </div>
-      <div className="text-sm text-white/30">© 2026 ANTIGRAVITY. All rights reserved.</div>
+      <div className="text-sm text-white/30">© 2026 ANTIGRAVITY. Business Intelligence Made Simple.</div>
     </div>
   </footer>
 );
@@ -493,7 +499,7 @@ export default function LandingPremium() {
   const [demoOpen, setDemoOpen] = useState(false);
 
   return (
-    <div className="min-h-screen text-white font-sans selection:bg-[#E50914] selection:text-white">
+    <div className="min-h-screen text-white font-sans selection:bg-sky-500 selection:text-white">
       <WatchDemoModal isOpen={demoOpen} onClose={() => setDemoOpen(false)} />
       <Navbar />
       <main>

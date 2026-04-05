@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import { AuthRequest, AuthenticatedUser } from '../types';
-import { AppError } from './appError';
+import { AuthRequest, AuthenticatedUser } from '../types/index.js';
+import { AppError } from './appError.js';
 
 export const requireUser = (req: AuthRequest): AuthenticatedUser => {
   if (!req.user?.userId) {

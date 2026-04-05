@@ -4,6 +4,7 @@ import { Shield, Zap, TrendingUp, X, Star } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
 import api from '../lib/axios';
+import { useNavigate } from 'react-router-dom';
 import paymentService from '../services/paymentService';
 
 const plans = [
@@ -37,6 +38,7 @@ export const UpgradeModal: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<'pro' | 'premium'>('pro');
   const { user, refetchUser } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleLimitReached = () => {
@@ -47,64 +49,9 @@ export const UpgradeModal: React.FC = () => {
     return () => window.removeEventListener('limitReached', handleLimitReached);
   }, []);
 
-  const handleUpgrade = async (plan: 'pro' | 'premium') => {
-    try {
-      setIsProcessing(true);
-      setSelectedPlan(plan);
-
-      // Load Razorpay SDK
-      await paymentService.ensureRazorpayLoaded();
-
-      // Create order via payment route (one-time payment flow)
-      const order = await paymentService.createOrder(plan);
-      const razorpayKey = order.key || import.meta.env.VITE_RAZORPAY_KEY;
-
-      if (!razorpayKey || !window.Razorpay) {
-        throw new Error('Payment gateway unavailable');
-      }
-
-      const rzp = new window.Razorpay({
-        key: razorpayKey,
-        amount: order.amount,
-        currency: order.currency,
-        name: 'BHIE',
-        description: `Upgrade to ${plan === 'pro' ? 'Pro' : 'Premium'}`,
-        order_id: order.orderId,
-        handler: async (response) => {
-          try {
-            const result = await paymentService.verify(response);
-            if (result.success) {
-              toast.success(`Successfully upgraded to ${plan === 'pro' ? 'Pro' : 'Premium'}! 🚀`);
-              setIsOpen(false);
-              await refetchUser();
-            }
-          } catch {
-            toast.error('Payment verification failed. Contact support.');
-          }
-        },
-        prefill: {
-          name: user?.name,
-          email: user?.email,
-        },
-        theme: { color: '#6366f1' },
-        modal: {
-          ondismiss: () => {
-            setIsProcessing(false);
-          },
-        },
-      });
-
-      rzp.on('payment.failed', () => {
-        toast.error('Payment failed or cancelled');
-        setIsProcessing(false);
-      });
-
-      rzp.open();
-    } catch (error: any) {
-      toast.error(error?.displayMessage || error?.message || 'Could not initiate upgrade. Try again.');
-    } finally {
-      setIsProcessing(false);
-    }
+  const handleUpgrade = (plan: 'pro' | 'premium') => {
+    setIsOpen(false);
+    navigate('/payments');
   };
 
   if (!isOpen) return null;
@@ -124,8 +71,8 @@ export const UpgradeModal: React.FC = () => {
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
 
           <button
-            onClick={() => setIsOpen(false)}
-            className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors z-10"
+            onClick={() => { setIsOpen(false); navigate('/dashboard'); }}
+            className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors z-50"
           >
             <X size={24} />
           </button>
@@ -173,7 +120,7 @@ export const UpgradeModal: React.FC = () => {
 
             <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => { setIsOpen(false); navigate('/dashboard'); }}
                 className="flex-1 py-3 px-4 rounded-xl font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 hover:text-white transition-all order-2 sm:order-1"
               >
                 Maybe Later

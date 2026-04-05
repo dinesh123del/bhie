@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
-import { env } from '../config/env';
-import { AppError } from './appError';
+import { env } from '../config/env.js';
+import { AppError } from './appError.js';
 let openaiClient = env.OPENAI_API_KEY
     ? new OpenAI({
         apiKey: env.OPENAI_API_KEY,

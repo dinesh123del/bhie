@@ -4,11 +4,11 @@ import Company from '../models/Company.js';
 import Image from '../models/Image.js';
 import Record from '../models/Record.js';
 import User from '../models/User.js';
-import { asyncHandler } from '../middleware/asyncHandler';
-import { redisClient } from '../config/redisClient';
-import { AuthRequest } from '../types';
+import { asyncHandler } from '../middleware/asyncHandler.js';
+import { redisClient } from '../config/redisClient.js';
+import { AuthRequest } from '../types/index.js';
 import { generateInsights, InsightPeriodSnapshot } from '../utils/generateInsights.js';
-import { requireUser } from '../utils/request';
+import { requireUser } from '../utils/request.js';
 
 type TrendPoint = {
   name: string;

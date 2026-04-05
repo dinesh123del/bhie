@@ -45,12 +45,14 @@ const ScanBill = () => {
   const handleSave = async () => {
     try {
       await recordsAPI.create({
-        title: `Receipt - ${data.date}`,
+        title: data.businessName || `Receipt - ${data.date}`,
         amount: data.totalAmount,
         type: 'expense',
         category: 'bill',
         date: data.date,
-        description: `Items: ${data.items.join(', ')}`
+        description: `Items: ${data.items.join(', ')}`,
+        gstNumber: data.gstNumber,
+        gstDetails: data.gstDetails
       });
       toast.success('Saved successfully');
       navigate('/records');
@@ -97,53 +99,85 @@ const ScanBill = () => {
           {/* Result Section */}
           {data && (
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-              <PremiumCard className="p-6 space-y-6 border-indigo-500/30">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-xl font-bold text-white">Detected Details</h2>
-                  <span className="text-xs font-medium text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded">Ready to save</span>
+              <PremiumCard className="p-6 space-y-6 border-indigo-500/30 overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+                   <Scan className="w-24 h-24 text-sky-400 rotate-12" />
+                </div>
+
+                <div className="flex justify-between items-center relative z-10">
+                  <h2 className="text-xl font-black text-white italic tracking-tight">Receipt Details</h2>
+                  <div className="flex items-center gap-2">
+                     <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-full border ${data.isUnclear ? 'text-amber-400 border-amber-500/20 bg-amber-500/5' : 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5'}`}>
+                        {data.integrityScore}% Accuracy
+                     </span>
+                  </div>
                 </div>
                 
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-white/[0.03] rounded-xl">
-                    <div className="flex items-center gap-3 text-gray-400">
-                      <IndianRupee className="w-4 h-4" /> Total Amount
-                    </div>
-                    <span className="text-xl font-bold text-white">₹{data.totalAmount}</span>
+                <div className="space-y-4 relative z-10">
+                  {/* MERCHANT IDENTITY BLOCK */}
+                  <div className="p-4 rounded-2xl bg-gradient-to-br from-white/[0.04] to-transparent border border-white/5 space-y-3">
+                     <div className="flex items-center justify-between">
+                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Store Name</div>
+                        {data.gstNumber && (
+                           <div className="flex items-center gap-1 text-[9px] font-black text-sky-400 uppercase tracking-widest">
+                              <Check className="w-3 h-3" /> Verified GST
+                           </div>
+                        )}
+                     </div>
+                     <div>
+                        <p className="text-lg font-black text-white tracking-tight">{data.businessName || 'Unknown Store'}</p>
+                        {data.gstNumber && <p className="text-[11px] font-mono font-bold text-sky-400/60 mt-1 uppercase tracking-wider">{data.gstNumber}</p>}
+                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between p-3 bg-white/[0.03] rounded-xl">
-                    <div className="flex items-center gap-3 text-gray-400">
-                      <Calendar className="w-4 h-4" /> Date
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-1 p-3 bg-white/[0.03] rounded-xl border border-white/5">
+                      <div className="text-[9px] font-black uppercase tracking-widest text-white/30">Amount</div>
+                      <span className="text-lg font-black text-white">₹{data.totalAmount}</span>
                     </div>
-                    <span className="text-white font-medium">{data.date}</span>
+
+                    <div className="flex flex-col gap-1 p-3 bg-white/[0.03] rounded-xl border border-white/5">
+                      <div className="text-[9px] font-black uppercase tracking-widest text-white/30">Date</div>
+                      <span className="text-sm font-bold text-white/80">{data.date}</span>
+                    </div>
                   </div>
 
-                  <div className="p-3 bg-white/[0.03] rounded-xl space-y-2">
-                    <div className="flex items-center gap-3 text-gray-400 mb-2">
-                      <List className="w-4 h-4" /> Items Found
+                  {/* GST DETAILS RECOVERY */}
+                  {data.gstDetails && data.gstDetails.legalName && (
+                    <motion.div 
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      className="p-3 rounded-xl bg-sky-500/5 border border-sky-500/10"
+                    >
+                       <div className="text-[9px] font-black uppercase tracking-widest text-sky-400/60 mb-2">Tax Details</div>
+                       <p className="text-xs font-bold text-white/70 italic truncate">{data.gstDetails.legalName}</p>
+                       <p className="text-[10px] font-medium text-white/30 mt-1 truncate">{data.gstDetails.address || 'Confidential Address'}</p>
+                    </motion.div>
+                  )}
+
+                  <div className="p-3 bg-white/[0.03] rounded-xl border border-white/5 space-y-2">
+                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30 mb-2">
+                      <List className="w-3 h-3" /> List of Items ({data.items.length})
                     </div>
                     {data.items.length > 0 ? (
-                      <ul className="text-sm text-gray-300 pl-7 list-disc">
-                        {data.items.map((item: string, i: number) => <li key={i}>{item}</li>)}
-                      </ul>
+                      <div className="flex flex-wrap gap-2">
+                        {data.items.map((item: string, i: number) => (
+                           <span key={i} className="px-2 py-1 rounded-lg bg-white/5 border border-white/5 text-[10px] font-bold text-white/60">
+                              {item.substring(0, 30)}
+                           </span>
+                        ))}
+                      </div>
                     ) : (
-                      <p className="text-sm text-gray-500 pl-7">No individual items identified</p>
+                      <p className="text-[10px] text-gray-500 italic">No items found</p>
                     )}
                   </div>
-
-                  {data.exactText && (
-                    <div className="p-3 bg-white/[0.03] rounded-xl space-y-2">
-                      <div className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Exact Extracted Text</div>
-                      <div className="text-[10px] leading-relaxed text-gray-500 font-mono bg-black/20 p-3 rounded-lg max-h-40 overflow-y-auto whitespace-pre-wrap border border-white/5">
-                        {data.exactText}
-                      </div>
-                    </div>
-                  )}
                 </div>
 
-                <PremiumButton className="w-full" variant="primary" onClick={handleSave}>
-                  Save Transaction
-                </PremiumButton>
+                <div className="pt-2">
+                   <PremiumButton className="w-full" variant="primary" onClick={handleSave}>
+                     Save to Records
+                   </PremiumButton>
+                </div>
               </PremiumCard>
             </motion.div>
           )}

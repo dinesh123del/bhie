@@ -1,11 +1,11 @@
 import { Response } from 'express';
 import crypto from 'crypto';
-import User from '../models/User';
-import { AuthRequest } from '../types';
-import { asyncHandler } from '../middleware/asyncHandler';
-import { getRazorpayClient } from '../utils/razorpay';
-import { RAZORPAY_PLAN_IDS } from '../utils/planConfig';
-import { env } from '../config/env';
+import User from '../models/User.js';
+import { AuthRequest } from '../types/index.js';
+import { asyncHandler } from '../middleware/asyncHandler.js';
+import { getRazorpayClient } from '../utils/razorpay.js';
+import { RAZORPAY_PLAN_IDS } from '../utils/planConfig.js';
+import { env } from '../config/env.js';
 
 export const subscriptionController = {
   // GET /api/subscription/status - Get current user's subscription status
@@ -36,7 +36,6 @@ export const subscriptionController = {
   // POST /api/subscription/create - Create Razorpay Subscription
   create: asyncHandler(async (req: AuthRequest, res: Response) => {
     const { plan } = req.body;
-
     if (!['pro', 'premium'].includes(plan)) {
       return res.status(400).json({
         success: false,
@@ -150,6 +149,40 @@ export const subscriptionController = {
       data: {
         plan: 'free',
         features: getPlanFeatures('free')
+      }
+    });
+  }),
+
+  // POST /api/subscription/direct-upgrade - Upgrade for free (requested "no payment needed")
+  directUpgrade: asyncHandler(async (req: AuthRequest, res: Response) => {
+    const { plan } = req.body;
+    console.log(`[DEBUG] Attempting DIRECT UPGRADE for plan: ${plan}, user: ${req.user!.userId}`);
+    if (!['pro', 'premium'].includes(plan)) {
+      return res.status(400).json({ success: false, message: 'Invalid plan' });
+    }
+
+    const user = await User.findById(req.user!.userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Set expiry to 30 days from now
+    const expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getDate() + 30);
+
+    user.plan = plan;
+    user.isPremium = true;
+    user.planExpiry = expiryDate;
+    user.isActive = true;
+    user.subscriptionStatus = 'active';
+    await user.save();
+
+    res.json({
+      success: true,
+      data: {
+        plan: user.plan,
+        planExpiry: user.planExpiry,
+        hasPremiumAccess: user.hasPremiumAccess()
       }
     });
   })

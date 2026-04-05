@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
+import { useSearchParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { User, Mail, Lock, ArrowRight, AlertCircle, CheckCircle } from 'lucide-react';
 import { registerUser } from '../api';
@@ -129,19 +129,19 @@ const PremiumRegister = () => {
         )}
 
         {/* Logo & Header */}
-        <motion.div variants={itemVariants} className="text-center mb-10">
-          <div className="flex justify-center mb-6">
+        <motion.div variants={itemVariants} className="text-center mb-8">
+          <div className="flex justify-center mb-4">
             <Logo size="lg" to="/" subtitle="Forge Your Advantage" glow />
           </div>
         </motion.div>
 
         {/* Card */}
         <motion.div variants={itemVariants}>
-          <PremiumCard extreme className="p-10 backdrop-blur-3xl bg-white/[0.01] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)]">
+          <PremiumCard extreme className="p-6 md:p-8 backdrop-blur-3xl bg-white/[0.01] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)]">
             {/* Heading */}
-            <div className="mb-10">
-              <h2 className="text-3xl font-black text-white mb-2 tracking-tight">Create Account</h2>
-              <p className="text-gray-400 text-sm font-medium">Join the elite network of business intelligence</p>
+            <div className="mb-6">
+              <h2 className="text-2xl md:text-3xl font-black text-white mb-1 tracking-tight">Join BHIE</h2>
+              <p className="text-gray-400 text-xs md:text-sm font-medium">Start managing your business records today</p>
             </div>
 
             {/* Error Alert */}
@@ -157,10 +157,10 @@ const PremiumRegister = () => {
             )}
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
               <PremiumInput
                 floating
-                label="Full Name"
+                label="Your Name"
                 type="text"
                 value={formData.name}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })}
@@ -197,8 +197,8 @@ const PremiumRegister = () => {
                   required
                 />
                 <label htmlFor="terms" className="text-[10px] uppercase font-black tracking-widest text-white/40 leading-relaxed cursor-pointer select-none">
-                  Agree to <a href="#" className="text-sky-400 hover:text-sky-300 transition-colors">Terms</a> &{' '}
-                  <a href="#" className="text-sky-400 hover:text-sky-300 transition-colors">Privacy Policy</a>
+                  Agree to <Link to="/terms" className="text-sky-400 hover:text-sky-300 transition-colors">Terms</Link> &{' '}
+                  <Link to="/about" className="text-sky-400 hover:text-sky-300 transition-colors">Privacy Policy</Link>
                 </label>
               </motion.div>
 
@@ -211,7 +211,7 @@ const PremiumRegister = () => {
                   className="w-full bg-gradient-to-r from-sky-400 to-indigo-500 hover:from-sky-300 hover:to-indigo-400 text-white border-none shadow-[0_20px_40px_-10px_rgba(56,189,248,0.3)]"
                   icon={<ArrowRight className="w-5 h-5" />}
                 >
-                  {loading ? 'Creating Account...' : 'Get Started'}
+                  {loading ? 'Creating Account...' : 'Create My Account'}
                 </PremiumButton>
               </motion.div>
             </form>
@@ -219,7 +219,7 @@ const PremiumRegister = () => {
             {/* Divider */}
             <motion.div variants={itemVariants} className="py-6 flex items-center gap-4">
               <div className="flex-1 h-px bg-white/10" />
-              <span className="text-xs text-gray-500 px-2">OR</span>
+              <span className="text-xs text-gray-500 px-2">OR CONTINUE WITH</span>
               <div className="flex-1 h-px bg-white/10" />
             </motion.div>
 

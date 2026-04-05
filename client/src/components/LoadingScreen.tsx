@@ -1,148 +1,199 @@
-import React, { useEffect, useState } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import React, { useEffect, useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  RealityEngine, 
+  SecurityEngine, 
+  NeuralSyncEngine, 
+  Scanlines, 
+  GlassShine,
+  ThermalEngine
+} from './ui/MicroEngines';
+import { ShieldCheck, Cpu, Zap, Network } from 'lucide-react';
 
 const LoadingScreen = () => {
   const [progress, setProgress] = useState(0);
+  const [statusIndex, setStatusIndex] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Parallax setup
-  const mouseX = useMotionValue(window.innerWidth / 2);
-  const mouseY = useMotionValue(window.innerHeight / 2);
-  
-  const springConfig = { damping: 25, stiffness: 150 };
-  const smoothX = useSpring(mouseX, springConfig);
-  const smoothY = useSpring(mouseY, springConfig);
-  
-  const x1 = useTransform(smoothX, [0, window.innerWidth], [-20, 20]);
-  const y1 = useTransform(smoothY, [0, window.innerHeight], [-20, 20]);
-  
-  const x2 = useTransform(smoothX, [0, window.innerWidth], [30, -30]);
-  const y2 = useTransform(smoothY, [0, window.innerHeight], [30, -30]);
+  const statuses = [
+    "Initializing Neural Core",
+    "Syncing Financial Nodes",
+    "Calibrating Reality Engine",
+    "Securing Data Pipelines",
+    "Optimizing User Insight",
+    "Finalizing Ecosystem"
+  ];
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    if (videoRef.current) {
+        videoRef.current.volume = 0.05; // Very subtle Apple feel
+    }
   }, []);
 
-  // Simulate progress
   useEffect(() => {
-    setProgress(0);
     const timer = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(timer);
           return 100;
         }
-        return prev + Math.floor(Math.random() * 15) + 5;
+        const step = Math.floor(Math.random() * 8) + 2;
+        return prev + step;
       });
-    }, 300);
+    }, 400);
 
-    return () => clearInterval(timer);
+    const statusTimer = setInterval(() => {
+      setStatusIndex((prev) => (prev + 1) % statuses.length);
+    }, 2000);
+
+    return () => {
+      clearInterval(timer);
+      clearInterval(statusTimer);
+    };
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-[#0A0D14] flex flex-col items-center justify-center overflow-hidden">
-      {/* Dynamic Background Ambient Lighting */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none flex items-center justify-center">
-        <motion.div 
-          className="w-[80vw] h-[80vw] max-w-[800px] max-h-[800px] bg-blue-600/10 rounded-full mix-blend-screen filter blur-[100px]"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div 
-          className="absolute w-[60vw] h-[60vw] max-w-[600px] max-h-[600px] bg-purple-600/10 rounded-full mix-blend-screen filter blur-[80px]"
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.5, 0.7, 0.5] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        />
+    <div className="fixed inset-0 z-[10000] bg-black flex flex-col items-center justify-center overflow-hidden selection:bg-indigo-500/30">
+      
+      {/* 1. CINEMATIC VIDEO BACKGROUND */}
+      <div className="absolute inset-0 z-0">
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted={false}
+          playsInline
+          className="w-full h-full object-cover opacity-40 transition-opacity duration-1000"
+        >
+          <source 
+            src="https://assets.mixkit.co/videos/preview/mixkit-top-view-of-a-person-writing-on-a-notebook-41974-preview.mp4" 
+            type="video/mp4" 
+          />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/40 to-black pointer-events-none" />
+        <div className="absolute inset-0 backdrop-blur-[20px] bg-black/20" />
       </div>
 
-      {/* Floating Cards (Parallax) */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden max-w-[1400px] mx-auto hidden lg:block">
-        <motion.div style={{ x: x1, y: y1 }} className="absolute top-[25%] left-[15%] p-5 bg-white/[0.02] backdrop-blur-md rounded-2xl border border-white/5 w-56 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
-          <div className="flex gap-3 mb-4">
-            <div className="h-8 w-8 bg-blue-500/20 rounded-lg flex items-center justify-center">⚛️</div>
-            <div className="flex-1 space-y-2 py-1">
-              <div className="h-2 w-full bg-white/10 rounded-full" />
-              <div className="h-2 w-3/4 bg-white/10 rounded-full" />
-            </div>
-          </div>
-          <div className="h-16 w-full bg-blue-500/10 rounded-xl" />
-        </motion.div>
+      {/* 2. GLOBAL OVERLAYS */}
+      <Scanlines />
+      <GlassShine />
+
+      {/* 3. MICRO ENGINE GRID (Decentralized Nodes) */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+         <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5, duration: 1 }}
+            className="absolute top-10 left-10 md:top-20 md:left-20"
+         >
+            <RealityEngine />
+         </motion.div>
+
+         <motion.div 
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.7, duration: 1 }}
+            className="absolute top-10 right-10 md:top-20 md:right-20"
+         >
+            <SecurityEngine />
+         </motion.div>
+
+         <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 1 }}
+            className="absolute bottom-10 left-10 md:bottom-20 md:left-20"
+         >
+            <NeuralSyncEngine />
+         </motion.div>
+
+         <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1, duration: 1 }}
+            className="absolute bottom-10 right-10 md:bottom-20 md:right-20"
+         >
+            <ThermalEngine />
+         </motion.div>
+      </div>
+
+      {/* 4. CENTRAL LOADING HUB */}
+      <div className="relative z-10 flex flex-col items-center">
         
-        <motion.div style={{ x: x2, y: y2 }} className="absolute bottom-[25%] right-[15%] p-5 bg-white/[0.02] backdrop-blur-md rounded-2xl border border-white/5 w-56 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
-          <div className="text-white/60 text-xs mb-3 font-medium">Network Latency</div>
-          <div className="flex gap-2 items-end h-20 w-full">
-            {[40, 70, 45, 90, 60, 85].map((h, i) => (
+        {/* Anti-gravity Core Animation */}
+        <div className="relative w-48 h-48 flex items-center justify-center mb-12">
+           <motion.div 
+              animate={{ rotate: 360 }} 
+              transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-0 rounded-full border border-white/5 border-t-sky-500/20 shadow-[0_0_50px_rgba(14,165,233,0.05)]" 
+           />
+           <motion.div 
+              animate={{ rotate: -360 }} 
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-4 rounded-full border border-white/5 border-b-purple-500/20" 
+           />
+           
+           <motion.div
+             initial={{ scale: 0.8, opacity: 0 }}
+             animate={{ scale: 1, opacity: 1 }}
+             className="w-24 h-24 rounded-3xl bg-gradient-to-br from-white/[0.05] to-transparent backdrop-blur-3xl border border-white/10 flex items-center justify-center relative overflow-hidden group shadow-2xl"
+           >
+              <div className="absolute inset-0 bg-gradient-to-tr from-sky-500/10 via-transparent to-purple-500/10" />
+              <Zap className="w-10 h-10 text-white animate-pulse" fill="white" />
+              
+              {/* Internal spinning ring */}
               <motion.div 
-                key={i}
-                className="flex-1 bg-gradient-to-t from-purple-500/50 to-purple-400 rounded-t-sm"
-                initial={{ height: 0 }}
-                animate={{ height: `${h}%` }}
-                transition={{ duration: 1.5, delay: i * 0.1, ease: "easeOut" }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-2 rounded-2xl border border-dashed border-white/10"
               />
-            ))}
-          </div>
+           </motion.div>
+        </div>
+
+        {/* Status Text & Progress */}
+        <div className="flex flex-col items-center gap-6">
+           <div className="flex flex-col items-center gap-1">
+              <AnimatePresence mode="wait">
+                 <motion.p 
+                    key={statusIndex}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40"
+                 >
+                    {statuses[statusIndex]}
+                 </motion.p>
+              </AnimatePresence>
+              <p className="text-[10px] font-bold text-sky-400/60 tracking-widest">{progress}% COMPLETED</p>
+           </div>
+
+           {/* Sleek Apple Progress Bar */}
+           <div className="w-64 h-0.5 bg-white/5 rounded-full overflow-hidden relative backdrop-blur-xl border border-white/5">
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                className="absolute top-0 left-0 h-full bg-gradient-to-r from-sky-400 via-white to-purple-500 shadow-[0_0_15px_rgba(255,255,255,0.4)]"
+              />
+           </div>
+        </div>
+
+        {/* Detail Badge */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
+          className="mt-12 flex items-center gap-3 px-4 py-2 rounded-full border border-white/5 bg-white/[0.02] backdrop-blur-md"
+        >
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/30">System Operational</span>
         </motion.div>
+
       </div>
 
-      {/* Anti-gravity Core */}
-      <div className="relative w-64 h-64 flex flex-col items-center justify-center">
-        <motion.div className="absolute inset-0 rounded-full border border-white/5 border-t-white/10" animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} />
-        <motion.div className="absolute inset-4 rounded-full border border-blue-500/10 border-b-blue-400/50" animate={{ rotate: -360 }} transition={{ duration: 12, repeat: Infinity, ease: "linear" }} />
-        <motion.div className="absolute inset-8 rounded-full border border-purple-500/10 border-l-purple-400/50" animate={{ rotate: 360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }} />
-
-        {/* Central glowing orb */}
-        <motion.div
-          className="w-16 h-16 rounded-full bg-gradient-to-tr from-blue-500 to-purple-600 shadow-[0_0_50px_rgba(59,130,246,0.6)]"
-          animate={{ y: [-10, 10, -10], scale: [0.95, 1.05, 0.95] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        />
-
-        {/* Particles */}
-        {[...Array(12)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute right-1/2 top-1/2 w-1.5 h-1.5 bg-white/70 rounded-full blur-[0.5px]"
-            initial={{ x: 0, y: 0, opacity: 0 }}
-            animate={{ 
-              x: Math.cos(i * 30 * Math.PI / 180) * (70 + Math.random() * 60),
-              y: Math.sin(i * 30 * Math.PI / 180) * (70 + Math.random() * 60),
-              opacity: [0, 0.8, 0]
-            }}
-            transition={{
-              duration: 2 + Math.random() * 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.2
-            }}
-          />
-        ))}
+      {/* Background Decorative Text */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-[12vw] font-black text-white/[0.02] select-none pointer-events-none tracking-tighter">
+        BHIE CLOUD
       </div>
-
-      {/* Progress Section */}
-      <motion.div 
-        className="mt-16 flex flex-col items-center z-10"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-      >
-        <div className="text-white/60 font-medium tracking-[0.2em] uppercase text-xs mb-4 flex items-center gap-3">
-          <motion.span animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity }} className="text-blue-400">●</motion.span>
-          Synchronizing Ecosystem
-        </div>
-        
-        <div className="w-64 h-1 bg-white/5 rounded-full overflow-hidden backdrop-blur-sm relative">
-          <motion.div 
-            className="absolute top-0 left-0 bottom-0 bg-gradient-to-r from-blue-500 to-purple-500 shadow-[0_0_15px_rgba(59,130,246,0.8)]"
-            initial={{ width: "0%" }}
-            animate={{ width: `${Math.min(progress, 100)}%` }}
-            transition={{ ease: "easeOut", duration: 0.4 }}
-          />
-        </div>
-      </motion.div>
     </div>
   );
 };

@@ -15,14 +15,16 @@ const openai = env.OPENAI_API_KEY && env.OPENAI_API_KEY !== 'your_openai_api_key
  * Designed for precision across Indian (₹) and Global standards.
  */
 const CURRENCY_PATTERNS = [
-  // Explicit Grand Total with Currency Symbols
-  /(?:grand\s*|net\s*|final\s*|)total(?:\s*(?:amount|due|payable))?\s*[:\-]?\s*(?:₹|rs?\.?|inr|usd|\$|eur|€|gbp|£)\s*([0-9,]+(?:\.[0-9]{1,2})?)/gi,
+  // Explicit Grand Total with Currency Symbols (₹, $, ₹, etc)
+  /(?:grand\s*|net\s*|final\s*|total|amount\s*payable|balance(?:\s*due)?)\s*[:\-]?\s*(?:₹|rs?\.?|inr|usd|\$|eur|€|gbp|£)\s*([0-9,]+(?:\.[0-9]{1,2})?)/gi,
   // Floating Currency Symbols
   /(?:₹|rs?\.?|inr|usd|\$|eur|€|gbp|£)\s*([0-9,]+(?:\.[0-9]{1,2})?)/gi,
-  // Standard Totals without symbols
-  /\b(?:total|amt|amount|subtotal|tax|gst)\s*[:\-]?\s*([0-9,]+(?:\.[0-9]{1,2})?)\b/gi,
+  // Standard Totals without symbols but with keywords
+  /\b(?:total|amt|amount|subtotal|tax|gst|invoice\s*value)\s*[:\-]?\s*([0-9,]+(?:\.[0-9]{1,2})?)\b/gi,
+  // Indian specifically (e.g. 500.00)
+  /\b([0-9,]{2,}(?:\.[0-9]{2}))\b/g,
   // Trailing currency markers
-  /\b([0-9,]+(?:\.[0-9]{1,2})?)\s*(?:total|amt|amount|inr|usd)\b/gi,
+  /\b([0-9,]+(?:\.[0-9]{1,2})?)\s*(?:total|amt|amount|inr|usd|rounded|sum)\b/gi,
 ];
 
 const INCOME_KEYWORDS = [
@@ -40,15 +42,16 @@ const EXPENSE_KEYWORDS = [
  * Maps intelligence signals to enterprise categories.
  */
 const CATEGORY_RULES = [
-  { category: 'materials', keywords: ['material', 'raw', 'stock', 'inventory', 'hardware', 'iron', 'steel', 'scrap'], type: 'expense' as const },
-  { category: 'transport', keywords: ['fuel', 'petrol', 'diesel', 'travel', 'uber', 'ola', 'rapido', 'logistics', 'shipping'], type: 'expense' as const },
-  { category: 'salary', keywords: ['salary', 'wages', 'staff', 'payroll', 'consultant', 'stipend'], type: 'expense' as const },
-  { category: 'rent', keywords: ['rent', 'lease', 'office', 'co-working', 'maintenance'], type: 'expense' as const },
-  { category: 'utilities', keywords: ['electricity', 'water', 'internet', 'wi-fi', 'recharge', 'mobile', 'hosting', 'aws', 'cloud'], type: 'expense' as const },
-  { category: 'food', keywords: ['food', 'restaurant', 'swiggy', 'zomato', 'blinkit', 'zepto', 'coffee', 'pantry'], type: 'expense' as const },
-  { category: 'marketing', keywords: ['ads', 'meta', 'google ads', 'marketing', 'branding', 'design', 'seo'], type: 'expense' as const },
-  { category: 'sales', keywords: ['sale', 'customer', 'invoice', 'order', 'client', 'payment received'], type: 'income' as const },
-  { category: 'investment', keywords: ['investment', 'return', 'stock', 'crypto', 'interest'], type: 'income' as const },
+  { category: 'materials', keywords: ['material', 'raw', 'stock', 'inventory', 'hardware', 'iron', 'steel', 'scrap', 'cement', 'bricks', 'tools'], type: 'expense' as const },
+  { category: 'transport', keywords: ['fuel', 'petrol', 'diesel', 'travel', 'uber', 'ola', 'rapido', 'logistics', 'shipping', 'freight', 'carrier', 'toll'], type: 'expense' as const },
+  { category: 'salary', keywords: ['salary', 'wages', 'staff', 'payroll', 'consultant', 'stipend', 'bonus', 'contractor'], type: 'expense' as const },
+  { category: 'rent', keywords: ['rent', 'lease', 'office', 'co-working', 'maintenance', 'deposit', 'electricity'], type: 'expense' as const },
+  { category: 'utilities', keywords: ['electricity', 'water', 'internet', 'wi-fi', 'recharge', 'mobile', 'hosting', 'aws', 'cloud', 'subscription', 'software', 'saas'], type: 'expense' as const },
+  { category: 'food', keywords: ['food', 'restaurant', 'swiggy', 'zomato', 'blinkit', 'zepto', 'coffee', 'pantry', 'canteen', 'groceries'], type: 'expense' as const },
+  { category: 'marketing', keywords: ['ads', 'meta', 'google ads', 'marketing', 'branding', 'design', 'seo', 'promotion', 'print', 'digital'], type: 'expense' as const },
+  { category: 'sales', keywords: ['sale', 'customer', 'invoice', 'order', 'client', 'payment received', 'revenue', 'transaction', 'transfer In'], type: 'income' as const },
+  { category: 'investment', keywords: ['investment', 'return', 'stock', 'crypto', 'interest', 'dividend', 'mutual fund', 'fd', 'staking'], type: 'income' as const },
+  { category: 'misc', keywords: ['other', 'others', 'miscellaneous', 'cash', 'transfer'], type: 'expense' as const },
 ];
 
 /** 
@@ -62,12 +65,14 @@ async function preprocessImage(buffer: Buffer | string): Promise<Buffer> {
   const metadata = await img.metadata();
   const width = metadata.width || 1000;
   
+  // ULTRA-HIGH RESOLUTION ENHANCEMENT for Worst Case Scans
   return img
     .greyscale()
-    .linear(1.5, -0.2) // Contrast boost
-    .sharpen({ sigma: 1.5, m1: 2, m2: 2 })
-    .median(1) // Light noise removal
-    .resize(Math.max(width, 1800), null, { fit: 'inside' }) // Scale up for small text
+    .normalize() // Equalize histogram for better distribution
+    .linear(1.8, -0.25) // Extreme contrast boost for faded receipts
+    .sharpen({ sigma: 2.0, m1: 5, m2: 5 }) // Aggressive sharpening
+    .median(2) // Heavier noise removal
+    .resize(Math.max(width, 2400), null, { fit: 'inside', kernel: 'lanczos3' }) // Higher scale for digital reconstruction
     .toBuffer();
 }
 
@@ -103,11 +108,14 @@ async function openaiVisionFallback(buffer: Buffer, ocrText: string): Promise<st
         content: [
           {
             type: 'text',
-            text: `Perform elite OCR on this business record. Extract all details with extreme precision. Compare with raw OCR: "${ocrText.substring(0, 500)}". Focus on Merchant Name, Date, and Final Amount. Return ONLY the extracted text.`
+            text: `You are an Elite Forensic Business Accountant for BHIE. Parse this document with 100% accuracy.
+                   Target: [Merchant Name, Date, Currency, Final Amount, Type (Income/Expense), Category].
+                   Context: Digital OCR scan results were low confidence: "${ocrText.substring(0, 300)}".
+                   Return ONLY the primary detected text block content. Be meticulous.`
           },
           {
             type: 'image_url',
-            image_url: { url: `data:image/jpeg;base64,${base64}` }
+            image_url: { url: `data:image/jpeg;base64,${base64}`, detail: 'high' }
           }
         ]
       }],
@@ -134,6 +142,10 @@ function cleanText(text: string): string {
  * PRECISE AMOUNT SYNTHESIS
  * Scans for financial markers and stabilizes on the highest logical total.
  */
+/**
+ * PRECISE AMOUNT SYNTHESIS
+ * Scans for financial markers and stabilizes on the highest logical total.
+ */
 function extractAmount(text: string): { amount: number; confidence: number } {
   let bestAmount = 0;
   let maxMatchConf = 0;
@@ -145,7 +157,6 @@ function extractAmount(text: string): { amount: number; confidence: number } {
       const val = parseFloat(rawVal.replace(/,/g, '').replace(/[^0-9.]/g, ''));
       
       if (!isNaN(val) && val > 0) {
-        // High confidence tokens
         const weight = /total|grand|due|paid/i.test(match[0]) ? 1.0 : 0.6;
         if (val > bestAmount) {
           bestAmount = val;
@@ -159,6 +170,16 @@ function extractAmount(text: string): { amount: number; confidence: number } {
     amount: parseFloat(bestAmount.toFixed(2)), 
     confidence: bestAmount > 0 ? maxMatchConf : 0 
   };
+}
+
+/**
+ * ENGINE CALIBRATION LAYER
+ * Normalizes and stabilizes erratic numeric artifacting from low resolution scans.
+ */
+function calibrateEngineOutput(amount: number): number {
+  if (!amount || amount <= 0) return 0;
+  // Professional rounding - ensure exactly 2 decimal places with safe floating point math
+  return Math.round((amount + Number.EPSILON) * 100) / 100;
 }
 
 function detectType(text: string): 'income' | 'expense' {
@@ -222,6 +243,49 @@ function extractItems(text: string): string[] {
   return items.slice(0, 15); // Cap at 15 items for brevity
 }
 
+/**
+ * BUSINESS & LEGAL EXTRACTION
+ * Specialized patterns for Merchant identification and Tax compliance.
+ */
+function extractBusinessName(text: string): string {
+  const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 2);
+  const addressKeywords = ['street', 'road', 'floor', 'building', 'city', 'pin', 'tel:', 'phone:', 'email', 'www'];
+  const datePatterns = [/\d{2}[\/-]\d{2}[\/-]\d{2,4}/, /\d{4}[\/-]\d{2}[\/-]\d{2}/];
+  
+  for (let i = 0; i < Math.min(lines.length, 8); i++) {
+    const line = lines[i];
+    const lowLine = line.toLowerCase();
+    const isAddress = addressKeywords.some(kw => lowLine.includes(kw));
+    const isDate = datePatterns.some(p => p.test(line));
+    const isGst = /gst|tin|vat|reg:|fssai/i.test(lowLine);
+    const isNumeric = /^[0-9\s.,:#-]+$/.test(line);
+    const isTotal = /total|subtotal|tax|invoice/i.test(lowLine);
+    
+    if (!isAddress && !isDate && !isGst && !isNumeric && !isTotal && line.length > 3) {
+      return line;
+    }
+  }
+  return 'Unknown Merchant';
+}
+
+function extractGSTIN(text: string): string | undefined {
+  const GST_PATTERN = /\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}/;
+  const match = text.match(GST_PATTERN);
+  return match ? match[0] : undefined;
+}
+
+async function searchGSTDetails(gstin: string): Promise<any> {
+    if (!gstin || !openai) return undefined;
+    
+    try {
+        const { AIEngine } = await import('../utils/aiEngine.js');
+        const response = await AIEngine.generateCompletion(`Provide registration details for GSTIN: ${gstin}. Return as JSON with keys: legalName, tradeName, status, address, taxpayerType, registrationDate.`);
+        return JSON.parse(response.content || '{}');
+    } catch (e) {
+        return undefined;
+    }
+}
+
 /** 
  * ELITE INTEGRITY ORCHESTRATOR
  * Main entry point for the backend intelligence engine.
@@ -257,20 +321,45 @@ export async function processDocument(input: Buffer | string): Promise<DocumentI
     const category = detectCategory(cleanedText, type);
     const date = extractDate(cleanedText);
     const items = extractItems(rawText); 
+    const businessName = extractBusinessName(rawText);
+    const gstNumber = extractGSTIN(cleanedText);
     
-    // 5. Final Confidence Calculation
-    let finalConfidence = (ocrConfidence * 0.5) + (amountData.confidence * 0.5);
-    if (aiUsed) finalConfidence = Math.max(finalConfidence, 0.9);
+    // 5. Advanced GST Lookup
+    let gstDetails = undefined;
+    if (gstNumber) {
+        gstDetails = await searchGSTDetails(gstNumber);
+    }
+    
+    // 6. MISSING DETAILS GUIDANCE (Engine Feedback)
+    const missingFields: string[] = [];
+    if (amountData.amount <= 0) missingFields.push('amount');
+    if (!date || date === new Date().toISOString().split('T')[0]) missingFields.push('transaction date');
+    if (category === 'other') missingFields.push('category classification');
+    if (businessName === 'Unknown Merchant') missingFields.push('merchant name');
+    if (rawText.length < 20) missingFields.push('document content');
+
+    // 7. Final Confidence Calculation & Professional Calibration
+    let finalConfidence = (ocrConfidence * 0.4) + (amountData.confidence * 0.6);
+    if (aiUsed) finalConfidence = Math.max(finalConfidence, 0.85);
+    
+    const calibratedAmount = calibrateEngineOutput(amountData.amount);
+    const integrityScore = Math.max(0, 100 - (missingFields.length * 20));
 
     return {
-      amount: amountData.amount,
+      amount: calibratedAmount,
       type,
       category,
       confidence: parseFloat(finalConfidence.toFixed(2)),
       rawText: cleanedText,
-      exactText, // Returning the exact text as requested
+      exactText,
       items,
       date,
+      businessName,
+      gstNumber,
+      gstDetails,
+      missingFields,
+      integrityScore,
+      isUnclear: missingFields.length > 0 || finalConfidence < 0.6
     };
   } catch (error) {
     console.error('Intelligence Engine critical failure:', error);

@@ -22,14 +22,10 @@ const DashboardScreen = () => {
             setData(response.data);
         } catch (error) {
             setData({
-                revenue: 15420.00,
-                expenses: 3240.50,
-                netBalance: 12179.50,
-                transactions: [
-                    { id: '1', title: 'Global Payout', amount: 500, type: 'revenue', date: '2026-04-03' },
-                    { id: '2', title: 'Cloud Infrastructure', amount: -1200, type: 'expense', date: '2026-04-01' },
-                    { id: '3', title: 'Security Audit', amount: -40.50, type: 'expense', date: '2026-03-28' },
-                ]
+                revenue: 0,
+                expenses: 0,
+                netBalance: 0,
+                transactions: []
             });
         }
     };
@@ -49,8 +45,8 @@ const DashboardScreen = () => {
             <StatusBar style="light" />
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.header}>
-                    <Text style={styles.kicker}>Authorized Node</Text>
-                    <Text style={styles.userName}>Director <Text style={styles.highlight}>Dinesh</Text></Text>
+                    <Text style={styles.kicker}>Active Account</Text>
+                    <Text style={styles.userName}>Welcome, <Text style={styles.highlight}>Dinesh</Text></Text>
                 </View>
 
                 <ScrollView 
@@ -65,7 +61,7 @@ const DashboardScreen = () => {
                             style={styles.mainBalanceCard}
                         >
                             <View style={styles.balanceHeader}>
-                                <Text style={styles.cardLabel}>Net Strategic Capital</Text>
+                                <Text style={styles.cardLabel}>Total Balance</Text>
                                 <View style={styles.statusBadge}>
                                     <Text style={styles.statusText}>ELITE</Text>
                                 </View>
@@ -74,12 +70,12 @@ const DashboardScreen = () => {
                             
                             <View style={styles.statsContainer}>
                                 <View>
-                                    <Text style={styles.statLabel}>Revenue Velocity</Text>
+                                    <Text style={styles.statLabel}>Money In</Text>
                                     <Text style={styles.revenueText}>+₹{data.revenue.toLocaleString()}</Text>
                                 </View>
                                 <View style={styles.statDivider} />
                                 <View>
-                                    <Text style={styles.statLabel}>Expenditure</Text>
+                                    <Text style={styles.statLabel}>Money Out</Text>
                                     <Text style={styles.expenseText}>-₹{data.expenses.toLocaleString()}</Text>
                                 </View>
                             </View>
@@ -89,8 +85,8 @@ const DashboardScreen = () => {
                     {/* Transactions Section */}
                     <Animated.View entering={FadeInDown.delay(400).duration(800)}>
                         <View style={styles.sectionHeader}>
-                            <Text style={styles.sectionTitle}>Node Activity Log</Text>
-                            <Text style={styles.sectionSubtitle}>Last 72 hours of telemetry</Text>
+                            <Text style={styles.sectionTitle}>Recent Activity</Text>
+                            <Text style={styles.sectionSubtitle}>Your last 3 days</Text>
                         </View>
                         
                         {data.transactions.map((tx, index) => (

@@ -116,7 +116,7 @@ const Login = () => {
           {/* Header */}
           <div className="mb-8">
             <h2 className="text-4xl font-bold text-white mb-2">Sign In</h2>
-            <p className="text-gray-300">Welcome back to BHIE</p>
+            <p className="secondary-text">By Your Side. Always.</p>
           </div>
 
           {/* Error */}
@@ -134,7 +134,7 @@ const Login = () => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-200 mb-3">
+              <label htmlFor="email" className="block text-sm font-bold text-white mb-3">
                 Email Address
               </label>
               <input
@@ -144,14 +144,14 @@ const Login = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 bg-white/8 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                className="w-full px-4 py-3 bg-white/[0.08] border border-white/20 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all"
                 placeholder="you@example.com"
               />
             </div>
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-200 mb-3">
+              <label htmlFor="password" className="block text-sm font-bold text-white mb-3">
                 Password
               </label>
               <div className="relative">
@@ -223,7 +223,7 @@ const Login = () => {
           {/* Divider */}
           <div className="my-6 flex items-center gap-3">
             <div className="flex-1 h-px bg-white/10" />
-            <span className="text-xs text-gray-400 font-medium">OR</span>
+            <span className="text-xs tertiary-text font-medium">OR</span>
             <div className="flex-1 h-px bg-white/10" />
           </div>
 
@@ -247,7 +247,7 @@ const Login = () => {
 
           {/* Footer */}
           <div className="text-center">
-            <p className="text-gray-300">
+            <p className="secondary-text">
               Don't have an account?{' '}
               <motion.button
                 whileHover={{ scale: 1.05 }}

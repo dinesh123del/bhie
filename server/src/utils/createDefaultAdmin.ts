@@ -1,5 +1,5 @@
-import User from '../models/User';
-import { env } from '../config/env';
+import User from '../models/User.js';
+import { env } from '../config/env.js';
 
 export const createDefaultAdmin = async (): Promise<void> => {
   try {

@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { redisClient } from '../config/redisClient.js';
-import { AuthRequest } from '../types';
+import { AuthRequest } from '../types/index.js';
 
 export const cacheGet: RequestHandler = async (req, res, next) => {
   if (req.method !== 'GET') return next();

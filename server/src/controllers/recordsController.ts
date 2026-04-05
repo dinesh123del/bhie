@@ -1,10 +1,10 @@
 import Record from '../models/Record.js';
 import User from '../models/User.js';
-import { asyncHandler } from '../middleware/asyncHandler';
-import { AuthRequest } from '../types';
+import { asyncHandler } from '../middleware/asyncHandler.js';
+import { AuthRequest } from '../types/index.js';
 import { Response } from 'express';
-import { AppError } from '../utils/appError';
-import { assertObjectId, requireUser } from '../utils/request';
+import { AppError } from '../utils/appError.js';
+import { assertObjectId, requireUser } from '../utils/request.js';
 
 export const recordsController = {
   getRecent: asyncHandler(async (req: AuthRequest, res: Response) => {

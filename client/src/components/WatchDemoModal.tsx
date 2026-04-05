@@ -21,8 +21,8 @@ const steps = [
     icon: BrainCircuit,
     color: 'text-purple-400',
     bg: 'bg-purple-400/10 border-purple-400/20',
-    title: '2. AI Extracts Everything',
-    desc: 'Our AI reads merchant name, date, amount, GST, and category — automatically. No manual typing.',
+    title: '2. Automatic Extraction',
+    desc: 'Our system reads merchant name, date, amount, GST, and category — automatically. No manual typing.',
   },
   {
     icon: BarChart2,
@@ -36,7 +36,7 @@ const steps = [
     color: 'text-amber-400',
     bg: 'bg-amber-400/10 border-amber-400/20',
     title: '4. Take Action on Insights',
-    desc: 'BHIE AI surfaces top spending warnings, saving opportunities, and cash-flow predictions daily.',
+    desc: 'Our system surfaces top spending warnings, saving opportunities, and cash-flow predictions daily.',
   },
 ];
 
@@ -99,7 +99,9 @@ const playDolbyDemoSound = () => {
       sweepGain.connect(ctx.destination);
       sweep.start();
       sweep.stop(ctx.currentTime + 2.5);
-    } catch(e) {}
+    } catch(e) {
+      console.error('Failed to parse watch demo features', e);
+    }
 };
 
 const WatchDemoModal: React.FC<WatchDemoModalProps> = ({ isOpen, onClose }) => {
@@ -194,9 +196,9 @@ const WatchDemoModal: React.FC<WatchDemoModalProps> = ({ isOpen, onClose }) => {
                   <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none z-10 mix-blend-overlay" />
                   
                   <img 
-                    src="/demo.webp" 
+                    src="/demo.png" 
                     alt="BHIE Working App Demo" 
-                    className="w-full h-auto object-cover opacity-90"
+                    className="w-full h-auto object-cover opacity-90 shadow-2xl"
                   />
                   
                   {/* Playing Indicator */}

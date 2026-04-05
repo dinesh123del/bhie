@@ -46,6 +46,8 @@ import {
   buildStoryBullets,
   formatCurrency,
 } from '../utils/dashboardIntelligence';
+import { QuickActionsBar } from '../components/QuickActionsBar';
+import { premiumFeedback } from '../utils/premiumFeedback';
 
 interface MetricsSummary {
   kpis?: {
@@ -54,6 +56,7 @@ interface MetricsSummary {
     inactiveRatio?: number;
     growthRate?: number;
     revenue?: number;
+    expenses?: number;
     profitMargin?: number;
   };
   monthlyData?: Array<{ month: string; revenue: number; expenses: number; target: number }>;
@@ -191,6 +194,7 @@ const Dashboard = () => {
   const [latestUpload, setLatestUpload] = useState<UploadedImageRecord | null>(null);
   const [apiData, setApiData] = useState<DashboardResponse | null>(null);
   const [detailsOpen, setDetailsOpen] = useState({ recent: true, insights: true });
+  const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
   const hasLoadedRef = useRef(false);
   const mountedRef = useRef(true);
   const requestInFlightRef = useRef(false);
@@ -287,25 +291,25 @@ const Dashboard = () => {
   }, [loadDashboard]);
 
   const revenue = company?.revenue ?? metrics?.kpis?.revenue ?? 0;
-  const expenses = company?.expenses ?? (revenue > 0 ? revenue * 0.58 : 92000);
-  const profit = company?.profit ?? revenue - expenses;
-  const growthRate = company?.growthRate ?? metrics?.kpis?.growthRate ?? 12.5;
+  const expenses = company?.expenses ?? (metrics?.kpis?.expenses ?? 0);
+  const profit = company?.profit ?? (revenue - expenses);
+  const growthRate = company?.growthRate ?? metrics?.kpis?.growthRate ?? 0;
   const profitMargin =
     company?.profitMargin ??
     metrics?.kpis?.profitMargin ??
     (revenue > 0 ? (profit / revenue) * 100 : 0);
   const totalRecords = metrics?.kpis?.totalRecords ?? user?.usageCount ?? 0;
-  const activeRecords = metrics?.kpis?.activeRecords ?? Math.max(0, Math.round(totalRecords * 0.72));
-  const expenseRatio = revenue > 0 ? (expenses / revenue) * 100 : 58;
-  const aiInsightsEnabled = canUseAIInsights(user);
+  const activeRecords = metrics?.kpis?.activeRecords ?? totalRecords;
+  const expenseRatio = revenue > 0 ? (expenses / revenue) * 100 : 0;
+  const smartInsightsEnabled = canUseAIInsights(user);
   const remainingUploads = getRemainingUploads(user);
   const remainingUploadsLabel = Number.isFinite(remainingUploads)
     ? `${remainingUploads} free uploads left`
     : 'Unlimited uploads available';
-  const previousRevenue = revenue > 0 ? revenue / Math.max(0.2, 1 + growthRate / 100) : 140000;
+  const previousRevenue = revenue > 0 ? (revenue / Math.max(0.2, 1 + growthRate / 100)) : 0;
   const targetRevenue = previousRevenue * 1.18;
-  const revenueProgress = clamp(revenue > 0 ? (revenue / targetRevenue) * 100 : 86);
-  const expenseControlProgress = clamp(125 - expenseRatio);
+  const revenueProgress = clamp(targetRevenue > 0 ? (revenue / targetRevenue) * 100 : 0);
+  const expenseControlProgress = clamp(revenue > 0 ? (125 - expenseRatio) : 0);
   const profitGrowthProgress = clamp(profitMargin * 1.45 + Math.max(growthRate, 0) * 0.95);
   const overallProgress = Math.round((revenueProgress + expenseControlProgress + profitGrowthProgress) / 3);
 
@@ -552,14 +556,15 @@ const Dashboard = () => {
         </motion.section>
 
         <motion.section
-          initial={{ opacity: 0, y: 26 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.52, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.5, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
         >
-          <BusinessHealthEngine
-            score={healthScore}
-            status={scoreData?.status ?? (healthScore >= 80 ? 'Excellent' : healthScore >= 60 ? 'Good' : 'Needs attention')}
-            breakdown={healthBreakdown}
+          <QuickActionsBar 
+            onQuickAdd={() => {
+              setIsQuickAddOpen(true);
+              premiumFeedback.haptic(10);
+            }} 
           />
         </motion.section>
 
@@ -581,6 +586,18 @@ const Dashboard = () => {
               icon={card.icon}
             />
           ))}
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 26 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.52, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <BusinessHealthEngine
+            score={healthScore}
+            status={scoreData?.status ?? (healthScore >= 80 ? 'Excellent' : healthScore >= 60 ? 'Good' : 'Needs attention')}
+            breakdown={healthBreakdown}
+          />
         </motion.section>
 
 
@@ -659,12 +676,16 @@ const Dashboard = () => {
           className="grid gap-6 xl:grid-cols-[1.02fr_0.98fr]"
         >
           <div className="space-y-4">
-            <QuickAdd onRecordAdded={() => void loadDashboard()} />
             <FileUpload
               onUploadComplete={(items) => {
                 setLatestUpload(normalizeLatestUpload(items[0]));
                 void loadDashboard();
               }}
+            />
+            <QuickAdd 
+              onRecordAdded={() => void loadDashboard()} 
+              externalOpen={isQuickAddOpen}
+              onExternalClose={() => setIsQuickAddOpen(false)}
             />
           </div>
 
@@ -721,18 +742,18 @@ const Dashboard = () => {
               <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-5 backdrop-blur-md">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-400">Smart insights</p>
                 <div className="mt-4 grid gap-3">
-                  {(aiInsightsEnabled ? insights : []).slice(0, 3).map((insight) => (
+                  {(smartInsightsEnabled ? insights : []).slice(0, 3).map((insight) => (
                     <div key={insight.message} className="rounded-[1.2rem] border border-white/10 bg-black/10 p-4">
                       <p className="text-sm font-semibold text-white">{insight.message}</p>
                       {insight.detail ? <p className="mt-2 text-sm leading-6 text-ink-300">{insight.detail}</p> : null}
                     </div>
                   ))}
 
-                  {!aiInsightsEnabled || insights.length === 0 ? (
+                  {!smartInsightsEnabled || insights.length === 0 ? (
                     <div className="rounded-[1.2rem] border border-dashed border-white/12 bg-white/[0.02] p-4">
                       <p className="text-sm font-semibold text-white">Action guidance is active</p>
                       <p className="mt-2 text-sm leading-6 text-ink-300">
-                        BHIE is using business rules to keep recommendations useful even when premium AI insights are unavailable.
+                        BHIE is using business rules to keep recommendations useful even when premium insights are unavailable.
                       </p>
                     </div>
                   ) : null}

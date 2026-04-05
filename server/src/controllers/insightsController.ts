@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
-import Insight from '../models/Insight';
-import { IntelligenceEngine } from '../services/intelligenceEngine';
-import { AuthRequest } from '../types';
-import { asyncHandler } from '../middleware/asyncHandler';
+import Insight from '../models/Insight.js';
+import { IntelligenceEngine } from '../services/intelligenceEngine.js';
+import { AuthRequest } from '../types/index.js';
+import { asyncHandler } from '../middleware/asyncHandler.js';
 
 export const insightsController = {
   getInsights: asyncHandler(async (req: AuthRequest, res: Response) => {

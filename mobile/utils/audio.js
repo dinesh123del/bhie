@@ -10,7 +10,8 @@ export const playStartupSound = async () => {
       // Since I cannot create a .mp3 file here easily without an external tool,
       // I will skip the binary asset and focus on high-fidelity haptics 
       // which feel 'premium' on mobile.
-      { uri: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_735c0293d0.mp3?filename=success-1-6297.mp3' }
+      // Using a low-frequency, cinematic chime for a premium 'Apple-style' feel
+      { uri: 'https://assets.mixkit.co/active_storage/sfx/2435/2435-preview.mp3' }
     );
     await sound.playAsync();
   } catch (error) {

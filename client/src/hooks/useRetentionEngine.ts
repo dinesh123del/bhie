@@ -30,14 +30,14 @@ export const useRetentionEngine = (userData: any, expenses: any[]) => {
     if (todayTotal > yesterdayTotal && todayTotal > 0) {
       newInsights.push({
         id: 'spending-spike',
-        title: 'Spending Pulse',
+        title: 'Spending Alert',
         message: `Your expenses are ${Math.round((todayTotal/yesterdayTotal - 1) * 100)}% higher today than yesterday.`,
         type: 'warning'
       });
     } else if (todayTotal < yesterdayTotal && yesterdayTotal > 0) {
       newInsights.push({
         id: 'saving-pulse',
-        title: 'Efficiency Core',
+        title: 'Great Savings',
         message: `Excellent! You saved ₹${Math.round(yesterdayTotal - todayTotal)} today compared to yesterday.`,
         type: 'achievement'
       });
@@ -47,7 +47,7 @@ export const useRetentionEngine = (userData: any, expenses: any[]) => {
     if (expenses.length > 5) {
       newInsights.push({
         id: 'weekly-summary',
-        title: 'Intelligence Core',
+        title: 'Weekly Summary',
         message: `Your weekly summary is ready. Click to see how your habits shifted.`,
         type: 'insight'
       });

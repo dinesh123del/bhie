@@ -12,17 +12,21 @@ import {
   Ban,
   CheckCircle,
   XCircle,
-  RefreshCw
+  RefreshCw,
+  Settings as SettingsIcon,
+  ShieldAlert
 } from 'lucide-react';
-import { adminService, AdminUser, AdminStats } from '../services/adminService';
+import { adminService, AdminUser, AdminStats, AdminSettings } from '../services/adminService';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import { toast } from 'react-hot-toast';
 
 const Admin = () => {
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [users, setUsers] = useState<AdminUser[]>([]);
+  const [settings, setSettings] = useState<AdminSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [usersLoading, setUsersLoading] = useState(false);
+  const [settingsLoading, setSettingsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [planFilter, setPlanFilter] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('');
@@ -32,6 +36,7 @@ const Admin = () => {
   useEffect(() => {
     loadStats();
     loadUsers();
+    loadSettings();
   }, []);
 
   useEffect(() => {
@@ -44,9 +49,29 @@ const Admin = () => {
       setStats(statsData);
     } catch (error) {
       console.error('Failed to load stats:', error);
-      toast.error('Failed to load statistics');
+    }
+  };
+
+  const loadSettings = async () => {
+    try {
+      const settingsData = await adminService.getSettings();
+      setSettings(settingsData);
+    } catch (error) {
+      console.error('Failed to load settings:', error);
+    }
+  };
+
+  const handleUpdateSettings = async (newData: Partial<AdminSettings>) => {
+    try {
+      setSettingsLoading(true);
+      const updated = await adminService.updateSettings(newData);
+      setSettings(updated);
+      toast.success('Settings updated successfully');
+      loadStats(); // Reload stats as they depend on prices
+    } catch (error) {
+      toast.error('Failed to update settings');
     } finally {
-      setLoading(false);
+      setSettingsLoading(false);
     }
   };
 
@@ -75,7 +100,7 @@ const Admin = () => {
     }
   };
 
-  const handleUpdatePlan = async (userId: string, newPlan: 'free' | '59' | '119') => {
+  const handleUpdatePlan = async (userId: string, newPlan: 'free' | 'pro' | 'premium') => {
     try {
       await adminService.updateUserPlan(userId, { plan: newPlan });
       toast.success('User plan updated successfully');
@@ -207,12 +232,12 @@ const Admin = () => {
                   <span className="font-semibold">{stats.users.free}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">₹59/month</span>
-                  <span className="font-semibold">{stats.users.paid59}</span>
+                  <span className="text-slate-400">Pro</span>
+                  <span className="font-semibold">{stats.users.paidPro}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">₹119/month</span>
-                  <span className="font-semibold">{stats.users.paid119}</span>
+                  <span className="text-slate-400">Premium</span>
+                  <span className="font-semibold">{stats.users.paidPremium}</span>
                 </div>
               </div>
             </motion.div>
@@ -226,12 +251,12 @@ const Admin = () => {
               <h3 className="text-lg font-semibold mb-4">Revenue Breakdown</h3>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-slate-400">₹59 plans</span>
-                  <span className="font-semibold">{formatCurrency(stats.revenue.monthly59)}</span>
+                  <span className="text-slate-400">Pro plans</span>
+                  <span className="font-semibold">{formatCurrency(stats.revenue.monthlyPro)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">₹119 plans</span>
-                  <span className="font-semibold">{formatCurrency(stats.revenue.monthly119)}</span>
+                  <span className="text-slate-400">Premium plans</span>
+                  <span className="font-semibold">{formatCurrency(stats.revenue.monthlyPremium)}</span>
                 </div>
                 <hr className="border-slate-600" />
                 <div className="flex justify-between">
@@ -257,13 +282,98 @@ const Admin = () => {
                   <span className="text-slate-400">Conversion Rate</span>
                   <span className="font-semibold">
                     {stats.users.total > 0
-                      ? Math.round(((stats.users.paid59 + stats.users.paid119) / stats.users.total) * 100)
+                      ? Math.round(((stats.users.paidPro + stats.users.paidPremium) / stats.users.total) * 100)
                       : 0}%
                   </span>
                 </div>
               </div>
             </motion.div>
           </div>
+        )}
+
+        {/* System & Pricing Settings */}
+        {settings && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+            className="grid grid-cols-1 gap-6 mb-8"
+          >
+            <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700 backdrop-blur-md">
+              <div className="flex items-center gap-3 mb-6">
+                <SettingsIcon className="w-5 h-5 text-indigo-400" />
+                <h2 className="text-xl font-semibold">System & Pricing Configuration</h2>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="space-y-2">
+                  <label className="text-sm text-slate-400">Pro Plan Price ({settings.currency})</label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={settings.proPrice}
+                      onChange={(e) => setSettings({ ...settings, proPrice: parseInt(e.target.value) })}
+                      className="bg-slate-900 border border-slate-700 rounded px-3 py-2 w-full focus:ring-1 focus:ring-indigo-500 outline-none"
+                    />
+                    <button 
+                      onClick={() => handleUpdateSettings({ proPrice: settings.proPrice })}
+                      disabled={settingsLoading}
+                      className="bg-indigo-600 hover:bg-indigo-500 rounded px-4 py-2 text-sm font-medium transition-colors"
+                    >
+                      Update
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm text-slate-400">Premium Plan Price ({settings.currency})</label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={settings.premiumPrice}
+                      onChange={(e) => setSettings({ ...settings, premiumPrice: parseInt(e.target.value) })}
+                      className="bg-slate-900 border border-slate-700 rounded px-3 py-2 w-full focus:ring-1 focus:ring-indigo-500 outline-none"
+                    />
+                    <button 
+                      onClick={() => handleUpdateSettings({ premiumPrice: settings.premiumPrice })}
+                      disabled={settingsLoading}
+                      className="bg-indigo-600 hover:bg-indigo-500 rounded px-4 py-2 text-sm font-medium transition-colors"
+                    >
+                      Update
+                    </button>
+                  </div>
+                </div>
+
+                <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-4 flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-indigo-300">Free Access Mode</p>
+                    <p className="text-xs text-slate-400 mt-1">Users can upgrade without payment</p>
+                  </div>
+                  <button
+                    onClick={() => handleUpdateSettings({ isFreeMode: !settings.isFreeMode })}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+                      settings.isFreeMode ? 'bg-indigo-600' : 'bg-slate-700'
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        settings.isFreeMode ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
+                </div>
+              </div>
+              
+              {settings.isFreeMode && (
+                <div className="mt-6 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-center gap-3">
+                  <ShieldAlert className="w-5 h-5 text-amber-500" />
+                  <p className="text-xs text-amber-200">
+                    <strong>Note:</strong> Free Access Mode is currently ACTIVE. Payment processing is bypassed for all new upgrades.
+                  </p>
+                </div>
+              )}
+            </div>
+          </motion.div>
         )}
 
         {/* Users Management */}
@@ -293,8 +403,8 @@ const Admin = () => {
               >
                 <option value="">All Plans</option>
                 <option value="free">Free</option>
-                <option value="59">₹59</option>
-                <option value="119">₹119</option>
+                <option value="pro">Pro</option>
+                <option value="premium">Premium</option>
               </select>
 
               <select
@@ -351,10 +461,10 @@ const Admin = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                           user.plan === 'free' ? 'bg-gray-600 text-gray-200' :
-                          user.plan === '59' ? 'bg-blue-600 text-blue-200' :
+                          user.plan === 'pro' ? 'bg-blue-600 text-blue-200' :
                           'bg-purple-600 text-purple-200'
                         }`}>
-                          {user.plan === 'free' ? 'Free' : `₹${user.plan}/mo`}
+                          {user.plan === 'free' ? 'Free' : user.plan.toUpperCase()}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -375,12 +485,12 @@ const Admin = () => {
                           {/* Plan Update Dropdown */}
                           <select
                             value={user.plan}
-                            onChange={(e) => handleUpdatePlan(user._id, e.target.value as 'free' | '59' | '119')}
+                            onChange={(e) => handleUpdatePlan(user._id, e.target.value as 'free' | 'pro' | 'premium')}
                             className="px-2 py-1 bg-slate-600 border border-slate-500 rounded text-xs text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
                           >
                             <option value="free">Free</option>
-                            <option value="59">₹59</option>
-                            <option value="119">₹119</option>
+                            <option value="pro">Pro</option>
+                            <option value="premium">Premium</option>
                           </select>
 
                           {/* Status Toggle */}

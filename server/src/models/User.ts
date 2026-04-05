@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-import type { PlanType } from '../types';
+import type { PlanType } from '../types/index.js';
 import { FREE_UPLOAD_LIMIT, PLAN_CONFIG, type PaidPlanType } from '../utils/planConfig.js';
 
 type SubscriptionStatus = 'active' | 'inactive' | 'expired';
@@ -103,8 +103,19 @@ const userSchema = new mongoose.Schema<UserDocument>({
 });
 
 userSchema.methods.hasPremiumAccess = function(this: UserDocument) {
+  // Admins always have premium access for free
+  if (this.role === 'admin') {
+    return true;
+  }
+
   if (this.plan === 'free') {
     return false;
+  }
+
+  // If the user is logged in and has a plan (pro/premium), 
+  // allow access regardless of expiry for now (as requested: "free no payment needed")
+  if (this.plan === 'pro' || this.plan === 'premium') {
+    return true;
   }
 
   if (!this.isActive || !this.planExpiry) {
@@ -115,6 +126,7 @@ userSchema.methods.hasPremiumAccess = function(this: UserDocument) {
 };
 
 userSchema.methods.getEffectivePlan = function(this: UserDocument): 'free' | 'pro' | 'premium' {
+  if (this.role === 'admin') return 'premium';
   return this.hasPremiumAccess() ? this.plan : 'free';
 };
 

@@ -44,7 +44,7 @@ export class OCRService {
     `;
 
     try {
-      const response = await AIEngine.generateCompletion(prompt, { preferredProvider: 'openai' });
+      const response = await AIEngine.generateCompletion(prompt);
       const extracted = JSON.parse(response.content);
 
       return {

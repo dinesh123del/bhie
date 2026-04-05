@@ -5,7 +5,7 @@ export interface Recommendation {
   message: string;
 }
 
-export { getBusinessAdvisorExplanation } from './businessAdvisor';
+export { getBusinessAdvisorExplanation } from './businessAdvisor.js';
 
 
 export interface PredictionsData {

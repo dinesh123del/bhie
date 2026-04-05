@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { recordsController } from '../controllers/recordsController';
-import { authenticateToken } from '../middleware/auth';
+import { recordsController } from '../controllers/recordsController.js';
+import { authenticateToken } from '../middleware/auth.js';
 
 const router = Router();
 

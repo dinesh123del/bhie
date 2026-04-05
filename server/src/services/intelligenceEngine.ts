@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import Insight from '../models/Insight';
-import BusinessRecord from '../models/Record';
+import Insight from '../models/Insight.js';
+import BusinessRecord from '../models/Record.js';
 
 export class IntelligenceEngine {
   static async generateInsights(userId: mongoose.Types.ObjectId): Promise<void> {

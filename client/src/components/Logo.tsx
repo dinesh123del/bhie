@@ -125,7 +125,7 @@ const LogoInner = ({
     animate={{ opacity: 1, scale: 1, y: 0 }}
     whileHover={{ scale: 1.01 }}
     transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-    className={`group relative inline-flex items-center ${sizeMap[size].gap} ${sizeMap[size].shell} border border-white/10 bg-white/[0.03] backdrop-blur-xl ${className || ''}`}
+    className={`group relative inline-flex items-center ${sizeMap[size].gap} ${sizeMap[size].shell} border border-white/20 bg-white/[0.08] backdrop-blur-xl ${className || ''}`}
   >
     {glow && (
       <motion.div

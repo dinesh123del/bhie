@@ -9,6 +9,7 @@ import { AppError } from '../utils/appError.js';
 import { requireUser } from '../utils/request.js';
 import { PLAN_CONFIG, RAZORPAY_PLAN_IDS, isPaidPlan } from '../utils/planConfig.js';
 import { getRazorpayClient } from '../utils/razorpay.js';
+import { subscriptionController } from '../controllers/subscriptionController.js';
 const router = express.Router();
 router.get('/webhook', (_req, res) => {
     res.status(405).json({ message: 'Method not allowed' });
@@ -41,7 +42,7 @@ router.get('/plans', asyncHandler(async (_req, res) => {
 }));
 router.get('/subscription', asyncHandler(async (req, res) => {
     const user = requireUser(req);
-    const account = await User.findById(user.userId).select('plan isActive planExpiry usageCount isPremium subscriptionId subscriptionStatus');
+    const account = await User.findById(user.userId).select('plan role isActive planExpiry usageCount isPremium subscriptionId subscriptionStatus');
     if (!account) {
         throw new AppError(404, 'User not found');
     }
@@ -229,4 +230,5 @@ router.post('/webhook', express.raw({ type: 'application/json', limit: env.BODY_
     }
     res.json({ received: true });
 }));
+router.post('/direct-upgrade', subscriptionController.directUpgrade);
 export default router;

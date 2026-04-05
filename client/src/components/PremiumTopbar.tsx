@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import {
   Bell,
   Search,
@@ -20,49 +21,63 @@ import { Logo } from './Logo';
 
 const PremiumTopbar = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [showProfile, setShowProfile] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
+    const handleScroll = (e: Event) => {
+      setIsScrolled((e.target as HTMLElement).scrollTop > 0);
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const mainContainer = document.getElementById('main-scroll-container');
+    if (mainContainer) {
+      mainContainer.addEventListener('scroll', handleScroll, { passive: true });
+      return () => mainContainer.removeEventListener('scroll', handleScroll);
+    }
   }, []);
 
   const handleAction = () => {
     premiumFeedback.click();
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      handleAction();
+      // Navigate to records with search query as a best-effort redirect
+      navigate(`/records?q=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery('');
+    }
+  };
+
   return (
     <motion.header
-      className={`fixed top-0 right-0 z-40 px-8 transition-all duration-300 h-20 ${
+      className={`absolute top-0 left-0 right-0 z-40 px-8 transition-all duration-300 h-20 ${
         isScrolled 
-          ? 'bg-[#0A0A0A]/80 backdrop-blur-xl border-b border-white/[0.08] dark:bg-[#0A0A0A]/80 dark:border-white/[0.08]' 
+          ? 'bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-black/[0.03] dark:border-white/[0.08]' 
           : 'bg-transparent'
       }`}
-      style={{ left: 'var(--sidebar-width, auto)' }}
     >
       <div className="flex items-center h-full justify-between gap-8">
         
-        {/* Left Side: Logo & Modern Search */}
-        <div className="flex items-center gap-8 flex-1 max-w-2xl">
-          <Logo size="sm" showSubtitle={false} className="border-none shadow-none bg-transparent" />
-          
+        {/* Left Side: Modern Search */}
+        <div className="flex items-center gap-8 flex-1 max-w-xl">
           <div className="flex-1 hidden md:block">
-            <div className="relative group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black/20 dark:text-white/20 transition-colors group-focus-within:text-brand-500" />
+            <form onSubmit={handleSearch} className="relative group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black/50 dark:text-white/70 transition-colors group-focus-within:text-brand-500" />
               <input
                 type="text"
-                placeholder="Quick search..."
-                className="w-full bg-black/[0.01] dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-2xl py-2.5 pl-11 pr-12 text-sm text-black dark:text-white placeholder-black/20 dark:placeholder-white/20 focus:outline-none focus:ring-4 focus:ring-brand-500/5 focus:border-brand-500/20 transition-all font-medium"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search resources (records, scans, analytics...)"
+                className="w-full bg-white/[0.08] border border-white/20 rounded-2xl py-2.5 pl-11 pr-12 text-sm text-white placeholder-white/60 focus:outline-none focus:ring-4 focus:ring-brand-500/5 focus:border-brand-500/40 transition-all font-medium"
               />
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 px-2 py-0.5 rounded-lg bg-black/[0.02] dark:bg-white/[0.02] text-[10px] font-bold text-black/20 dark:text-white/20 border border-black/5 dark:border-white/5">
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 px-2 py-0.5 rounded-lg bg-black/[0.05] dark:bg-white/[0.05] text-[10px] font-bold text-black/40 dark:text-white/50 border border-black/10 dark:border-white/10">
                 <Command className="w-3 h-3" />
                 <span>K</span>
               </div>
-            </div>
+            </form>
           </div>
         </div>
 
@@ -72,8 +87,11 @@ const PremiumTopbar = () => {
           <ThemeToggle />
 
           <button
-            onClick={handleAction}
-            className="p-2.5 rounded-2xl bg-black/[0.01] dark:bg-white/[0.02] border border-black/5 dark:border-white/5 text-black/40 dark:text-white/40 hover:text-brand-500 dark:hover:text-brand-400 transition-all relative overflow-hidden group"
+            onClick={() => {
+              handleAction();
+              navigate('/notifications');
+            }}
+            className="p-2.5 rounded-2xl bg-black/[0.03] dark:bg-white/[0.05] border border-black/10 dark:border-white/10 text-black/60 dark:text-white/60 hover:text-brand-500 dark:hover:text-brand-400 transition-all relative overflow-hidden group"
           >
             <Bell className="w-5 h-5" />
             <span className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-brand-500 shadow-lg shadow-brand-500/50" />
@@ -110,11 +128,11 @@ const PremiumTopbar = () => {
                 <p className="text-sm font-black text-black dark:text-white tracking-tighter truncate max-w-[120px] leading-none mb-1">
                   {user?.name}
                 </p>
-                <p className="text-[10px] font-bold text-black/30 dark:text-white/20 uppercase tracking-widest leading-none">
+                <p className="text-[10px] font-bold text-black/50 dark:text-white/40 uppercase tracking-widest leading-none">
                   {user?.role || 'User'}
                 </p>
               </div>
-              <ChevronDown className={`w-4 h-4 text-black/20 dark:text-white/20 transition-transform duration-300 ${showProfile ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-4 h-4 text-black/40 dark:text-white/40 transition-transform duration-300 ${showProfile ? 'rotate-180' : ''}`} />
             </button>
 
             {/* Account Popover */}
@@ -127,25 +145,29 @@ const PremiumTopbar = () => {
                   className="absolute right-0 mt-4 w-64 rounded-3xl bg-white dark:bg-[#0f172a] border border-black/[0.03] dark:border-white/5 shadow-2xl p-4 z-50 ring-1 ring-black/5 overflow-hidden"
                 >
                   <div className="mb-4 pb-4 border-b border-black/[0.03] dark:border-white/5">
-                    <p className="text-[10px] font-black text-black/20 dark:text-white/20 tracking-widest uppercase mb-3 px-2">Account Registry</p>
+                    <p className="text-[10px] font-black text-black/20 dark:text-white/20 tracking-widest uppercase mb-3 px-2">Profile Details</p>
                     <div className="p-3 rounded-2xl bg-black/[0.01] dark:bg-white/[0.01] border border-black/5 dark:border-white/5">
                       <p className="text-xs font-black text-black dark:text-white mb-1 truncate">{user?.email}</p>
                       <div className="flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-[9px] text-black/30 dark:text-white/30 font-black uppercase tracking-widest leading-none">Active Identity</span>
+                        <span className="text-[9px] text-black/30 dark:text-white/30 font-black uppercase tracking-widest leading-none">Active Account</span>
                       </div>
                     </div>
                   </div>
 
                   <div className="space-y-1">
                     {[
-                      { icon: User, label: 'Profile Settings' },
-                      { icon: Settings, label: 'Ecosystem Config' },
-                      { icon: HelpCircle, label: 'Documentation' }
+                       { icon: User, label: 'Profile', path: '/profile' },
+                       { icon: Settings, label: 'Settings', path: '/settings' },
+                       { icon: HelpCircle, label: 'Help', path: '/about' }
                     ].map((item, i) => (
                       <button
                         key={i}
-                        onClick={handleAction}
+                        onClick={() => {
+                          handleAction();
+                          setShowProfile(false);
+                          navigate(item.path);
+                        }}
                         className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-black/50 dark:text-white/40 hover:text-brand-500 dark:hover:text-brand-400 hover:bg-brand-500/5 transition-all text-xs font-black uppercase tracking-widest"
                       >
                         <item.icon className="w-4 h-4" />
@@ -159,11 +181,12 @@ const PremiumTopbar = () => {
                         onClick={() => {
                           handleAction();
                           logout();
+                          navigate('/login');
                         }}
                         className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-rose-500 hover:bg-rose-500/5 transition-all text-xs font-black uppercase tracking-widest"
                       >
                         <div className="w-4 h-4" />
-                        Terminate Session
+                        Log Out
                       </button>
                     </div>
                   </div>
@@ -178,3 +201,4 @@ const PremiumTopbar = () => {
 };
 
 export default PremiumTopbar;
+

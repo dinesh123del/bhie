@@ -1,9 +1,9 @@
 import express from 'express';
-import { Report } from '../models/Report';
-import { asyncHandler } from '../middleware/asyncHandler';
-import { authenticateToken } from '../middleware/auth';
-import { AppError } from '../utils/appError';
-import { requireUser } from '../utils/request';
+import { Report } from '../models/Report.js';
+import { asyncHandler } from '../middleware/asyncHandler.js';
+import { authenticateToken } from '../middleware/auth.js';
+import { AppError } from '../utils/appError.js';
+import { requireUser } from '../utils/request.js';
 const router = express.Router();
 router.use(authenticateToken);
 router.get('/', asyncHandler(async (req, res) => {

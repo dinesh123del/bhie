@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-import User from '../models/User';
+import User from '../models/User.js';
 
 export class SubscriptionManager {
   static startExpiryChecker() {

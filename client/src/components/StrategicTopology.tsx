@@ -26,8 +26,8 @@ export const StrategicTopology = ({ records }: TopologyProps) => {
             <Network className="w-5 h-5 text-sky-400" />
          </div>
          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Strategic Topology</p>
-            <h3 className="text-sm font-black text-white uppercase tracking-tighter">Capital Node Distribution</h3>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Spending View</p>
+            <h3 className="text-sm font-black text-white uppercase tracking-tighter">Your Money Map</h3>
          </div>
       </div>
 
@@ -74,7 +74,7 @@ export const StrategicTopology = ({ records }: TopologyProps) => {
             
             <div className="absolute -bottom-12 opacity-0 group-hover:opacity-100 transition-all text-[8px] font-black text-sky-400 flex items-center gap-2">
                <Terminal className="w-3 h-3" />
-               <span>RESONANCE DETECTED</span>
+               <span>HIGH SPENDING DETECTED</span>
             </div>
           </motion.div>
         ))}
@@ -83,10 +83,10 @@ export const StrategicTopology = ({ records }: TopologyProps) => {
       <div className="absolute bottom-8 right-8 text-[10px] font-black text-white/20 uppercase tracking-[0.3em] flex items-center gap-4">
          <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
-            <span>TOPOLOGY_ACTIVE</span>
+            <span>LIVE VIEW</span>
          </div>
          <div className="w-px h-3 bg-white/10" />
-         <span>DRAG TO RE-CALIBRATE</span>
+         <span>DRAG TO MOVE</span>
       </div>
     </div>
   );

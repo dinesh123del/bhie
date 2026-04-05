@@ -34,6 +34,8 @@ const recordSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
+    gstNumber: String,
+    gstDetails: mongoose.Schema.Types.Mixed,
 }, {
     timestamps: true,
 });

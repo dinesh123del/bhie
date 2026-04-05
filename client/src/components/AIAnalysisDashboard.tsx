@@ -49,7 +49,7 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
       <div className="p-10 bg-red-500/5 border border-red-500/20 rounded-3xl backdrop-blur-xl">
         <div className="flex items-center gap-4 mb-4">
            <AlertTriangle className="w-6 h-6 text-red-400" />
-           <p className="text-xl font-bold text-white">Analysis Interrupted</p>
+           <p className="text-xl font-bold text-white">Something went wrong</p>
         </div>
         <p className="text-red-200/60 font-medium">
           {analysisResult?.message || 'The AI analyst encountered an unexpected issue. Please try again.'}
@@ -74,7 +74,7 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-4">
              <Sparkles className="w-5 h-5 text-white/80" />
-             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/70">Expert Analysis Complete</span>
+             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/70">Analysis Done</span>
           </div>
           <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-4 leading-none">Business Summary.</h1>
           <div className="flex items-center gap-2 text-white/70 font-medium bg-black/10 w-fit px-4 py-2 rounded-full backdrop-blur-md">
@@ -88,7 +88,7 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
           { label: 'Total Revenue', value: analysisResult.businessData.revenue, icon: <IndianRupee />, color: 'sky' },
-          { label: 'Operational Burn', value: analysisResult.businessData.expenses, icon: <Wallet />, color: 'amber' },
+          { label: 'Business Expenses', value: analysisResult.businessData.expenses, icon: <Wallet />, color: 'amber' },
           { label: 'User Base', value: analysisResult.businessData.customerCount, icon: <Users />, color: 'purple' }
         ].map((kpi, i) => (
           <PremiumCard key={i} extreme={kpi.color === 'sky'} className="relative p-8 bg-white/[0.02] overflow-hidden">
@@ -123,7 +123,7 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
         <PremiumCard className="p-8 bg-white/[0.01]">
           <div className="flex items-center justify-between mb-10">
             <h2 className="text-2xl font-black text-white tracking-tight">Financial Health</h2>
-            <PremiumBadge tone="positive">Stability Optimal</PremiumBadge>
+            <PremiumBadge tone="positive">Doing Good</PremiumBadge>
           </div>
           
           <div className="grid grid-cols-2 gap-6 mb-10">
@@ -132,14 +132,14 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
               <p className="text-3xl font-black text-sky-400">{analysis.financial.profitMargin}</p>
             </div>
             <div className="p-6 bg-white/[0.03] border border-white/5 rounded-2xl">
-              <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-2">Burn Velocity</p>
+              <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-2">Spending Speed</p>
               <p className="text-3xl font-black text-white">{analysis.financial.expenseRatio}</p>
             </div>
           </div>
 
           <div className="space-y-6">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/20 mb-4">Tactical Findings</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/20 mb-4">Tips for You</p>
               <ul className="space-y-3">
                 {analysis.financial.keyFindings.map((finding: string, idx: number) => (
                   <li key={idx} className="flex gap-3 text-sm text-white/60 leading-relaxed font-medium">
@@ -178,9 +178,9 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
 
           <div className="space-y-4 mb-10">
             {[
-              { label: '3-Month', sub: 'Tactical Window', val: analysis.predictions.forecast3Month, color: 'sky' },
-              { label: '6-Month', sub: 'Strategic Horizon', val: analysis.predictions.forecast6Month, color: 'indigo' },
-              { label: '12-Month', sub: 'Corporate Trajectory', val: analysis.predictions.forecast12Month, color: 'purple' }
+              { label: '3-Month', sub: 'Next 3 Months', val: analysis.predictions.forecast3Month, color: 'sky' },
+              { label: '6-Month', sub: 'Next 6 Months', val: analysis.predictions.forecast6Month, color: 'indigo' },
+              { label: '12-Month', sub: 'Next Year', val: analysis.predictions.forecast12Month, color: 'purple' }
             ].map((f, i) => (
               <div key={i} className="group relative p-6 bg-white/[0.02] hover:bg-white/[0.04] border border-white/5 rounded-2xl transition-all flex items-center justify-between">
                  <div>
@@ -216,8 +216,8 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
                <Target className="w-6 h-6 text-white" />
             </div>
             <div>
-               <h2 className="text-3xl font-black text-white tracking-tight italic uppercase">Market Execution</h2>
-               <p className="text-xs text-white/40 font-black uppercase tracking-[0.25em]">Strategic Command Directive</p>
+               <h2 className="text-3xl font-black text-white tracking-tight italic uppercase">Market Strategy</h2>
+               <p className="text-xs text-white/40 font-black uppercase tracking-[0.25em]">Key Business Tips</p>
             </div>
          </div>
 
@@ -281,7 +281,7 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
          <div className="mb-10 p-8 bg-white text-slate-950 rounded-[2rem] shadow-[0_30px_60px_-15px_rgba(255,255,255,0.2)]">
             <div className="flex items-center gap-3 mb-6">
                <Zap className="w-5 h-5 text-sky-600 fill-current" />
-               <span className="text-xs font-black uppercase tracking-[0.3em]">Immediate Priority Protocols</span>
+               <span className="text-xs font-black uppercase tracking-[0.3em]">Do These Now</span>
             </div>
             <div className="grid md:grid-cols-3 gap-6">
                {analysis.strategies.immediateActions.slice(0, 3).map((action: string, idx: number) => (
@@ -314,7 +314,7 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
                      {[
                        { label: 'Expectation', val: strategy.expectedImpact },
                        { label: 'Timeline', val: strategy.timeline },
-                       { label: 'Risk Model', val: strategy.riskLevel },
+                       { label: 'Safety Level', val: strategy.riskLevel },
                        { label: 'Confidence', val: strategy.confidence }
                      ].map((stat, sidx) => (
                        <div key={sidx} className="p-4 bg-white/5 rounded-xl border border-white/5">
@@ -338,7 +338,7 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
       {/* Global Defense Protocols */}
       <PremiumCard className="p-10 border-red-500/20 bg-red-500/5 backdrop-blur-3xl">
         <h3 className="text-2xl font-black text-red-100 italic tracking-tighter mb-8 flex items-center gap-3 underline underline-offset-8 decoration-red-500/40">
-           <ShieldCheck className="w-6 h-6 text-red-500" /> Global Defense Protocols
+           <ShieldCheck className="w-6 h-6 text-red-500" /> Protecting Your Business
         </h3>
         <div className="grid md:grid-cols-2 gap-8">
            <ul className="space-y-4">
@@ -351,7 +351,7 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({
            </ul>
            <div className="flex flex-col justify-end items-end">
               <div className="text-right">
-                 <p className="text-[10px] font-black text-red-400/60 uppercase tracking-[0.3em] mb-1">System Audit Requisite</p>
+                 <p className="text-[10px] font-black text-red-400/60 uppercase tracking-[0.3em] mb-1">Next Check-up</p>
                  <p className="text-xl font-black text-white">{analysis.strategies.nextReviewDate}</p>
               </div>
            </div>

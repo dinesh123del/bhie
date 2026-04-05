@@ -16,11 +16,12 @@ export const apiLimiter = rateLimit({
 });
 
 /**
- * Sensitive operation limiter (Auth, Payments)
+ * BANK-GRADE SECURITY: Sensitive operation limiter (Auth, Payments)
+ * Strictly limits attempts to block brute-force attacks.
  */
 export const sensitiveLimiter = rateLimit({
   windowMs: env.AUTH_RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000,
-  max: env.AUTH_RATE_LIMIT_MAX || 10,
+  max: 5, // Bank-grade strictness: 5 attempts max per window
   message: {
     success: false,
     message: 'Too many consecutive attempts, please try again after 15 minutes',

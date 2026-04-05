@@ -90,43 +90,43 @@ const PremiumAnalytics = () => {
     { icon: <Wallet className="w-5 h-5" />, label: 'Pro Plan', href: '/pricing' },
   ];
 
-  const cashFlowData = [
-    { name: 'Jan', revenue: 45000, expenses: 32000, profit: 13000 },
-    { name: 'Feb', revenue: 52000, expenses: 34000, profit: 18000 },
-    { name: 'Mar', revenue: 48000, expenses: 38000, profit: 10000 },
-    { name: 'Apr', revenue: 61000, expenses: 42000, profit: 19000 },
-    { name: 'May', revenue: 55000, expenses: 40000, profit: 15000 },
-    { name: 'Jun', revenue: 67000, expenses: 45000, profit: 22000 },
+  // Dynamic data derivation
+  const cashFlowData = metrics?.monthlyData || [
+    { name: 'No Data', revenue: 0, expenses: 0, profit: 0 }
   ];
 
-  const radarData = [
-    { subject: 'Marketing', A: 120, B: 110, fullMark: 150 },
-    { subject: 'Payroll', A: 98, B: 130, fullMark: 150 },
-    { subject: 'Software', A: 86, B: 130, fullMark: 150 },
-    { subject: 'Rent', A: 99, B: 100, fullMark: 150 },
-    { subject: 'Travel', A: 85, B: 90, fullMark: 150 },
-    { subject: 'Operations', A: 65, B: 85, fullMark: 150 },
+  const radarData = metrics?.kpis ? [
+    { subject: 'Marketing', A: 0, B: 0, fullMark: 150 },
+    { subject: 'Payroll', A: 0, B: 0, fullMark: 150 },
+    { subject: 'Software', A: 0, B: 0, fullMark: 150 },
+    { subject: 'Rent', A: 0, B: 0, fullMark: 150 },
+    { subject: 'Travel', A: 0, B: 0, fullMark: 150 },
+    { subject: 'Operations', A: 0, B: 0, fullMark: 150 },
+  ] : [
+    { subject: 'Marketing', A: 0, B: 0, fullMark: 150 },
+    { subject: 'Payroll', A: 0, B: 0, fullMark: 150 },
+    { subject: 'Software', A: 0, B: 0, fullMark: 150 },
+    { subject: 'Rent', A: 0, B: 0, fullMark: 150 },
+    { subject: 'Travel', A: 0, B: 0, fullMark: 150 },
+    { subject: 'Operations', A: 0, B: 0, fullMark: 150 },
   ];
 
-  const performanceData = [
-    { name: 'Mon', active: 400, target: 240 },
-    { name: 'Tue', active: 300, target: 139 },
-    { name: 'Wed', active: 200, target: 980 },
-    { name: 'Thu', active: 278, target: 390 },
-    { name: 'Fri', active: 189, target: 480 },
-    { name: 'Sat', active: 239, target: 380 },
-    { name: 'Sun', active: 349, target: 430 },
+  const performanceData = metrics?.monthlyData ? metrics.monthlyData.map((d: any) => ({
+    name: d.month,
+    active: d.revenue,
+    target: d.target
+  })) : [
+    { name: 'Mon', active: 0, target: 0 },
+    { name: 'Tue', active: 0, target: 0 },
+    { name: 'Wed', active: 0, target: 0 },
+    { name: 'Thu', active: 0, target: 0 },
+    { name: 'Fri', active: 0, target: 0 },
+    { name: 'Sat', active: 0, target: 0 },
+    { name: 'Sun', active: 0, target: 0 },
   ];
 
   if (loading) {
     return (
-      <MainLayout
-        sidebarItems={sidebarItems}
-        activePage="/analytics"
-        onNavigate={(href) => navigate(href)}
-        onLogout={handleLogout}
-        userName={user?.name}
-      >
         <div className="space-y-6">
           <div className="h-12 bg-white/5 rounded-xl animate-pulse" />
           <div className="grid gap-6 md:grid-cols-3">
@@ -135,18 +135,11 @@ const PremiumAnalytics = () => {
             ))}
           </div>
         </div>
-      </MainLayout>
     );
   }
 
   return (
-    <MainLayout
-      sidebarItems={sidebarItems}
-      activePage="/analytics"
-      onNavigate={(href) => navigate(href)}
-      onLogout={handleLogout}
-      userName={user?.name}
-    >
+    <>
       <div className="space-y-8">
         {/* Header */}
         <motion.div
@@ -162,7 +155,7 @@ const PremiumAnalytics = () => {
                 <span className="text-xs font-black uppercase tracking-[0.3em]">Institutional Grade</span>
              </div>
             <h1 className="text-5xl font-black text-white tracking-tighter">Business Intelligence<span className="text-sky-500">.</span></h1>
-            <p className="text-gray-400 mt-1 font-medium">Real-time financial synthesis for scaled operations</p>
+            <p className="secondary-text mt-1 font-medium">Real-time financial synthesis for scaled operations</p>
           </div>
           <motion.div className="flex gap-3">
             <PremiumButton variant="secondary" size="md" icon={<Filter className="w-4 h-4" />}>
@@ -177,10 +170,10 @@ const PremiumAnalytics = () => {
         {/* KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { icon: <Zap className="w-6 h-6 text-yellow-400" />, label: "Cash Velocity", value: "8.4x", trend: "+12.2%", color: "yellow" },
-            { icon: <TrendingUp className="w-6 h-6 text-emerald-400" />, label: "Gross Margin", value: "64.8%", trend: "+2.4%", color: "emerald" },
-            { icon: <Wallet className="w-6 h-6 text-sky-400" />, label: "Burn Rate", value: "₹4.2L", trend: "-5.1%", color: "sky" },
-            { icon: <PieIcon className="w-6 h-6 text-indigo-400" />, label: "EBITDA Margin", value: "31.2%", trend: "+1.8%", color: "indigo" }
+            { icon: <Zap className="w-6 h-6 text-yellow-400" />, label: "Cash Velocity", value: metrics?.kpis?.growthRate ? `${(metrics.kpis.growthRate / 10).toFixed(1)}x` : "0.0x", trend: metrics?.kpis?.growthRate ? `+${metrics.kpis.growthRate}%` : "0%", color: "yellow" },
+            { icon: <TrendingUp className="w-6 h-6 text-emerald-400" />, label: "Gross Margin", value: metrics?.kpis?.profitMargin ? `${metrics.kpis.profitMargin.toFixed(1)}%` : "0.0%", trend: "0%", color: "emerald" },
+            { icon: <Wallet className="w-6 h-6 text-sky-400" />, label: "Total Revenue", value: metrics?.kpis?.revenue ? `₹${(metrics.kpis.revenue / 100000).toFixed(1)}L` : "₹0.0L", trend: "0%", color: "sky" },
+            { icon: <PieIcon className="w-6 h-6 text-indigo-400" />, label: "Net Profit", value: metrics?.kpis?.profit ? `₹${(metrics.kpis.profit / 100000).toFixed(1)}L` : "₹0.0L", trend: "0%", color: "indigo" }
           ].map((kpi, i) => (
             <motion.div 
               key={i}
@@ -213,7 +206,7 @@ const PremiumAnalytics = () => {
               <div className="flex items-center justify-between mb-8">
                 <div>
                   <h3 className="text-xl font-black text-white tracking-tight">Cumulative Cash Flow</h3>
-                  <p className="text-xs text-white/30 uppercase tracking-widest mt-1">Revenue vs Operating Expenses</p>
+                  <p className="text-xs secondary-text uppercase tracking-widest mt-1">Revenue vs Operating Expenses</p>
                 </div>
               </div>
               <div className="h-[350px] w-full">
@@ -254,7 +247,7 @@ const PremiumAnalytics = () => {
               <div className="flex items-center justify-between mb-8">
                 <div>
                   <h3 className="text-xl font-black text-white tracking-tight">Resource Synthesis</h3>
-                  <p className="text-xs text-white/30 uppercase tracking-widest mt-1">Variance across structural domains</p>
+                  <p className="text-xs secondary-text uppercase tracking-widest mt-1">Variance across structural domains</p>
                 </div>
               </div>
               <div className="h-[350px] w-full">
@@ -295,7 +288,7 @@ const PremiumAnalytics = () => {
              <div className="flex items-center justify-between mb-8">
                 <div>
                   <h3 className="text-xl font-black text-white tracking-tight">Operational Performance</h3>
-                  <p className="text-xs text-white/30 uppercase tracking-widest mt-1">Active vs Target Benchmark</p>
+                  <p className="text-xs secondary-text uppercase tracking-widest mt-1">Active vs Target Benchmark</p>
                 </div>
               </div>
               <div className="h-[300px] w-full">
@@ -334,7 +327,7 @@ const PremiumAnalytics = () => {
                   <Sparkles className="w-3 h-3" /> Core Intelligence
                 </motion.div>
                 <h3 className="text-3xl font-black text-white tracking-tight">AI Strategic Analysis</h3>
-                <p className="text-gray-400 mt-2 font-medium">Synthesized business recommendations based on real-time data.</p>
+                <p className="secondary-text mt-2 font-medium">Synthesized business recommendations based on real-time data.</p>
               </div>
               {aiInsightsEnabled ? (
                 <PremiumButton 
@@ -359,7 +352,7 @@ const PremiumAnalytics = () => {
                   <Sparkles className="w-20 h-20 mx-auto mb-6 text-sky-400/40" />
                 </motion.div>
                 <h3 className="text-2xl font-black text-white mb-4">Unlock Strategic Power</h3>
-                <p className="mx-auto max-w-xl text-gray-400 font-medium leading-relaxed">
+                <p className="mx-auto max-w-xl secondary-text font-medium leading-relaxed">
                   The AI Strategic Engine is currently reserved for Pro Tier users. Upgrade today to access predictive forecasting, expense optimization, and growth scaling strategies.
                 </p>
                 <div className="mt-8 flex justify-center gap-4">
@@ -377,8 +370,7 @@ const PremiumAnalytics = () => {
           </div>
         </motion.div>
       </div>
-    </MainLayout>
-  );
+  </>);
 };
 
 export default PremiumAnalytics;

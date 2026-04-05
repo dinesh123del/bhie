@@ -10,6 +10,8 @@ interface RecordDocument extends mongoose.Document {
   status: string;
   fileUrl?: string;
   userId: mongoose.Types.ObjectId;
+  gstNumber?: string;
+  gstDetails?: any;
 }
 
 const recordSchema = new mongoose.Schema<RecordDocument>({
@@ -47,6 +49,8 @@ const recordSchema = new mongoose.Schema<RecordDocument>({
     ref: 'User',
     required: true,
   },
+  gstNumber: String,
+  gstDetails: mongoose.Schema.Types.Mixed,
 }, {
   timestamps: true,
 });

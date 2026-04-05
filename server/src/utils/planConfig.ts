@@ -1,4 +1,4 @@
-import type { PlanType } from '../types';
+import type { PlanType } from '../types/index.js';
 
 export type PaidPlanType = Exclude<PlanType, 'free'>;
 

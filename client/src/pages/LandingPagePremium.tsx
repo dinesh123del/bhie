@@ -407,7 +407,7 @@ export default function LandingPagePremium() {
               features={[
                 'Unlimited records',
                 'Advanced analytics',
-                'Predictive AI',
+                'Predictive Logic',
                 'Priority support',
                 '100 GB storage',
                 'Advanced API',

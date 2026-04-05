@@ -92,6 +92,13 @@ export const authService = {
     return normalizedUser;
   },
 
+  updateMe: async (updates: Partial<AuthUser>): Promise<AuthUser> => {
+    const response = await api.patch('/auth/me', updates);
+    const normalizedUser = normalizeUser(response.data.user);
+    localStorage.setItem('user', JSON.stringify(normalizedUser));
+    return normalizedUser;
+  },
+
   logout: async () => {
     try {
       await authAPI.logout();

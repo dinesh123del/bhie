@@ -13,21 +13,24 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="BHIE">
     <link rel="apple-touch-icon" href="/icon-192.png">
+    
+    <!-- BANK-GRADE SECURITY: Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://checkout.razorpay.com https://*.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://*.googleusercontent.com https://*.razorpay.com; connect-src 'self' http://localhost:5001 https://*.razorpay.com https://api.openai.com https://api.anthropic.com; font-src 'self' https://fonts.gstatic.com; object-src 'none'; frame-src 'self' https://api.razorpay.com;">
     <!-- BHIE Premium Typography: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
       /* Critical render path: prevent flash */
-      html { background: #0A0A0A; }
+      html { background: var(--bg, #0A0A0A); }
       body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
     </style>
-    <script type="module" crossorigin src="/assets/index-D4zY3WD_.js"></script>
-    <link rel="modulepreload" crossorigin href="/assets/motion-HLaulvEs.js">
-    <link rel="modulepreload" crossorigin href="/assets/charts-B3l_p52A.js">
-    <link rel="modulepreload" crossorigin href="/assets/icons-BRaIHm4s.js">
+    <script type="module" crossorigin src="/assets/index-BxQuPhVL.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/motion-DO_lp7YQ.js">
+    <link rel="modulepreload" crossorigin href="/assets/charts-CJ07aCCx.js">
     <link rel="modulepreload" crossorigin href="/assets/network-BfPGe2AS.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-CYSAGii5.css">
+    <link rel="modulepreload" crossorigin href="/assets/icons-CXTMT4Xk.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-DAP2LzvX.css">
   </head>
   <body>
     <div id="root"></div>

@@ -28,7 +28,7 @@ export class AIEngine {
     prompt: string,
     options: AIEngineOptions = {}
   ): Promise<AIResponse> {
-    const { preferredProvider = 'openai', fallbackEnabled = true } = options;
+    const { preferredProvider = 'claude', fallbackEnabled = true } = options;
     
     // Priority queue of providers
     const providers: AIProvider[] = [preferredProvider];
@@ -84,30 +84,15 @@ export class AIEngine {
   }
 
   private static async callClaude(prompt: string): Promise<AIResponse> {
-    if (!env.CLAUDE_API_KEY) return { success: false, content: '', provider: 'claude', model: '', error: 'API key missing' };
-
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': env.CLAUDE_API_KEY,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-3-haiku-20240307',
-        max_tokens: 2000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-
-    const data = await response.json() as any;
-    if (!response.ok) return { success: false, content: '', provider: 'claude', model: '', error: data.error?.message || 'Claude error' };
-
+    const { callClaude } = await import('./claude.js');
+    const result = await callClaude(prompt, 'claude-3-5-sonnet-20240620');
+    
     return {
-      success: true,
-      content: data.content[0]?.text || '',
+      success: result.success,
+      content: result.raw,
       provider: 'claude',
-      model: 'claude-3-haiku'
+      model: 'claude-3-5-sonnet',
+      error: result.error
     };
   }
 

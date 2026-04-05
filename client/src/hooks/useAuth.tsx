@@ -20,6 +20,7 @@ interface AuthContextType {
     userData: Pick<AuthUser, 'id' | 'name' | 'email' | 'role'> & Partial<AuthUser>
   ) => void;
   logout: () => void;
+  updateProfile: (updates: Partial<User>) => void;
   refetchUser: () => Promise<void>;
   validateAuth: () => Promise<void>;
 }
@@ -164,6 +165,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
     navigate('/login', { replace: true });
   };
 
+  // Update profile locally
+  const updateProfile = (updates: Partial<User>) => {
+    setUser(prev => {
+      if (!prev) return null;
+      const updated = { ...prev, ...updates };
+      localStorage.setItem('user', JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   // Refetch user data
   const refetchUser = async () => {
     try {
@@ -183,11 +194,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
         loading,
         login,
         logout,
+        updateProfile,
         refetchUser,
         validateAuth,
       }}
     >
       {children}
     </AuthContext.Provider>
+
   );
 }

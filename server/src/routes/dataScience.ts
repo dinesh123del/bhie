@@ -2,16 +2,18 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs/promises';
-import { asyncHandler } from '../middleware/asyncHandler';
-import { authenticateToken } from '../middleware/auth';
-import { dataScienceAgent } from '../agents/dataScienceAgent';
-import { ensureUploadDir, uploadDir } from '../utils/uploads';
-import { AppError } from '../utils/appError';
-import { AuthRequest } from '../types';
+import { asyncHandler } from '../middleware/asyncHandler.js';
+import { authenticateToken } from '../middleware/auth.js';
+import { dataScienceAgent } from '../agents/dataScienceAgent.js';
+import { ensureUploadDir, uploadDir } from '../utils/uploads.js';
+import { AppError } from '../utils/appError.js';
+import { AuthRequest } from '../types/index.js';
 import csv from 'csv-parser';
 import * as XLSX from 'xlsx';
 import { Readable } from 'stream';
-import { PDFParse } from 'pdf-parse';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const pdf = require('pdf-parse');
 
 const router = express.Router();
 
@@ -107,13 +109,8 @@ function parseExcel(filePath: string): any[] {
 
 async function parsePDF(filePath: string): Promise<string> {
   const buffer = await fs.readFile(filePath);
-  const parser = new PDFParse({ data: buffer });
-  try {
-    const parsed = await parser.getText();
-    return String(parsed.text || '').trim();
-  } finally {
-    await parser.destroy();
-  }
+  const data = await pdf(buffer);
+  return (data.text || '').trim();
 }
 
 export default router;

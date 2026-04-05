@@ -3,32 +3,32 @@ import express, { Response } from 'express';
 import mongoose from 'mongoose';
 import multer from 'multer';
 import path from 'path';
-import { env } from '../config/env';
-import { asyncHandler } from '../middleware/asyncHandler';
-import { authenticateToken } from '../middleware/auth';
-import { redisClient } from '../config/redisClient';
-import Image from '../models/Image';
+import { env } from '../config/env.js';
+import { asyncHandler } from '../middleware/asyncHandler.js';
+import { authenticateToken } from '../middleware/auth.js';
+import { redisClient } from '../config/redisClient.js';
+import Image from '../models/Image.js';
 import ImageIntelligence, {
   ImageDetectedType,
   ImageIntelligenceDocument,
   ImageProcessingStatus,
-} from '../models/ImageIntelligence';
-import BusinessRecord from '../models/Record';
-import Upload from '../models/Upload';
-import User from '../models/User';
+} from '../models/ImageIntelligence.js';
+import BusinessRecord from '../models/Record.js';
+import Upload from '../models/Upload.js';
+import User from '../models/User.js';
 import {
   detectFileType,
   processUploadedFile,
-} from '../services/fileRecordService';
+} from '../services/fileRecordService.js';
 import {
   enqueueImageProcessing,
   reverseImageSearch,
-} from '../services/imageIntelligenceService';
-import { processImageForRecord } from '../services/imageRecordService';
-import { AuthRequest } from '../types';
-import { AppError } from '../utils/appError';
-import { cleanupFiles, ensureUploadDir, uploadDir } from '../utils/uploads';
-import { requireUser } from '../utils/request';
+} from '../services/imageIntelligenceService.js';
+import { processImageForRecord } from '../services/imageRecordService.js';
+import { AuthRequest } from '../types/index.js';
+import { AppError } from '../utils/appError.js';
+import { cleanupFiles, ensureUploadDir, uploadDir } from '../utils/uploads.js';
+import { requireUser } from '../utils/request.js';
 
 const router = express.Router();
 
@@ -462,7 +462,7 @@ async function handleRecordUpload(req: AuthRequest, res: Response): Promise<void
 
         const record = await BusinessRecord.create({
           userId: authUser.userId,
-          title: buildRecordTitle(processed.category, processed.detectedType, processed.sourceName),
+          title: processed.businessName || buildRecordTitle(processed.category, processed.detectedType, processed.sourceName),
           type: processed.detectedType === 'unknown' ? 'expense' : processed.detectedType,
           amount: processed.amount,
           category: processed.category,
@@ -470,6 +470,8 @@ async function handleRecordUpload(req: AuthRequest, res: Response): Promise<void
           description: processed.extractedText || `Created from ${processed.fileType.toUpperCase()} upload: ${processed.sourceName}`,
           status: 'completed',
           fileUrl: imageUrl,
+          gstNumber: processed.gstNumber,
+          gstDetails: processed.gstDetails,
         });
 
         const uploadEntry = await Upload.create({
@@ -544,6 +546,12 @@ async function handleRecordUpload(req: AuthRequest, res: Response): Promise<void
             category: processed.category,
             date: processed.date,
             amountMatch: processed.amountMatch,
+            businessName: processed.businessName,
+            gstNumber: processed.gstNumber,
+            gstDetails: processed.gstDetails,
+            isUnclear: processed.isUnclear,
+            missingFields: processed.missingFields,
+            integrityScore: processed.integrityScore,
           },
         });
       }

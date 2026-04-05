@@ -9,7 +9,7 @@ interface Message {
   timestamp: string;
 }
 
-const AIChat = () => {
+const SmartChat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -34,7 +34,7 @@ const AIChat = () => {
       const predRes = await api.get('/ai/prediction');
       setPrediction(predRes.data);
     } catch (error) {
-      console.error('AI data load failed');
+      console.error('Data load failed');
     }
   };
 
@@ -88,7 +88,7 @@ const AIChat = () => {
         <div className="lg:col-span-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white p-8 rounded-3xl shadow-2xl">
           <div className="flex items-center mb-6">
             <TrendingUp className="w-8 h-8 mr-3" />
-            <h2 className="text-2xl font-bold">AI Insights</h2>
+            <h2 className="text-2xl font-bold">Smart Insights</h2>
           </div>
           {insights?.insights?.map((insight: any, index: number) => (
             <div key={index} className={`mb-4 p-4 rounded-2xl ${
@@ -139,7 +139,7 @@ const AIChat = () => {
           <div className="flex items-center mb-4">
             <Bot className="w-10 h-10 bg-blue-100 text-blue-600 p-3 rounded-2xl mr-4" />
             <div>
-              <h2 className="text-2xl font-bold text-white">AI Business Assistant</h2>
+              <h2 className="text-2xl font-bold text-white">Smart Business Assistant</h2>
               <p className="text-gray-600 dark:text-gray-400">Ask about growth, risks, suggestions</p>
             </div>
           </div>
@@ -199,7 +199,7 @@ const AIChat = () => {
             <div className="flex justify-start">
               <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 rounded-2xl shadow-lg max-w-md">
                 <LoadingSpinner />
-                <p className="text-sm text-gray-500 mt-2">AI is thinking...</p>
+                <p className="text-sm text-gray-500 mt-2">Thinking...</p>
               </div>
             </div>
           )}
@@ -214,7 +214,7 @@ const AIChat = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-              placeholder="Ask AI about your business data..."
+              placeholder="Ask about your business data..."
               className="flex-1 px-4 py-3 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600"
               disabled={loading}
             />
@@ -232,5 +232,5 @@ const AIChat = () => {
   );
 };
 
-export default AIChat;
+export default SmartChat;
 

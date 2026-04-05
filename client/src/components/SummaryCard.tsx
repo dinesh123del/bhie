@@ -49,38 +49,42 @@ const SummaryCard = ({
     <motion.div
       initial={{ opacity: 0, y: 22 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -3, scale: 1.01 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -8, transition: { duration: 0.2 } }}
       className="h-full"
     >
-      <PremiumCard
-        gradient={highlight}
-        hoverable={false}
-        className={`h-full min-h-[230px] border ${highlight ? 'border-white/15 shadow-glass-hover' : 'border-white/10'}`}
-      >
-        <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${currentTone.halo} opacity-80`} />
+      <div className={`group relative h-full overflow-hidden rounded-[3rem] p-px transition-all duration-500 shadow-2xl ${highlight ? 'bg-gradient-to-br from-brand-400 to-purple-500' : 'bg-white/10 hover:bg-white/20'}`}>
+        <div className="relative h-full bg-white dark:bg-[#0A0A0B] rounded-[2.95rem] p-10 flex flex-col justify-between gap-8 backdrop-blur-3xl transition-colors duration-500 group-hover:bg-white/95 dark:group-hover:bg-[#121214]">
+          <div className={`absolute inset-0 bg-gradient-to-br ${currentTone.halo} opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
 
-        <div className="relative flex h-full flex-col justify-between gap-6">
-          <div className="flex items-start justify-between gap-4">
-            <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-ink-400">{title}</p>
-              <h3 className="text-3xl font-semibold tracking-[-0.06em] text-white md:text-[2.4rem]">{value}</h3>
+          <div className="relative z-10 flex flex-col gap-6">
+            <div className="flex items-start justify-between">
+              <div className="space-y-4">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                  {title}
+                </p>
+                <div className="text-4xl md:text-5xl font-[900] tracking-tighter text-gray-900 dark:text-white leading-none tabular-nums">
+                  {value}
+                </div>
+              </div>
+
+              <div className={`flex h-16 w-16 items-center justify-center rounded-[1.5rem] border backdrop-blur-xl group-hover:scale-110 transition-transform duration-500 ${currentTone.iconWrap}`}>
+                {icon}
+              </div>
             </div>
 
-            <div className={`flex h-14 w-14 items-center justify-center rounded-2xl border backdrop-blur-md ${currentTone.iconWrap}`}>
-              {icon}
+            <div className="flex flex-wrap gap-2.5">
+               <span className={`inline-flex items-center gap-2 rounded-xl px-4 py-1.5 text-[10px] font-black uppercase tracking-widest border transition-all duration-500 ${currentTone.chip}`}>
+                {currentTone.indicator}
+                {change}
+              </span>
             </div>
           </div>
 
-          <div className="space-y-3">
-            <span className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] ${currentTone.chip}`}>
-              {currentTone.indicator}
-              {change}
-            </span>
-            <p className="max-w-xs text-sm leading-6 text-ink-300">{detail}</p>
-          </div>
+          <p className="relative z-10 text-sm leading-relaxed font-semibold text-gray-500 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors">
+            {detail}
+          </p>
         </div>
-      </PremiumCard>
+      </div>
     </motion.div>
   );
 };

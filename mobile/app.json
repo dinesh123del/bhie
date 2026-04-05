@@ -16,7 +16,11 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.billsense.mobile",
       "infoPlist": {
-        "NSCameraUsageDescription": "BillSense needs camera access to scan receipts."
+        "NSCameraUsageDescription": "BHIE needs camera access to scan receipts.",
+        "NSUserNotificationsUsageDescription": "BHIE sends you business alerts and payment reminders."
+      },
+      "entitlements": {
+        "aps-environment": "production"
       },
       "runtimeVersion": {
         "policy": "appVersion"
@@ -30,6 +34,9 @@
       },
       "permissions": [
         "NOTIFICATIONS",
+        "USE_REMOTE_NOTIFICATIONS",
+        "VIBRATE",
+        "RECEIVE_BOOT_COMPLETED",
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE"

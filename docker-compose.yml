@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  bhie-app:
+    build: .
+    ports:
+      - "5001:5001"
+    environment:
+      - NODE_ENV=production
+      - PORT=5001
+      - MONGO_URI=mongodb://mongodb:27017/bhie
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=change_me_super_secret_jwt_key
+      # Add all other necessary .env file configurations here (OpenAI, Razorpay, etc.)
+    depends_on:
+      - mongodb
+      - redis
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:6-jammy
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:
+  redis_data:

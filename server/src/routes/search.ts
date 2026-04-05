@@ -1,10 +1,10 @@
 import express, { Response } from 'express';
-import { asyncHandler } from '../middleware/asyncHandler';
-import { authenticateToken } from '../middleware/auth';
-import { AuthRequest } from '../types';
-import { searchImageIntelligence } from '../services/imageIntelligenceService';
-import { AppError } from '../utils/appError';
-import { requireUser } from '../utils/request';
+import { asyncHandler } from '../middleware/asyncHandler.js';
+import { authenticateToken } from '../middleware/auth.js';
+import { AuthRequest } from '../types/index.js';
+import { searchImageIntelligence } from '../services/imageIntelligenceService.js';
+import { AppError } from '../utils/appError.js';
+import { requireUser } from '../utils/request.js';
 
 const router = express.Router();
 

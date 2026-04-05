@@ -5,12 +5,13 @@ import User from '../models/User.js';
 import { asyncHandler } from '../middleware/asyncHandler.js';
 import { authenticateToken } from '../middleware/auth.js';
 import type { CreateOrderRequest, VerifyPaymentRequest } from '../types/payment.js';
-import { AuthRequest } from '../types';
+import { AuthRequest } from '../types/index.js';
 import { env } from '../config/env.js';
 import { AppError } from '../utils/appError.js';
 import { requireUser } from '../utils/request.js';
 import { PLAN_CONFIG, RAZORPAY_PLAN_IDS, isPaidPlan, type PaidPlanType } from '../utils/planConfig.js';
 import { getRazorpayClient } from '../utils/razorpay.js';
+import { subscriptionController } from '../controllers/subscriptionController.js';
 
 const router: Router = express.Router();
 
@@ -61,7 +62,7 @@ router.get(
   '/subscription',
   asyncHandler(async (req: AuthRequest, res: Response) => {
     const user = requireUser(req);
-    const account = await User.findById(user.userId).select('plan isActive planExpiry usageCount isPremium subscriptionId subscriptionStatus');
+    const account = await User.findById(user.userId).select('plan role isActive planExpiry usageCount isPremium subscriptionId subscriptionStatus');
 
     if (!account) {
       throw new AppError(404, 'User not found');
@@ -304,5 +305,7 @@ router.post(
     res.json({ received: true });
   })
 );
+
+router.post('/direct-upgrade', subscriptionController.directUpgrade);
 
 export default router;

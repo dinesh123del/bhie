@@ -83,7 +83,7 @@ export const DataScienceHub: React.FC = () => {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setAnalysis(response.data.analysis);
-      toast.success('Analysis Synthesis Complete');
+      toast.success('Analysis Done');
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Analysis failed');
     } finally {
@@ -102,14 +102,14 @@ export const DataScienceHub: React.FC = () => {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-6"
           >
             <GraduationCap className="w-4 h-4 text-emerald-400" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Business Analysis Hub</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Expert Business Check</span>
           </motion.div>
           
           <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-[0.9] mb-4">
-            Expert <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-white to-blue-400">Analysis.</span>
+            Expert Business <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-white to-blue-400">Check.</span>
           </h1>
           <p className="max-w-2xl text-xl text-white/40 font-medium leading-relaxed">
-            Upload your files or business documents. Our professional AI runs a full business audit and finds growth patterns in seconds.
+            Upload your spreadsheets or business files. Our smart AI will study them and find easy ways for you to grow in seconds.
           </p>
         </div>
 
@@ -126,8 +126,8 @@ export const DataScienceHub: React.FC = () => {
                     <Beaker className="w-5 h-5" />
                 </div>
                 <div>
-                   <h2 className="text-xl font-bold text-white tracking-tight">Upload Report</h2>
-                   <p className="text-xs text-white/40 uppercase tracking-widest font-black">Professional Audit Tool</p>
+                   <h2 className="text-xl font-bold text-white tracking-tight">Upload Your File</h2>
+                   <p className="text-xs text-white/40 uppercase tracking-widest font-black">Smart Business Tool</p>
                 </div>
               </div>
 
@@ -146,8 +146,8 @@ export const DataScienceHub: React.FC = () => {
                   <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-4 border border-emerald-400/10">
                     <Upload className="w-6 h-6" />
                   </div>
-                  <h3 className="text-white font-bold mb-1">Upload Data</h3>
-                  <p className="text-xs text-white/30 font-medium">Drop CSV, Excel, or PDF here</p>
+                  <h3 className="text-white font-bold mb-1">Pick a File</h3>
+                  <p className="text-xs text-white/30 font-medium">Put your spreadsheet or PDF here</p>
                 </motion.div>
               ) : (
                 <motion.div 
@@ -173,7 +173,7 @@ export const DataScienceHub: React.FC = () => {
                     loading={loading}
                     className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black border-none py-4"
                   >
-                    Generate Report
+                    See My Results
                   </PremiumButton>
                 </motion.div>
               )}
@@ -182,14 +182,14 @@ export const DataScienceHub: React.FC = () => {
               <div className="mt-10 p-6 bg-emerald-500/5 border border-emerald-400/10 rounded-2xl">
                  <div className="flex items-center gap-2 mb-4">
                     <Sparkles className="w-3 h-3 text-emerald-400" />
-                    <span className="text-[10px] font-black text-emerald-400/80 uppercase tracking-widest">DS Analysis Stack</span>
+                    <span className="text-[10px] font-black text-emerald-400/80 uppercase tracking-widest">What we check</span>
                  </div>
                  <ul className="space-y-3">
                    {[
-                     "Professional Cost & Price Audit",
-                     "Business Performance Metrics",
-                     "Operational Risk Check",
-                     "Growth & Profit Projections"
+                     "Checking your costs & prices",
+                     "Seeing how well you're doing",
+                     "Finding any problems",
+                     "Seeing your future growth"
                    ].map((item, i) => (
                      <li key={i} className="flex items-center gap-3 text-[10px] text-white/50 font-medium font-mono">
                         <ChevronRight className="w-2.5 h-2.5 text-emerald-400" /> {item}
@@ -217,7 +217,7 @@ export const DataScienceHub: React.FC = () => {
                       <div className="w-12 h-12 rounded-2xl bg-emerald-400/10 flex items-center justify-center text-emerald-400">
                         <Sparkles className="w-6 h-6" />
                       </div>
-                      <h2 className="text-3xl font-black text-white italic">The Synthesis</h2>
+                      <h2 className="text-3xl font-black text-white italic">What We Found</h2>
                     </div>
                     <p className="text-xl text-white/70 leading-relaxed font-medium italic">
                       "{analysis.summary}"
@@ -230,7 +230,7 @@ export const DataScienceHub: React.FC = () => {
                       <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400">
                         <TrendingUp className="w-4 h-4" />
                       </div>
-                      <h3 className="text-xl font-black text-white uppercase tracking-tighter">Strategic Profitability Roadmap</h3>
+                      <h3 className="text-xl font-black text-white uppercase tracking-tighter">Your Plan to Grow</h3>
                     </div>
 
                     <div className="grid grid-cols-1 gap-4">
@@ -290,7 +290,7 @@ export const DataScienceHub: React.FC = () => {
                     <PremiumCard className="p-8 border-white/5">
                       <div className="flex items-center gap-3 mb-6">
                         <BrainCircuit className="w-5 h-5 text-purple-400" />
-                        <h3 className="text-lg font-black text-white uppercase tracking-tighter">Correlation Matrix</h3>
+                        <h3 className="text-lg font-black text-white uppercase tracking-tighter">Connections Found</h3>
                       </div>
                       <div className="space-y-4">
                         {analysis.correlations.map((c, i) => (
@@ -305,7 +305,7 @@ export const DataScienceHub: React.FC = () => {
                     <PremiumCard className="p-8 border-white/5">
                       <div className="flex items-center gap-3 mb-6">
                         <ShieldCheck className="w-5 h-5 text-amber-400" />
-                        <h3 className="text-lg font-black text-white uppercase tracking-tighter">Anomaly Detection</h3>
+                        <h3 className="text-lg font-black text-white uppercase tracking-tighter">Odd Numbers Found</h3>
                       </div>
                       <div className="space-y-4">
                         {analysis.outliers.map((o, i) => (
@@ -339,33 +339,32 @@ export const DataScienceHub: React.FC = () => {
                     </div>
                   </PremiumCard>
 
-                  {/* DS 101: Educational Section */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <PremiumCard className="p-6 border-white/5 bg-blue-500/5 hover:bg-blue-500/10 transition-colors">
                       <div className="flex items-center gap-3 mb-4 text-blue-400">
                         <LineChart className="w-5 h-5" />
-                        <h4 className="font-black text-xs uppercase tracking-widest">Trend Logic</h4>
+                        <h4 className="font-black text-xs uppercase tracking-widest">Track Your Trends</h4>
                       </div>
                       <p className="text-xs text-white/40 leading-relaxed">
-                        We use exponential smoothing to weight recent data more heavily than older records, ensuring your short-term forecasts remain reactive to the market.
+                        We look at your recent data more than old lists to make sure we know what is happening in your shop right now.
                       </p>
                     </PremiumCard>
                     <PremiumCard className="p-6 border-white/5 bg-emerald-500/5 hover:bg-emerald-500/10 transition-colors">
                       <div className="flex items-center gap-3 mb-4 text-emerald-400">
                         <PieChart className="w-5 h-5" />
-                        <h4 className="font-black text-xs uppercase tracking-widest">Cluster Map</h4>
+                        <h4 className="font-black text-xs uppercase tracking-widest">How We Group Spending</h4>
                       </div>
                       <p className="text-xs text-white/40 leading-relaxed">
-                        By applying K-Means clustering to your transaction frequency and volume, we segment your spending into "Essential Core" and "Peripheral Luxury".
+                        We split your spending into "Must Have" and "Extra Things" so you can see where to save your money.
                       </p>
                     </PremiumCard>
                     <PremiumCard className="p-6 border-white/5 bg-indigo-500/5 hover:bg-indigo-500/10 transition-colors">
                       <div className="flex items-center gap-3 mb-4 text-indigo-400">
                         <ShieldCheck className="w-5 h-5" />
-                        <h4 className="font-black text-xs uppercase tracking-widest">Outlier Filter</h4>
+                        <h4 className="font-black text-xs uppercase tracking-widest">How We Spot Odd Numbers</h4>
                       </div>
                       <p className="text-xs text-white/40 leading-relaxed">
-                        Using the Interquartile Range (IQR) method, we identify points 1.5x above or below the whiskers, flagging them as operational anomalies.
+                        We find any numbers that look very different from the usual ones and flag them for you to check.
                       </p>
                     </PremiumCard>
                   </div>
@@ -393,8 +392,8 @@ export const DataScienceHub: React.FC = () => {
                             <Beaker className="w-10 h-10 text-emerald-400" />
                          </div>
                       </div>
-                      <h3 className="text-3xl font-black text-white mb-2 italic">Synthesizing Dataset...</h3>
-                      <p className="text-white/30 text-sm tracking-[0.4em] uppercase font-black">Executing Data Science Protocols</p>
+                      <h3 className="text-3xl font-black text-white mb-2 italic">Reading Your File...</h3>
+                      <p className="text-white/30 text-sm tracking-[0.4em] uppercase font-black">Looking for patterns in your data</p>
                    </PremiumCard>
                 </motion.div>
               ) : (
@@ -407,9 +406,9 @@ export const DataScienceHub: React.FC = () => {
                     <div className="w-32 h-32 rounded-3xl bg-emerald-500/5 border border-emerald-500/10 flex items-center justify-center text-emerald-400 mb-12 transition-all duration-700 group-hover:scale-110 group-hover:rotate-6">
                        <BarChart3 className="w-12 h-12 opacity-40 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <h3 className="text-4xl font-black text-white mb-6">Hub on Standby</h3>
+                    <h3 className="text-4xl font-black text-white mb-6">Ready to Help</h3>
                     <p className="text-white/40 max-w-sm mb-10 text-lg font-medium leading-relaxed">
-                      Upload your business datasets to initialize the Graduate-level discovery protocols. We'll find patterns you missed.
+                      Upload your business files and we'll find patterns you might have missed. We're ready to help you grow.
                     </p>
                     <div className="flex gap-4">
                        <div className="px-5 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-black text-white/50 uppercase tracking-widest flex items-center gap-2">

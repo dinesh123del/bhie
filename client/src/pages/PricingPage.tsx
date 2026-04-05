@@ -11,7 +11,8 @@ export default function PricingPage() {
   const [pricingData, setPricingData] = useState({
     country: 'US',
     currency: 'USD',
-    price: 5
+    price: 5,
+    premiumPrice: 15
   });
   const [loading, setLoading] = useState(true);
 
@@ -43,11 +44,11 @@ export default function PricingPage() {
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const country = e.target.value;
-    const mockConfig: Record<string, { currency: string, price: number }> = {
-      IN: { currency: "INR", price: 99 },
-      US: { currency: "USD", price: 5 },
-      GB: { currency: "GBP", price: 4 },
-      DEFAULT: { currency: "USD", price: 5 }
+    const mockConfig: Record<string, { currency: string, price: number, premiumPrice: number }> = {
+      IN: { currency: "INR", price: 79, premiumPrice: 299 },
+      US: { currency: "USD", price: 5, premiumPrice: 15 },
+      GB: { currency: "GBP", price: 4, premiumPrice: 12 },
+      DEFAULT: { currency: "USD", price: 5, premiumPrice: 15 }
     };
     
     const newPricing = mockConfig[country] || mockConfig['DEFAULT'];
@@ -81,7 +82,7 @@ export default function PricingPage() {
     },
     {
       name: 'Premium',
-      price: loading ? '...' : `${getCurrencySymbol(pricingData.currency)}${pricingData.price * 3}`, 
+      price: loading ? '...' : `${getCurrencySymbol(pricingData.currency)}${pricingData.premiumPrice}`, 
       period: '/month',
       description: 'For organizations with advanced governance, integrations, and executive workflows.',
       features: ['Everything in Pro', 'Custom integrations', 'Advanced reporting', 'Dedicated support', 'API access'],

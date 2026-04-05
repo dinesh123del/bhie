@@ -55,8 +55,8 @@ function playGrandStartup(muted: boolean) {
     
     const masterGain = ctx.createGain();
     masterGain.gain.setValueAtTime(0, ctx.currentTime);
-    masterGain.gain.linearRampToValueAtTime(0.8, ctx.currentTime + 0.1);
-    masterGain.gain.setTargetAtTime(0.001, ctx.currentTime + 0.5, 2.0); // Smooth decay
+    masterGain.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.1); // Substantially decreased per user request for "rich" feel
+    masterGain.gain.setTargetAtTime(0.001, ctx.currentTime + 0.5, 2.0); 
     
     // Smooth lowpass filter for warmth and "mac synth" feel
     const filter = ctx.createBiquadFilter();
@@ -91,29 +91,29 @@ function playGrandStartup(muted: boolean) {
       osc.stop(ctx.currentTime + start + dur + 1.0);
     };
 
-    const baseF = 46.25; // F#1
+    const baseC = 32.70; // C1 (Lower, warmer root)
     const t = 0.0;
     
-    // Layer 0: SUB-BASS (Tremendous foundation, felt rather than heard)
-    playNote(baseF / 2, t, 6.0, 0.5, 'sine');     // F#0 (23.12 Hz)
+    // Layer 0: SUB-BASS
+    playNote(baseC / 2, t, 6.0, 0.4, 'sine');     // C0
 
-    // Layer 1: Bass foundation (Deep Saw/Triangle for rich lower harmonics)
-    playNote(baseF, t, 6.0, 0.4, 'triangle');     // F#1
-    playNote(baseF * 2, t, 5.5, 0.35, 'sawtooth'); // F#2
+    // Layer 1: Bass foundation
+    playNote(baseC, t, 6.0, 0.3, 'sine');         // C1
+    playNote(baseC * 2, t, 5.5, 0.25, 'triangle'); // C2
     
-    // Layer 2: Main Body (Square/Saw for width, slightly detuned for massive chorus effect)
-    playNote(baseF * 4, t + 0.02, 5.0, 0.25, 'square', -8); // F#3 detuned flat
-    playNote(baseF * 4, t + 0.02, 5.0, 0.25, 'square', 8);  // F#3 detuned sharp
-    playNote(138.59, t + 0.03, 5.0, 0.2, 'sawtooth');       // C#3
+    // Layer 2: Main Body (Warmer, softer)
+    playNote(baseC * 4, t + 0.02, 5.0, 0.15, 'triangle', -5); // C3 detuned flat
+    playNote(baseC * 4, t + 0.02, 5.0, 0.15, 'triangle', 5);  // C3 detuned sharp
+    playNote(164.81, t + 0.03, 5.0, 0.1, 'sine');             // E3 (Major 3rd)
     
     // Layer 3: Warmth/Major third and fifth
-    playNote(233.08, t + 0.04, 5.0, 0.15, 'sawtooth');    // A#3 (Major 3rd)
-    playNote(277.18, t + 0.04, 5.0, 0.15, 'triangle');    // C#4 (Perfect 5th)
+    playNote(196.00, t + 0.04, 5.0, 0.1, 'sine');             // G3 (Perfect 5th)
+    playNote(261.63, t + 0.04, 5.0, 0.1, 'sine');             // C4
     
-    // Layer 4: Crystalline Top (Sine for pure bell-like overtones)
-    playNote(369.99, t + 0.05, 6.0, 0.15, 'sine');        // F#4
-    playNote(554.37, t + 0.06, 6.0, 0.1, 'sine');         // C#5
-    playNote(739.99, t + 0.08, 5.0, 0.05, 'sine');        // F#5
+    // Layer 4: Crystalline Top (Subdued)
+    playNote(329.63, t + 0.05, 6.0, 0.05, 'sine');            // E4
+    playNote(392.00, t + 0.06, 6.0, 0.03, 'sine');            // G4
+    playNote(523.25, t + 0.08, 5.0, 0.02, 'sine');            // C5
     
     if (ctx.state === 'suspended') {
       ctx.resume();
@@ -202,7 +202,7 @@ export default function CinematicSplash({
   const startSequence = () => {
     if (phase !== 'awaiting') return;
     
-    // Play majestic sound on click
+    // Play majestic sound automatically
     playGrandStartup(muted);
     setPhase('revealing');
 
@@ -219,6 +219,14 @@ export default function CinematicSplash({
     }, duration);
   };
 
+  // AUTOPLAY: Trigger sequence immediately on mount without user touch
+  useEffect(() => {
+    const timer = setTimeout(() => {
+        startSequence();
+    }, 500); // Tiny delay for system readiness
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <motion.div
       className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
@@ -231,26 +239,11 @@ export default function CinematicSplash({
       <AnimatePresence>
         {phase === 'awaiting' && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.5, filter: 'blur(10px)' }}
-            transition={{ duration: 0.8, ease: 'easeInOut' }}
-            className="absolute inset-0 flex items-center justify-center cursor-pointer z-50 group"
-            onClick={startSequence}
-          >
-            <div className="flex flex-col items-center gap-6">
-              <motion.div 
-                className="w-20 h-20 rounded-full border border-white/10 flex items-center justify-center bg-white/5 backdrop-blur-xl group-hover:bg-white/10 transition-colors"
-                animate={{ boxShadow: ['0 0 0px rgba(79,70,229,0)', '0 0 40px rgba(79,70,229,0.5)', '0 0 0px rgba(79,70,229,0)'] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              >
-                <div className="w-6 h-6 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 animate-pulse" />
-              </motion.div>
-              <p className="text-sm font-bold tracking-[0.4em] uppercase text-white/40 group-hover:text-white/80 transition-colors">
-                Enter Experience
-              </p>
-            </div>
-          </motion.div>
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 flex items-center justify-center bg-black z-[10001]"
+          />
         )}
       </AnimatePresence>
 
@@ -309,13 +302,13 @@ export default function CinematicSplash({
             phase === 'awaiting'
               ? { opacity: 0, scale: 0.8 }
               : phase === 'revealing'
-                ? { opacity: 1, scale: 1, filter: 'drop-shadow(0 0 40px rgba(79,70,229,1))' }
+                ? { opacity: 1, scale: 1, filter: 'drop-shadow(0 0 20px rgba(79,70,229,0.6))' }
                 : phase === 'pulsing'
                   ? {
                     opacity: 1, scale: [1, 1.02, 1], filter: [
-                      'drop-shadow(0 0 12px rgba(79,70,229,0.5))',
-                      'drop-shadow(0 0 30px rgba(79,70,229,0.9))',
-                      'drop-shadow(0 0 12px rgba(79,70,229,0.5))',
+                      'drop-shadow(0 0 8px rgba(79,70,229,0.3))',
+                      'drop-shadow(0 0 15px rgba(79,70,229,0.5))',
+                      'drop-shadow(0 0 8px rgba(79,70,229,0.3))',
                     ]
                   }
                   : { opacity: 0, scale: 1.1, filter: 'blur(10px)' }
@@ -339,10 +332,9 @@ export default function CinematicSplash({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.8, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
-              className="text-sm font-medium tracking-[0.3em] uppercase"
-              style={{ color: 'rgba(255,255,255,0.4)', letterSpacing: '0.3em' }}
+              className="secondary-text"
             >
-              Your Business. Your Control.
+              By Your Side. Always.
             </motion.p>
           )}
         </AnimatePresence>

@@ -15,62 +15,22 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>('system');
-  const [resolvedTheme, setResolvedTheme] = useState<'dark' | 'light'>('dark');
+  const [theme] = useState<Theme>('dark');
+  const [resolvedTheme] = useState<'dark' | 'light'>('dark');
   const [mounted, setMounted] = useState(false);
 
-  const setTheme = useCallback((newTheme: Theme) => {
-    setThemeState(newTheme);
-    localStorage.setItem('theme', newTheme);
-    
-    const root = window.document.documentElement;
-    if (newTheme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      root.classList.toggle('dark', systemTheme === 'dark');
-      setResolvedTheme(systemTheme);
-    } else {
-      root.classList.toggle('dark', newTheme === 'dark');
-      setResolvedTheme(newTheme);
-    }
-  }, []);
-
-  const toggleTheme = useCallback(() => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(nextTheme);
-  }, [theme, setTheme]);
+  // No-op for forced dark mode
+  const setTheme = useCallback(() => {}, []);
+  const toggleTheme = useCallback(() => {}, []);
 
   useEffect(() => {
     const root = window.document.documentElement;
-    
-    // Load stored theme
-    const stored = localStorage.getItem('theme') as Theme | null;
-    if (stored) {
-      setThemeState(stored);
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setThemeState('system');
-    }
-
-    // Sync system preference listener
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = () => {
-      if (theme === 'system') {
-        root.classList.toggle('dark', mediaQuery.matches);
-        setResolvedTheme(mediaQuery.matches ? 'dark' : 'light');
-      }
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    handleChange();
-
+    root.classList.add('dark');
+    root.classList.remove('light');
     setMounted(true);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [theme, setTheme]);
+  }, []);
 
-  const ThemeToggleIcon: React.FC = () => (
-    <motion.div whileHover={{ rotate: 20 }} whileTap={{ scale: 0.95 }}>
-      {resolvedTheme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-    </motion.div>
-  );
+  const ThemeToggleIcon: React.FC = () => null; // Hide the toggle icon logic
 
   const value: ThemeContextType = {
     theme,
@@ -81,7 +41,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   if (!mounted) {
-    return <div className="min-h-screen bg-white dark:bg-slate-950" />;
+    return <div className="min-h-screen bg-slate-950" />;
   }
 
   return (

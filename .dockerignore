@@ -1,0 +1,13 @@
+node_modules
+npm-debug.log
+.DS_Store
+.env
+
+client/dist
+server/dist
+
+.git
+.gitignore
+
+temp/
+uploads/

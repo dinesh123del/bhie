@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   BarChart3,
@@ -40,11 +40,11 @@ interface RecordItem {
 }
 
 const sidebarItems = [
-  { icon: <BarChart3 className="h-5 w-5" />, label: 'Dashboard', href: '/dashboard' },
-  { icon: <FileText className="h-5 w-5" />, label: 'Records', href: '/records' },
-  { icon: <TrendingUp className="h-5 w-5" />, label: 'Analytics', href: '/analytics' },
-  { icon: <ScanSearch className="h-5 w-5" />, label: 'AI Deep Dive', href: '/analysis-report' },
-  { icon: <Wallet className="h-5 w-5" />, label: 'Pro Plan', href: '/pricing' },
+  { icon: <BarChart3 className="h-5 w-5" />, label: 'Overview', href: '/dashboard' },
+  { icon: <FileText className="h-5 w-5" />, label: 'My Bills', href: '/records' },
+  { icon: <TrendingUp className="h-5 w-5" />, label: 'Growth', href: '/analytics' },
+  { icon: <ScanSearch className="h-5 w-5" />, label: 'Ask Assistant', href: '/analysis-report' },
+  { icon: <Wallet className="h-5 w-5" />, label: 'Upgrade', href: '/pricing' },
 ];
 
 const statusToneMap = {
@@ -99,10 +99,11 @@ const PremiumSection = ({ children, delay = 0, className = "" }: { children: Rea
 
 const PremiumRecords = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user, logout } = useAuth();
   const [records, setRecords] = useState<RecordItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(searchParams.get('q') || '');
   const [statusFilter, setStatusFilter] = useState<'all' | RecordItem['status']>('all');
   const [viewMode, setViewMode] = useState<'list' | 'topology'>('list');
   const [selectedRecord, setSelectedRecord] = useState<RecordItem | null>(null);
@@ -184,13 +185,7 @@ const PremiumRecords = () => {
   };
 
   return (
-    <MainLayout
-      sidebarItems={sidebarItems}
-      activePage="/records"
-      onNavigate={(href) => navigate(href)}
-      onLogout={logout}
-      userName={user?.name}
-    >
+    <>
       <div className="mx-auto max-w-7xl space-y-12 px-6 pb-20">
         
         {/* HUD INTERROGATION MODAL */}
@@ -204,23 +199,24 @@ const PremiumRecords = () => {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
-          className="overflow-hidden rounded-[3rem] border border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.14),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(129,140,248,0.12),transparent_26%),rgba(2,6,23,0.78)] p-6 shadow-[0_28px_80px_rgba(2,6,23,0.48)] md:p-12 relative"
+          className="overflow-hidden rounded-[3rem] border border-black/5 dark:border-white/10 bg-white/40 dark:bg-white/[0.02] backdrop-blur-3xl p-8 shadow-2xl md:p-14 relative"
         >
-          <div className="flex flex-col gap-12 xl:flex-row xl:items-end xl:justify-between">
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-500/5 to-purple-500/5 pointer-events-none" />
+          <div className="flex flex-col gap-12 xl:flex-row xl:items-end xl:justify-between relative z-10">
             <div className="max-w-4xl">
               <motion.div 
                  initial={{ x: -20, opacity: 0 }}
                  animate={{ x: 0, opacity: 1 }}
-                 className="section-kicker flex items-center gap-2 mb-6"
+                 className="flex items-center gap-2 mb-8"
               >
-                <div className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">All Records</span>
+                <div className="w-2.5 h-2.5 rounded-full bg-brand-500 shadow-[0_0_15px_rgba(139,92,246,0.8)] animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">FINANCIAL LEDGER</span>
               </motion.div>
-              <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-none">
-                Business <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-white to-indigo-300">Records.</span>
+              <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-gray-900 dark:text-white leading-[0.9]">
+                All Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400 filter drop-shadow-sm">Bills & Money.</span>
               </h1>
-              <p className="mt-8 max-w-2xl text-xl text-white/40 font-medium leading-relaxed">
-                Track all your business income and expenses in one place. Search and filter your data easily.
+              <p className="mt-8 max-w-2xl text-xl md:text-2xl text-gray-500 dark:text-gray-400 font-semibold leading-relaxed tracking-tight">
+                Trace every single Rupee. Discover, filter, and organize your receipts with military precision.
               </p>
             </div>
 
@@ -230,53 +226,58 @@ const PremiumRecords = () => {
                 size="lg"
                 icon={<Download className="h-5 w-5" />}
                 onClick={() => exportRecords(filteredRecords)}
+                className="rounded-2xl"
               >
                 Export CSV
               </PremiumButton>
               <PremiumButton
-                size="lg"
-                icon={<Plus className="h-5 w-5" />}
-                onClick={() => navigate('/dashboard')}
-              >
-                Add Record
-              </PremiumButton>
+                 size="lg"
+                 icon={<Plus className="h-5 w-5" />}
+                 onClick={() => navigate('/dashboard')}
+                 className="rounded-2xl shadow-lg shadow-brand-500/20"
+               >
+                 Log New Bill
+               </PremiumButton>
             </div>
           </div>
         </motion.section>
 
-        {/* VIEW TOGGLE */}
-        <div className="flex justify-between items-center bg-white/[0.02] border border-white/5 p-4 rounded-[2rem] backdrop-blur-xl">
-           <div className="flex gap-2">
-              <button 
-                onClick={() => setViewMode('list')}
-                className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'list' ? 'bg-sky-500/10 text-sky-400 border border-sky-500/30' : 'text-white/40 hover:text-white'}`}
-              >
-                 <LayoutGrid className="w-4 h-4" />
-                 Tactical List
-              </button>
-              <button 
-                onClick={() => setViewMode('topology')}
-                className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'topology' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/30' : 'text-white/40 hover:text-white'}`}
-              >
-                 <Network className="w-4 h-4" />
-                 Strategic Topology
-              </button>
+        {/* VIEW TOGGLE & SUMMARY STATS */}
+        <div className="flex flex-col md:flex-row justify-between items-center bg-white/40 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 p-4 rounded-[2.5rem] backdrop-blur-3xl shadow-xl gap-6">
+           <div className="flex gap-2 p-1.5 bg-gray-100/50 dark:bg-white/5 rounded-2xl border border-black/5 dark:border-white/5">
+               <button 
+                 onClick={() => setViewMode('list')}
+                 className={`flex items-center gap-2 px-8 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${viewMode === 'list' ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-xl scale-105' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white'}`}
+               >
+                  <LayoutGrid className="w-4 h-4" />
+                  Grid View
+               </button>
+               <button 
+                 onClick={() => setViewMode('topology')}
+                 className={`flex items-center gap-2 px-8 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${viewMode === 'topology' ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-xl scale-105' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white'}`}
+               >
+                  <Network className="w-4 h-4" />
+                  Visual Node
+               </button>
            </div>
-           
-           <div className="hidden md:flex gap-8 px-8">
-              <div className="flex flex-col items-center">
-                 <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest mb-1">Density</p>
-                 <p className="text-xl font-black text-white">{totals.total}</p>
-              </div>
-              <div className="flex flex-col items-center">
-                 <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest mb-1">Yield</p>
-                 <p className="text-xl font-black text-emerald-400">{formatCurrency(totals.income)}</p>
-              </div>
-              <div className="flex flex-col items-center">
-                 <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest mb-1">Exhaust</p>
-                 <p className="text-xl font-black text-rose-400">{formatCurrency(totals.expenses)}</p>
-              </div>
-           </div>
+           <div className="flex flex-wrap justify-center md:flex-nowrap gap-12 px-8">
+               <div className="flex flex-col items-center group">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1.5 group-hover:text-brand-500 transition-colors">Total Entries</p>
+                  <p className="text-3xl font-black text-gray-900 dark:text-white tracking-tighter tabular-nums">{totals.total}</p>
+               </div>
+               <div className="flex flex-col items-center group">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1.5 group-hover:text-emerald-500 transition-colors">Capital In</p>
+                  <p className="text-3xl font-black text-emerald-600 dark:text-emerald-400 tracking-tighter tabular-nums filter drop-shadow-[0_0_10px_rgba(16,185,129,0.1)]">
+                    <span className="text-sm mr-1 opacity-50">₹</span>{totals.income.toLocaleString()}
+                  </p>
+               </div>
+               <div className="flex flex-col items-center group">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1.5 group-hover:text-rose-500 transition-colors">Money Out</p>
+                  <p className="text-3xl font-black text-rose-600 dark:text-rose-400 tracking-tighter tabular-nums filter drop-shadow-[0_0_10px_rgba(244,63,94,0.1)]">
+                    <span className="text-sm mr-1 opacity-50">₹</span>{totals.expenses.toLocaleString()}
+                  </p>
+               </div>
+            </div>
         </div>
 
         <AnimatePresence mode="wait">
@@ -292,116 +293,153 @@ const PremiumRecords = () => {
             </motion.div>
           ) : (
             <div className="space-y-8">
-               <PremiumSection delay={0.3} className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between px-2">
-                 <div className="relative w-full xl:max-w-xl group">
-                   <Search className="absolute left-6 top-4.5 h-6 w-6 text-white/30 group-focus-within:text-sky-400 transition-colors" />
-                   <input
-                     type="text"
-                     placeholder="Search Records..."
-                     value={search}
-                     onChange={(event) => setSearch(event.target.value)}
-                     className="w-full rounded-[1.5rem] border border-white/5 bg-white/[0.02] py-5 pl-16 pr-6 text-xl text-white placeholder:text-white/10 focus:border-sky-400/50 backdrop-blur-3xl focus:outline-none focus:ring-4 focus:ring-sky-400/5 transition-all"
-                   />
-                 </div>
+                <PremiumSection delay={0.3} className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between px-2">
+                  <div className="relative w-full xl:max-w-xl group">
+                    <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
+                      <Search className="h-5 w-5 text-gray-400 group-focus-within:text-brand-500 transition-colors" />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Search bills, categories, or notes..."
+                      value={search}
+                      onChange={(event) => setSearch(event.target.value)}
+                      className="w-full rounded-2xl border border-black/10 dark:border-white/10 bg-white/40 dark:bg-white/[0.03] py-4.5 pl-14 pr-6 text-base text-gray-900 dark:text-white placeholder:text-gray-500 focus:border-brand-500/50 backdrop-blur-3xl focus:outline-none focus:ring-4 focus:ring-brand-500/10 transition-all font-medium shadow-inner"
+                    />
+                  </div>
 
-                 <div className="flex flex-wrap gap-2">
-                   {(['all', 'pending', 'in_progress', 'completed', 'cancelled'] as const).map((filter) => (
-                     <button
-                       key={filter}
-                       type="button"
-                       onClick={() => setStatusFilter(filter)}
-                       className={`inline-flex items-center gap-2 rounded-xl border px-4 py-3 text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
-                         statusFilter === filter
-                           ? 'border-sky-400/50 bg-sky-400/20 text-white shadow-[0_0_25px_rgba(56,189,248,0.2)]'
-                           : 'border-white/5 bg-white/[0.01] text-white/40 hover:bg-white/5 hover:text-white'
-                       }`}
-                     >
-                       {filter === 'all' ? 'All Nodes' : formatStatusLabel(filter)}
-                     </button>
-                   ))}
-                 </div>
-               </PremiumSection>
+                  <div className="flex flex-wrap items-center gap-2.5 bg-gray-100/50 dark:bg-white/5 p-1.5 rounded-2xl backdrop-blur-md border border-black/5 dark:border-white/5">
+                    {(['all', 'pending', 'in_progress', 'completed', 'cancelled'] as const).map((filter) => (
+                       <button
+                         key={filter}
+                         type="button"
+                         onClick={() => setStatusFilter(filter)}
+                         className={`relative px-5 py-2 text-xs font-bold transition-all duration-500 rounded-xl ${
+                           statusFilter === filter
+                             ? 'bg-white dark:bg-white/10 text-brand-600 dark:text-brand-400 shadow-sm'
+                             : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'
+                         }`}
+                       >
+                         {filter === 'all' ? 'All' : formatStatusLabel(filter)}
+                         {statusFilter === filter && (
+                           <motion.div 
+                             layoutId="activeFilter" 
+                             className="absolute inset-0 bg-white dark:bg-white/10 rounded-xl -z-10 shadow-sm"
+                             transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                           />
+                         )}
+                       </button>
+                    ))}
+                  </div>
+                </PremiumSection>
 
-               {loading ? (
-                 <div className="grid gap-6">
-                   {[1, 2, 3, 4].map((item) => (
-                     <div key={item} className="h-32 animate-pulse rounded-[2.5rem] border border-white/10 bg-white/[0.04]" />
-                   ))}
-                 </div>
-               ) : filteredRecords.length === 0 ? (
-                 <PremiumCard hoverable={false} className="border border-dashed border-white/12 bg-white/[0.03] py-24 text-center rounded-[3rem]">
-                   <Zap className="w-12 h-12 text-white/10 mx-auto mb-6" />
-                   <p className="text-2xl font-black text-white italic tracking-tight">No intelligence nodes detected.</p>
-                   <p className="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-white/30 font-medium">
-                     Adjust the search parameters or filter nodes.
-                   </p>
-                 </PremiumCard>
-               ) : (
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                   {filteredRecords.map((record, index) => (
-                     <motion.div
-                       key={record._id}
-                       initial={{ opacity: 0, y: 12, rotateX: 10 }}
-                       animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                       transition={{ duration: 0.45, delay: index * 0.05, ease: [0.22, 1, 0.36, 1] }}
-                       whileHover={{ y: -8, transition: { duration: 0.2 } }}
-                       onClick={() => setSelectedRecord(record)}
-                     >
-                       <PremiumCard className="border border-white/5 p-8 bg-white/[0.01] backdrop-blur-3xl group cursor-pointer overflow-hidden rounded-[2.5rem] relative">
-                         <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                         
-                         <div className="flex flex-col gap-6 relative z-10">
-                           <div className="flex justify-between items-start">
-                             <div className="space-y-4">
-                               <div className="flex items-center gap-3">
-                                 <h2 className="text-2xl font-black text-white tracking-tighter uppercase line-clamp-1">{record.title}</h2>
-                               </div>
-                               <div className="flex flex-wrap gap-2 text-[8px] font-black uppercase tracking-[0.2em] text-white/40">
-                                  <span className="px-3 py-1.5 rounded-full border border-white/10 bg-white/5">{record.category}</span>
-                                  <span className="px-3 py-1.5 rounded-full border border-white/10 bg-white/5">{record.type}</span>
-                                  <span className="px-3 py-1.5 rounded-full border border-white/10 bg-white/5">{formatStatusLabel(record.status)}</span>
-                               </div>
-                             </div>
-                             <div className="text-right">
-                               <p className="text-[3rem] font-black text-white leading-none tracking-tighter">
-                                 ₹{record.amount.toLocaleString()}
-                               </p>
-                             </div>
-                           </div>
-
-                           <p className="text-lg leading-relaxed text-white/40 font-medium line-clamp-2 italic">
-                             "{record.description || 'No strategic metadata attached.'}"
-                           </p>
-
-                           <div className="flex justify-between items-center pt-8 border-t border-white/5">
-                              <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">
-                                {new Date(record.date || record.createdAt).toLocaleDateString('en-IN', {
-                                  day: '2-digit', month: 'long', year: 'numeric'
-                                })}
-                              </span>
-                              <div className="flex items-center gap-4">
-                                 <button 
-                                   onClick={(e) => handleDelete(record._id, e)}
-                                   className="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500/60 hover:text-rose-400"
-                                 >
-                                   Terminate Node
-                                 </button>
-                                 <div className="w-10 h-10 rounded-full border border-sky-400/20 bg-sky-400/5 flex items-center justify-center text-sky-400 group-hover:scale-110 transition-transform">
-                                    <TrendingUp className="w-5 h-5" />
-                                 </div>
+                {loading ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {[1, 2, 3, 4].map((item) => (
+                      <div key={item} className="h-64 animate-pulse rounded-[2.5rem] border border-white/5 bg-white/[0.02]" />
+                    ))}
+                  </div>
+                ) : filteredRecords.length === 0 ? (
+                   <PremiumCard hoverable={false} className="border border-dashed border-black/10 dark:border-white/10 bg-white/30 dark:bg-white/[0.01] py-32 text-center rounded-[3rem] backdrop-blur-sm">
+                     <div className="w-20 h-20 rounded-[2rem] bg-gray-100 dark:bg-white/5 flex items-center justify-center mx-auto mb-8 shadow-sm">
+                       <Search className="w-10 h-10 text-gray-300 dark:text-gray-600" />
+                     </div>
+                     <h3 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">No records match your search</h3>
+                     <p className="mx-auto mt-4 max-w-sm text-base text-gray-500 dark:text-gray-400 font-medium">
+                       Try using more general keywords or adjust your status filters.
+                     </p>
+                   </PremiumCard>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {filteredRecords.map((record, index) => (
+                      <motion.div
+                        key={record._id}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                        whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                        onClick={() => setSelectedRecord(record)}
+                        className="group"
+                      >
+                        <div className="relative h-full overflow-hidden rounded-[2.5rem] p-px bg-gradient-to-br from-black/10 to-transparent dark:from-white/15 dark:to-transparent hover:from-brand-500/40 transition-all duration-500 shadow-lg">
+                          <div className="relative h-full bg-white dark:bg-[#0A0A0B] rounded-[2.45rem] p-8 flex flex-col gap-6 transition-colors duration-500 group-hover:bg-white/95 dark:group-hover:bg-[#121214]">
+                            {/* Card Content Interior */}
+                            <div className="flex justify-between items-start">
+                              <div className="space-y-4 flex-1">
+                                <div className="flex items-center gap-3">
+                                  <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight line-clamp-1 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
+                                    {record.title}
+                                  </h2>
+                                </div>
+                                <div className="flex flex-wrap gap-2 text-[10px] font-black uppercase tracking-widest">
+                                   <span className="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-white/5 border border-black/5 dark:border-white/5 text-gray-600 dark:text-gray-400">
+                                     {record.category}
+                                   </span>
+                                   <span className={`px-3 py-1.5 rounded-lg border flex items-center gap-1.5 ${
+                                     record.type === 'income' 
+                                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400' 
+                                      : 'bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400'
+                                   }`}>
+                                     <div className={`w-1.5 h-1.5 rounded-full ${record.type === 'income' ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                                     {record.type}
+                                   </span>
+                                </div>
                               </div>
-                           </div>
-                         </div>
-                       </PremiumCard>
-                     </motion.div>
-                   ))}
-                 </div>
-               )}
-            </div>
-          )}
-        </AnimatePresence>
+                              
+                              <div className="text-right ml-4">
+                                <div className="flex flex-col items-end">
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="text-lg font-bold text-gray-400 dark:text-gray-500">₹</span>
+                                    <span className="text-4xl font-[900] text-gray-900 dark:text-white tracking-tighter transition-all font-mono tabular-nums leading-none">
+                                      {record.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                             <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400 font-medium line-clamp-2 min-h-[3rem]">
+                               {record.description || 'No additional details provided for this entry.'}
+                             </p>
+
+                            <div className="flex justify-between items-end mt-auto pt-6 border-t border-black/5 dark:border-white/5">
+                               <div className="flex flex-col gap-1">
+                                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Date Logged</span>
+                                 <span className="text-xs font-bold text-gray-700 dark:text-gray-300">
+                                   {new Date(record.date || record.createdAt).toLocaleDateString('en-IN', {
+                                     day: '2-digit', month: 'short', year: 'numeric'
+                                   })}
+                                 </span>
+                               </div>
+                               
+                               <div className="flex items-center gap-2">
+                                  <div className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border ${
+                                    record.status === 'completed' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600' :
+                                    record.status === 'pending' ? 'bg-orange-500/10 border-orange-500/20 text-orange-600' :
+                                    record.status === 'in_progress' ? 'bg-blue-500/10 border-blue-500/20 text-blue-600' :
+                                    'bg-gray-500/10 border-gray-500/20 text-gray-500'
+                                  }`}>
+                                    {formatStatusLabel(record.status)}
+                                  </div>
+                                  <button 
+                                    onClick={(e) => handleDelete(record._id, e)}
+                                    className="p-2 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-500/10 transition-all duration-300 group/del"
+                                    title="Delete Record"
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover/del:scale-110 transiton-transform"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                                  </button>
+                               </div>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </AnimatePresence>
       </div>
-    </MainLayout>
+    </>
   );
 };
 

@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider, useAuth } from './hooks/useAuth';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 // Layout Components
 import PremiumLayout from './components/PremiumLayout';
@@ -32,6 +33,21 @@ const DataScienceHub  = lazy(() => import('./pages/DataScienceHub'));
 
 const Pricing = lazy(() => import('./pages/Pricing'));
 const Profile = lazy(() => import('./pages/Home'));
+const About   = lazy(() => import('./pages/About'));
+const Terms   = lazy(() => import('./pages/Terms'));
+const Reports = lazy(() => import('./pages/Reports'));
+const Insights = lazy(() => import('./pages/Insights'));
+const AIChat = lazy(() => import('./pages/AIChat'));
+const Prediction = lazy(() => import('./pages/Prediction'));
+const InnovativeDashboard = lazy(() => import('./pages/InnovativeDashboard'));
+const ImageIntelligence = lazy(() => import('./pages/ImageIntelligence'));
+const CompanySetup = lazy(() => import('./pages/CompanySetup'));
+const AnalyticsPremium = lazy(() => import('./pages/AnalyticsPremium'));
+const DashboardPremium = lazy(() => import('./pages/DashboardPremium'));
+const LandingPremiumPage = lazy(() => import('./pages/LandingPremium'));
+const RecordsPremium = lazy(() => import('./pages/RecordsPremium'));
+const Home = lazy(() => import('./pages/Home'));
+const Notifications = lazy(() => import('./pages/Notifications'));
 
 // ── Mute preference key ──────────────────────────────────────
 const MUTE_KEY = 'bhie_sound_muted';
@@ -72,15 +88,15 @@ function MainApp() {
   const onboardingSteps = [
     {
       title: 'Welcome to BHIE',
-      description: "Welcome to the future of business intelligence. Let's get your finances automated in 60 seconds.",
+      description: "We help you track your business money and grow. Let's get you set up in one minute.",
     },
     {
-      title: 'Snap & Automate',
-      description: 'Snap any receipt. AI extracts the merchant, date, and amount instantly — no manual entry.',
+      title: 'Snap & Save',
+      description: 'Just take a photo of any bill. Our AI finds the shop name, date, and price instantly — you do nothing.',
     },
     {
-      title: 'Real-time Control',
-      description: 'Watch your profit and loss update live as you scan. Your first insight awaits.',
+      title: 'See Your Progress',
+      description: 'Watch your profit grow as you scan. We make your business clear and simple.',
     },
   ];
 
@@ -107,6 +123,8 @@ function MainApp() {
               <Route path="/login"   element={<PremiumLogin />} />
               <Route path="/register" element={<PremiumRegister />} />
               <Route path="/pricing" element={<Pricing />} />
+              <Route path="/about"   element={<About />} />
+              <Route path="/terms"   element={<Terms />} />
 
               {/* Core Dashboard Experience */}
               <Route path="/dashboard"       element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -122,6 +140,21 @@ function MainApp() {
               <Route path="/records"  element={<ProtectedRoute><Records /></ProtectedRoute>} />
               <Route path="/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
               <Route path="/profile"  element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="/reports"  element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+              <Route path="/insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
+              <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+              
+              {/* Extra Valid Routes from Standard Sidebar */}
+              <Route path="/ai-chat" element={<ProtectedRoute><AIChat /></ProtectedRoute>} />
+              <Route path="/predictions" element={<ProtectedRoute><Prediction /></ProtectedRoute>} />
+              <Route path="/innovative-dashboard" element={<ProtectedRoute><InnovativeDashboard /></ProtectedRoute>} />
+              <Route path="/image-intelligence" element={<ProtectedRoute><ImageIntelligence /></ProtectedRoute>} />
+              <Route path="/company-setup" element={<ProtectedRoute><CompanySetup /></ProtectedRoute>} />
+              <Route path="/analytics-premium" element={<ProtectedRoute><AnalyticsPremium /></ProtectedRoute>} />
+              <Route path="/dashboard-premium" element={<ProtectedRoute><DashboardPremium /></ProtectedRoute>} />
+              <Route path="/landing" element={<ProtectedRoute><LandingPremiumPage /></ProtectedRoute>} />
+              <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+              <Route path="/ai-analysis" element={<Navigate to="/analysis-report" replace />} />
 
               {/* Catch All */}
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
@@ -142,9 +175,16 @@ function App() {
   useEffect(() => {
     const preload = async () => {
       try {
-        const API_URL = import.meta.env.VITE_API_URL || 'https://bhie-api.onrender.com';
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        // BANK-GRADE SECURITY: Initialize CSRF session
+        await fetch(`${API_URL}/api/auth/csrf-token`, { 
+          credentials: 'include',
+          signal: AbortSignal.timeout(3000) 
+        });
+        
         await fetch(`${API_URL}/api/health`, { signal: AbortSignal.timeout(2500) });
-      } catch {
+      } catch (err) {
+        console.error('Security handshake failed:', err);
         // Backend unreachable — offline mode
       } finally {
         setDataReady(true);
@@ -162,55 +202,57 @@ function App() {
 
   return (
     <AuthProvider>
-      <ThemeProvider>
-        <AnimatePresence mode="wait">
-          {!showApp ? (
-            <motion.div
-              key="bhie-splash"
-              className="fixed inset-0 z-[10000]"
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8, ease: 'easeInOut' }}
-            >
-              <CinematicSplash
-                onComplete={handleSplashComplete}
-                duration={2700}
-                muted={muted}
-              />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="bhie-app"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, ease: 'easeInOut' }}
-              className="h-full w-full"
-            >
-              <MainApp />
-              <Toaster
-                position="top-right"
-                toastOptions={{
-                  duration: 5000,
-                  style: {
-                    background: 'rgba(10, 10, 10, 0.9)',
-                    color: '#fff',
-                    border: '1px solid rgba(79,70,229,0.2)',
-                    backdropFilter: 'blur(20px)',
-                    borderRadius: '16px',
-                    padding: '14px 20px',
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(79,70,229,0.1)',
-                  },
-                  success: {
-                    iconTheme: { primary: '#10b981', secondary: '#fff' },
-                  },
-                }}
-              />
-              <UpgradeModal />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </ThemeProvider>
+      <LanguageProvider>
+        <ThemeProvider>
+          <AnimatePresence mode="wait">
+            {!showApp ? (
+              <motion.div
+                key="bhie-splash"
+                className="fixed inset-0 z-[10000]"
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.8, ease: 'easeInOut' }}
+              >
+                <CinematicSplash
+                  onComplete={handleSplashComplete}
+                  duration={2700}
+                  muted={muted}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="bhie-app"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, ease: 'easeInOut' }}
+                className="h-full w-full"
+              >
+                <MainApp />
+                <Toaster
+                  position="top-right"
+                  toastOptions={{
+                    duration: 5000,
+                    style: {
+                      background: 'rgba(10, 10, 10, 0.9)',
+                      color: '#fff',
+                      border: '1px solid rgba(79,70,229,0.2)',
+                      backdropFilter: 'blur(20px)',
+                      borderRadius: '16px',
+                      padding: '14px 20px',
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(79,70,229,0.1)',
+                    },
+                    success: {
+                      iconTheme: { primary: '#10b981', secondary: '#fff' },
+                    },
+                  }}
+                />
+                <UpgradeModal />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </ThemeProvider>
+      </LanguageProvider>
     </AuthProvider>
   );
 }

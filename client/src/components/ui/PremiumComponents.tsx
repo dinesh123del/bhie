@@ -58,12 +58,12 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
     >
       {extreme && (
         <motion.div
-          className="absolute -inset-[1px] -z-10 bg-gradient-to-r from-sky-400 via-purple-500 to-orange-500 rounded-[2.5rem]"
+          className="absolute -inset-[1px] -z-10 bg-gradient-to-r from-sky-400/50 via-purple-500/50 to-orange-500/50 rounded-[2.5rem]"
           animate={{
-            opacity: [0.7, 1, 0.7],
-            scale: [1, 1.01, 1],
+            opacity: [0.3, 0.5, 0.3],
+            scale: [1, 1.005, 1],
           }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
         />
       )}
       
@@ -135,10 +135,10 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
   };
 
   const variantClasses = {
-    primary: 'bg-white text-black hover:shadow-[0_20px_40px_-12px_rgba(255,255,255,0.2)] shadow-white/10',
-    secondary: 'bg-white/5 border border-white/15 text-white hover:bg-white/10 backdrop-blur-xl',
-    ghost: 'text-white/60 hover:text-white hover:bg-white/5',
-    danger: 'bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20',
+    primary: 'bg-white text-black hover:shadow-[0_20px_40px_-12px_rgba(255,255,255,0.2)] shadow-white/10 dark:bg-white dark:text-black',
+    secondary: 'bg-[var(--bhie-primary)]/10 border border-[var(--bhie-primary)]/20 text-[var(--primary-text)] hover:bg-[var(--bhie-primary)]/15 backdrop-blur-xl',
+    ghost: 'text-[var(--secondary-text)] hover:text-[var(--primary-text)] hover:bg-[var(--bhie-primary)]/5',
+    danger: 'bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-500/20',
   };
 
   return (
@@ -230,7 +230,7 @@ export const PremiumInput: React.FC<{
   ...props
 }) => {
   const [isFocused, setIsFocused] = React.useState(false);
-  const hasValue = value && value.toString().length > 0;
+  const hasValue = value !== undefined && value !== null && value.toString().length > 0;
 
   if (floating) {
     return (
@@ -253,7 +253,7 @@ export const PremiumInput: React.FC<{
         </motion.label>
 
         <input
-          className={`w-full bg-transparent border-b border-white/10 py-3 text-white outline-none focus:border-sky-400/50 transition-all ${icon ? 'pl-10' : ''} ${error ? 'border-red-500/40' : ''} ${className}`}
+          className={`w-full bg-transparent border-b border-[var(--bhie-border)] py-3 text-white caret-sky-400 outline-none focus:border-sky-400/50 transition-all ${icon ? 'pl-10' : ''} ${error ? 'border-red-500/40' : ''} ${className}`}
           onFocus={(e) => {
             setIsFocused(true);
             props.onFocus?.(e);
@@ -285,7 +285,7 @@ export const PremiumInput: React.FC<{
 
   return (
     <div className="space-y-2">
-      {label && <label className="text-sm font-semibold tracking-tight text-white/60 ml-2">{label}</label>}
+      {label && <label className="text-sm font-semibold tracking-tight text-[var(--secondary-text)] ml-2">{label}</label>}
       <div className="relative group">
         <motion.div
           className="absolute inset-0 rounded-2xl bg-white/5 opacity-0 group-focus-within:opacity-100 transition-opacity blur-xl -z-10"
@@ -298,7 +298,7 @@ export const PremiumInput: React.FC<{
           </span>
         )}
         <input
-          className={`w-full bg-white/[0.04] border border-white/10 rounded-2xl px-4 py-3 placeholder:text-white/20 text-white outline-none focus:border-white/30 focus:bg-white/[0.06] transition-all ${icon ? 'pl-11' : ''} ${error ? 'border-red-500/40 focus:border-red-500' : ''} ${className}`}
+          className={`w-full bg-[var(--bhie-surface)] border border-[var(--bhie-border)] rounded-2xl px-4 py-3 placeholder:text-[var(--tertiary-text)] text-white caret-[var(--bhie-primary)] outline-none focus:border-[var(--bhie-primary)]/40 focus:bg-[var(--bhie-surface)]/80 transition-all ${icon ? 'pl-11' : ''} ${error ? 'border-red-500/40 focus:border-red-500' : ''} ${className}`}
           onFocus={(e) => {
             props.onFocus?.(e);
             premiumFeedback.haptic(5);
@@ -371,13 +371,15 @@ export const KPICard: React.FC<{
 }> = ({ label, value, icon, trend }) => (
   <PremiumCard floating gradient className="h-full">
     <div className="flex justify-between items-start mb-4">
-      <p className="text-xs font-bold uppercase tracking-widest text-white/40">{label}</p>
-      <div className="p-3 bg-white/5 rounded-xl border border-white/10 text-white/80">
+      <p className="text-xs font-bold uppercase tracking-widest text-[var(--secondary-text)]">{label}</p>
+      <div className="p-3 bg-[var(--bhie-surface)] rounded-xl border border-[var(--bhie-border)] text-[var(--primary-text)]">
         {icon}
       </div>
     </div>
     <div className="space-y-1">
-      <h3 className="text-4xl font-black tracking-tight text-white">{value}</h3>
+      <h3 className={`text-4xl font-black tracking-tight text-[var(--primary-text)] transition-opacity ${value === 0 || value === '0' || value === '₹0' ? 'opacity-30' : 'opacity-100'}`}>
+        {value}
+      </h3>
       {trend && (
         <div className={`flex items-center gap-1.5 text-xs font-bold ${trend.positive ? 'text-emerald-400' : 'text-rose-400'}`}>
           <HiMiniSparkles className="text-sm" />
@@ -409,11 +411,11 @@ export const PremiumBadge: React.FC<{
   })();
 
   const toneClasses = {
-    neutral: 'border-white/10 bg-white/[0.05] text-white/50',
-    positive: 'border-emerald-400/15 bg-emerald-500/10 text-emerald-300',
-    warning: 'border-amber-400/15 bg-amber-500/10 text-amber-300',
-    brand: 'border-sky-300/18 bg-sky-400/10 text-sky-200',
-    danger: 'border-rose-400/20 bg-rose-500/10 text-rose-300',
+    neutral: 'border-[var(--bhie-border)] bg-[var(--bhie-surface)] text-[var(--secondary-text)]',
+    positive: 'border-emerald-400/15 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300',
+    warning: 'border-amber-400/15 bg-amber-500/10 text-amber-600 dark:text-amber-300',
+    brand: 'border-sky-300/18 bg-sky-400/10 text-sky-600 dark:text-sky-200',
+    danger: 'border-rose-400/20 bg-rose-500/10 text-rose-600 dark:text-rose-300',
   };
 
   return (

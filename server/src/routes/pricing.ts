@@ -1,6 +1,7 @@
 import express from 'express';
 import requestIp from 'request-ip';
 import geoip from 'geoip-lite';
+import Settings from '../models/Settings.js';
 
 const router = express.Router();
 
@@ -33,6 +34,9 @@ router.get('/', async (req, res) => {
       console.error('Failed to fetch from ipapi.co', err);
     }
     
+    // Get dynamic settings
+    const settings = await Settings.findOne() || { proPrice: 79, premiumPrice: 299, currency: 'INR', isFreeMode: true };
+    
     // Pricing Lookups
     const pricing = pricingConfig[country] || pricingConfig['DEFAULT'];
 
@@ -40,8 +44,10 @@ router.get('/', async (req, res) => {
       success: true,
       data: {
         country: geoCountry,
-        currency: pricing.currency,
-        price: pricing.price,
+        currency: settings.currency || pricing.currency,
+        price: settings.proPrice || pricing.price, // Pro price as base
+        premiumPrice: settings.premiumPrice,
+        isFreeMode: settings.isFreeMode ?? true,
         ip: ipToTest
       }
     });

@@ -16,6 +16,7 @@ import {
   GraduationCap,
   Volume2,
   VolumeX,
+  FilePlus2,
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { premiumFeedback } from '../utils/premiumFeedback';
@@ -32,16 +33,18 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { id: 'dashboard', name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+  { id: 'records', name: 'Records', path: '/records', icon: Activity },
+  { id: 'analytics', name: 'Trends', path: '/analytics', icon: BarChart4 },
+  { id: 'reports', name: 'Reports', path: '/reports', icon: FilePlus2 },
+  { id: 'insights', name: 'Insights', path: '/insights', icon: BrainCircuit },
   { id: 'ds-hub', name: 'Data Hub', path: '/ds-hub', icon: GraduationCap },
-  { id: 'analysis', name: 'Analysis', path: '/analysis-report', icon: BrainCircuit },
-  { id: 'analytics', name: 'Performance', path: '/analytics', icon: BarChart4 },
-  { id: 'health', name: 'System Health', path: '/system-health', icon: Activity },
+  { id: 'health', name: 'Health Status', path: '/system-health', icon: Activity },
 ];
 
 const mgmtItems: NavItem[] = [
   { id: 'settings', name: 'Settings', path: '/settings', icon: Settings },
   { id: 'billing', name: 'Billing', path: '/payments', icon: CreditCard },
-  { id: 'security', name: 'Security', path: '/admin', icon: ShieldCheck },
+  { id: 'security', name: 'Admin', path: '/admin', icon: ShieldCheck },
 ];
 
 const PremiumSidebar = () => {
@@ -68,9 +71,9 @@ const PremiumSidebar = () => {
   return (
     <motion.aside
       initial={false}
-      animate={{ width: isCollapsed ? 80 : 260 }}
+      animate={{ width: isCollapsed ? 80 : 280 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="relative h-screen bg-white dark:bg-[#0f172a] border-r border-black/[0.03] dark:border-white/5 flex flex-col z-50 overflow-hidden"
+      className="relative h-screen bg-slate-50/95 dark:bg-[#0A0A0A]/95 backdrop-blur-2xl border-r border-black/[0.05] dark:border-white/[0.05] flex flex-col z-[60] overflow-hidden shadow-2xl"
     >
       {/* Logo Section */}
       <div className="h-20 flex items-center px-6">
@@ -112,47 +115,51 @@ const PremiumSidebar = () => {
       <div className="flex-1 px-4 space-y-6 pt-4 overflow-y-auto no-scrollbar">
         <div>
           {!isCollapsed && (
-            <p className="px-4 mb-3 text-[10px] font-bold tracking-[0.2em] text-black/30 dark:text-white/20 uppercase">
+            <p className="px-5 mb-4 text-[10px] font-black tracking-[0.25em] text-gray-500 dark:text-gray-400 uppercase">
               Main Menu
             </p>
           )}
-          <nav className="space-y-1">
+          <nav className="space-y-1.5">
             {navItems.map((item) => {
               const active = location.pathname === item.path;
               return (
                 <button
                   key={item.id}
                   onClick={() => handleNav(item.path)}
-                  className={`w-full group relative flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-300 ${
+                  className={`w-full group relative flex items-center gap-3.5 px-5 py-3 rounded-2xl transition-all duration-500 ${
                     active
-                      ? 'text-white'
-                      : 'text-white/40 hover:text-white/80 hover:bg-white/[0.03]'
+                      ? 'text-brand-600 dark:text-brand-400 shadow-[0_10px_25px_-5px_rgba(79,70,229,0.1)]'
+                      : 'text-gray-500 hover:text-gray-950 dark:text-gray-400 dark:hover:text-white'
                   }`}
                 >
                   {active && (
                     <motion.div
                       layoutId="sidebar-active-bg"
-                      className="absolute inset-0 rounded-xl -z-10"
-                      style={{ background: 'linear-gradient(135deg, rgba(79,70,229,0.15), rgba(147,51,234,0.10))' }}
-                      transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                      className="absolute inset-0 rounded-2xl -z-10 shadow-inner"
+                      style={{ 
+                        background: 'linear-gradient(135deg, rgba(79,70,229,0.08), rgba(147,51,234,0.05))',
+                        border: '1px solid rgba(79,70,229,0.1)'
+                      }}
+                      transition={{ type: 'spring', bounce: 0.15, duration: 0.7 }}
                     />
                   )}
-                  <MagneticElement strength={0.4}>
+                  <div className="relative">
                     <item.icon
-                      className={`w-5 h-5 transition-all duration-300 flex-shrink-0 ${
-                        active ? 'opacity-100 scale-110' : 'opacity-50 group-hover:opacity-80 group-hover:scale-110'
+                      className={`w-5 h-5 transition-all duration-500 flex-shrink-0 ${
+                        active ? 'opacity-100 scale-110' : 'opacity-40 group-hover:opacity-100 group-hover:scale-115'
                       }`}
-                      style={active ? { color: '#818CF8' } : {}}
+                      style={active ? { filter: 'drop-shadow(0 0 8px rgba(129,140,248,0.4))' } : {}}
                     />
-                  </MagneticElement>
+                    {active && <motion.div layoutId="dot" className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-brand-500 rounded-full shadow-[0_0_8px_rgba(79,70,229,0.5)]" />}
+                  </div>
                   {!isCollapsed && (
-                    <span className="text-[13px] font-bold tracking-tight flex-1 text-left">
+                    <span className={`text-[14px] font-bold tracking-tight transition-colors duration-300 ${active ? 'text-gray-900 dark:text-white' : ''}`}>
                       {item.name}
                     </span>
                   )}
                   {active && (
                     <motion.div
-                      className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r-full"
+                      className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full"
                       style={{ background: 'linear-gradient(180deg, #4F46E5, #9333EA)' }}
                       layoutId="sidebar-indicator"
                       transition={{ type: 'spring', bounce: 0.2 }}
@@ -166,28 +173,26 @@ const PremiumSidebar = () => {
 
         <div>
           {!isCollapsed && (
-            <p className="px-4 mb-3 text-[10px] font-bold tracking-[0.2em] text-black/30 dark:text-white/20 uppercase">
+            <p className="px-5 mb-4 text-[10px] font-black tracking-[0.25em] text-gray-500 dark:text-gray-400 uppercase">
               Management
             </p>
           )}
-          <nav className="space-y-1">
+          <nav className="space-y-1.5">
             {mgmtItems.map((item) => {
               const active = location.pathname === item.path;
               return (
                 <button
                   key={item.id}
                   onClick={() => handleNav(item.path)}
-                  className={`w-full group relative flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-300 ${
+                  className={`w-full group relative flex items-center gap-3.5 px-5 py-3 rounded-2xl transition-all duration-500 ${
                     active 
-                      ? 'bg-brand-500/10 text-brand-600 dark:text-brand-400' 
-                      : 'text-black/50 dark:text-white/40 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-black/[0.02] dark:hover:bg-white/[0.02]'
+                      ? 'bg-brand-500/10 text-brand-500' 
+                      : 'text-gray-500 hover:text-gray-950 dark:text-gray-400 dark:hover:text-white'
                   }`}
                 >
-                  <MagneticElement strength={0.4}>
-                    <item.icon className={`w-5 h-5 transition-all duration-300 ${active ? 'scale-110 opacity-100' : 'opacity-70 group-hover:opacity-100 group-hover:scale-110'}`} />
-                  </MagneticElement>
+                  <item.icon className={`w-5 h-5 transition-all duration-500 ${active ? 'scale-110 opacity-100' : 'opacity-40 group-hover:opacity-100 group-hover:scale-115'}`} />
                   {!isCollapsed && (
-                    <span className="text-[13px] font-bold tracking-tight">
+                    <span className={`text-[14px] font-bold tracking-tight transition-colors duration-300 ${active ? 'text-gray-900 dark:text-white' : ''}`}>
                       {item.name}
                     </span>
                   )}
@@ -199,11 +204,11 @@ const PremiumSidebar = () => {
       </div>
 
       {/* Footer Section */}
-      <div className="p-4 border-t border-white/[0.04] space-y-2">
+      <div className="p-6 border-t border-black/[0.04] dark:border-white/[0.04] space-y-3">
 
         {/* Streak badge — hidden when collapsed */}
         {!isCollapsed && (
-          <div className="mb-3">
+          <div className="mb-4">
             <StreakBadge compact />
           </div>
         )}
@@ -211,14 +216,14 @@ const PremiumSidebar = () => {
         {/* Mute toggle */}
         <button
           onClick={toggleMute}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-white/30 hover:text-white/60 hover:bg-white/[0.03] transition-all"
+          className="w-full flex items-center gap-3.5 px-5 py-2.5 rounded-2xl text-gray-500 hover:text-gray-950 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-all duration-300"
         >
           {isMuted
             ? <VolumeX className="w-4 h-4 flex-shrink-0" />
             : <Volume2 className="w-4 h-4 flex-shrink-0" />}
           {!isCollapsed && (
-            <span className="text-[12px] font-semibold">
-              {isMuted ? 'Sound off' : 'Sound on'}
+            <span className="text-[12px] font-bold tracking-tight">
+              {isMuted ? 'Muted' : 'Audible'}
             </span>
           )}
         </button>
@@ -229,10 +234,10 @@ const PremiumSidebar = () => {
             logout();
             navigate('/login');
           }}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-rose-500/70 hover:text-rose-500 hover:bg-rose-500/5 transition-all"
+          className="w-full flex items-center gap-3.5 px-5 py-2.5 rounded-2xl text-red-500/70 hover:text-red-500 hover:bg-red-500/5 transition-all duration-300"
         >
           <LogOut className="w-5 h-5 flex-shrink-0" />
-          {!isCollapsed && <span className="text-[13px] font-bold tracking-tight">Disconnect</span>}
+          {!isCollapsed && <span className="text-[13px] font-black uppercase tracking-widest">Sign Out</span>}
         </button>
 
         <button
@@ -240,12 +245,11 @@ const PremiumSidebar = () => {
             premiumFeedback.click();
             setIsCollapsed(!isCollapsed);
           }}
-          className="w-full flex items-center justify-center h-10 rounded-xl transition-all group"
-          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}
+          className="w-full flex items-center justify-center h-12 rounded-2xl transition-all duration-500 group shadow-sm bg-white dark:bg-white/[0.03] border border-black/[0.05] dark:border-white/[0.05] hover:border-brand-500/30"
         >
           {isCollapsed
-            ? <ChevronRight className="w-4 h-4 text-white/30 group-hover:text-white/60" />
-            : <ChevronLeft  className="w-4 h-4 text-white/30 group-hover:text-white/60" />}
+            ? <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-brand-500" />
+            : <ChevronLeft  className="w-5 h-5 text-gray-400 group-hover:text-brand-500" />}
         </button>
       </div>
     </motion.aside>

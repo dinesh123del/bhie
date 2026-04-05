@@ -30,7 +30,7 @@ const LoginScreen = ({ navigation }) => {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       navigation.replace('Main');
     } catch (error) {
-      Alert.alert('Protocol Error', 'Verification failed. Please check credentials.');
+      Alert.alert('Login Error', 'Something went wrong. Please check your email and password.');
     } finally {
       setLoading(false);
     }
@@ -44,14 +44,14 @@ const LoginScreen = ({ navigation }) => {
         style={styles.container}
       >
         <View style={styles.form}>
-          <View className="mb-12">
-            <Text style={styles.kicker}>Authorized Access Only</Text>
-            <Text style={styles.title}>Elite <Text style={styles.highlight}>Mobile</Text></Text>
-            <Text style={styles.subtitle}>Enter your credentials to synchronize with the BHIE dashboard.</Text>
+          <View style={styles.titleBlock}>
+            <Text style={styles.kicker}>Secure Sign In</Text>
+            <Text style={styles.title}>BHIE <Text style={styles.highlight}>Mobile</Text></Text>
+            <Text style={styles.subtitle}>Sign in to access your business dashboard on the go.</Text>
           </View>
 
           <Input 
-            label="Node Identifier"
+            label="Email Address"
             placeholder="node_admin@bhie.com"
             value={email}
             onChangeText={setEmail}
@@ -59,7 +59,7 @@ const LoginScreen = ({ navigation }) => {
           />
 
           <Input 
-            label="Security Protocol"
+            label="Password"
             placeholder="••••••••"
             value={password}
             onChangeText={setPassword}
@@ -68,17 +68,17 @@ const LoginScreen = ({ navigation }) => {
           />
 
           <Button 
-            title={loading ? "Authenticating..." : "Initialize Command"} 
+            title={loading ? "Signing in..." : "Sign In Now"} 
             onPress={handleLogin}
             style={styles.loginBtn}
           />
 
           <TouchableOpacity 
-            onPress={() => navigation.navigate('Register')}
+            onPress={() => Alert.alert('Create Account', 'Please visit bhie.app on your browser to create a new account.')}
             style={styles.registerLink}
           >
             <Text style={styles.registerText}>
-              First-time activation? <Text style={styles.boldText}>Create Node</Text>
+              New here? <Text style={styles.boldText}>Create Account</Text>
             </Text>
           </TouchableOpacity>
         </View>
@@ -94,6 +94,9 @@ const styles = StyleSheet.create({
   },
   form: {
     paddingHorizontal: 32,
+  },
+  titleBlock: {
+    marginBottom: 48,
   },
   kicker: {
     fontSize: 10,

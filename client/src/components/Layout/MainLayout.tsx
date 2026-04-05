@@ -13,6 +13,14 @@ import { HiChevronDoubleLeft, HiChevronDoubleRight, HiSparkles } from 'react-ico
 import { useTheme } from '../../contexts/ThemeContext';
 import Logo from '../Logo';
 import { premiumFeedback } from '../../utils/premiumFeedback';
+import { 
+  RealityEngine, 
+  ThermalEngine, 
+  SecurityEngine, 
+  MagneticWrapper, 
+  Scanlines,
+  MouseGlow
+} from '../ui/MicroEngines';
 
 interface SidebarItem {
   icon: React.ReactNode;
@@ -42,19 +50,21 @@ const ThemeToggleButton = () => {
   const { toggleTheme, resolvedTheme } = useTheme();
 
   return (
-    <motion.button
-      aria-label="Toggle theme"
-      onClick={() => {
-        toggleTheme();
-        premiumFeedback.click();
-      }}
-      whileHover={{ scale: 1.01, rotate: 2 }}
-      whileTap={{ scale: 0.96 }}
-      onMouseEnter={() => premiumFeedback.haptic(5)}
-      className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-ink-100 transition-all duration-300 ease-premium hover:bg-white/[0.08]"
-    >
-      {resolvedTheme === 'dark' ? <Sun className="h-5 w-5 text-amber-300" /> : <Moon className="h-5 w-5 text-ink-200" />}
-    </motion.button>
+    <MagneticWrapper strength={0.4}>
+      <motion.button
+        aria-label="Toggle theme"
+        onClick={() => {
+          toggleTheme();
+          premiumFeedback.click();
+        }}
+        whileHover={{ scale: 1.01, rotate: 2 }}
+        whileTap={{ scale: 0.96 }}
+        onMouseEnter={() => premiumFeedback.haptic(5)}
+        className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-ink-100 transition-all duration-300 ease-premium hover:bg-white/[0.08]"
+      >
+        {resolvedTheme === 'dark' ? <Sun className="h-5 w-5 text-amber-300" /> : <Moon className="h-5 w-5 text-ink-200" />}
+      </motion.button>
+    </MagneticWrapper>
   );
 };
 
@@ -67,6 +77,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const profileInitials = userName
     .split(' ')
@@ -112,30 +123,42 @@ export const Navbar: React.FC<NavbarProps> = ({
             {collapsed ? <HiChevronDoubleRight className="text-lg" /> : <HiChevronDoubleLeft className="text-lg" />}
           </motion.button>
 
-          <div className="hidden lg:flex">
+          <div className="hidden lg:flex items-center gap-6">
             <Logo size="sm" to="/dashboard" showSubtitle={false} className="bg-transparent px-0 py-0 shadow-none border-transparent" />
+            <RealityEngine />
+            <SecurityEngine />
           </div>
         </div>
 
         <div className="hidden min-w-[320px] max-w-xl flex-1 items-center lg:flex">
-          <div className="glass-panel flex h-12 w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-0 shadow-none">
+          <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (searchQuery.trim()) {
+                premiumFeedback.click();
+                // Simple search redirect to records
+                window.location.href = `/records?q=${encodeURIComponent(searchQuery)}`;
+              }
+            }}
+            className="glass-panel flex h-12 w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-0 shadow-none"
+          >
             <Search className="h-4 w-4 text-ink-300" />
             <input
-              readOnly
-              value=""
-              placeholder="Quick search coming soon"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search data, scans, analytics..."
               className="w-full bg-transparent text-sm text-white placeholder:text-ink-400 focus:outline-none"
             />
             <span className="rounded-xl border border-white/10 bg-white/[0.04] px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-300">
-              Soon
+              Enter
             </span>
-          </div>
+          </form>
         </div>
 
         <div className="flex items-center gap-2 md:gap-3">
           <div className="hidden items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.05] px-3 py-2 md:flex">
-            <HiSparkles className="text-sky-200" />
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-100">
+            <HiSparkles className="text-sky-300" />
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] secondary-text">
               Business tools
             </span>
           </div>
@@ -143,21 +166,23 @@ export const Navbar: React.FC<NavbarProps> = ({
           <ThemeToggleButton />
 
           <div className="relative">
-            <motion.button
-              onClick={() => {
-                setNotificationsOpen((current) => !current);
-                setProfileOpen(false);
-                premiumFeedback.click();
-              }}
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.96 }}
-              onMouseEnter={() => premiumFeedback.haptic(5)}
-              className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white transition-all duration-300 ease-premium hover:bg-white/[0.08]"
-              aria-label="Show notifications"
-            >
-              <Bell className="h-5 w-5 text-ink-100" />
-              <span className="absolute right-3 top-3 h-2.5 w-2.5 rounded-full bg-sky-300 shadow-brand-glow" />
-            </motion.button>
+            <MagneticWrapper strength={0.3}>
+              <motion.button
+                onClick={() => {
+                  setNotificationsOpen((current) => !current);
+                  setProfileOpen(false);
+                  premiumFeedback.click();
+                }}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.96 }}
+                onMouseEnter={() => premiumFeedback.haptic(5)}
+                className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white transition-all duration-300 ease-premium hover:bg-white/[0.08]"
+                aria-label="Show notifications"
+              >
+                <Bell className="h-5 w-5 text-ink-100" />
+                <span className="absolute right-3 top-3 h-2.5 w-2.5 rounded-full bg-sky-300 shadow-brand-glow" />
+              </motion.button>
+            </MagneticWrapper>
 
             <AnimatePresence>
               {notificationsOpen ? (
@@ -195,20 +220,22 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           <div className="relative">
-            <motion.button
-              onClick={() => {
-                setProfileOpen((current) => !current);
-                setNotificationsOpen(false);
-              }}
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.96 }}
-              className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white transition-all duration-300 ease-premium hover:bg-white/[0.08]"
-              aria-label="Open profile menu"
-            >
-              <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-300 to-indigo-500 text-sm font-semibold text-slate-950">
-                {profileInitials}
-              </span>
-            </motion.button>
+            <MagneticWrapper strength={0.3}>
+              <motion.button
+                onClick={() => {
+                  setProfileOpen((current) => !current);
+                  setNotificationsOpen(false);
+                }}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.96 }}
+                className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white transition-all duration-300 ease-premium hover:bg-white/[0.08]"
+                aria-label="Open profile menu"
+              >
+                <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-300 to-indigo-500 text-sm font-semibold text-slate-950">
+                  {profileInitials}
+                </span>
+              </motion.button>
+            </MagneticWrapper>
 
             <AnimatePresence>
               {profileOpen ? (
@@ -303,7 +330,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         <div className="px-4 pb-2 pt-4">
-          <div className={`glass-panel flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 shadow-none ${collapsed ? 'justify-center' : ''}`}>
+          <div className={`glass-panel relative overflow-hidden flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 shadow-none ${collapsed ? 'justify-center' : ''}`}>
+            <Scanlines />
             <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-gradient text-slate-950 shadow-brand-glow">
               <HiSparkles />
             </span>
@@ -358,13 +386,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </nav>
 
         <div className="mt-auto border-t border-white/10 px-4 py-4">
-          <div className={`glass-panel rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-4 shadow-none ${collapsed ? 'items-center justify-center' : ''}`}>
+          <div className={`glass-panel relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-4 shadow-none ${collapsed ? 'items-center justify-center' : ''}`}>
+            <Scanlines />
             {!collapsed ? (
-              <>
-                <p className="text-xs uppercase tracking-[0.2em] text-ink-400">BHIE OS</p>
-                <p className="mt-2 text-sm font-semibold text-white">Simple business workspace</p>
-                <p className="mt-1 text-sm text-ink-300">Use this menu to check records, analytics, and actions without extra noise.</p>
-              </>
+              <div className="flex flex-col gap-4">
+                <div className="space-y-1">
+                  <p className="text-xs uppercase tracking-[0.2em] text-ink-400">BHIE OS</p>
+                  <p className="mt-2 text-sm font-semibold text-white">Simple business workspace</p>
+                  <p className="mt-1 text-sm text-ink-300">Use this menu to check records, analytics, and actions without extra noise.</p>
+                </div>
+                <div className="space-y-2 border-t border-white/5 pt-4">
+                  <ThermalEngine />
+                </div>
+              </div>
             ) : (
               <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-2xl bg-white/[0.06] text-white">
                 <HiSparkles />
@@ -390,6 +424,7 @@ export const MainLayout: React.FC<{
 
   return (
     <div className="min-h-screen text-white bg-transparent">
+      <MouseGlow />
       <Sidebar
         items={sidebarItems}
         active={activePage}
@@ -417,25 +452,25 @@ export const MainLayout: React.FC<{
         >
           {sidebarItems.slice(0, 4).map((item) => {
              const selected = activePage === item.href;
-             return (
-               <motion.button
-                 key={item.href}
-                 whileTap={{ scale: 0.9 }}
-                 onClick={() => onNavigate(item.href)}
-                 className={`flex flex-col items-center justify-center gap-1 rounded-xl px-4 py-1 transition-colors ${selected ? 'text-sky-400' : 'text-white/40'}`}
-               >
-                 <span className={selected ? 'scale-110' : ''}>{item.icon}</span>
-                 <span className="text-[10px] font-black uppercase tracking-tight">{item.label.slice(0, 5)}</span>
-               </motion.button>
-             );
+              return (
+                <motion.button
+                  key={item.href}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => onNavigate(item.href)}
+                  className={`flex flex-col items-center justify-center gap-1 rounded-xl px-4 py-1 transition-colors ${selected ? 'text-sky-400' : 'text-white/70'}`}
+                >
+                  <span className={selected ? 'scale-110' : ''}>{item.icon}</span>
+                  <span className={`text-[10px] font-black uppercase tracking-tight ${selected ? 'text-sky-400' : 'text-white/60'}`}>{item.label.slice(0, 5)}</span>
+                </motion.button>
+              );
           })}
           <motion.button
              whileTap={{ scale: 0.9 }}
              onClick={() => setMobileOpen(true)}
-             className="flex flex-col items-center justify-center gap-1 rounded-xl px-4 py-1 text-white/40"
+             className="flex flex-col items-center justify-center gap-1 rounded-xl px-4 py-1 text-white/70"
           >
              <Menu className="h-5 w-5" />
-             <span className="text-[10px] font-black uppercase tracking-tight">More</span>
+             <span className="text-[10px] font-black uppercase tracking-tight tertiary-text">More</span>
           </motion.button>
         </motion.nav>
       </div>

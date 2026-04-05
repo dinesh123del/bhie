@@ -37,6 +37,19 @@ export interface UploadedImageRecord {
     category: string;
     date: string;
     amountMatch?: string | null;
+    missingFields?: string[];
+    integrityScore?: number;
+    isUnclear?: boolean;
+    businessName?: string;
+    gstNumber?: string;
+    gstDetails?: {
+      legalName?: string;
+      tradeName?: string;
+      status?: string;
+      address?: string;
+      taxpayerType?: string;
+      registrationDate?: string;
+    };
   };
 }
 

@@ -82,6 +82,11 @@ export const paymentService = {
     return response.data;
   },
 
+  async directUpgrade(plan: 'pro' | 'premium') {
+    const response = await api.post('/payment/direct-upgrade', { plan });
+    return response.data;
+  },
+
   async ensureRazorpayLoaded() {
     if (window.Razorpay) {
       return;

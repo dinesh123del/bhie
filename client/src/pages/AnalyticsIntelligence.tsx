@@ -109,8 +109,8 @@ const AnalyticsIntelligence = () => {
       {/* Header & Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-black text-white tracking-tight mb-2">Performance Analytics</h1>
-          <p className="text-white/40 font-medium italic">Comprehensive analysis of your financial health.</p>
+          <h1 className="text-4xl font-black text-white tracking-tight mb-2">How's Your Business Doing?</h1>
+          <p className="text-white/40 font-medium italic">A clear look at your money and growth.</p>
         </div>
         <div className="flex items-center gap-2 bg-white/5 p-1.5 rounded-[1.25rem] border border-white/10 backdrop-blur-2xl self-start md:self-auto">
           {[7, 30, 90].map((r) => (
@@ -137,7 +137,7 @@ const AnalyticsIntelligence = () => {
               <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400">
                 <DollarSign className="w-5 h-5" />
               </div>
-              <h3 className="text-sm font-bold text-white tracking-widest uppercase">Revenue Analysis</h3>
+              <h3 className="text-sm font-bold text-white tracking-widest uppercase">Money Coming In</h3>
             </div>
           </div>
           <div className="p-6 flex-1">
@@ -162,7 +162,7 @@ const AnalyticsIntelligence = () => {
             </div>
             <div className="mt-6">
                 <InsightCard 
-                    title="Revenue Insight" 
+                    title="Money Tip" 
                     message={data.revenue.insight} 
                     impactLevel="medium"
                 />
@@ -175,7 +175,7 @@ const AnalyticsIntelligence = () => {
             <div className="p-6 border-b border-white/5 bg-blue-600/5">
                 <div className="flex items-center gap-3">
                     <Zap className="w-5 h-5 text-yellow-400" />
-                    <h3 className="text-sm font-bold text-white tracking-widest uppercase">Growth Forecast</h3>
+                    <h3 className="text-sm font-bold text-white tracking-widest uppercase">Future Predictions</h3>
                 </div>
             </div>
             <div className="p-6 flex-1 space-y-6">
@@ -208,7 +208,7 @@ const AnalyticsIntelligence = () => {
         {/* Profit vs Expenses */}
         <PremiumCard className="h-full" padded={false}>
             <div className="p-6 border-b border-white/5">
-                <h3 className="text-sm font-bold text-white tracking-widest uppercase">Net Balance</h3>
+                <h3 className="text-sm font-bold text-white tracking-widest uppercase">Profit Left Over</h3>
             </div>
             <div className="p-6 space-y-6">
                 <div className="h-[200px]">
@@ -238,7 +238,7 @@ const AnalyticsIntelligence = () => {
         {/* Expense Breakdown */}
         <PremiumCard padded={false}>
           <div className="p-6 border-b border-white/5">
-            <h3 className="text-sm font-bold text-white tracking-widest uppercase">Cost Breakdown</h3>
+            <h3 className="text-sm font-bold text-white tracking-widest uppercase">Where Your Money Goes</h3>
           </div>
           <div className="p-6">
             <div className="h-[200px]">
@@ -270,11 +270,11 @@ const AnalyticsIntelligence = () => {
         {/* Customer & Product Leaderboard */}
         <PremiumCard padded={false}>
             <div className="p-6 border-b border-white/5">
-               <h3 className="text-sm font-bold text-white tracking-widest uppercase">Top Performers</h3>
+               <h3 className="text-sm font-bold text-white tracking-widest uppercase">Best Customers & Products</h3>
             </div>
             <div className="p-6 space-y-6">
                 <div className="space-y-4">
-                    <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Top Revenue Chains</p>
+                    <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Top Customers</p>
                     {data.customers.topCustomers.map((cust, idx) => (
                         <div key={idx} className="flex items-center justify-between p-3 rounded-2xl bg-white/[0.02] border border-white/5">
                             <span className="text-sm font-bold text-white/80">{cust.name}</span>
@@ -283,7 +283,7 @@ const AnalyticsIntelligence = () => {
                     ))}
                 </div>
                 <div className="space-y-4 pt-4 border-t border-white/5">
-                    <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Inventory Risks</p>
+                    <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Low Stock Alerts</p>
                     {data.inventory.lowStock.map((prod, idx) => (
                         <div key={idx} className="flex items-center justify-between">
                             <span className="text-xs font-medium text-white/60">{prod.name}</span>

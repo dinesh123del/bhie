@@ -1,9 +1,10 @@
 import { Response } from 'express';
 import mongoose from 'mongoose';
-import User from '../models/User';
-import BusinessRecord from '../models/Record';
-import { AuthRequest } from '../types';
-import { asyncHandler } from '../middleware/asyncHandler';
+import User from '../models/User.js';
+import BusinessRecord from '../models/Record.js';
+import Settings from '../models/Settings.js';
+import { AuthRequest } from '../types/index.js';
+import { asyncHandler } from '../middleware/asyncHandler.js';
 
 export const adminController = {
   // GET /api/admin/users - List all users with pagination and filters
@@ -59,10 +60,10 @@ export const adminController = {
     const { id } = req.params;
     const { plan, planExpiry } = req.body;
 
-    if (!['free', '59', '119'].includes(plan)) {
+    if (!['free', 'pro', 'premium'].includes(plan)) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid plan. Must be free, 59, or 119'
+        message: 'Invalid plan. Must be free, pro, or premium'
       });
     }
 
@@ -140,26 +141,26 @@ export const adminController = {
       totalUsers,
       activeUsers,
       freeUsers,
-      paidUsers59,
-      paidUsers119,
+      paidUsersPro,
+      paidUsersPremium,
       totalRecords,
       recentRecords
     ] = await Promise.all([
       User.countDocuments(),
       User.countDocuments({ isActive: true }),
       User.countDocuments({ plan: 'free' }),
-      User.countDocuments({ plan: '59' }),
-      User.countDocuments({ plan: '119' }),
+      User.countDocuments({ plan: 'pro' }),
+      User.countDocuments({ plan: 'premium' }),
       BusinessRecord.countDocuments(),
       BusinessRecord.countDocuments({
         createdAt: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }
       })
     ]);
 
-    // Calculate revenue (simplified - assuming monthly plans)
-    const revenue59 = paidUsers59 * 59;
-    const revenue119 = paidUsers119 * 119;
-    const totalRevenue = revenue59 + revenue119;
+    // Calculate revenue (simplified)
+    const revenuePro = paidUsersPro * 79; // Using default for now
+    const revenuePremium = paidUsersPremium * 299;
+    const totalRevenue = revenuePro + revenuePremium;
 
     res.json({
       success: true,
@@ -168,12 +169,12 @@ export const adminController = {
           total: totalUsers,
           active: activeUsers,
           free: freeUsers,
-          paid59: paidUsers59,
-          paid119: paidUsers119
+          paidPro: paidUsersPro,
+          paidPremium: paidUsersPremium
         },
         revenue: {
-          monthly59: revenue59,
-          monthly119: revenue119,
+          monthlyPro: revenuePro,
+          monthlyPremium: revenuePremium,
           total: totalRevenue
         },
         records: {
@@ -211,5 +212,31 @@ export const adminController = {
       success: true,
       message: 'Password reset successfully'
     });
+  }),
+
+  // GET /api/admin/settings - Get site settings
+  getSettings: asyncHandler(async (req: AuthRequest, res: Response) => {
+    let settings = await Settings.findOne();
+    if (!settings) {
+      settings = await Settings.create({});
+    }
+    res.json({ success: true, data: settings });
+  }),
+
+  // PATCH /api/admin/settings - Update site settings
+  updateSettings: asyncHandler(async (req: AuthRequest, res: Response) => {
+    let settings = await Settings.findOne();
+    if (!settings) {
+      settings = new Settings();
+    }
+
+    const { proPrice, premiumPrice, isFreeMode, currency } = req.body;
+    if (proPrice !== undefined) settings.proPrice = proPrice;
+    if (premiumPrice !== undefined) settings.premiumPrice = premiumPrice;
+    if (isFreeMode !== undefined) settings.isFreeMode = isFreeMode;
+    if (currency !== undefined) settings.currency = currency;
+
+    await settings.save();
+    res.json({ success: true, data: settings });
   })
 };

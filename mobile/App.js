@@ -1,21 +1,30 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
+import * as Notifications from 'expo-notifications';
+import * as Haptics from 'expo-haptics';
 
 // Screens
 import LoginScreen from './screens/LoginScreen';
 import DashboardScreen from './screens/DashboardScreen';
-import DashboardScreen from './screens/DashboardScreen';
+
+// Push notification helpers
+import {
+  registerForPushNotificationsAsync,
+  handleNotificationReceived,
+  handleNotificationResponse,
+} from './src/services/pushNotifications';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// Mock Screens for demonstration
-const AddScreen = () => <DashboardScreen />; // Placeholder for adding transactions
-const ProfileScreen = () => <DashboardScreen />; // Placeholder for profile
+// Placeholder screens
+const AddScreen = () => <DashboardScreen />;
+const ProfileScreen = () => <DashboardScreen />;
 
 const TabNavigator = () => {
     return (
@@ -32,15 +41,14 @@ const TabNavigator = () => {
                 tabBarActiveTintColor: '#38BDF8',
                 tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.35)',
                 tabBarStyle: {
-                    borderTopWidth: 0,
+                    borderTopWidth: 1,
                     elevation: 0,
                     backgroundColor: '#0F1219',
                     height: 90,
                     paddingBottom: 30,
                     paddingTop: 10,
                     borderTopColor: 'rgba(255, 255, 255, 0.05)',
-                    borderTopWidth: 1,
-                }
+                },
             })}
         >
             <Tab.Screen name="Home" component={DashboardScreen} />
@@ -50,26 +58,54 @@ const TabNavigator = () => {
     );
 };
 
-import * as Haptics from 'expo-haptics';
-import { playStartupSound } from './utils/audio';
-
 export default function App() {
-    React.useEffect(() => {
-        // Elite Startup Sequence
+    const notificationListener = useRef();
+    const responseListener = useRef();
+
+    useEffect(() => {
+        // ─── Startup Sequence ───────────────────────────────────────────────
         const startUp = async () => {
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-            await playStartupSound();
+            try {
+                await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+            } catch (_) {
+                // Haptics may not be available on all devices
+            }
         };
         startUp();
+
+        // ─── Push Notifications ─────────────────────────────────────────────
+        registerForPushNotificationsAsync().then((token) => {
+            if (token) {
+                console.log('[BHIE] Registered push token:', token);
+                // TODO: Send token to your backend here
+                // api.post('/api/notifications/register', { token });
+            }
+        });
+
+        // Listen for notifications received while app is foregrounded
+        notificationListener.current = Notifications.addNotificationReceivedListener(
+            handleNotificationReceived
+        );
+
+        // Listen for user tapping on a notification
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(
+            handleNotificationResponse
+        );
+
+        // Clean up listeners on unmount
+        return () => {
+            notificationListener.current?.remove();
+            responseListener.current?.remove();
+        };
     }, []);
 
     return (
         <NavigationContainer>
             <StatusBar style="light" />
-            <Stack.Navigator 
+            <Stack.Navigator
                 screenOptions={{
                     headerShown: false,
-                    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS, // Smooth horizontal slide
+                    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
                 }}
             >
                 <Stack.Screen name="Login" component={LoginScreen} />

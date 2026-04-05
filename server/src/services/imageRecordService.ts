@@ -28,6 +28,12 @@ export interface ProcessedImagePayload {
   rawText: string;
   extractedText: string;
   date: Date;
+  missingFields?: string[];
+  integrityScore?: number;
+  isUnclear?: boolean;
+  businessName?: string;
+  gstNumber?: string;
+  gstDetails?: any;
 }
 
 export async function processImageForRecord(filePath: string, originalName: string): Promise<ProcessedImagePayload> {
@@ -45,5 +51,11 @@ export async function processImageForRecord(filePath: string, originalName: stri
     rawText: intelResult.rawText,
     extractedText: intelResult.rawText,
     date,
+    missingFields: intelResult.missingFields,
+    integrityScore: intelResult.integrityScore,
+    isUnclear: intelResult.isUnclear,
+    businessName: intelResult.businessName,
+    gstNumber: intelResult.gstNumber,
+    gstDetails: intelResult.gstDetails,
   };
 }

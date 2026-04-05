@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
-import { AppError } from '../utils/appError';
-import User from '../models/User';
+import { AppError } from '../utils/appError.js';
+import User from '../models/User.js';
 
 export const checkAdmin: RequestHandler = async (req, res, next) => {
   try {

@@ -1,14 +1,16 @@
 import { RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
-import { env } from '../config/env';
-import { AppError } from '../utils/appError';
-import { AuthenticatedUser } from '../types';
+import { env } from '../config/env.js';
+import { AppError } from '../utils/appError.js';
+import { AuthenticatedUser } from '../types/index.js';
 
 import User from '../models/User.js';
 
 export const authenticateToken: RequestHandler = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : undefined;
+  // BANK-GRADE SECURITY: Prioritize secure cookie, fallback to header for mobile
+  const token = req.cookies?.token || (req.headers.authorization?.startsWith('Bearer ') 
+    ? req.headers.authorization.slice(7) 
+    : undefined);
 
   if (!token) {
     next(new AppError(401, 'Access token required'));

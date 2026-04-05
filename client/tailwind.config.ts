@@ -36,6 +36,14 @@ const config: Config = {
           700: '#6d28d9',
           800: '#5b21b6',
           900: '#4c1d95',
+        },
+        bhie: {
+          primary: '#5E5CE6',
+          purple: '#BF5AF2',
+          black: '#000000',
+          surface: 'rgba(28, 28, 30, 0.7)',
+          border: 'rgba(255, 255, 255, 0.12)',
+          glow: 'rgba(94, 92, 230, 0.5)',
         }
       },
       borderRadius: {

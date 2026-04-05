@@ -30,7 +30,7 @@ export const LanguageSwitcher = () => {
           setIsOpen(!isOpen);
           premiumFeedback.click();
         }}
-        className="flex items-center gap-2 p-2.5 rounded-2xl bg-black/[0.01] dark:bg-white/[0.02] border border-black/5 dark:border-white/5 text-black/40 dark:text-white/40 hover:text-brand-500 dark:hover:text-brand-400 transition-all group"
+        className="flex items-center gap-2 p-2.5 rounded-2xl bg-black/[0.03] dark:bg-white/[0.05] border border-black/10 dark:border-white/10 text-black/60 dark:text-white/60 hover:text-brand-500 dark:hover:text-brand-400 transition-all group"
         title={t('language')}
       >
         <Languages className="w-5 h-5" />

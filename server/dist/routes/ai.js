@@ -4,6 +4,7 @@ import { asyncHandler } from '../middleware/asyncHandler.js';
 import { authenticateToken } from '../middleware/auth.js';
 import Company from '../models/Company.js';
 import User from '../models/User.js';
+import { AIEngine } from '../utils/aiEngine.js';
 import { AppError } from '../utils/appError.js';
 import { requireUser } from '../utils/request.js';
 const router = express.Router();
@@ -24,9 +25,9 @@ router.post('/analyze', authenticateToken, asyncHandler(async (req, res) => {
     const user = await User.findById(authUser.userId);
     if (!user)
         throw new AppError(404, 'User not found');
-    const company = await Company.findOne({ userId: authUser.userId });
-    if (!company)
-        throw new AppError(404, 'Company not found');
+    // Company is optional — the form collects all required numbers directly
+    // so we don't block analysis when it hasn't been set up yet.
+    await Company.findOne({ userId: authUser.userId });
     const analysisResult = await runAgents(businessData, provider);
     if (analysisResult.status === 'error') {
         throw new AppError(500, analysisResult.message);
@@ -59,7 +60,13 @@ router.post('/scan-bill', authenticateToken, upload.single('bill'), asyncHandler
                 date: result.date,
                 confidence: result.confidence,
                 rawText: result.rawText,
-                exactText: result.exactText // Added exact text to response
+                exactText: result.exactText,
+                businessName: result.businessName,
+                gstNumber: result.gstNumber,
+                gstDetails: result.gstDetails,
+                integrityScore: result.integrityScore,
+                missingFields: result.missingFields,
+                isUnclear: result.isUnclear
             }
         });
     }
@@ -71,4 +78,82 @@ router.post('/scan-bill', authenticateToken, upload.single('bill'), asyncHandler
 router.get('/history', authenticateToken, (_req, res) => {
     res.json({ history: [], message: 'History feature coming soon' });
 });
+router.post('/predict', authenticateToken, asyncHandler(async (req, res) => {
+    const { records = [] } = req.body;
+    if (!Array.isArray(records)) {
+        throw new AppError(400, 'Records must be an array');
+    }
+    const totalRecords = records.length;
+    if (totalRecords === 0) {
+        return res.json({
+            healthScore: 0,
+            riskLevel: 'low',
+            suggestions: ['Start uploading bills and receipts to see your health score.'],
+            metrics: {
+                totalRecords: 0,
+                draftCount: 0,
+                activeCount: 0,
+                archivedCount: 0,
+                completionRate: 0,
+                riskFactors: []
+            },
+            timestamp: new Date().toISOString()
+        });
+    }
+    const draftCount = records.filter(r => r.status === 'draft').length;
+    const activeCount = records.filter(r => r.status === 'active' || !r.status).length;
+    const archivedCount = records.filter(r => r.status === 'archived' || r.status === 'completed').length;
+    const completionRate = Math.round((activeCount / totalRecords) * 100);
+    // Calculate Health Score (Simple logic for now)
+    let healthScore = completionRate;
+    const riskFactors = [];
+    if (draftCount > totalRecords * 0.3) {
+        healthScore -= 15;
+        riskFactors.push('High percentage of incomplete draft records');
+    }
+    if (totalRecords < 5) {
+        healthScore -= 10;
+        riskFactors.push('Limited data points for accurate forecasting');
+    }
+    healthScore = Math.max(0, Math.min(100, healthScore));
+    const riskLevel = healthScore > 80 ? 'low' : healthScore > 50 ? 'medium' : 'high';
+    res.json({
+        healthScore,
+        riskLevel,
+        suggestions: [
+            healthScore > 80 ? 'Your record health is excellent. Maintain this consistency.' :
+                healthScore > 50 ? 'Address pending draft records to improve system accuracy.' :
+                    'Urgent: Multiple incomplete records detected. System visibility is currently limited.'
+        ],
+        metrics: {
+            totalRecords,
+            draftCount,
+            activeCount,
+            archivedCount,
+            completionRate,
+            riskFactors
+        },
+        timestamp: new Date().toISOString()
+    });
+}));
+router.post('/translate', authenticateToken, asyncHandler(async (req, res) => {
+    const { text, targetLanguage } = req.body;
+    if (!text || !targetLanguage) {
+        throw new AppError(400, 'Text and targetLanguage are required');
+    }
+    const prompt = `Translate the following interface text to ${targetLanguage}. 
+    Return ONLY a JSON object with a single key "translation".
+    
+    Text: "${text}"`;
+    const aiResponse = await AIEngine.generateCompletion(prompt, {
+        preferredProvider: 'openai' // OpenAI is better for short translations
+    });
+    try {
+        const parsed = JSON.parse(aiResponse.content);
+        res.json({ translation: parsed.translation || aiResponse.content });
+    }
+    catch (e) {
+        res.json({ translation: aiResponse.content });
+    }
+}));
 export default router;

@@ -5,7 +5,7 @@ export interface AdminUser {
   name: string;
   email: string;
   role: 'admin' | 'user';
-  plan: 'free' | '59' | '119';
+  plan: 'free' | 'pro' | 'premium';
   planExpiry?: string;
   isActive: boolean;
   recordCount: number;
@@ -18,12 +18,12 @@ export interface AdminStats {
     total: number;
     active: number;
     free: number;
-    paid59: number;
-    paid119: number;
+    paidPro: number;
+    paidPremium: number;
   };
   revenue: {
-    monthly59: number;
-    monthly119: number;
+    monthlyPro: number;
+    monthlyPremium: number;
     total: number;
   };
   records: {
@@ -32,8 +32,15 @@ export interface AdminStats {
   };
 }
 
+export interface AdminSettings {
+  proPrice: number;
+  premiumPrice: number;
+  currency: string;
+  isFreeMode: boolean;
+}
+
 export interface UpdateUserPlanRequest {
-  plan: 'free' | '59' | '119';
+  plan: 'free' | 'pro' | 'premium';
   planExpiry?: string;
 }
 
@@ -90,6 +97,18 @@ export const adminService = {
   // Get admin statistics
   getStats: async (): Promise<AdminStats> => {
     const response = await api.get('/admin/stats');
+    return response.data.data;
+  },
+
+  // Get site settings
+  getSettings: async (): Promise<AdminSettings> => {
+    const response = await api.get('/admin/settings');
+    return response.data.data;
+  },
+
+  // Update site settings
+  updateSettings: async (data: Partial<AdminSettings>): Promise<AdminSettings> => {
+    const response = await api.patch('/admin/settings', data);
     return response.data.data;
   }
 };

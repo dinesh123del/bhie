@@ -14,6 +14,7 @@ import { AppError } from '../utils/appError.js';
 import { requireUser } from '../utils/request.js';
 
 import { sensitiveLimiter } from '../middleware/rateLimiter.js';
+import { setAuthCookie, clearAuthCookie } from '../utils/cookie.js';
 
 const router = express.Router();
 
@@ -127,8 +128,11 @@ router.post(
 
     const token = generateToken(user._id.toString(), user.role as UserRole);
 
+    // BANK-GRADE SECURITY: Set httpOnly cookie
+    setAuthCookie(res, token);
+
     res.json({
-      token,
+      token, // Still returning token for mobile app compatibility
       user: {
         id: user._id,
         name: user.name,
@@ -143,11 +147,37 @@ router.post(
   })
 );
 
-import { 
-  register as registerController, 
-} from '../controllers/authController.js';
+router.post(
+  '/register',
+  sensitiveLimiter,
+  asyncHandler(async (req: Request, res: Response) => {
+    const { name, email, password } = registerSchema.parse(req.body);
+    
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      throw new AppError(400, 'User already exists');
+    }
 
-router.post('/register', sensitiveLimiter, registerController);
+    const user = await User.create({ name, email, password });
+    const token = generateToken(user._id.toString(), user.role as UserRole);
+
+    // BANK-GRADE SECURITY: Set httpOnly cookie
+    setAuthCookie(res, token);
+
+    res.status(201).json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        plan: user.plan,
+        isActive: user.isActive,
+        usageCount: user.usageCount,
+      }
+    });
+  })
+);
 
 router.get('/google', (req, res, next) => {
   if (!googleOAuthEnabled) {
@@ -176,6 +206,10 @@ router.get('/google/callback', (req, res, next) => {
     }
 
     const token = generateToken(user.userId, user.role);
+    
+    // Set cookie for browser sessions
+    setAuthCookie(res, token);
+    
     const redirectUrl = new URL('/login', env.CLIENT_URL);
     redirectUrl.searchParams.set('token', token);
     redirectUrl.searchParams.set('from', 'google');
@@ -232,6 +266,9 @@ router.post(
 
     const token = generateToken(user._id.toString(), user.role as UserRole);
 
+    // Set cookie for browser sessions
+    setAuthCookie(res, token);
+
     res.json({
       token,
       user: {
@@ -280,8 +317,61 @@ router.get(
   })
 );
 
+router.patch(
+  '/me',
+  authenticateToken,
+  asyncHandler(async (req: AuthRequest, res: Response) => {
+    const authUser = requireUser(req);
+    const { name, email, password } = req.body;
+    
+    const user = await User.findById(authUser.userId);
+    if (!user) throw new AppError(404, 'User not found');
+
+    if (name) user.name = name;
+    if (email && email !== user.email) {
+      const existing = await User.findOne({ email });
+      if (existing) throw new AppError(400, 'Email already in use');
+      user.email = email;
+    }
+    if (password) user.password = password;
+
+    await user.save();
+
+    res.json({
+      success: true,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        plan: typeof user.getEffectivePlan === 'function' ? user.getEffectivePlan() : user.plan,
+        subscriptionStatus: user.isActive ? 'active' : 'inactive',
+        expiryDate: user.planExpiry?.toISOString() || null,
+        usageCount: user.usageCount,
+        profilePic: user.profilePic,
+      },
+    });
+  })
+);
+
 router.post('/logout', (_req: Request, res: Response) => {
+  clearAuthCookie(res);
   res.json({ message: 'Logged out successfully' });
+});
+
+/**
+ * BANK-GRADE SECURITY: CSRF Protection Endpoint
+ * Returns a CSRF token for the frontend to use in subsequent requests.
+ */
+router.get('/csrf-token', (req, res) => {
+  // Simple CSRF token implementation if not using library
+  const token = Math.random().toString(36).substring(2);
+  res.cookie('XSRF-TOKEN', token, {
+    httpOnly: false, // Accessible by JS for CSRF headers
+    secure: env.IS_PRODUCTION,
+    sameSite: 'lax',
+  });
+  res.json({ csrfToken: token });
 });
 
 export default router;

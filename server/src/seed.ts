@@ -1,5 +1,5 @@
-import { createDefaultAdmin } from './utils/createDefaultAdmin';
-import { connectDB } from './config/db';
+import { createDefaultAdmin } from './utils/createDefaultAdmin.js';
+import { connectDB } from './config/db.js';
 
 async function seed() {
   try {

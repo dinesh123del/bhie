@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import multer from 'multer';
 import { ZodError } from 'zod';
-import { env } from '../config/env';
-import { AppError, isAppError } from '../utils/appError';
+import { env } from '../config/env.js';
+import { AppError, isAppError } from '../utils/appError.js';
 
 const { JsonWebTokenError, TokenExpiredError } = jwt;
 

@@ -70,8 +70,17 @@ const userSchema = new mongoose.Schema({
     timestamps: true,
 });
 userSchema.methods.hasPremiumAccess = function () {
+    // Admins always have premium access for free
+    if (this.role === 'admin') {
+        return true;
+    }
     if (this.plan === 'free') {
         return false;
+    }
+    // If the user is logged in and has a plan (pro/premium), 
+    // allow access regardless of expiry for now (as requested: "free no payment needed")
+    if (this.plan === 'pro' || this.plan === 'premium') {
+        return true;
     }
     if (!this.isActive || !this.planExpiry) {
         return false;
@@ -79,6 +88,8 @@ userSchema.methods.hasPremiumAccess = function () {
     return this.planExpiry.getTime() > Date.now();
 };
 userSchema.methods.getEffectivePlan = function () {
+    if (this.role === 'admin')
+        return 'premium';
     return this.hasPremiumAccess() ? this.plan : 'free';
 };
 userSchema.methods.refreshSubscriptionStatus = async function () {

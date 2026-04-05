@@ -18,7 +18,7 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
         <motion.div
           className="absolute -left-[15%] -top-[15%] h-[60%] w-[60%] rounded-full"
           style={{
-            background: 'radial-gradient(circle, rgba(56,189,248,0.07) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(56,189,248,0.03) 0%, transparent 70%)',
           }}
           animate={{
             x: [0, 40, 0],
@@ -29,7 +29,7 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
         <motion.div
           className="absolute -right-[10%] top-[20%] h-[55%] w-[55%] rounded-full"
           style={{
-            background: 'radial-gradient(circle, rgba(129,140,248,0.06) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(129,140,248,0.02) 0%, transparent 70%)',
           }}
           animate={{
             x: [0, -30, 0],
@@ -40,7 +40,7 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
         <motion.div
           className="absolute left-[20%] bottom-[5%] h-[45%] w-[45%] rounded-full"
           style={{
-            background: 'radial-gradient(circle, rgba(168,85,247,0.05) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(168,85,247,0.02) 0%, transparent 70%)',
           }}
           animate={{
             x: [0, 25, 0],

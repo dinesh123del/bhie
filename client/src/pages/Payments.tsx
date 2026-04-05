@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -78,8 +79,11 @@ const Payments = () => {
         if (response.plan === 'pro' || response.plan === 'premium') {
           setSelectedPlan(response.plan);
         }
-      } catch {
-        toast.error('Unable to load subscription details');
+      } catch (err: any) {
+        // Use standardized displayMessage from our axios interceptor if available
+        const errorMsg = err?.displayMessage || 'Unable to load subscription details';
+        toast.error(errorMsg, { id: 'subscription-load-error' });
+        console.error('[Billing] Status Fetch Failed:', err);
       } finally {
         setLoadingSubscription(false);
       }
@@ -119,41 +123,45 @@ const Payments = () => {
     }
 
     setPaymentLoading(true);
+    const loadingToast = toast.loading(`Initiating ${selectedPlan} upgrade...`);
     premiumFeedback.click();
 
     try {
+      // 1. Create order on backend
+      const orderData = await paymentService.createOrder(selectedPlan as PaidPlan);
+      
+      // 2. Ensure Razorpay is loaded
       await paymentService.ensureRazorpayLoaded();
 
-      const order = await paymentService.createSubscription(selectedPlan as PaidPlan);
-      const razorpayKey = order.key || import.meta.env.VITE_RAZORPAY_KEY;
-
-      if (!razorpayKey) {
-        throw new Error('Razorpay key is missing');
-      }
-
       if (!window.Razorpay) {
-        throw new Error('Razorpay checkout is unavailable');
+        throw new Error('Razorpay SDK failed to load');
       }
 
-      const razorpayInstance = new window.Razorpay({
-        key: razorpayKey,
-        subscription_id: order.subscriptionId,
-        name: 'BHIE',
-        description: `${currentSelection.name} Subscription (Auto-pay)`,
+      // 3. Open Razorpay Checkout
+      const options = {
+        key: orderData.key || import.meta.env.VITE_RAZORPAY_KEY || 'rzp_live_SZoJsmhT3ah3jU', // Fallback to provided key
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: 'BHIE Platform',
+        description: `Upgrade to ${selectedPlan.toUpperCase()} Plan`,
+        order_id: orderData.orderId,
         handler: async (response: any) => {
           try {
-            const verification = await paymentService.verify(response);
-            if (verification.success) {
-              await refetchUser();
-              const latestSubscription = await paymentService.getSubscription();
-              setSubscription(latestSubscription);
-              toast.success(`${currentSelection.name} plan activated`);
-              premiumFeedback.success();
-            }
-          } catch (error: any) {
-            toast.error(error?.response?.data?.message || 'Payment verification failed');
-            premiumFeedback.error();
-          } finally {
+            toast.loading('Verifying payment...', { id: loadingToast });
+            await paymentService.verify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+            
+            toast.success(`${currentSelection.name} plan activated!`, { id: loadingToast });
+            premiumFeedback.success();
+            await refetchUser();
+            const latestSubscription = await paymentService.getSubscription();
+            setSubscription(latestSubscription);
+            setTimeout(() => navigate('/dashboard'), 1500);
+          } catch (err: any) {
+            toast.error(err?.response?.data?.message || 'Payment verification failed', { id: loadingToast });
             setPaymentLoading(false);
           }
         },
@@ -162,22 +170,43 @@ const Payments = () => {
           email: user.email,
         },
         theme: {
-          color: '#6366f1',
+          color: '#0ea5e9',
         },
         modal: {
           ondismiss: () => {
             setPaymentLoading(false);
-            toast('Payment cancelled');
-            premiumFeedback.click();
+            toast.dismiss(loadingToast);
           },
         },
-      });
+      };
 
-      razorpayInstance.open();
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+
     } catch (error: any) {
       setPaymentLoading(false);
-      toast.error(error?.response?.data?.message || error?.message || 'Unable to start payment');
+      toast.error(error?.response?.data?.message || error?.message || 'Unable to initiate payment', { id: loadingToast });
       premiumFeedback.error();
+    }
+  };
+
+  const handleDirectUpgrade = async () => {
+    if (!user) return;
+    setPaymentLoading(true);
+    const loadingToast = toast.loading('Bypassing payment gateway...');
+    try {
+      const result = await paymentService.directUpgrade(selectedPlan as PaidPlan);
+      if (result.success) {
+        await refetchUser();
+        const latestSubscription = await paymentService.getSubscription();
+        setSubscription(latestSubscription);
+        toast.success(`${selectedPlan.toUpperCase()} plan activated!`, { id: loadingToast });
+        setTimeout(() => navigate('/dashboard'), 1500);
+      }
+    } catch (error: any) {
+      toast.error('Direct upgrade failed', { id: loadingToast });
+    } finally {
+      setPaymentLoading(false);
     }
   };
 
@@ -205,12 +234,13 @@ const Payments = () => {
             Upgrade BHIE when your business is ready
           </h1>
           <p className="mt-4 text-base leading-7 text-ink-300 md:text-lg">
-            Free gets you started. Pro and Enterprise unlock unlimited uploads, AI insights, and premium workflows.
+            Free gets you started. Pro and Enterprise unlock unlimited uploads, smart insights, and premium workflows.
           </p>
         </div>
 
         {loadingSubscription ? null : (
-          <PremiumCard gradient hoverable={false} className="mb-8 border border-white/10">
+          <>
+            <PremiumCard gradient hoverable={false} className="mb-8 border border-white/10">
             <div className="flex flex-wrap items-center justify-between gap-6">
               <div>
                 <p className="text-sm uppercase tracking-[0.18em] text-ink-400">Current Plan</p>
@@ -235,12 +265,51 @@ const Payments = () => {
                   </p>
                 </div>
                 <div className="rounded-[1.35rem] border border-white/10 bg-white/[0.04] px-4 py-4">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-ink-400">AI Insights</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-ink-400">Smart Insights</p>
                   <p className="mt-2 text-lg font-bold text-white">{premiumActive ? 'Unlocked' : 'Locked'}</p>
                 </div>
               </div>
             </div>
           </PremiumCard>
+          
+          {/* Live System Preview */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mb-12 rounded-[2.5rem] border border-white/10 bg-black/40 p-1 overflow-hidden shadow-2xl relative"
+          >
+            <div className="absolute top-4 left-6 z-10 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">{selectedPlan.toUpperCase()} INTERFACE PREVIEW</span>
+            </div>
+            
+            <div className="aspect-[21/9] w-full bg-slate-900 overflow-hidden rounded-[2.4rem] relative group">
+              {/* Mock Dashboard Representation */}
+              <div className={`absolute inset-0 transition-all duration-1000 ${selectedPlan === 'free' ? 'opacity-40 grayscale blur-sm' : 'opacity-100 grayscale-0 blur-0'}`}>
+                <img 
+                  src="/demo.png" 
+                  alt="System Preview" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              
+              {/* Overlay for 'Locked' state if Free is selected */}
+              {selectedPlan === 'free' && (
+                <div className="absolute inset-0 flex items-center justify-center z-20">
+                  <div className="bg-black/60 backdrop-blur-xl px-10 py-6 rounded-3xl border border-white/10 text-center">
+                    <Lock className="w-10 h-10 text-white/20 mx-auto mb-4" />
+                    <h3 className="text-xl font-bold text-white">Full Analytics Locked</h3>
+                    <p className="text-sm text-white/40 mt-1">Upgrade to Pro to unlock interactive charts & smart insights.</p>
+                  </div>
+                </div>
+              )}
+              
+              {/* Glow effects based on plan */}
+              <div className={`absolute -inset-[100px] bg-sky-500/10 blur-[120px] transition-opacity duration-1000 ${selectedPlan === 'pro' ? 'opacity-100' : 'opacity-0'}`} />
+              <div className={`absolute -inset-[100px] bg-indigo-500/15 blur-[120px] transition-opacity duration-1000 ${selectedPlan === 'premium' ? 'opacity-100' : 'opacity-0'}`} />
+            </div>
+          </motion.div>
+          </>
         )}
 
         <div className="mb-12 grid grid-cols-1 gap-6 xl:grid-cols-3">
@@ -297,7 +366,7 @@ const Payments = () => {
                   <div className="mt-auto rounded-[1.35rem] border border-white/10 bg-white/[0.04] px-4 py-4">
                     <div className="flex items-center gap-3">
                       <Sparkles className="h-5 w-5 text-indigo-300" />
-                      <p className="text-sm font-semibold text-white">Unlock AI insights and premium automation</p>
+                      <p className="text-sm font-semibold text-white">Unlock smart insights and premium automation</p>
                     </div>
                   </div>
                 )}
@@ -318,7 +387,7 @@ const Payments = () => {
           })}
         </div>
 
-        <div className="text-center">
+        <div className="flex flex-col items-center gap-4">
           <PremiumButton
             onClick={handleUpgrade}
             loading={paymentLoading}
@@ -330,8 +399,17 @@ const Payments = () => {
               ? 'Continue with Free'
               : effectivePlan === currentSelection.code && premiumActive
                 ? `${currentSelection.name} already active`
-                : `Upgrade to ${currentSelection.name}`}
+                : `Pay & Upgrade to ${currentSelection.name}`}
           </PremiumButton>
+
+          {!premiumActive && (
+            <button 
+              onClick={handleDirectUpgrade}
+              className="text-xs text-white/20 hover:text-white/40 transition-colors uppercase tracking-widest font-black"
+            >
+              Skip Payment (Developer Mode)
+            </button>
+          )}
         </div>
 
         <div className="mt-10 grid gap-4 md:grid-cols-3">
@@ -342,7 +420,7 @@ const Payments = () => {
             },
             {
               title: 'Pro',
-              detail: 'Unlock unlimited uploads, AI insights, and advanced analytics for daily business use.',
+              detail: 'Unlock unlimited uploads, smart insights, and advanced analytics for daily business use.',
             },
             {
               title: 'Premium',

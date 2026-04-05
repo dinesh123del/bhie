@@ -10,8 +10,8 @@ import ImageIntelligence, {
   OCRLine,
   OCRWord,
   StructuredData,
-} from '../models/ImageIntelligence';
-import { env } from '../config/env';
+} from '../models/ImageIntelligence.js';
+import { env } from '../config/env.js';
 
 interface ProcessedPayload {
   extractedText: string;

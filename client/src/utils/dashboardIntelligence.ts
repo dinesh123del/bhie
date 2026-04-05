@@ -49,7 +49,7 @@ export function buildHealthBreakdown(input: {
   profitMargin: number;
   healthScore: number;
 }): HealthBreakdownItem[] {
-  const revenueStrength = clamp(input.revenue > 0 ? 55 + input.growthRate * 2.2 : 22);
+  const revenueStrength = clamp(input.revenue > 0 ? 55 + input.growthRate * 2.2 : 0);
   const expenseStrength = clamp(100 - input.expenseRatio);
   const profitStrength = clamp(input.profitMargin * 1.9 + Math.max(input.growthRate, 0) * 0.8);
 

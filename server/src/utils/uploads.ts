@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { env } from '../config/env';
+import { env } from '../config/env.js';
 
 export const uploadDir = path.resolve(process.cwd(), env.UPLOAD_DIR);
 

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  BrainCircuit, 
-  Target, 
-  TrendingUp, 
-  AlertCircle, 
-  RefreshCw, 
+import {
+  BrainCircuit,
+  Target,
+  TrendingUp,
+  AlertCircle,
+  RefreshCw,
   ArrowRight,
   Sparkles,
   PieChart,
@@ -19,20 +19,20 @@ import type { BusinessData } from '../types/ai';
 import { premiumFeedback } from '../utils/premiumFeedback';
 
 export const AnalysisReportPage: React.FC = () => {
-  const [formData, setFormData] = useState<BusinessData>({
-    revenue: 0,
-    expenses: 0,
-    customerCount: 0,
-    previousRevenue: 0,
+  const [formData, setFormData] = useState<any>({
+    revenue: '',
+    expenses: '',
+    customerCount: '',
+    previousRevenue: '',
   });
 
   const { data: analysisResult, loading, error, analyze, reset } = useAIAnalysis();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev: any) => ({
       ...prev,
-      [name]: name === 'customerCount' ? parseInt(value) || 0 : parseFloat(value) || 0,
+      [name]: value === '' ? '' : (name === 'customerCount' ? parseInt(value) || 0 : parseFloat(value) || 0),
     }));
   };
 
@@ -51,10 +51,10 @@ export const AnalysisReportPage: React.FC = () => {
     reset();
     premiumFeedback.click();
     setFormData({
-      revenue: 0,
-      expenses: 0,
-      customerCount: 0,
-      previousRevenue: 0,
+      revenue: '',
+      expenses: '',
+      customerCount: '',
+      previousRevenue: '',
     });
   };
 
@@ -63,7 +63,7 @@ export const AnalysisReportPage: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         {/* Elite Header */}
         <div className="mb-12">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-6"
@@ -71,18 +71,18 @@ export const AnalysisReportPage: React.FC = () => {
             <BrainCircuit className="w-4 h-4 text-sky-400" />
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">AI Analyst v4.2</span>
           </motion.div>
-          
+
           <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-[0.9] mb-4">
-            Business <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-white to-indigo-400">Deep Dive.</span>
+            Ask Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-white to-indigo-400">AI Analyst.</span>
           </h1>
           <p className="max-w-2xl text-xl text-white/40 font-medium leading-relaxed">
-            Use our AI analyst to study your business numbers. Get clear advice based on your data.
+            Give our AI your numbers, and it will tell you exactly how to grow. No jargon, just clear steps to help your business.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-10">
           {/* Input Side */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="lg:sticky lg:top-24 h-fit"
@@ -90,11 +90,11 @@ export const AnalysisReportPage: React.FC = () => {
             <PremiumCard extreme className="p-8 backdrop-blur-3xl bg-white/[0.02]">
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center text-sky-400 border border-sky-400/20">
-                    <Target className="w-5 h-5" />
+                  <Target className="w-5 h-5" />
                 </div>
                 <div>
-                   <h2 className="text-xl font-bold text-white tracking-tight">Enter Your Numbers</h2>
-                   <p className="text-xs text-white/40 uppercase tracking-widest font-black">Update Business Data</p>
+                  <h2 className="text-xl font-bold text-white tracking-tight">Tell Us Your Numbers</h2>
+                  <p className="text-xs text-white/40 uppercase tracking-widest font-black">Fill In Your Info</p>
                 </div>
               </div>
 
@@ -107,7 +107,7 @@ export const AnalysisReportPage: React.FC = () => {
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <PremiumInput
-                  label="Current Revenue (₹)"
+                  label="Money Made This Month (₹)"
                   type="number"
                   name="revenue"
                   value={formData.revenue}
@@ -118,7 +118,7 @@ export const AnalysisReportPage: React.FC = () => {
                 />
 
                 <PremiumInput
-                  label="Monthly Expenses (₹)"
+                  label="Money Spent This Month (₹)"
                   type="number"
                   name="expenses"
                   value={formData.expenses}
@@ -129,7 +129,7 @@ export const AnalysisReportPage: React.FC = () => {
                 />
 
                 <PremiumInput
-                  label="Total Customer Count"
+                  label="Number of Customers"
                   type="number"
                   name="customerCount"
                   value={formData.customerCount}
@@ -140,7 +140,7 @@ export const AnalysisReportPage: React.FC = () => {
                 />
 
                 <PremiumInput
-                  label="Baseline Revenue (₹)"
+                  label="Average Monthly Money Made (₹)"
                   type="number"
                   name="previousRevenue"
                   value={formData.previousRevenue}
@@ -160,14 +160,14 @@ export const AnalysisReportPage: React.FC = () => {
                   >
                     Start Analysis
                   </PremiumButton>
-                  
+
                   {analysisResult && (
                     <button
                       type="button"
                       onClick={handleReset}
                       className="w-full py-4 text-white/40 hover:text-white text-xs font-black uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2"
                     >
-                      <RefreshCw className="w-3 h-3" /> Reset Node
+                      <RefreshCw className="w-3 h-3" /> Start Over
                     </button>
                   )}
                 </div>
@@ -175,22 +175,22 @@ export const AnalysisReportPage: React.FC = () => {
 
               {/* Protocol Monitor */}
               <div className="mt-10 p-6 bg-sky-500/5 border border-sky-500/10 rounded-2xl">
-                 <div className="flex items-center gap-2 mb-4">
-                    <Sparkles className="w-3 h-3 text-sky-400" />
-                    <span className="text-[10px] font-black text-sky-400/80 uppercase tracking-widest">Analysis Tools</span>
-                 </div>
-                 <ul className="space-y-3">
-                   {[
-                     "Profit growth planning",
-                     "Risk detection",
-                     "Future trends",
-                     "Business strategy"
-                   ].map((item, i) => (
-                     <li key={i} className="flex items-center gap-3 text-[10px] text-white/50 font-medium">
-                        <div className="w-1 h-1 rounded-full bg-sky-500/40" /> {item}
-                     </li>
-                   ))}
-                 </ul>
+                <div className="flex items-center gap-2 mb-4">
+                  <Sparkles className="w-3 h-3 text-sky-400" />
+                  <span className="text-[10px] font-black text-sky-400/80 uppercase tracking-widest">Analysis Tools</span>
+                </div>
+                <ul className="space-y-3">
+                  {[
+                    "How to make more money",
+                    "Spotting problems early",
+                    "What to expect next",
+                    "Easy steps to grow"
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-center gap-3 text-[10px] text-white/50 font-medium">
+                      <div className="w-1 h-1 rounded-full bg-sky-500/40" /> {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </PremiumCard>
           </motion.div>
@@ -218,25 +218,25 @@ export const AnalysisReportPage: React.FC = () => {
                   animate={{ opacity: 1 }}
                   className="space-y-6"
                 >
-                   <PremiumCard className="p-12 bg-white/[0.01] flex flex-col items-center justify-center min-h-[600px] border-white/5">
-                      <div className="relative w-24 h-24 mb-8">
-                         <motion.div 
-                           className="absolute inset-0 border-2 border-sky-500/20 rounded-full"
-                           animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.2, 0.5] }}
-                           transition={{ duration: 2, repeat: Infinity }}
-                         />
-                         <motion.div 
-                           className="absolute inset-2 border-2 border-sky-400 border-t-transparent rounded-full"
-                           animate={{ rotate: 360 }}
-                           transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-                         />
-                         <div className="absolute inset-0 flex items-center justify-center">
-                            <BrainCircuit className="w-8 h-8 text-sky-400" />
-                         </div>
+                  <PremiumCard className="p-12 bg-white/[0.01] flex flex-col items-center justify-center min-h-[600px] border-white/5">
+                    <div className="relative w-24 h-24 mb-8">
+                      <motion.div
+                        className="absolute inset-0 border-2 border-sky-500/20 rounded-full"
+                        animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.2, 0.5] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
+                      <motion.div
+                        className="absolute inset-2 border-2 border-sky-400 border-t-transparent rounded-full"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <BrainCircuit className="w-8 h-8 text-sky-400" />
                       </div>
-                      <h3 className="text-xl font-bold text-white mb-2">Analyzing Data...</h3>
-                      <p className="text-white/40 text-sm tracking-widest uppercase font-black">AI is working on your results</p>
-                   </PremiumCard>
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-2">Studying Your Numbers...</h3>
+                    <p className="text-white/40 text-sm tracking-widest uppercase font-black">AI is working on your results</p>
+                  </PremiumCard>
                 </motion.div>
               ) : (
                 <motion.div
@@ -246,16 +246,16 @@ export const AnalysisReportPage: React.FC = () => {
                 >
                   <PremiumCard className="p-12 text-center bg-white/[0.01] border-white/5 flex flex-col items-center justify-center min-h-[600px]">
                     <div className="w-24 h-24 rounded-3xl bg-sky-500/5 border border-sky-500/10 flex items-center justify-center text-sky-400 mb-8">
-                       <PieChart className="w-10 h-10 opacity-40" />
+                      <PieChart className="w-10 h-10 opacity-40" />
                     </div>
-                    <h3 className="text-3xl font-black text-white mb-4">Ready to Start</h3>
+                    <h3 className="text-3xl font-black text-white mb-4">Waiting for Your Numbers</h3>
                     <p className="text-white/40 max-w-sm mb-8 font-medium">
-                      Enter your numbers on the left to start the AI analysis.
+                      Fill in your business info on the left to start the AI analysis.
                     </p>
                     <div className="flex gap-2">
-                       <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[9px] font-black text-white/50 uppercase tracking-widest">Ready</div>
-                       <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[9px] font-black text-white/50 uppercase tracking-widest">Optimized</div>
-                       <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[9px] font-black text-white/50 uppercase tracking-widest">Secure</div>
+                      <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[9px] font-black text-white/50 uppercase tracking-widest">Ready</div>
+                      <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[9px] font-black text-white/50 uppercase tracking-widest">Optimized</div>
+                      <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[9px] font-black text-white/50 uppercase tracking-widest">Secure</div>
                     </div>
                   </PremiumCard>
                 </motion.div>
