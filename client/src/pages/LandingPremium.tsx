@@ -167,7 +167,10 @@ const Hero = () => (
             Get Started Free <ArrowRight className="w-5 h-5" />
           </Link>
           <button 
-            onClick={() => premiumFeedback.click()}
+            onClick={() => {
+              premiumFeedback.click();
+              document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+            }}
             className="w-full sm:w-auto px-10 py-4 bg-white/5 hover:bg-white/10 text-white text-lg font-bold rounded transition-all flex items-center justify-center gap-2 border border-white/10 backdrop-blur-md"
           >
             <Play className="w-5 h-5 fill-current" /> Watch Demo
