@@ -13,7 +13,9 @@ import {
   ShieldCheck,
   CreditCard,
   Activity,
-  GraduationCap
+  GraduationCap,
+  FileText,
+  ScanLine
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { premiumFeedback } from '../utils/premiumFeedback';
@@ -28,6 +30,8 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { id: 'dashboard', name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+  { id: 'records', name: 'Records', path: '/records', icon: FileText },
+  { id: 'scan', name: 'Scan Bill', path: '/scan-bill', icon: ScanLine },
   { id: 'ds-hub', name: 'Data Hub', path: '/ds-hub', icon: GraduationCap },
   { id: 'analysis', name: 'Analysis', path: '/analysis-report', icon: BrainCircuit },
   { id: 'analytics', name: 'Performance', path: '/analytics', icon: BarChart4 },
@@ -35,9 +39,8 @@ const navItems: NavItem[] = [
 ];
 
 const mgmtItems: NavItem[] = [
-  { id: 'settings', name: 'Settings', path: '/settings', icon: Settings },
+  { id: 'settings', name: 'Admin Panel', path: '/settings', icon: ShieldCheck },
   { id: 'billing', name: 'Billing', path: '/payments', icon: CreditCard },
-  { id: 'security', name: 'Security', path: '/admin', icon: ShieldCheck },
 ];
 
 const PremiumSidebar = () => {

@@ -45,6 +45,8 @@ const Admin = () => {
     } catch (error) {
       console.error('Failed to load stats:', error);
       toast.error('Failed to load statistics');
+    } finally {
+      setLoading(false);
     }
   };
 

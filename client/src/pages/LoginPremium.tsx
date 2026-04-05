@@ -10,6 +10,7 @@ import axios from 'axios';
 import Logo from '../components/Logo';
 import { GoogleButton } from '../components/auth/GoogleButton';
 import React from 'react';
+import { premiumFeedback } from '../utils/premiumFeedback';
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
@@ -57,8 +58,10 @@ const PremiumLogin = () => {
 
     try {
       const response = await authService.login({ email, password });
+      premiumFeedback.success();
       login(response.token, response.user);
     } catch (error: any) {
+      premiumFeedback.error();
       let message = 'Login failed';
       if (axios.isAxiosError(error)) {
         message = error.response?.data?.message || 'Unable to connect to server';
