@@ -14,9 +14,6 @@ const api: AxiosInstance = axios.create({
   baseURL: `${API}/api`,
   withCredentials: true,
   timeout: 15000,
-  headers: {
-    'Bypass-Tunnel-Reminder': 'true'
-  }
 });
 
 const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));

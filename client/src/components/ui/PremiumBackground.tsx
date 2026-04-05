@@ -20,7 +20,7 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
     let animationFrameId: number;
     let particles: Particle[] = [];
     const particleCount = 350;
-    const colors = ['#38bdf8', '#818cf8', '#a855f7', '#fb923c', '#f43f5e', '#ffffff'];
+    const colors = ['#38bdf8', '#818cf8', '#a855f7', '#fbbf24', '#f9a8d4', '#ffffff', '#e2e8f0'];
 
     class Particle {
       x: number;
@@ -115,26 +115,30 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
       
       // Target: 109 + 73 + 2003 = 2185
       
-      // 1. Optimized Tiny Stars (1500)
-      for (let i = 0; i < 1500; i++) {
+      // 1. Dust Motes - barely visible, atmospheric (800)
+      for (let i = 0; i < 800; i++) {
         const p = new Particle();
-        p.size = Math.random() * 0.6 + 0.05;
-        p.twinkle *= 0.5;
-        p.speedY *= 0.4;
-        particles.push(p);
-      }
-      // 2. High Quality Glitter (500)
-      for (let i = 0; i < 500; i++) {
-        const p = new Particle();
-        p.size = Math.random() * 1.5 + 0.5;
-        particles.push(p);
-      }
-      // 3. Cinematic Bokeh (185)
-      for (let i = 0; i < 185; i++) {
-        const p = new Particle();
-        p.size = Math.random() * 4 + 1;
-        p.opacity = 0.1;
+        p.size = Math.random() * 0.4 + 0.05;
         p.twinkle *= 0.3;
+        p.speedY *= 0.3;
+        p.speedX *= 0.3;
+        p.opacity = Math.random() * 0.3 + 0.05;
+        particles.push(p);
+      }
+      // 2. Micro Glitters - refined sparkle points (300)
+      for (let i = 0; i < 300; i++) {
+        const p = new Particle();
+        p.size = Math.random() * 1.2 + 0.3;
+        p.twinkle *= 0.6;
+        particles.push(p);
+      }
+      // 3. Soft Bokeh - dreamy background orbs (80)
+      for (let i = 0; i < 80; i++) {
+        const p = new Particle();
+        p.size = Math.random() * 3 + 1;
+        p.opacity = Math.random() * 0.08 + 0.02;
+        p.twinkle *= 0.2;
+        p.speedY *= 0.5;
         particles.push(p);
       }
     };

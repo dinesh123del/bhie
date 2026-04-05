@@ -22,7 +22,8 @@ const Dashboard = lazy(() => import('./pages/DashboardPremium'));
 const Analytics = lazy(() => import('./pages/AnalyticsPremium'));
 
 const AnalysisReport = lazy(() => import('./pages/AIAnalysisPage'));
-const Settings = lazy(() => import('./pages/Admin')); 
+const Settings = lazy(() => import('./pages/Admin'));
+const AdminPanel = lazy(() => import('./pages/Admin'));
 const Records = lazy(() => import('./pages/RecordsPremium'));
 const SystemHealth = lazy(() => import('./pages/SystemHealth'));
 const Payments = lazy(() => import('./pages/Payments'));
@@ -108,6 +109,7 @@ function MainApp() {
               <Route path="/scan-bill" element={<ProtectedRoute><ScanBill /></ProtectedRoute>} />
               <Route path="/ds-hub" element={<ProtectedRoute><DataScienceHub /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+              <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
 
               {/* Support Modules */}
               <Route path="/records" element={<ProtectedRoute><Records /></ProtectedRoute>} />

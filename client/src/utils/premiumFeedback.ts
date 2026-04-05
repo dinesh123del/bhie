@@ -1,29 +1,23 @@
-// Premium Feedback Engine — Haptic + Sound Effects
-// Ultra-refined Web Audio API tones that feel built-in, like iOS/macOS system sounds.
-// Zero external assets. Zero latency. Pure synthesis.
+// Premium Feedback Engine - Haptics + Spatial Audio
+// Delivers a satisfying, addictive micro-interaction layer across the entire app.
+// Uses Web Audio API exclusively - zero external assets needed.
 
 class FeedbackEngine {
   private audioContext: AudioContext | null = null;
-  private masterGain: GainNode | null = null;
-  private enabled: boolean = true;
 
   private initAudio() {
     if (!this.audioContext && typeof window !== 'undefined') {
       const AudioCtx = (window.AudioContext || (window as any).webkitAudioContext);
       this.audioContext = new AudioCtx();
-      this.masterGain = this.audioContext.createGain();
-      this.masterGain.gain.value = 0.12; // Master volume — subtle but audible
-      this.masterGain.connect(this.audioContext.destination);
     }
     if (this.audioContext?.state === 'suspended') {
       this.audioContext.resume();
     }
   }
 
-  private playTone(freq: number, type: OscillatorType, duration: number, volume: number = 0.06) {
-    if (!this.enabled) return;
+  private playTone(freq: number, type: OscillatorType, duration: number, volume: number = 0.04) {
     this.initAudio();
-    if (!this.audioContext || !this.masterGain) return;
+    if (!this.audioContext) return;
 
     const osc = this.audioContext.createOscillator();
     const gain = this.audioContext.createGain();
@@ -31,131 +25,168 @@ class FeedbackEngine {
     osc.type = type;
     osc.frequency.setValueAtTime(freq, this.audioContext.currentTime);
 
-    // Soft attack → natural decay (feels premium, not jarring)
-    gain.gain.setValueAtTime(0.001, this.audioContext.currentTime);
-    gain.gain.linearRampToValueAtTime(volume, this.audioContext.currentTime + 0.015);
+    gain.gain.setValueAtTime(volume, this.audioContext.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + duration);
 
     osc.connect(gain);
-    gain.connect(this.masterGain);
+    gain.connect(this.audioContext.destination);
 
     osc.start();
     osc.stop(this.audioContext.currentTime + duration);
   }
 
-  // ── Soft button tap (like iOS keyboard tick) ──
+  // ===== Core Interaction Sounds =====
+
+  // Soft "tick" for button clicks - feels like a mechanical switch
   tick() {
-    this.playTone(1200, 'sine', 0.06, 0.04);
+    this.playTone(880, 'sine', 0.06, 0.03);
+    this.playTone(1200, 'sine', 0.04, 0.015);
   }
 
-  // ── Navigation click (subtle pop) ──
-  pop() {
-    this.playTone(600, 'sine', 0.08, 0.05);
-    setTimeout(() => this.playTone(900, 'sine', 0.06, 0.03), 30);
-  }
-
-  // ── Success Chime (ascending A major triad — warm & rewarding) ──
+  // Elegant Success Chime (A Major Shimmer) - feels like unlocking something
   chime() {
-    this.playTone(880.00, 'sine', 0.5, 0.05);    // A5
-    setTimeout(() => this.playTone(1108.73, 'sine', 0.4, 0.04), 80);  // C#6
-    setTimeout(() => this.playTone(1318.51, 'sine', 0.35, 0.03), 160); // E6
-    setTimeout(() => this.playTone(1760.00, 'sine', 0.3, 0.02), 250);  // A6 (octave shimmer)
+    this.playTone(880.00, 'sine', 0.8, 0.035);  // A5
+    setTimeout(() => this.playTone(1108.73, 'sine', 0.6, 0.025), 120); // C#6
+    setTimeout(() => this.playTone(1318.51, 'sine', 0.4, 0.018), 240); // E6
   }
 
-  // ── Error / failure tone (low rumble) ──
+  // Smooth, low-frequency error signal
   low() {
-    this.playTone(150, 'sine', 0.3, 0.05);
-    setTimeout(() => this.playTone(100, 'sine', 0.4, 0.03), 100);
+    this.playTone(200, 'sine', 0.4, 0.035);
+    setTimeout(() => this.playTone(150, 'sine', 0.3, 0.025), 100);
   }
 
-  // ── Notification ping (gentle bell) ──
-  ping() {
-    this.playTone(1400, 'sine', 0.15, 0.04);
-    setTimeout(() => this.playTone(1800, 'sine', 0.12, 0.02), 60);
+  // ===== Enhanced Navigation Sounds =====
+
+  // Page navigation whoosh - subtle air movement feel
+  navigate() {
+    this.playTone(400, 'sine', 0.12, 0.02);
+    setTimeout(() => this.playTone(600, 'sine', 0.1, 0.015), 50);
   }
 
-  // ── Toggle switch sound ──
-  toggle(on: boolean) {
-    if (on) {
-      this.playTone(700, 'sine', 0.08, 0.04);
-      setTimeout(() => this.playTone(1050, 'sine', 0.06, 0.03), 40);
-    } else {
-      this.playTone(1050, 'sine', 0.08, 0.04);
-      setTimeout(() => this.playTone(700, 'sine', 0.06, 0.03), 40);
-    }
+  // Hover sound - barely perceptible, like a whisper
+  hover() {
+    this.playTone(1400, 'sine', 0.04, 0.008);
   }
 
-  // ── Haptic vibration (mobile devices) ──
+  // Tab/section switch - clean digital pop
+  tab() {
+    this.playTone(700, 'sine', 0.08, 0.02);
+    this.playTone(900, 'sine', 0.06, 0.012);
+  }
+
+  // Toggle on/off sounds
+  toggleOn() {
+    this.playTone(600, 'sine', 0.08, 0.025);
+    setTimeout(() => this.playTone(900, 'sine', 0.06, 0.02), 60);
+  }
+
+  toggleOff() {
+    this.playTone(900, 'sine', 0.08, 0.02);
+    setTimeout(() => this.playTone(600, 'sine', 0.06, 0.015), 60);
+  }
+
+  // Modal open/close
+  modalOpen() {
+    this.playTone(300, 'sine', 0.2, 0.02);
+    setTimeout(() => this.playTone(500, 'sine', 0.15, 0.015), 80);
+    setTimeout(() => this.playTone(700, 'sine', 0.1, 0.01), 160);
+  }
+
+  modalClose() {
+    this.playTone(700, 'sine', 0.12, 0.015);
+    setTimeout(() => this.playTone(400, 'sine', 0.1, 0.01), 80);
+  }
+
+  // Notification ping - attention-grabbing but not jarring
+  notification() {
+    this.playTone(1046.50, 'sine', 0.3, 0.03); // C6
+    setTimeout(() => this.playTone(1318.51, 'sine', 0.25, 0.025), 150); // E6
+  }
+
+  // Achievement / milestone unlocked - magical sparkle
+  achievement() {
+    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C5 -> E6 arpeggio
+    notes.forEach((freq, i) => {
+      setTimeout(() => this.playTone(freq, 'sine', 0.5 - i * 0.08, 0.025 - i * 0.003), i * 80);
+    });
+  }
+
+  // ===== Haptic Engine =====
+
   vibrate(ms: number | number[] = 10) {
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
       try {
         navigator.vibrate(ms);
-      } catch (_) { /* silently ignore */ }
+      } catch (e) {
+        // Ignore haptic failures silently
+      }
     }
-  }
-
-  // ── Enable/Disable all feedback ──
-  setEnabled(val: boolean) {
-    this.enabled = val;
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem('bhie_sound', val ? '1' : '0');
-    }
-  }
-
-  isEnabled() {
-    if (typeof localStorage !== 'undefined') {
-      const stored = localStorage.getItem('bhie_sound');
-      if (stored !== null) this.enabled = stored === '1';
-    }
-    return this.enabled;
   }
 }
 
 const engine = new FeedbackEngine();
 
 export const premiumFeedback = {
-  // Standard button click — use on every interactive element
+  // Core interactions
   click: () => {
     engine.tick();
     engine.vibrate(6);
   },
-
-  // Navigation between pages — slightly richer than click
-  navigate: () => {
-    engine.pop();
-    engine.vibrate(8);
-  },
-
-  // Success action (login, save, upload complete)
   success: () => {
     engine.chime();
-    engine.vibrate([8, 40, 8]);
+    engine.vibrate([8, 20, 8]);
   },
-
-  // Error / failure action
   error: () => {
     engine.low();
-    engine.vibrate(40);
+    engine.vibrate([40, 30, 40]);
   },
 
-  // Notification arrived
-  notify: () => {
-    engine.ping();
-    engine.vibrate([5, 20, 5]);
+  // Navigation
+  navigate: () => {
+    engine.navigate();
+    engine.vibrate(4);
   },
-
-  // Toggle switch
-  toggle: (on: boolean) => {
-    engine.toggle(on);
+  hover: () => {
+    engine.hover();
+  },
+  tab: () => {
+    engine.tab();
     engine.vibrate(5);
   },
 
-  // Raw haptic only (for hover states, etc.)
-  haptic: (ms: number = 8) => {
-    engine.vibrate(ms);
+  // Toggles
+  toggleOn: () => {
+    engine.toggleOn();
+    engine.vibrate(8);
+  },
+  toggleOff: () => {
+    engine.toggleOff();
+    engine.vibrate(5);
   },
 
-  // Master sound on/off
-  setEnabled: (val: boolean) => engine.setEnabled(val),
-  isEnabled: () => engine.isEnabled(),
+  // Modals
+  modalOpen: () => {
+    engine.modalOpen();
+    engine.vibrate([5, 15, 5]);
+  },
+  modalClose: () => {
+    engine.modalClose();
+    engine.vibrate(5);
+  },
+
+  // Special effects
+  notification: () => {
+    engine.notification();
+    engine.vibrate([10, 10, 10]);
+  },
+  achievement: () => {
+    engine.achievement();
+    engine.vibrate([5, 10, 5, 10, 5, 20, 10]);
+  },
+
+  // Raw haptic
+  haptic: (ms: number = 8) => {
+    engine.vibrate(ms);
+  }
 };
