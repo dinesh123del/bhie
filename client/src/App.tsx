@@ -35,6 +35,8 @@ const Pricing = lazy(() => import('./pages/Pricing'));
 const Profile = lazy(() => import('./pages/Home'));
 const About   = lazy(() => import('./pages/About'));
 const Terms   = lazy(() => import('./pages/Terms'));
+const Privacy = lazy(() => import('./pages/Privacy'));
+const Contact = lazy(() => import('./pages/Contact'));
 const Reports = lazy(() => import('./pages/Reports'));
 const Insights = lazy(() => import('./pages/Insights'));
 const AIChat = lazy(() => import('./pages/AIChat'));
@@ -125,6 +127,8 @@ function MainApp() {
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/about"   element={<About />} />
               <Route path="/terms"   element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/contact" element={<Contact />} />
 
               {/* Core Dashboard Experience */}
               <Route path="/dashboard"       element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

@@ -6,7 +6,7 @@ import path from 'path';
 import { env } from '../config/env.js';
 import { asyncHandler } from '../middleware/asyncHandler.js';
 import { authenticateToken } from '../middleware/auth.js';
-import { redisClient } from '../config/redisClient.js';
+import { CacheService } from '../services/cacheService.js';
 import Image from '../models/Image.js';
 import ImageIntelligence, {
   ImageDetectedType,
@@ -559,10 +559,7 @@ async function handleRecordUpload(req: AuthRequest, res: Response): Promise<void
 
     await user.save();
 
-    const userId = authUser.userId;
-    ['dashboard', 'analytics:predictions', 'ai:insights'].forEach(type => {
-      redisClient.del(`cache:${type}:${userId}`).catch(console.error);
-    });
+    CacheService.invalidateUserCache(authUser.userId).catch(console.error);
 
     res.status(201).json({
       message: 'Files processed and records saved',

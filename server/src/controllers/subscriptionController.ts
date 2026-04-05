@@ -4,6 +4,7 @@ import User from '../models/User.js';
 import { AuthRequest } from '../types/index.js';
 import { asyncHandler } from '../middleware/asyncHandler.js';
 import { getRazorpayClient } from '../utils/razorpay.js';
+import { CacheService } from '../services/cacheService.js';
 import { RAZORPAY_PLAN_IDS } from '../utils/planConfig.js';
 import { env } from '../config/env.js';
 
@@ -106,6 +107,8 @@ export const subscriptionController = {
 
     await user.upgradePlan(plan, razorpay_subscription_id);
 
+    CacheService.invalidateUserCache(user._id.toString()).catch(console.error);
+
     res.json({
       success: true,
       message: `Successfully upgraded to ${plan}`,
@@ -143,6 +146,8 @@ export const subscriptionController = {
     user.planExpiry = undefined;
     await user.save();
 
+    CacheService.invalidateUserCache(user._id.toString()).catch(console.error);
+
     res.json({
       success: true,
       message: 'Subscription cancelled successfully',
@@ -176,6 +181,8 @@ export const subscriptionController = {
     user.isActive = true;
     user.subscriptionStatus = 'active';
     await user.save();
+
+    CacheService.invalidateUserCache(user._id.toString()).catch(console.error);
 
     res.json({
       success: true,

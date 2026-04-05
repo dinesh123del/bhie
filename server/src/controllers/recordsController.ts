@@ -5,6 +5,7 @@ import { AuthRequest } from '../types/index.js';
 import { Response } from 'express';
 import { AppError } from '../utils/appError.js';
 import { assertObjectId, requireUser } from '../utils/request.js';
+import { CacheService } from '../services/cacheService.js';
 
 export const recordsController = {
   getRecent: asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -61,6 +62,8 @@ export const recordsController = {
       await user.incrementUsageCount();
     }
 
+    CacheService.invalidateUserCache(authUser.userId).catch(console.error);
+
     res.status(201).json(record);
   }),
 
@@ -77,6 +80,8 @@ export const recordsController = {
     if (!record) {
       throw new AppError(404, 'Record not found or access denied');
     }
+
+    CacheService.invalidateUserCache(user.userId).catch(console.error);
 
     res.json(record);
   }),
@@ -98,6 +103,8 @@ export const recordsController = {
     if (account && typeof account.decrementUsageCount === 'function') {
       await account.decrementUsageCount();
     }
+
+    CacheService.invalidateUserCache(user.userId).catch(console.error);
 
     res.json({ message: 'Record deleted' });
   }),

@@ -25,6 +25,32 @@ const PremiumTopbar = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  const fetchUnreadCount = async () => {
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${API_URL}/api/alerts/unread/count`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setUnreadCount(data.count || 0);
+      }
+    } catch (err) {
+      console.error('Failed to fetch unread count:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchUnreadCount();
+      const interval = setInterval(fetchUnreadCount, 60000);
+      return () => clearInterval(interval);
+    }
+  }, [user]);
 
   useEffect(() => {
     const handleScroll = (e: Event) => {
@@ -90,11 +116,16 @@ const PremiumTopbar = () => {
             onClick={() => {
               handleAction();
               navigate('/notifications');
+              setUnreadCount(0); // Optimistic clear
             }}
             className="p-2.5 rounded-2xl bg-black/[0.03] dark:bg-white/[0.05] border border-black/10 dark:border-white/10 text-black/60 dark:text-white/60 hover:text-brand-500 dark:hover:text-brand-400 transition-all relative overflow-hidden group"
           >
             <Bell className="w-5 h-5" />
-            <span className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-brand-500 shadow-lg shadow-brand-500/50" />
+            {unreadCount > 0 && (
+              <span className="absolute top-2 right-2 min-w-[14px] h-[14px] flex items-center justify-center rounded-full bg-rose-500 text-white text-[8px] font-black px-1 ring-2 ring-white dark:ring-[#0f172a] shadow-sm">
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </span>
+            )}
           </button>
 
           {(!user?.plan || user.plan === 'free') && (

@@ -5,7 +5,7 @@ import Image from '../models/Image.js';
 import Record from '../models/Record.js';
 import User from '../models/User.js';
 import { asyncHandler } from '../middleware/asyncHandler.js';
-import { redisClient } from '../config/redisClient.js';
+import { CacheService } from '../services/cacheService.js';
 import { AuthRequest } from '../types/index.js';
 import { generateInsights, InsightPeriodSnapshot } from '../utils/generateInsights.js';
 import { requireUser } from '../utils/request.js';
@@ -307,8 +307,8 @@ export const dashboardController = {
 
     res.json(responseData);
 
-    const cacheKey = `cache:dashboard:${user.userId}`;
-    redisClient.set(cacheKey, JSON.stringify(responseData), { EX: 60 }).catch(console.error);
+    const cacheKey = CacheService.generateKey(req.baseUrl + req.path, user.userId);
+    CacheService.set(cacheKey, responseData, 300).catch(console.error);
   }),
 };
 

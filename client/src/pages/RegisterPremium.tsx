@@ -198,7 +198,7 @@ const PremiumRegister = () => {
                 />
                 <label htmlFor="terms" className="text-[10px] uppercase font-black tracking-widest text-white/40 leading-relaxed cursor-pointer select-none">
                   Agree to <Link to="/terms" className="text-sky-400 hover:text-sky-300 transition-colors">Terms</Link> &{' '}
-                  <Link to="/about" className="text-sky-400 hover:text-sky-300 transition-colors">Privacy Policy</Link>
+                  <Link to="/privacy" className="text-sky-400 hover:text-sky-300 transition-colors">Privacy Policy</Link>
                 </label>
               </motion.div>
 
@@ -231,13 +231,12 @@ const PremiumRegister = () => {
             <motion.div variants={itemVariants} className="text-center">
               <p className="text-gray-400 text-sm">
                 Already have an account?{' '}
-                <motion.a
-                  whileHover={{ x: 2 }}
-                  href="/login"
+                <Link
+                  to="/login"
                   className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors"
                 >
                   Sign in
-                </motion.a>
+                </Link>
               </p>
             </motion.div>
           </PremiumCard>

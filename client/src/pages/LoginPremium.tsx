@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, ArrowRight, AlertCircle, ShieldCheck, Zap } from 'lucide-react';
@@ -210,13 +210,12 @@ const PremiumLogin = () => {
               <div className="text-center pt-4">
                 <p className="text-white/30 text-xs font-bold tracking-wider">
                   NEW HERE?{' '}
-                  <motion.a 
-                    href="/register" 
+                  <Link 
+                    to="/register" 
                     className="text-white hover:text-sky-400 transition-colors font-black border-b border-white/10 pb-0.5"
-                    whileHover={{ scale: 1.05 }}
                   >
                     CREATE AN ACCOUNT
-                  </motion.a>
+                  </Link>
                 </p>
               </div>
             </div>

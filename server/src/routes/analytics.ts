@@ -5,7 +5,7 @@ import Record from '../models/Record.js';
 import { asyncHandler } from '../middleware/asyncHandler.js';
 import { authenticateToken } from '../middleware/auth.js';
 import { cacheGet } from '../middleware/cacheGet.js';
-import { redisClient } from '../config/redisClient.js';
+import { CacheService } from '../services/cacheService.js';
 import { AuthRequest } from '../types/index.js';
 import { AppError } from '../utils/appError.js';
 import { requireUser } from '../utils/request.js';
@@ -191,8 +191,8 @@ router.get(
 
     res.json(responseData);
 
-    const cacheKey = `cache:analytics:predictions:${user.userId}`;
-    redisClient.set(cacheKey, JSON.stringify(responseData), { EX: 60 }).catch(console.error);
+    const cacheKey = CacheService.generateKey(req.baseUrl + req.path, user.userId);
+    CacheService.set(cacheKey, responseData, 300).catch(console.error);
   })
 );
 

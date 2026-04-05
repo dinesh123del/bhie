@@ -39,5 +39,10 @@ const recordSchema = new mongoose.Schema({
 }, {
     timestamps: true,
 });
+// Optimized indexes for dashboard analytics and filtering
+recordSchema.index({ userId: 1, date: -1 });
+recordSchema.index({ userId: 1, type: 1, date: -1 });
+recordSchema.index({ userId: 1, category: 1 });
+recordSchema.index({ userId: 1, status: 1 });
 const Record = mongoose.model('Record', recordSchema);
 export default Record;

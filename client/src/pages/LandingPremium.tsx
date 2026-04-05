@@ -486,8 +486,9 @@ const Footer = () => (
       <div className="flex gap-6 text-sm text-white/50">
         <a href="#features" className="hover:text-white transition-colors">Features</a>
         <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
-        <a href="/terms" className="hover:text-white transition-colors">Terms</a>
-        <a href="/about" className="hover:text-white transition-colors">Privacy</a>
+        <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
+        <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+        <Link to="/contact" className="hover:text-white transition-colors">Contact</Link>
       </div>
       <div className="text-sm text-white/30">© 2026 ANTIGRAVITY. Business Intelligence Made Simple.</div>
     </div>
