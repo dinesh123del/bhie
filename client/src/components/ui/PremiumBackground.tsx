@@ -44,9 +44,9 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
         this.color = colors[Math.floor(Math.random() * colors.length)];
         this.density = Math.random() * 20 + 1;
         this.opacity = Math.random() * 0.6 + 0.1;
-        this.twinkle = (Math.random() * 0.008) + 0.002; // Slower, softer twinkle
-        this.speedY = (Math.random() * -0.2) - 0.05; // Ultra-slow upward drift
-        this.speedX = (Math.random() * 0.1) - 0.05;
+        this.twinkle = (Math.random() * 0.003) + 0.001; // Ultra-slow, very peaceful twinkle
+        this.speedY = (Math.random() * -0.05) - 0.02; // Glacial upward drift
+        this.speedX = (Math.random() * 0.04) - 0.02; // Very slow horizontal sway
       }
 
       draw() {
@@ -95,7 +95,7 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
            
            if (distance < maxDistance) {
              const force = (maxDistance - distance) / maxDistance;
-             const push = mouseRef.current.active ? 3 : 0.5;
+             const push = mouseRef.current.active ? 1.5 : 0.2; // Gentle repulsion
              this.x += (dx / distance) * force * this.density * push;
              this.y += (dy / distance) * force * this.density * push;
            }
@@ -208,7 +208,7 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
             opacity: [0.1, 0.2, 0.1],
             filter: ["blur(120px) hue-rotate(0deg)", "blur(120px) hue-rotate(45deg)", "blur(120px) hue-rotate(0deg)"]
           }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div 
           className="absolute -right-[5%] bottom-[10%] h-[60%] w-[60%] rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none" 
@@ -216,7 +216,7 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
             opacity: [0.1, 0.3, 0.1],
             filter: ["blur(120px) hue-rotate(0deg)", "blur(120px) hue-rotate(-45deg)", "blur(120px) hue-rotate(0deg)"]
           }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          transition={{ duration: 35, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
         <div className="absolute left-[30%] top-[40%] h-[40%] w-[40%] rounded-full bg-purple-500/3 blur-[120px] animate-pulse" style={{ animationDelay: '4s' }} />
       </div>
