@@ -79,6 +79,14 @@ export const alertsController = {
       markedCount: result.modifiedCount,
       unreadCount: 0 
     });
+  }),
+
+  // GET /api/alerts/unread/count
+  getUnreadCount: asyncHandler(async (req: AuthRequest, res: Response) => {
+    const user = requireUser(req);
+    const userId = new Types.ObjectId(user.userId);
+    const count = await Alert.countDocuments({ userId, isRead: false });
+    res.json({ count });
   })
 };
 

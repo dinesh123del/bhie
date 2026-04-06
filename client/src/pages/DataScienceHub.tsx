@@ -234,7 +234,7 @@ export const DataScienceHub: React.FC = () => {
                     </div>
 
                     <div className="grid grid-cols-1 gap-4">
-                      {analysis.profitabilityRoadmap.map((item, i) => (
+                      {(analysis.profitabilityRoadmap || []).map((item, i) => (
                         <motion.div
                           key={i}
                           initial={{ opacity: 0, x: -20 }}
@@ -272,7 +272,7 @@ export const DataScienceHub: React.FC = () => {
 
                   {/* Core Metrics Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {analysis.statistics.map((stat, i) => (
+                    {(analysis.statistics || []).map((stat, i) => (
                       <PremiumCard key={i} className="p-6 bg-white/[0.03]">
                         <p className="text-[10px] text-white/40 uppercase font-black mb-2">{stat.metric}</p>
                         <p className={`text-2xl font-black ${
@@ -293,7 +293,7 @@ export const DataScienceHub: React.FC = () => {
                         <h3 className="text-lg font-black text-white uppercase tracking-tighter">Connections Found</h3>
                       </div>
                       <div className="space-y-4">
-                        {analysis.correlations.map((c, i) => (
+                        {(analysis.correlations || []).map((c, i) => (
                           <div key={i} className="flex gap-4 p-4 rounded-xl bg-purple-500/5 border border-purple-500/10">
                             <Zap className="w-4 h-4 text-purple-400 mt-1 flex-shrink-0" />
                             <p className="text-sm text-purple-200/80 font-medium leading-relaxed">{c}</p>
@@ -308,7 +308,7 @@ export const DataScienceHub: React.FC = () => {
                         <h3 className="text-lg font-black text-white uppercase tracking-tighter">Odd Numbers Found</h3>
                       </div>
                       <div className="space-y-4">
-                        {analysis.outliers.map((o, i) => (
+                        {(analysis.outliers || []).map((o, i) => (
                           <div key={i} className="flex gap-4 p-4 rounded-xl bg-amber-500/5 border border-amber-500/10">
                             <Info className="w-4 h-4 text-amber-400 mt-1 flex-shrink-0" />
                             <p className="text-sm text-amber-200/80 font-medium leading-relaxed">{o}</p>

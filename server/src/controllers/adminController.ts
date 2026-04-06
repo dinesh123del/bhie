@@ -76,9 +76,13 @@ export const adminController = {
     }
 
     user.plan = plan;
-    if (plan !== 'free' && planExpiry) {
-      user.planExpiry = new Date(planExpiry);
-    } else if (plan === 'free') {
+    if (plan !== 'free') {
+      // If admin updates plan, set a far-future expiry if none provided
+      // This ensures the access "reflects" and stays active
+      const defaultExpiry = new Date();
+      defaultExpiry.setFullYear(defaultExpiry.getFullYear() + 1); // 1 year of access
+      user.planExpiry = planExpiry ? new Date(planExpiry) : defaultExpiry;
+    } else {
       user.planExpiry = undefined;
     }
 
@@ -230,11 +234,12 @@ export const adminController = {
       settings = new Settings();
     }
 
-    const { proPrice, premiumPrice, isFreeMode, currency } = req.body;
+    const { proPrice, premiumPrice, isFreeMode, currency, adminInstructions } = req.body;
     if (proPrice !== undefined) settings.proPrice = proPrice;
     if (premiumPrice !== undefined) settings.premiumPrice = premiumPrice;
     if (isFreeMode !== undefined) settings.isFreeMode = isFreeMode;
     if (currency !== undefined) settings.currency = currency;
+    if (adminInstructions !== undefined) settings.adminInstructions = adminInstructions;
 
     await settings.save();
     res.json({ success: true, data: settings });

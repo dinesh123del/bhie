@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import type { SignOptions } from 'jsonwebtoken';
 import passport from 'passport';
@@ -20,7 +21,7 @@ const router = express.Router();
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email'),
-  password: z.string().min(6, 'Password too short'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
 const registerSchema = z.object({
@@ -210,8 +211,8 @@ router.get('/google/callback', (req, res, next) => {
     // Set cookie for browser sessions
     setAuthCookie(res, token);
     
-    const redirectUrl = new URL('/login', env.CLIENT_URL);
-    redirectUrl.searchParams.set('token', token);
+    // REDACTED: No longer passing token in URL for security
+    const redirectUrl = new URL('/dashboard', env.CLIENT_URL);
     redirectUrl.searchParams.set('from', 'google');
     res.redirect(redirectUrl.toString());
   })(req, res, next);
@@ -322,18 +323,25 @@ router.patch(
   authenticateToken,
   asyncHandler(async (req: AuthRequest, res: Response) => {
     const authUser = requireUser(req);
-    const { name, email, password } = req.body;
     
     const user = await User.findById(authUser.userId);
     if (!user) throw new AppError(404, 'User not found');
 
-    if (name) user.name = name;
-    if (email && email !== user.email) {
-      const existing = await User.findOne({ email });
+    // Validate update fields
+    const updateSchema = z.object({
+      name: z.string().trim().min(1, 'Name required').optional(),
+      email: z.string().email('Invalid email').optional(),
+      password: z.string().min(8, 'Password must be at least 8 characters').optional(),
+    });
+    const validated = updateSchema.parse(req.body);
+
+    if (validated.name) user.name = validated.name;
+    if (validated.email && validated.email !== user.email) {
+      const existing = await User.findOne({ email: validated.email });
       if (existing) throw new AppError(400, 'Email already in use');
-      user.email = email;
+      user.email = validated.email;
     }
-    if (password) user.password = password;
+    if (validated.password) user.password = validated.password;
 
     await user.save();
 
@@ -364,12 +372,13 @@ router.post('/logout', (_req: Request, res: Response) => {
  * Returns a CSRF token for the frontend to use in subsequent requests.
  */
 router.get('/csrf-token', (req, res) => {
-  // Simple CSRF token implementation if not using library
-  const token = Math.random().toString(36).substring(2);
+  // Use cryptographically secure random bytes
+  const token = crypto.randomBytes(24).toString('hex');
   res.cookie('XSRF-TOKEN', token, {
     httpOnly: false, // Accessible by JS for CSRF headers
     secure: env.IS_PRODUCTION,
     sameSite: 'lax',
+    path: '/',
   });
   res.json({ csrfToken: token });
 });

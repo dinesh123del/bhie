@@ -2,17 +2,17 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  BarChart, Bar, LineChart, Line, AreaChart, Area, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend
+  BarChart, Bar, AreaChart, Area, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend
 } from 'recharts';
 import {
-  TrendingUp, MoreHorizontal, ArrowUpRight, Download, Filter, Sparkles, Wallet, FileText, BarChart2, PieChart as PieIcon, Activity, Zap
+  TrendingUp, Download, Filter, Sparkles, Wallet, PieChart as PieIcon, Activity, Zap
 } from 'lucide-react';
-import { MainLayout } from '../components/Layout/MainLayout';
 import { PremiumCard, PremiumButton, KPICard } from '../components/ui/PremiumComponents';
 import api from '../lib/axios';
 import { AnalysisDashboard } from '../components/AIAnalysisDashboard';
 import { aiService, BusinessData, AIAnalysisResponse } from '../services/aiService';
 import { canUseAIInsights } from '../utils/plan';
+import { premiumFeedback } from '../utils/premiumFeedback';
 
 const PremiumAnalytics = () => {
   const navigate = useNavigate();
@@ -77,20 +77,6 @@ const PremiumAnalytics = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate('/login');
-  };
-
-  const sidebarItems = [
-    { icon: <BarChart2 className="w-5 h-5" />, label: 'Dashboard', href: '/dashboard' },
-    { icon: <FileText className="w-5 h-5" />, label: 'Records', href: '/records' },
-    { icon: <TrendingUp className="w-5 h-5" />, label: 'Analytics', href: '/analytics' },
-    { icon: <Sparkles className="w-5 h-5" />, label: 'AI Deep Dive', href: '/analysis-report' },
-    { icon: <Wallet className="w-5 h-5" />, label: 'Pro Plan', href: '/pricing' },
-  ];
-
-  // Dynamic data derivation
   const cashFlowData = metrics?.monthlyData || [
     { name: 'No Data', revenue: 0, expenses: 0, profit: 0 }
   ];
@@ -128,68 +114,74 @@ const PremiumAnalytics = () => {
   if (loading) {
     return (
         <div className="space-y-6">
-          <div className="h-12 bg-white/5 rounded-xl animate-pulse" />
-          <div className="grid gap-6 md:grid-cols-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-32 bg-white/5 rounded-2xl animate-pulse" />
+          <div className="h-10 w-1/3 bg-[#1C1C1E] animate-pulse rounded-lg" />
+          <div className="grid gap-6 md:grid-cols-4">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="h-32 bg-[#1C1C1E] rounded-xl animate-pulse" />
             ))}
           </div>
+          <div className="h-[400px] bg-[#1C1C1E] animate-pulse rounded-xl" />
         </div>
     );
   }
 
+  const springTransition = { duration: 0.6, ease: [0.2, 0.8, 0.2, 1] };
+
   return (
     <>
-      <div className="space-y-8">
+      <div className="relative mx-auto max-w-[1200px] px-6 md:px-8 py-8 space-y-12 pb-24 text-white">
+        
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between flex-wrap gap-4"
-        >
-          <div>
-             <div className="flex items-center gap-3 mb-2 text-sky-400">
-                <div className="p-2 rounded-lg bg-sky-500/10 border border-sky-500/20">
-                   <Activity className="w-5 h-5" />
-                </div>
-                <span className="text-xs font-black uppercase tracking-[0.3em]">Institutional Grade</span>
-             </div>
-            <h1 className="text-5xl font-black text-white tracking-tighter">Business Intelligence<span className="text-sky-500">.</span></h1>
-            <p className="secondary-text mt-1 font-medium">Real-time financial synthesis for scaled operations</p>
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-[#1C1C1E]">
+          <div className="space-y-2">
+            <motion.div 
+               initial={{ opacity: 0, scale: 0.95 }}
+               animate={{ opacity: 1, scale: 1 }}
+               transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+               className="inline-flex items-center gap-2 mb-2"
+            >
+              <div className="w-1.5 h-1.5 rounded-full bg-[#AF52DE]" />
+              <span className="text-[11px] font-semibold text-[#A1A1A6] uppercase tracking-wider">Business Intelligence</span>
+            </motion.div>
+            <h1 className="text-[32px] md:text-[40px] font-bold tracking-tight text-white leading-tight">
+              Real-time analysis.
+            </h1>
           </div>
           <motion.div className="flex gap-3">
-            <PremiumButton variant="secondary" size="md" icon={<Filter className="w-4 h-4" />}>
-              Parameters
-            </PremiumButton>
-            <PremiumButton size="md" icon={<Download className="w-4 h-4" />}>
-              Full Export
-            </PremiumButton>
+            <button className="px-4 py-2 rounded-full border border-[#1C1C1E] hover:bg-[#1C1C1E] transition-colors flex items-center gap-2 text-[13px] font-medium text-[#A1A1A6]">
+              <Filter className="w-4 h-4" /> Parameters
+            </button>
+            <button className="px-4 py-2 rounded-full bg-white text-black hover:bg-white/90 transition-colors flex items-center gap-2 text-[13px] font-medium">
+              <Download className="w-4 h-4" /> Export Data
+            </button>
           </motion.div>
-        </motion.div>
+        </header>
 
         {/* KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { icon: <Zap className="w-6 h-6 text-yellow-400" />, label: "Cash Velocity", value: metrics?.kpis?.growthRate ? `${(metrics.kpis.growthRate / 10).toFixed(1)}x` : "0.0x", trend: metrics?.kpis?.growthRate ? `+${metrics.kpis.growthRate}%` : "0%", color: "yellow" },
-            { icon: <TrendingUp className="w-6 h-6 text-emerald-400" />, label: "Gross Margin", value: metrics?.kpis?.profitMargin ? `${metrics.kpis.profitMargin.toFixed(1)}%` : "0.0%", trend: "0%", color: "emerald" },
-            { icon: <Wallet className="w-6 h-6 text-sky-400" />, label: "Total Revenue", value: metrics?.kpis?.revenue ? `₹${(metrics.kpis.revenue / 100000).toFixed(1)}L` : "₹0.0L", trend: "0%", color: "sky" },
-            { icon: <PieIcon className="w-6 h-6 text-indigo-400" />, label: "Net Profit", value: metrics?.kpis?.profit ? `₹${(metrics.kpis.profit / 100000).toFixed(1)}L` : "₹0.0L", trend: "0%", color: "indigo" }
+            { icon: <Zap className="w-5 h-5 text-[#FF9500]" />, label: "Cash Velocity", value: metrics?.kpis?.growthRate ? `${(metrics.kpis.growthRate / 10).toFixed(1)}x` : "0.0x", trend: metrics?.kpis?.growthRate ? `+${metrics.kpis.growthRate}%` : "0%" },
+            { icon: <TrendingUp className="w-5 h-5 text-[#34C759]" />, label: "Gross Margin", value: metrics?.kpis?.profitMargin ? `${metrics.kpis.profitMargin.toFixed(1)}%` : "0.0%", trend: "0%" },
+            { icon: <Wallet className="w-5 h-5 text-[#007AFF]" />, label: "Total Revenue", value: metrics?.kpis?.revenue ? `₹${(metrics.kpis.revenue / 100000).toFixed(1)}L` : "₹0.0L", trend: "0%" },
+            { icon: <PieIcon className="w-5 h-5 text-[#AF52DE]" />, label: "Net Profit", value: metrics?.kpis?.profit ? `₹${(metrics.kpis.profit / 100000).toFixed(1)}L` : "₹0.0L", trend: "0%" }
           ].map((kpi, i) => (
             <motion.div 
               key={i}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              whileHover={{ y: -5 }}
-              className="relative group"
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, ...springTransition }}
+              whileHover={{ y: -2 }}
+              className="apple-card p-6 flex flex-col"
             >
-              <div className={`absolute -inset-1 bg-${kpi.color}-500/20 rounded-3xl blur opacity-0 group-hover:opacity-100 transition duration-500`} />
-              <KPICard
-                icon={kpi.icon}
-                label={kpi.label}
-                value={kpi.value}
-                trend={{ val: kpi.trend, positive: kpi.trend.startsWith('+') }}
-              />
+               <div className="flex items-center justify-between mb-4">
+                 <span className="text-[13px] font-semibold text-[#A1A1A6]">{kpi.label}</span>
+                 {kpi.icon}
+               </div>
+               <div className="text-[28px] font-bold tracking-tight mb-1">{kpi.value}</div>
+               <div className={`text-[13px] font-medium ${kpi.trend.startsWith('+') ? 'text-[#34C759]' : 'text-[#A1A1A6]'}`}>
+                 {kpi.trend}
+               </div>
             </motion.div>
           ))}
         </div>
@@ -201,39 +193,40 @@ const PremiumAnalytics = () => {
             initial={{ opacity: 0, scale: 0.98 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
+            transition={springTransition}
           >
-            <PremiumCard className="relative p-8 h-full">
-              <div className="flex items-center justify-between mb-8">
-                <div>
-                  <h3 className="text-xl font-black text-white tracking-tight">Cumulative Cash Flow</h3>
-                  <p className="text-xs secondary-text uppercase tracking-widest mt-1">Revenue vs Operating Expenses</p>
-                </div>
+            <div className="apple-card p-6 md:p-8 h-full">
+              <div className="mb-6">
+                <h3 className="text-[17px] font-semibold tracking-tight text-white">Cumulative Cash Flow</h3>
+                <p className="text-[13px] text-[#A1A1A6] mt-1">Revenue vs Operating Expenses</p>
               </div>
-              <div className="h-[350px] w-full">
+              <div className="h-[300px] w-full font-sans">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={cashFlowData}>
+                  <AreaChart data={cashFlowData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10b828" stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor="#10b828" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#34C759" stopOpacity={0.4}/>
+                        <stop offset="95%" stopColor="#34C759" stopOpacity={0}/>
                       </linearGradient>
                       <linearGradient id="colorExp" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor="#f43f5e" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#FF3B30" stopOpacity={0.4}/>
+                        <stop offset="95%" stopColor="#FF3B30" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                    <XAxis dataKey="name" stroke="#64748b" axisLine={false} tickLine={false} />
-                    <YAxis stroke="#64748b" axisLine={false} tickLine={false} />
+                    <XAxis dataKey="name" stroke="#A1A1A6" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontFamily: 'SF Pro Text, -apple-system, system-ui, sans-serif' }} />
+                    <YAxis stroke="#A1A1A6" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontFamily: 'SF Pro Text, -apple-system, system-ui, sans-serif' }} />
                     <Tooltip 
-                      contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
+                      contentStyle={{ background: 'rgba(28, 28, 30, 0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', backdropFilter: 'blur(20px)', fontSize: '12px' }}
+                      itemStyle={{ fontWeight: '500' }}
+                      labelStyle={{ color: '#fff', fontWeight: '600', marginBottom: '4px' }}
                     />
-                    <Area type="monotone" dataKey="revenue" stroke="#10b828" fillOpacity={1} fill="url(#colorRev)" strokeWidth={3} />
-                    <Area type="monotone" dataKey="expenses" stroke="#f43f5e" fillOpacity={1} fill="url(#colorExp)" strokeWidth={3} />
+                    <Area type="monotone" dataKey="revenue" stroke="#34C759" fillOpacity={1} fill="url(#colorRev)" strokeWidth={3} />
+                    <Area type="monotone" dataKey="expenses" stroke="#FF3B30" fillOpacity={1} fill="url(#colorExp)" strokeWidth={3} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
-            </PremiumCard>
+            </div>
           </motion.div>
 
           {/* Radar Chart for Resource Allocation */}
@@ -241,130 +234,124 @@ const PremiumAnalytics = () => {
             initial={{ opacity: 0, scale: 0.98 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            transition={{ ...springTransition, delay: 0.1 }}
           >
-            <PremiumCard className="relative p-8 h-full">
-              <div className="flex items-center justify-between mb-8">
-                <div>
-                  <h3 className="text-xl font-black text-white tracking-tight">Resource Synthesis</h3>
-                  <p className="text-xs secondary-text uppercase tracking-widest mt-1">Variance across structural domains</p>
-                </div>
+            <div className="apple-card p-6 md:p-8 h-full">
+              <div className="mb-6">
+                <h3 className="text-[17px] font-semibold tracking-tight text-white">Resource Synthesis</h3>
+                <p className="text-[13px] text-[#A1A1A6] mt-1">Variance across structural domains</p>
               </div>
-              <div className="h-[350px] w-full">
+              <div className="h-[300px] w-full font-sans">
                 <ResponsiveContainer width="100%" height="100%">
-                  <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+                  <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
                     <PolarGrid stroke="rgba(255,255,255,0.1)" />
-                    <PolarAngleAxis dataKey="subject" tick={{ fill: '#94a3b8', fontSize: 12 }} />
-                    <PolarRadiusAxis stroke="rgba(255,255,255,0.1)" />
-                    <Radar
-                      name="Current"
-                      dataKey="A"
-                      stroke="#38bdf8"
-                      fill="#38bdf8"
-                      fillOpacity={0.6}
+                    <PolarAngleAxis dataKey="subject" tick={{ fill: '#A1A1A6', fontSize: 11, fontFamily: 'SF Pro Text, -apple-system, system-ui, sans-serif' }} />
+                    <PolarRadiusAxis stroke="rgba(255,255,255,0.1)" tick={false} axisLine={false} />
+                    <Radar dataKey="A" stroke="#007AFF" fill="#007AFF" fillOpacity={0.4} />
+                    <Radar dataKey="B" stroke="#AF52DE" fill="#AF52DE" fillOpacity={0.2} />
+                    <Tooltip 
+                      contentStyle={{ background: 'rgba(28, 28, 30, 0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', backdropFilter: 'blur(20px)', fontSize: '12px' }}
+                      itemStyle={{ fontWeight: '500' }}
                     />
-                    <Radar
-                      name="Prior Period"
-                      dataKey="B"
-                      stroke="#818cf8"
-                      fill="#818cf8"
-                      fillOpacity={0.3}
-                    />
-                    <Legend />
                   </RadarChart>
                 </ResponsiveContainer>
               </div>
-            </PremiumCard>
+            </div>
           </motion.div>
         </div>
 
         {/* Weekly Performance Bar Chart */}
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={springTransition}
         >
-          <PremiumCard className="p-8">
-             <div className="flex items-center justify-between mb-8">
-                <div>
-                  <h3 className="text-xl font-black text-white tracking-tight">Operational Performance</h3>
-                  <p className="text-xs secondary-text uppercase tracking-widest mt-1">Active vs Target Benchmark</p>
-                </div>
-              </div>
-              <div className="h-[300px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={performanceData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                    <XAxis dataKey="name" stroke="#64748b" axisLine={false} tickLine={false} />
-                    <YAxis stroke="#64748b" axisLine={false} tickLine={false} />
-                    <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }} />
-                    <Bar dataKey="active" fill="#38bdf8" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="target" fill="#1e293b" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-          </PremiumCard>
+          <div className="apple-card p-6 md:p-8">
+             <div className="mb-6">
+               <h3 className="text-[17px] font-semibold tracking-tight text-white">Operational Performance</h3>
+               <p className="text-[13px] text-[#A1A1A6] mt-1">Active vs Target Benchmark</p>
+             </div>
+             <div className="h-[300px] w-full font-sans">
+               <ResponsiveContainer width="100%" height="100%">
+                 <BarChart data={performanceData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                   <XAxis dataKey="name" stroke="#A1A1A6" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontFamily: 'SF Pro Text, -apple-system, system-ui, sans-serif' }} />
+                   <YAxis stroke="#A1A1A6" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontFamily: 'SF Pro Text, -apple-system, system-ui, sans-serif' }} />
+                   <Tooltip 
+                      contentStyle={{ background: 'rgba(28, 28, 30, 0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', backdropFilter: 'blur(20px)', fontSize: '12px' }}
+                      itemStyle={{ fontWeight: '500' }}
+                      cursor={{ fill: 'rgba(255,255,255,0.03)' }}
+                    />
+                   <Bar dataKey="active" fill="#007AFF" radius={[4, 4, 0, 0]} />
+                   <Bar dataKey="target" fill="#2C2C2E" radius={[4, 4, 0, 0]} />
+                 </BarChart>
+               </ResponsiveContainer>
+             </div>
+          </div>
         </motion.div>
 
         {/* AI Insights with Premium Overlay */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="relative group overflow-hidden rounded-[3rem] border border-white/10 bg-white/[0.01] backdrop-blur-3xl"
+           initial={{ opacity: 0, y: 20 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           viewport={{ once: true }}
+           transition={springTransition}
+           className="relative overflow-hidden apple-card p-8 md:p-12"
         >
-          <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/10 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[100px] pointer-events-none" />
-          
-          <div className="p-10 relative z-10">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#007AFF]/10 rounded-full blur-[100px] pointer-events-none" />
+          <div className="relative z-10">
             <div className="flex items-center justify-between flex-wrap gap-6 mb-10">
               <div>
                 <motion.div 
-                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-400/10 border border-sky-400/20 text-sky-400 text-[10px] font-black uppercase tracking-widest mb-3"
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#007AFF]/10 text-[#007AFF] text-[11px] font-semibold uppercase tracking-wider mb-2"
+                  animate={{ scale: [1, 1.02, 1] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
                 >
-                  <Sparkles className="w-3 h-3" /> Core Intelligence
+                  <Sparkles className="w-3.5 h-3.5" /> Intelligence Core
                 </motion.div>
-                <h3 className="text-3xl font-black text-white tracking-tight">AI Strategic Analysis</h3>
-                <p className="secondary-text mt-2 font-medium">Synthesized business recommendations based on real-time data.</p>
+                <h3 className="text-[28px] font-bold text-white tracking-tight">AI Strategic Analysis.</h3>
+                <p className="text-[15px] font-medium text-[#A1A1A6] mt-1">Synthesized business recommendations based on real-time data.</p>
               </div>
               {aiInsightsEnabled ? (
-                <PremiumButton 
-                  onClick={generateAIInsights}
-                  loading={aiLoading}
-                  size="lg"
-                  className="bg-sky-500 hover:bg-sky-400 border-none shadow-[0_15px_30px_-5px_rgba(14,165,233,0.3)]"
-                  icon={<TrendingUp className="w-4 h-4" />}
+                <button 
+                  onClick={() => {
+                    premiumFeedback.click();
+                    generateAIInsights();
+                  }}
+                  disabled={aiLoading}
+                  className="px-6 py-2.5 bg-[#007AFF] hover:bg-[#007AFF]/90 text-white text-[14px] font-medium rounded-full shadow-lg transition-colors flex items-center gap-2 disabled:opacity-50"
                 >
-                  Refresh Intelligence
-                </PremiumButton>
+                  {aiLoading ? <span className="animate-spin inline-block">⟳</span> : <TrendingUp className="w-4 h-4" />}
+                  Refresh Analysis
+                </button>
               ) : null}
             </div>
 
             {!aiInsightsEnabled ? (
-              <div className="rounded-[2.5rem] border border-white/5 bg-white/[0.02] p-12 text-center backdrop-blur-xl relative overflow-hidden group-hover:border-white/10 transition-colors">
-                <div className="absolute inset-0 bg-gradient-to-br from-sky-500/5 to-purple-500/5 opacity-50" />
-                <motion.div
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <Sparkles className="w-20 h-20 mx-auto mb-6 text-sky-400/40" />
-                </motion.div>
-                <h3 className="text-2xl font-black text-white mb-4">Unlock Strategic Power</h3>
-                <p className="mx-auto max-w-xl secondary-text font-medium leading-relaxed">
+              <div className="rounded-2xl border border-white/5 bg-[#1C1C1E]/50 p-12 text-center relative overflow-hidden group">
+                <h3 className="text-[20px] font-bold text-white mb-2">Unlock Strategic Power</h3>
+                <p className="mx-auto max-w-xl text-[15px] text-[#A1A1A6] font-medium leading-relaxed">
                   The AI Strategic Engine is currently reserved for Pro Tier users. Upgrade today to access predictive forecasting, expense optimization, and growth scaling strategies.
                 </p>
-                <div className="mt-8 flex justify-center gap-4">
-                  <PremiumButton onClick={() => navigate('/pricing')} size="lg" className="px-10">Upgrade to Pro</PremiumButton>
+                <div className="mt-8 flex justify-center">
+                  <button 
+                    onClick={() => {
+                      premiumFeedback.click();
+                      navigate('/pricing');
+                    }} 
+                    className="px-8 py-3 bg-white text-black font-semibold rounded-full hover:scale-105 transition-transform"
+                  >
+                    Upgrade to Pro
+                  </button>
                 </div>
               </div>
             ) : aiAnalysis ? (
               <AnalysisDashboard analysisResult={aiAnalysis} />
             ) : (
               <div className="text-center py-20">
-                <div className="w-16 h-16 border-4 border-sky-400/20 border-t-sky-400 rounded-full animate-spin mx-auto mb-6" />
-                <p className="text-white/40 font-bold uppercase tracking-widest text-xs">Synthesizing Business Intelligence...</p>
+                <div className="w-10 h-10 border-2 border-[#2C2C2E] border-t-[#007AFF] rounded-full animate-spin mx-auto mb-4" />
+                <p className="text-[#A1A1A6] font-semibold text-[13px]">Synthesizing Business Intelligence...</p>
               </div>
             )}
           </div>

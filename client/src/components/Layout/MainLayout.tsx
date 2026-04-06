@@ -21,6 +21,7 @@ import {
   Scanlines,
   MouseGlow
 } from '../ui/MicroEngines';
+import AdminAnnouncement from '../ui/AdminAnnouncement';
 
 interface SidebarItem {
   icon: React.ReactNode;
@@ -424,6 +425,7 @@ export const MainLayout: React.FC<{
 
   return (
     <div className="min-h-screen text-white bg-transparent">
+      <AdminAnnouncement />
       <MouseGlow />
       <Sidebar
         items={sidebarItems}

@@ -163,13 +163,13 @@ const normalizeLatestUpload = (value: unknown): UploadedImageRecord | null => {
   } as UploadedImageRecord;
 };
 
-// Premium Section Wrapper with Scroll Animations
+// Premium Section Wrapper with Apple smooth scroll easing
 const PremiumSection = ({ children, delay = 0, className = "" }: { children: React.ReactNode, delay?: number, className?: string }) => (
   <motion.section
-    initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
+    initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
     whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-    viewport={{ once: true, margin: "-100px" }}
-    transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.8, delay, ease: [0.2, 0.8, 0.2, 1] }}
     className={className}
   >
     {children}
@@ -193,7 +193,7 @@ const DashboardPremium = () => {
   const mountedRef = useRef(true);
   const requestInFlightRef = useRef(false);
 
-  // Scroll Progress for parallax
+  // Smooth Scroll Progress for parallax
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -286,7 +286,7 @@ const DashboardPremium = () => {
         change: growthRate > 0 ? `+${growthRate.toFixed(1)}% this month` : 'No growth data',
         detail: `You've made more money this month! Great job.`,
         tone: 'positive' as const,
-        icon: <IndianRupee className="h-6 w-6" />,
+        icon: <IndianRupee className="w-5 h-5 text-[#27C93F]" />,
       },
       {
         title: 'Money Spent',
@@ -294,7 +294,7 @@ const DashboardPremium = () => {
         change: expenseRatio > 60 ? 'Spending High' : 'Doing Well',
         detail: expenseRatio > 60 ? 'You are spending a lot of money. Try to save more.' : `Your spending is under control.`,
         tone: expenseRatio > 60 ? ('negative' as const) : ('positive' as const),
-        icon: <Wallet className="h-6 w-6" />,
+        icon: <Wallet className="w-5 h-5 text-[#FFBD2E]" />,
       },
       {
         title: 'Leftover Profit',
@@ -303,7 +303,7 @@ const DashboardPremium = () => {
         detail: profitMargin > 20 ? 'Your business is healthy and growing.' : 'Your profit is a bit low. Watch your costs.',
         tone: 'accent' as const,
         highlight: true,
-        icon: <TrendingUp className="h-6 w-6" />,
+        icon: <TrendingUp className="w-5 h-5 text-[#007AFF]" />,
       },
     ], [expenseRatio, expenses, growthRate, profit, profitMargin, revenue, targetRevenue]);
 
@@ -321,57 +321,55 @@ const DashboardPremium = () => {
   if (loading) {
     return (
         <div className="p-8 space-y-12">
-            <div className="h-20 w-2/3 bg-white/5 animate-pulse rounded-3xl" />
-            <div className="grid grid-cols-3 gap-8">
-                <div className="h-48 bg-white/5 animate-pulse rounded-[2.5rem]" />
-                <div className="h-48 bg-white/5 animate-pulse rounded-[2.5rem]" />
-                <div className="h-48 bg-white/5 animate-pulse rounded-[2.5rem]" />
+            <div className="h-10 w-1/3 bg-[#1C1C1E] animate-pulse rounded-lg" />
+            <div className="grid grid-cols-3 gap-6">
+                <div className="h-32 bg-[#1C1C1E] animate-pulse rounded-xl" />
+                <div className="h-32 bg-[#1C1C1E] animate-pulse rounded-xl" />
+                <div className="h-32 bg-[#1C1C1E] animate-pulse rounded-xl" />
             </div>
-            <div className="h-[400px] bg-white/5 animate-pulse rounded-[3rem]" />
+            <div className="h-[400px] bg-[#1C1C1E] animate-pulse rounded-xl" />
         </div>
     );
   }
 
   return (
     <>
-      <motion.div className="fixed top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600 origin-left z-[100]" style={{ scaleX }} />
-
-      <div className="relative mx-auto max-w-7xl px-6 md:px-12 py-10 md:py-20 space-y-16 md:space-y-24">
+      <div className="relative mx-auto max-w-[1200px] px-6 md:px-8 py-8 space-y-12 pb-24 text-white">
         
-        {/* APP HEADER: Compact & Personalized */}
-        <header className="flex flex-col md:flex-row md:items-end justify-between gap-10">
-          <div className="space-y-4">
+        {/* APP HEADER: Apple Clean Typography */}
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-[#1C1C1E]">
+          <div className="space-y-2">
             <motion.div 
-               initial={{ opacity: 0, scale: 0.9 }}
+               initial={{ opacity: 0, scale: 0.95 }}
                animate={{ opacity: 1, scale: 1 }}
-               className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-xl border border-brand-500/10 bg-brand-500/5 backdrop-blur-3xl"
+               transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+               className="inline-flex items-center gap-2 mb-2"
             >
-              <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.5)] animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-[0.25em] text-brand-600 dark:text-brand-400">Tactical Intelligence Sync</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-[#007AFF]" />
+              <span className="text-[11px] font-semibold text-[#A1A1A6] uppercase tracking-wider">Analytics</span>
             </motion.div>
             
-            <h1 className="text-5xl md:text-8xl font-black tracking-tighter text-gray-900 dark:text-white leading-[0.85]">
+            <h1 className="text-[32px] md:text-[40px] font-bold tracking-tight text-white leading-tight">
               Hey {user?.name?.split(' ')[0] || 'Partner'}, <br className="hidden md:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-indigo-400 to-purple-500 filter drop-shadow-sm">Your financial story.</span>
+              <span className="text-[#A1A1A6]">Here's your summary.</span>
             </h1>
           </div>
 
-          <div className="flex items-center gap-4 md:pb-4 overflow-x-auto no-scrollbar">
-             <div className="p-5 flex flex-col gap-2 min-w-[160px] bg-white dark:bg-white/[0.03] border border-black/5 dark:border-white/5 rounded-[2rem] shadow-xl">
-                <span className="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-[0.2em] flex items-center gap-1.5">
-                    <RiFlashlightFill className="text-amber-500" /> Goal Depth
+          <div className="flex items-center gap-4">
+             <div className="px-5 py-4 flex flex-col gap-1 min-w-[140px] apple-card">
+                <span className="text-[11px] font-medium text-[#A1A1A6] uppercase tracking-wider flex items-center gap-1.5">
+                    Goal Progress
                 </span>
                 <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-black text-gray-900 dark:text-white tracking-tighter tabular-nums">{overallProgress}%</span>
-                    <span className="text-xs text-emerald-600 dark:text-emerald-400 font-black">+2.4%</span>
+                    <span className="text-[28px] font-bold tracking-tight tabular-nums">{overallProgress}%</span>
                 </div>
              </div>
              
-             <div className="p-5 flex flex-col gap-2 min-w-[160px] bg-white dark:bg-white/[0.03] border border-black/5 dark:border-white/5 rounded-[2rem] shadow-xl">
-                <span className="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-[0.2em] flex items-center gap-1.5">
-                    <RiCalendarEventLine className="text-brand-500" /> Operational Day
+             <div className="px-5 py-4 flex flex-col gap-1 min-w-[140px] apple-card">
+                <span className="text-[11px] font-medium text-[#A1A1A6] uppercase tracking-wider flex items-center gap-1.5">
+                    Current Period
                 </span>
-                <span className="text-3xl font-black text-gray-900 dark:text-white tracking-tighter tabular-nums text-right">Q1-28</span>
+                <span className="text-[28px] font-bold tracking-tight text-right">Q{Math.ceil((new Date().getMonth() + 1) / 3)}</span>
              </div>
           </div>
         </header>
@@ -379,10 +377,10 @@ const DashboardPremium = () => {
         {/* QUICK ACTION HUB */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-                { label: 'Capture Bill', icon: Camera, color: 'from-brand-500 to-indigo-600', path: '/scan-bill', desc: 'Scan any receipt' },
-                { label: 'Neural Intelligence', icon: RiRobot2Line, color: 'from-purple-500 to-pink-600', path: '/analysis-report', desc: 'Ask your assistant' },
-                { label: 'Data Hub', icon: Database, color: 'from-emerald-500 to-teal-600', path: '/ds-hub', desc: 'Global records' },
-                { label: 'Ledger History', icon: RiHistoryLine, color: 'from-orange-500 to-rose-600', path: '/records', desc: 'View transactions' },
+                { label: 'Capture Receipt', icon: Camera, path: '/scan-bill', desc: 'Scan AI' },
+                { label: 'Intelligence', icon: RiRobot2Line, path: '/analysis-report', desc: 'Ask assistant' },
+                { label: 'Data Hub', icon: Database, path: '/ds-hub', desc: 'Global storage' },
+                { label: 'Ledger', icon: RiHistoryLine, path: '/records', desc: 'Transactions' },
             ].map((action, i) => (
                 <button 
                   key={i}
@@ -390,57 +388,54 @@ const DashboardPremium = () => {
                     if (action.path) navigate(action.path);
                     premiumFeedback.click();
                   }}
-                  className="flex flex-col items-start p-6 rounded-[2.5rem] bg-white dark:bg-white/[0.03] border border-black/5 dark:border-white/5 hover:bg-white dark:hover:bg-white/10 hover:shadow-2xl transition-all group relative overflow-hidden text-left"
+                  className="flex flex-col items-start p-5 rounded-2xl bg-[#1C1C1E] border border-white/5 hover:border-white/20 transition-all group text-left"
                 >
-                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${action.color} flex items-center justify-center mb-4 shadow-xl group-hover:scale-110 transition-transform`}>
-                        <action.icon className="w-6 h-6 text-white" />
+                    <div className="w-10 h-10 rounded-full bg-[#2C2C2E] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
+                        <action.icon className="w-5 h-5 text-white" />
                     </div>
-                    <span className="text-base font-black text-gray-900 dark:text-white tracking-tight mb-1">{action.label}</span>
-                    <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{action.desc}</span>
-                    <Plus className="absolute top-6 right-6 w-5 h-5 text-gray-200 dark:text-white/5 group-hover:text-brand-500 group-hover:rotate-90 transition-all" />
+                    <span className="text-[16px] font-semibold tracking-tight text-white mb-1">{action.label}</span>
+                    <span className="text-[12px] font-medium text-[#A1A1A6]">{action.desc}</span>
                 </button>
             ))}
         </div>
 
         {/* METRICS CAROUSEL */}
-        <div className="flex md:grid md:grid-cols-3 gap-8 overflow-x-auto no-scrollbar pb-8 px-1 -mx-4 md:mx-0 md:px-0 scroll-padding">
+        <div className="flex md:grid md:grid-cols-3 gap-6 overflow-x-auto no-scrollbar pb-4 md:pb-0">
             {summaryCards.map((card, i) => (
-                <div key={card.title} className="min-w-[85vw] md:min-w-0">
-                    <SummaryCard
-                        title={card.title}
-                        value={card.value}
-                        change={card.change}
-                        detail={card.detail}
-                        tone={card.tone}
-                        highlight={card.highlight}
-                        icon={card.icon}
-                    />
+                <div key={card.title} className="min-w-[85vw] md:min-w-0 apple-card p-6 flex flex-col">
+                   <div className="flex items-center justify-between mb-4">
+                     <span className="text-[13px] font-semibold text-[#A1A1A6]">{card.title}</span>
+                     {card.icon}
+                   </div>
+                   <div className="mb-2">
+                     {card.value}
+                   </div>
+                   <div className={`text-[13px] font-medium ${card.tone === 'positive' ? 'text-[#27C93F]' : card.tone === 'negative' ? 'text-[#FF3B30]' : 'text-[#A1A1A6]'}`}>
+                     {card.change}
+                   </div>
                 </div>
             ))}
         </div>
 
-        {/* WINNING STRATEGY */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-12">
-            <PremiumSection className="space-y-12">
-                <BusinessHealthEngine
-                    score={healthScore}
-                    status={scoreData?.status ?? (healthScore >= 80 ? 'Elite' : healthScore >= 60 ? 'Optimal' : 'Standard')}
-                    resonanceIndex={scoreData?.resonanceIndex ?? 50}
-                    breakdown={healthBreakdown}
-                />
+        {/* STRATEGY SECTION */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
+            <PremiumSection className="space-y-8">
+                <div className="apple-card p-8">
+                   <BusinessHealthEngine
+                       score={healthScore}
+                       status={scoreData?.status ?? (healthScore >= 80 ? 'Elite' : healthScore >= 60 ? 'Optimal' : 'Standard')}
+                       resonanceIndex={scoreData?.resonanceIndex ?? 50}
+                       breakdown={healthBreakdown}
+                   />
+                </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="relative overflow-hidden rounded-[3rem] p-px bg-white/10 dark:bg-white/5 shadow-2xl">
-                        <div className="relative bg-white dark:bg-[#0A0A0B] rounded-[2.95rem] p-10 h-full backdrop-blur-3xl">
-                            <Scanlines />
-                            <div className="flex justify-between items-center mb-10">
-                                <h3 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2.5 tracking-tight">
-                                    <RiPieChart2Line className="text-brand-500" /> Capital Flux
-                                </h3>
-                                <div className="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">Real-time</div>
-                            </div>
-                            <RevenueLineChart data={apiData?.metrics?.monthlyData || []} loading={loading} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="apple-card p-6 min-h-[300px]">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-[17px] font-semibold tracking-tight">Revenue Trend</h3>
+                            <div className="px-2 py-1 rounded text-[10px] font-medium bg-[#007AFF]/10 text-[#007AFF]">Live</div>
                         </div>
+                        <RevenueLineChart data={apiData?.metrics?.monthlyData || []} loading={loading} />
                     </div>
 
                     <ActionCenter
@@ -458,40 +453,37 @@ const DashboardPremium = () => {
             </PremiumSection>
 
             {/* SIDEBAR WIDGETS */}
-            <aside className="space-y-8">
-                <div className="relative overflow-hidden rounded-[3rem] p-8 dark:bg-brand-500/5 border border-brand-500/10 shadow-xl">
-                    <div className="relative z-10 space-y-6">
+            <aside className="space-y-6">
+                <div className="apple-card p-6 bg-gradient-to-br from-[#1C1C1E] to-black relative overflow-hidden">
+                    <div className="relative z-10 space-y-4">
                         <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-500">Neural Sync</span>
-                            <NeuralSyncEngine />
+                            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#007AFF]">System Status</span>
+                            <div className="w-2 h-2 rounded-full bg-[#27C93F] animate-pulse" />
                         </div>
-                        <p className="text-lg font-bold leading-tight text-gray-900 dark:text-white tracking-tight">
-                            Engine is auditing <span className="text-brand-500 tabular-nums">{totalRecords}</span> entries.
+                        <p className="text-[17px] font-medium leading-snug tracking-tight text-white">
+                            Monitoring <span className="text-[#007AFF] font-semibold">{totalRecords}</span> financial entries.
                         </p>
-                        <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 leading-relaxed uppercase tracking-widest">
+                        <p className="text-[13px] text-[#A1A1A6]">
                             {confirmationMessage}
                         </p>
                     </div>
-                    <div className="absolute top-0 right-0 w-40 h-40 bg-brand-500/10 blur-[80px] rounded-full" />
                 </div >
 
-                <div className="space-y-4">
-                    <div className="flex items-center gap-2.5 px-2">
-                        <Plus className="w-3.5 h-3.5 text-brand-500" /> 
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400">Quick Authority Input</span>
+                <div className="space-y-3">
+                    <div className="flex items-center gap-2 px-1">
+                        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#636366]">Quick Add</span>
                     </div>
                     <QuickAdd onRecordAdded={() => void loadDashboard()} className="w-full" />
                 </div>
 
-                <div className="relative overflow-hidden rounded-[3rem] bg-white dark:bg-white/[0.03] border border-black/5 dark:border-white/5 p-8 shadow-xl">
-                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400 mb-8">Strategic Insights</h4>
-                    <div className="space-y-6">
+                <div className="apple-card p-6">
+                    <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#636366] mb-4">AI Observations</h4>
+                    <div className="space-y-4">
                         {insights.slice(0, 3).map((insight, idx) => (
-                            <div key={idx} className="flex gap-5 group cursor-pointer" onClick={() => navigate('/analysis-report')}>
-                                <div className="w-1.5 h-12 rounded-full bg-gray-100 dark:bg-white/5 group-hover:bg-brand-500 transition-all duration-500" />
+                            <div key={idx} className="flex gap-4 group cursor-pointer" onClick={() => navigate('/analysis-report')}>
                                 <div className="space-y-1">
-                                    <p className="text-xs font-black text-gray-900 dark:text-white group-hover:text-brand-500 transition-colors uppercase tracking-widest leading-none">{insight.message}</p>
-                                    <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">{insight.detail || 'Deep intelligence analysis available for this vector.'}</p>
+                                    <p className="text-[14px] font-semibold tracking-tight group-hover:text-[#007AFF] transition-colors">{insight.message}</p>
+                                    <p className="text-[13px] text-[#A1A1A6] line-clamp-2 leading-relaxed">{insight.detail || 'Deep intelligence analysis available.'}</p>
                                 </div>
                             </div>
                         ))}
@@ -501,28 +493,26 @@ const DashboardPremium = () => {
         </div>
 
         {/* FOOTER ACTION */}
-        <PremiumSection delay={0.2} className="pt-12 pb-12">
-            <div className="p-px rounded-[4rem] bg-gradient-to-r from-transparent via-brand-500/30 to-transparent shadow-2xl">
-                <div className="bg-white dark:bg-[#080809] rounded-[3.95rem] p-16 md:p-24 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_-20%,rgba(79,70,229,0.15),transparent)]" />
-                    <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start justify-between gap-20">
-                        <div className="space-y-8 text-center lg:text-left flex-1">
-                            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-xl border border-brand-500/20 bg-brand-500/5">
-                                <Camera className="w-4 h-4 text-brand-500" />
-                                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-brand-500">Optical Intelligence</span>
-                            </div>
-                            <h2 className="text-5xl md:text-8xl font-black tracking-tighter text-gray-900 dark:text-white leading-[0.85]">Turn paper<br className="hidden md:block" /> into <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-indigo-500 uppercase italic">Power.</span></h2>
-                            <p className="text-2xl font-semibold text-gray-500 dark:text-gray-400 max-w-xl leading-relaxed tracking-tight">Capture any document. Our vision engine processes the data with surgical accuracy and syncs it to your ledger instantly.</p>
+        <PremiumSection delay={0.2} className="pt-8 mb-20">
+            <div className="apple-card p-10 md:p-14 overflow-hidden relative border-t border-[#007AFF]/20">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-[#007AFF]/10 blur-[100px] rounded-full" />
+                <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start justify-between gap-12">
+                    <div className="space-y-4 flex-1">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#007AFF]/10 text-[#007AFF]">
+                            <Camera className="w-4 h-4" />
+                            <span className="text-[11px] font-semibold uppercase tracking-wider">Vision Engine</span>
                         </div>
-                        
-                        <div className="w-full lg:w-[650px] shrink-0">
-                            <FileUpload
-                                onUploadComplete={(items) => {
-                                    setLatestUpload(normalizeLatestUpload(items[0]));
-                                    void loadDashboard();
-                                }}
-                            />
-                        </div>
+                        <h2 className="text-[32px] md:text-[40px] font-bold tracking-tight leading-tight">Instant extraction.</h2>
+                        <p className="text-[17px] text-[#A1A1A6] max-w-lg leading-relaxed">Simply capture a receipt. Our Apple Intelligence model processes amounts, dates, and vendors instantly.</p>
+                    </div>
+                    
+                    <div className="w-full md:w-[400px] shrink-0">
+                        <FileUpload
+                            onUploadComplete={(items) => {
+                                setLatestUpload(normalizeLatestUpload(items[0]));
+                                void loadDashboard();
+                            }}
+                        />
                     </div>
                 </div>
             </div>

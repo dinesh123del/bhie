@@ -6,7 +6,7 @@ import Button from '../components/Button';
 import PremiumBackground from '../components/PremiumBackground';
 import { authService } from '../services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Haptics from 'expo-haptics';
+import premiumFeedback from '../services/soundHelper';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -20,16 +20,24 @@ const LoginScreen = ({ navigation }) => {
     if (!email) { newErrors.email = 'Email required'; valid = false; }
     if (!password) { newErrors.password = 'Password required'; valid = false; }
     setErrors(newErrors);
+    
+    if (!valid) {
+      premiumFeedback.warning();
+    }
+    
     return valid;
   };
 
   const handleLogin = async () => {
     if (!validate()) return;
     setLoading(true);
+    await premiumFeedback.impact();
+    
     try {
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      await premiumFeedback.success();
       navigation.replace('Main');
     } catch (error) {
+      await premiumFeedback.error();
       Alert.alert('Login Error', 'Something went wrong. Please check your email and password.');
     } finally {
       setLoading(false);
@@ -101,7 +109,7 @@ const styles = StyleSheet.create({
   kicker: {
     fontSize: 10,
     fontWeight: '900',
-    color: '#38BDF8',
+    color: '#007AFF',
     textTransform: 'uppercase',
     letterSpacing: 2,
     marginBottom: 12,
@@ -114,7 +122,7 @@ const styles = StyleSheet.create({
     letterSpacing: -2,
   },
   highlight: {
-    color: '#38BDF8',
+    color: '#007AFF',
   },
   subtitle: {
     fontSize: 15,
@@ -136,7 +144,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   boldText: {
-    color: '#38BDF8',
+    color: '#007AFF',
     fontWeight: '800',
   }
 });

@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { API } from '../lib/axios';
 import { premiumFeedback } from '../utils/premiumFeedback';
 import { Logo } from './Logo';
 
@@ -29,8 +30,7 @@ const PremiumTopbar = () => {
 
   const fetchUnreadCount = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      const res = await fetch(`${API_URL}/api/alerts/unread/count`, {
+      const res = await fetch(`${API}/api/alerts/unread/count`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }

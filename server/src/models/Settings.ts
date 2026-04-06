@@ -5,6 +5,8 @@ export interface SettingsDocument extends mongoose.Document {
   premiumPrice: number;
   currency: string;
   isFreeMode: boolean; // Toggle for "no payment needed"
+  adminAccessCode: string; // Security code to access admin panel
+  adminInstructions: string; // Global instructions/announcements from admin
 }
 
 const settingsSchema = new mongoose.Schema<SettingsDocument>({
@@ -12,6 +14,8 @@ const settingsSchema = new mongoose.Schema<SettingsDocument>({
   premiumPrice: { type: Number, default: 299 },
   currency: { type: String, default: 'INR' },
   isFreeMode: { type: Boolean, default: true }, // Free by default as requested
+  adminAccessCode: { type: String, default: '7665' }, // Default admin access code
+  adminInstructions: { type: String, default: '' }, // Default empty
 }, {
   timestamps: true
 });

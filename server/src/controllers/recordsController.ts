@@ -11,8 +11,9 @@ export const recordsController = {
   getRecent: asyncHandler(async (req: AuthRequest, res: Response) => {
     const user = requireUser(req);
     const limit = Math.min(20, Math.max(1, Number(req.query.limit || 5)));
+    const query = user.role === 'admin' ? {} : { userId: user.userId };
 
-    const records = await Record.find({ userId: user.userId })
+    const records = await Record.find(query)
       .sort({ createdAt: -1 })
       .limit(limit)
       .populate('userId', 'name');
@@ -22,8 +23,10 @@ export const recordsController = {
 
   getAll: asyncHandler(async (req: AuthRequest, res: Response) => {
     const user = requireUser(req);
+    const query: globalThis.Record<string, unknown> = 
+      user.role === 'admin' ? {} : { userId: user.userId };
 
-    const records = await Record.find({ userId: user.userId }).populate('userId', 'name email');
+    const records = await Record.find(query).populate('userId', 'name email');
     res.json(records);
   }),
 

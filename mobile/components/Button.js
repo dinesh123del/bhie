@@ -15,7 +15,7 @@ const Button = ({ onPress, title, style, textStyle, type = 'primary' }) => {
 
   const handlePressIn = () => {
     scale.value = withSpring(0.95);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
   };
 
   const handlePressOut = () => {
@@ -44,7 +44,7 @@ const Button = ({ onPress, title, style, textStyle, type = 'primary' }) => {
       style={[styles.button, style, animatedStyle]}
     >
       <LinearGradient
-        colors={['#38BDF8', '#4F46E5']}
+        colors={['#007AFF', '#5856D6']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={StyleSheet.absoluteFill}
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 12,
     overflow: 'hidden',
-    shadowColor: '#38BDF8',
+    shadowColor: '#007AFF',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.2,
     shadowRadius: 12,
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.8,
   },
   secondaryText: {
-    color: '#38BDF8',
+    color: '#007AFF',
   },
 });
 

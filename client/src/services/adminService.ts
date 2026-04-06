@@ -37,6 +37,8 @@ export interface AdminSettings {
   premiumPrice: number;
   currency: string;
   isFreeMode: boolean;
+  adminAccessCode?: string;
+  adminInstructions?: string;
 }
 
 export interface UpdateUserPlanRequest {
@@ -49,6 +51,43 @@ export interface UpdateUserStatusRequest {
 }
 
 export const adminService = {
+  // Admin Authentication
+  adminLogin: async (credentials: { email: string; password: string }): Promise<any> => {
+    const response = await api.post('/admin/login', credentials);
+    return response.data;
+  },
+
+  checkIsAdmin: async (credentials: { email: string; password: string }): Promise<{ isAdmin: boolean }> => {
+    const response = await api.post('/admin/check-admin', credentials);
+    return response.data;
+  },
+
+  verifyAccessCode: async (code: string): Promise<{ success: boolean; verified: boolean }> => {
+    const response = await api.post('/admin/verify-code', { code });
+    return response.data;
+  },
+
+  changeAccessCode: async (currentCode: string, newCode: string): Promise<{ success: boolean; message: string }> => {
+    const response = await api.patch('/admin/access-code', { currentCode, newCode });
+    return response.data;
+  },
+
+  // Admin Management
+  getAdmins: async (): Promise<{ success: boolean; data: any[] }> => {
+    const response = await api.get('/admin/admins');
+    return response.data;
+  },
+
+  addAdmin: async (data: { email: string; password?: string; name?: string }): Promise<any> => {
+    const response = await api.post('/admin/add-admin', data);
+    return response.data;
+  },
+
+  removeAdmin: async (email: string): Promise<any> => {
+    const response = await api.post('/admin/remove-admin', { email });
+    return response.data;
+  },
+
   // Get all users with pagination and filters
   getUsers: async (params?: {
     page?: number;

@@ -12,6 +12,7 @@ import { requireUser } from '../utils/request.js';
 import { PLAN_CONFIG, RAZORPAY_PLAN_IDS, isPaidPlan, type PaidPlanType } from '../utils/planConfig.js';
 import { getRazorpayClient } from '../utils/razorpay.js';
 import { subscriptionController } from '../controllers/subscriptionController.js';
+import { checkAdmin } from '../middleware/subscription.js';
 
 const router: Router = express.Router();
 
@@ -306,6 +307,6 @@ router.post(
   })
 );
 
-router.post('/direct-upgrade', subscriptionController.directUpgrade);
+router.post('/direct-upgrade', checkAdmin, subscriptionController.directUpgrade);
 
 export default router;

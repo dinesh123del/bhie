@@ -8,12 +8,12 @@ const REPORT_TEMPLATES = [
   {
     title: 'Monthly Business Summary',
     type: 'summary',
-    content: 'Auto-generated summary placeholder. Update this report with the latest operational notes and KPI commentary.',
+    content: 'Comprehensive overview of business performance, highlighting key operational wins and critical growth trends for the current period.',
   },
   {
     title: 'Revenue Snapshot',
     type: 'finance',
-    content: 'Auto-generated finance placeholder. Add revenue, expense, and profit observations for the current reporting period.',
+    content: 'Detailed financial breakdown, covering gross revenue, net profit margins, and expense attribution for optimized financial health tracking.',
   },
 ];
 

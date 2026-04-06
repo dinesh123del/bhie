@@ -45,9 +45,17 @@ export async function callClaude(prompt: string, model: 'claude-3-5-sonnet-20240
     const content = response.content[0];
     const raw = content.type === 'text' ? content.text : '';
 
+    let parsedData = raw;
+    try {
+      const cleanRaw = raw.replace(/```json/g, '').replace(/```/g, '').trim();
+      parsedData = JSON.parse(cleanRaw);
+    } catch {
+      // Fallback to raw text if not strictly JSON
+    }
+
     return {
       success: true,
-      data: raw,
+      data: parsedData,
       raw,
     };
   } catch (error: any) {

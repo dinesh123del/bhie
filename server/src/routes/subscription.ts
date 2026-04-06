@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { subscriptionController } from '../controllers/subscriptionController.js';
 import { authenticateToken } from '../middleware/auth.js';
+import { checkAdmin } from '../middleware/subscription.js';
 
 import { sensitiveLimiter } from '../middleware/rateLimiter.js';
 
@@ -11,7 +12,7 @@ router.use(authenticateToken);
 
 router.get('/status', subscriptionController.getStatus);
 router.post('/create', sensitiveLimiter, subscriptionController.create);
-router.post('/direct-upgrade', subscriptionController.directUpgrade);
+router.post('/direct-upgrade', checkAdmin, subscriptionController.directUpgrade);
 router.post('/verify', sensitiveLimiter, subscriptionController.verify);
 router.post('/cancel', subscriptionController.cancel);
 

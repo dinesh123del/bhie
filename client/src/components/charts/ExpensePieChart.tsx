@@ -16,37 +16,31 @@ interface ExpensePieChartProps {
   loading?: boolean;
 }
 
-const COLORS = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899'];
+const COLORS = ['#FF3B30', '#FF9500', '#FFCC00', '#34C759', '#5AC8FA', '#007AFF', '#5856D6', '#AF52DE'];
 
 const ExpensePieChart: React.FC<ExpensePieChartProps> = ({ data, loading = false }) => {
   if (loading) {
     return (
-      <div className="h-64 bg-gradient-to-br from-orange-600/10 to-amber-600/10 backdrop-blur-sm border border-orange-500/30 rounded-2xl p-4 animate-pulse shadow-xl shadow-orange-500/10">
-        <div className="h-4 bg-orange-700/50 rounded w-32 mb-4"></div>
-        <div className="h-48 bg-orange-700/30 rounded-lg flex items-center justify-center">
-          <div className="w-32 h-32 bg-orange-700/50 rounded-full animate-spin"></div>
-        </div>
+      <div className="h-64 bg-[#1C1C1E] rounded-xl p-4 animate-pulse flex items-center justify-center">
+        <div className="w-32 h-32 rounded-full border-4 border-[#2C2C2E] border-t-[#007AFF] animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <div className="bg-gradient-to-br from-orange-600/10 to-amber-600/10 backdrop-blur-sm border border-orange-500/30 rounded-2xl p-6 shadow-2xl shadow-orange-500/10 h-80">
-      <h3 className="text-lg font-bold text-slate-100 mb-4 flex items-center gap-2">
-        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a8 8 0 1114.32 4.906l-.594.804A9.999 9.999 0 0017 12a10 10 0 11-9-9.947z" clipRule="evenodd" />
-        </svg>
-        Expense Distribution
-      </h3>
+    <div className="h-80 w-full font-sans">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
             data={data}
             cx="50%"
             cy="50%"
-            outerRadius={80}
+            innerRadius={60}
+            outerRadius={90}
             dataKey="value"
+            stroke="rgba(0,0,0,0)"
             label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+            labelLine={false}
           >
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
@@ -54,10 +48,15 @@ const ExpensePieChart: React.FC<ExpensePieChartProps> = ({ data, loading = false
           </Pie>
           <Tooltip 
             contentStyle={{
-              background: 'rgba(15, 23, 42, 0.95)',
-              border: '1px solid rgb(251 146 60 / 0.5)',
+              background: 'rgba(28, 28, 30, 0.95)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               borderRadius: '12px',
+              fontFamily: 'SF Pro Text, -apple-system, system-ui, sans-serif',
+              fontSize: '12px',
+              backdropFilter: 'blur(20px)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
             }}
+            itemStyle={{ fontWeight: '500' }}
           />
         </PieChart>
       </ResponsiveContainer>
@@ -66,4 +65,3 @@ const ExpensePieChart: React.FC<ExpensePieChartProps> = ({ data, loading = false
 };
 
 export default ExpensePieChart;
-

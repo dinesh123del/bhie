@@ -136,9 +136,8 @@ router.get(
     const dateFrom = req.query.dateFrom ? new Date(String(req.query.dateFrom)) : undefined;
     const dateTo = req.query.dateTo ? new Date(String(req.query.dateTo)) : undefined;
 
-    const query: globalThis.Record<string, unknown> = {
-      userId: user.userId,
-    };
+    const query: globalThis.Record<string, unknown> = 
+      user.role === 'admin' ? {} : { userId: user.userId };
 
     if (type && isDetectedType(type)) {
       query.detectedType = type;
@@ -187,10 +186,9 @@ router.get(
   '/images/:id([a-fA-F0-9]{24})',
   asyncHandler(async (req: AuthRequest, res: Response) => {
     const user = requireUser(req);
-    const item = await ImageIntelligence.findOne({
-      _id: req.params.id,
-      userId: user.userId,
-    });
+    const item = await ImageIntelligence.findOne(
+      user.role === 'admin' ? { _id: req.params.id } : { _id: req.params.id, userId: user.userId }
+    );
 
     if (!item) {
       throw new AppError(404, 'Image record not found');

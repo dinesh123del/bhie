@@ -12,9 +12,10 @@ const router = express.Router();
 router.use(authenticateToken);
 router.get('/score', asyncHandler(async (req, res) => {
     const user = requireUser(req);
+    const query = user.role === 'admin' ? {} : { userId: user.userId };
     const [company, records] = await Promise.all([
-        Company.findOne({ userId: user.userId }),
-        Record.find({ userId: user.userId }),
+        Company.findOne(query),
+        Record.find(query),
     ]);
     const totalRecords = records.length;
     const revenue = records
@@ -57,9 +58,10 @@ router.get('/score', asyncHandler(async (req, res) => {
 }));
 router.get('/summary', asyncHandler(async (req, res) => {
     const user = requireUser(req);
+    const query = user.role === 'admin' ? {} : { userId: user.userId };
     const [records, company] = await Promise.all([
-        Record.find({ userId: user.userId }).sort({ date: 1, createdAt: 1 }),
-        Company.findOne({ userId: user.userId }),
+        Record.find(query).sort({ date: 1, createdAt: 1 }),
+        Company.findOne(query),
     ]);
     const totalRecords = records.length;
     const activeRecords = records.filter((record) => record.status !== 'cancelled').length;
@@ -90,7 +92,8 @@ router.get('/summary', asyncHandler(async (req, res) => {
 }));
 router.get('/trends', asyncHandler(async (req, res) => {
     const user = requireUser(req);
-    const records = await Record.find({ userId: user.userId }).sort({ date: 1, createdAt: 1 });
+    const query = user.role === 'admin' ? {} : { userId: user.userId };
+    const records = await Record.find(query).sort({ date: 1, createdAt: 1 });
     const trends = buildDailyTrends(records);
     res.json({ trends });
 }));

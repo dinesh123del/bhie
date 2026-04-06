@@ -2,7 +2,7 @@ import Constants from 'expo-constants';
 
 const getBackendUrl = () => {
   // Use Production URL for live app
-  const PRODUCTION_URL = 'https://bhie-api.onrender.com';
+  const PRODUCTION_URL = 'https://bhie-app.vercel.app'; // Replace with your actual live backend URL
   
   if (!__DEV__) {
     return PRODUCTION_URL;

@@ -35,6 +35,7 @@ export interface GenerateInsightsInput {
   currentPeriod: InsightPeriodSnapshot;
   previousPeriod: InsightPeriodSnapshot;
   recentTrend: InsightTrendPoint[];
+  userId?: string;
 }
 
 const currencyFormatter = new Intl.NumberFormat('en-IN', {
@@ -215,6 +216,16 @@ async function enhanceInsightsWithAI(
   input: GenerateInsightsInput,
   baseInsights: DashboardInsight[]
 ): Promise<DashboardInsight[]> {
+  const { CacheService } = await import('../services/cacheService.js');
+  const cacheKey = input.userId ? `cache:ai:insights:${input.userId}` : null;
+  
+  if (cacheKey) {
+    const cachedAI = await CacheService.get<DashboardInsight[]>(cacheKey);
+    if (cachedAI && cachedAI.length > 0) {
+      return cachedAI;
+    }
+  }
+
   const prompt = [
     'You are a professional Business Analyst and Strategic Consultant for BHIE.',
     'Your goal is to provide clear, actionable business advice to small and medium business owners.',
@@ -244,7 +255,14 @@ async function enhanceInsightsWithAI(
   const parsed = parseAIResponse(result);
   const aiInsights = normalizeInsights(parsed?.insights);
 
-  return aiInsights.length > 0 ? aiInsights : baseInsights;
+  const finalInsights = aiInsights.length > 0 ? aiInsights : baseInsights;
+  
+  if (cacheKey && finalInsights.length > 0) {
+    // Cache AI Strategic insights for 12 hours since they shouldn't bounce constantly
+    await CacheService.set(cacheKey, finalInsights, 60 * 60 * 12);
+  }
+
+  return finalInsights;
 }
 
 function normalizeInsights(value: unknown): DashboardInsight[] {

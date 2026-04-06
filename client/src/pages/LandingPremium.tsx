@@ -2,63 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import WatchDemoModal from '../components/WatchDemoModal';
+import { Logo } from '../components/Logo';
 import {
   Menu,
   X,
   Play,
   ArrowRight,
   BarChart2,
-  BrainCircuit,
-  MessageSquare,
-  FileText,
-  Activity,
+  List,
+  Sparkles,
+  Camera,
   ChevronDown,
   ShieldCheck,
-  CheckCircle,
+  Check,
 } from 'lucide-react';
 import { PremiumCard } from '../components/ui/PremiumComponents';
 import { premiumFeedback } from '../utils/premiumFeedback';
-
-// ======================= NETFLIX-STYLE INTRO =======================
-const CinematicIntro = ({ onComplete }: { onComplete: () => void }) => {
-  useEffect(() => {
-    // We intentionally don't play actual audio here as modern browsers block un-interacted autoplay,
-    // but the visual scale-up provides the haptic/mental "tadum" feeling.
-    const timer = setTimeout(onComplete, 4500);
-    return () => clearTimeout(timer);
-  }, [onComplete]);
-
-  return (
-    <motion.div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black overflow-hidden pointer-events-none"
-      initial={{ opacity: 1 }}
-      animate={{ opacity: 0 }}
-      transition={{ duration: 0.8, delay: 3.5, ease: 'easeOut' }}
-    >
-      <motion.div
-        className="relative flex items-center justify-center"
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: [0.8, 1, 1, 150], opacity: [0, 1, 1, 0] }}
-        transition={{ 
-          duration: 3.8, 
-          times: [0, 0.15, 0.7, 1], 
-          ease: [0.11, 0, 0.5, 0] // Expo-in-out feel
-        }}
-      >
-        <span 
-          className="text-[8rem] md:text-[16rem] font-black tracking-tighter"
-          style={{
-            color: '#38bdf8',
-            textShadow: '0 0 50px rgba(56,189,248,0.8), 0 0 100px rgba(56,189,248,0.4)',
-            fontFamily: '"Bebas Neue", "Arial Black", sans-serif'
-          }}
-        >
-          BHIE
-        </span>
-      </motion.div>
-    </motion.div>
-  );
-};
 
 // ======================= NAVIGATION =======================
 const Navbar = () => {
@@ -66,40 +25,44 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'bg-black/90 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <div className="flex flex-col">
-          <Link to="/" className="text-3xl font-black text-white tracking-tighter leading-none">BHIE<span className="text-sky-500">.</span></Link>
-          <span className="text-[10px] font-bold text-sky-400 uppercase tracking-widest mt-1 opacity-80 hidden md:block">Plain English Business</span>
-        </div>
+    <motion.header 
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ease-out border-b border-white/5 ${
+        scrolled ? 'bg-[#000000]/80 backdrop-blur-xl' : 'bg-transparent border-transparent'
+      }`}
+    >
+      <div className="max-w-[980px] mx-auto px-6 h-14 flex items-center justify-between">
+        <Logo size="sm" showSubtitle={false} className="scale-90 opacity-90 hover:opacity-100 transition-opacity" to="/" />
         
-        <nav className="hidden md:flex gap-8 text-sm font-medium text-white/80">
-          <a href="#features" className="hover:text-white transition-colors">Our Features</a>
+        <nav className="hidden md:flex gap-8 text-[12px] font-medium text-white/80 tracking-wide">
+          <a href="#features" className="hover:text-white transition-colors">Features</a>
           <a href="#how-it-works" className="hover:text-white transition-colors">How it Works</a>
           <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
-          <a href="#faq" className="hover:text-white transition-colors">Help</a>
+          <a href="#faq" className="hover:text-white transition-colors">Support</a>
         </nav>
 
         <div className="hidden md:flex items-center gap-4">
-          <Link to="/login" className="text-sm font-bold text-white hover:text-white/80 transition-colors">Sign In</Link>
+          <Link to="/login" className="text-[12px] font-medium text-white/80 hover:text-white transition-colors">Sign In</Link>
           <Link 
             to="/register" 
             onClick={() => premiumFeedback.click()}
             onMouseEnter={() => premiumFeedback.haptic(5)}
-            className="px-5 py-2 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white text-sm font-bold rounded transiton-all shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+            className="px-4 py-1.5 bg-white text-black text-[12px] font-semibold rounded-full hover:scale-105 transition-transform"
           >
             Join Free
           </Link>
         </div>
 
-        <button className="md:hidden text-white" onClick={() => setMobileOpen(!mobileOpen)}>
-          {mobileOpen ? <X /> : <Menu />}
+        <button className="md:hidden text-white/80" onClick={() => setMobileOpen(!mobileOpen)}>
+          {mobileOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
@@ -107,203 +70,181 @@ const Navbar = () => {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden absolute top-20 inset-x-0 bg-black border-b border-white/10 flex flex-col p-6 gap-6 shadow-2xl"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-[#1C1C1E] border-b border-white/10 overflow-hidden"
           >
-            <a href="#features" onClick={() => setMobileOpen(false)} className="text-white text-lg font-medium">Features</a>
-            <a href="#pricing" onClick={() => setMobileOpen(false)} className="text-white text-lg font-medium">Pricing</a>
-            <a href="#faq" onClick={() => setMobileOpen(false)} className="text-white text-lg font-medium">FAQ</a>
-            <Link 
-              to="/register" 
-              onClick={() => {
-                setMobileOpen(false);
-                premiumFeedback.click();
-              }} 
-              className="py-3 bg-sky-500 text-center text-white font-bold rounded"
-            >
-              Start Free
-            </Link>
+            <div className="flex flex-col px-6 py-4 gap-4">
+              <a href="#features" onClick={() => setMobileOpen(false)} className="text-white/80 text-sm py-2">Features</a>
+              <a href="#pricing" onClick={() => setMobileOpen(false)} className="text-white/80 text-sm py-2 border-t border-white/10">Pricing</a>
+              <div className="pt-4 flex gap-4">
+                 <Link to="/login" className="flex-1 py-2 text-center text-white/80 text-sm bg-white/10 rounded-lg">Sign In</Link>
+                 <Link to="/register" className="flex-1 py-2 text-center text-black text-sm bg-white rounded-lg font-medium">Join Free</Link>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   );
 };
 
-const floatingVariant = {
-  animate: {
-    y: [0, -12, 0],
-    transition: {
-      duration: 3.5,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
-  }
-};
+// ======================= HERO =======================
+const Hero = ({ onWatchDemo }: { onWatchDemo?: () => void }) => {
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 500], [0, 150]);
+  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
-const Hero = ({ onWatchDemo }: { onWatchDemo?: () => void }) => (
-  <section className="relative min-h-[100svh] flex items-center justify-center pt-20 px-6 overflow-hidden">
-    <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center">
-      <motion.div
-        variants={floatingVariant}
-        animate="animate"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
+  return (
+    <section className="relative min-h-[100svh] flex flex-col items-center justify-center pt-24 px-6 overflow-hidden bg-black pb-20">
+      <motion.div 
+        style={{ y, opacity }}
+        className="relative z-10 max-w-[980px] mx-auto flex flex-col items-center text-center mt-10"
       >
-        <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-6 drop-shadow-[0_0_30px_rgba(255,255,255,0.15)]">
-          STOP TYPING BILLS.<br/>
-          <span className="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(56,189,248,0.4)] uppercase">OUR SMART ASSISTANT READS THEM FOR YOU</span>
-        </h1>
-        <p className="text-lg md:text-2xl text-white/60 max-w-3xl mx-auto mb-10 font-medium">
-          Just snap a photo of any receipt. We'll handle the math and show you exactly where your money goes — in plain English.
-        </p>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+          transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
+        >
+          <h1 className="text-[48px] md:text-[80px] font-bold text-white tracking-tight leading-[1.05] mb-6">
+            Business intelligence. <br/>
+            <span className="bg-gradient-to-r from-[#007AFF] via-[#AF52DE] to-[#FF2D55] bg-clip-text text-transparent">
+              Reimagined.
+            </span>
+          </h1>
+        </motion.div>
+        
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.0, delay: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
+          className="text-[19px] md:text-[24px] text-[#A1A1A6] max-w-[750px] mx-auto mb-12 font-medium tracking-tight leading-relaxed"
+        >
+          Elite financial intelligence. Instant receipt scanning. A sophisticated, high-fidelity engine built precisely for the modern entrepreneur.
+        </motion.p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.0, delay: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-5"
+        >
           <Link 
             to="/register" 
             onClick={() => premiumFeedback.click()}
             onMouseEnter={() => premiumFeedback.haptic(5)}
-            className="w-full sm:w-auto px-10 py-4 bg-white text-slate-950 hover:bg-white/90 text-lg font-black rounded transition-all flex items-center justify-center gap-2 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.3)]"
+            className="w-full sm:w-auto px-8 py-3.5 bg-white text-black hover:bg-white/90 text-[17px] font-semibold rounded-full transition-all flex items-center justify-center gap-2"
           >
-            Try It Free <ArrowRight className="w-5 h-5" />
+            Start free <ArrowRight className="w-4 h-4" />
           </Link>
           <button 
             onClick={() => {
               premiumFeedback.click();
               onWatchDemo?.();
             }}
-            className="w-full sm:w-auto px-10 py-4 bg-white/5 hover:bg-white/10 text-white text-lg font-bold rounded transition-all flex items-center justify-center gap-2 border border-white/10 backdrop-blur-md"
+            className="w-full sm:w-auto px-8 py-3.5 text-white text-[17px] font-medium rounded-full transition-all flex items-center justify-center gap-2 hover:bg-white/5"
           >
-            <Play className="w-5 h-5 fill-current" /> See How It Works
+            Watch the film <Play className="w-4 h-4 opacity-80" />
           </button>
-        </div>
-      </motion.div>
-
-      {/* Cinematic Dashboard Mockup */}
-      <motion.div
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
-        className="mt-20 w-full max-w-4xl relative"
-      >
-        <div className="absolute inset-0 bg-sky-500 blur-[100px] opacity-20" />
-        <div className="relative rounded-t-xl bg-[#0a0a0a] border border-[#333] border-b-0 overflow-hidden shadow-2xl">
-           <div className="h-6 bg-[#1a1a1a] flex items-center px-4 gap-2">
-             <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
-             <div className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-           </div>
-           <div className="aspect-[16/9] bg-[url('/demo.png')] bg-cover bg-center opacity-90 contrast-110 saturate-100" />
-           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-        </div>
-      </motion.div>
-    </div>
-  </section>
-);
-
-// ======================= PROBLEM =======================
-const Problem = () => (
-  <section className="py-24 px-6 bg-[#0a0a0a]/95 border-t border-[#222]">
-    <div className="max-w-7xl mx-auto">
-      <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-5xl font-black text-white uppercase">Old spreadsheets are <span className="text-sky-400">boring and slow</span>.</h2>
-      </div>
-      <div className="grid md:grid-cols-3 gap-8">
-         {[
-           { title: "Tired of Typing?", desc: "Stop wasting your evenings typing numbers from paper receipts. Let us do the work." },
-           { title: "No More Lost Bills", desc: "Never hunt for a missing receipt again. They are all organized in one safe place." },
-           { title: "Know Your Profit Now", desc: "Don't wait for your accountant to tell you how much money you have left." },
-         ].map((item, i) => (
-           <PremiumCard 
-             extreme
-             key={i}
-             delay={i * 0.15}
-             className="backdrop-blur-3xl bg-white/[0.01]"
-           >
-              <div className="w-12 h-12 bg-sky-950/40 border border-sky-500/20 flex items-center justify-center rounded-xl flex-shrink-0 mb-6">
-                <X className="text-sky-400 w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
-              <p className="text-white/50">{item.desc}</p>
-           </PremiumCard>
-         ))}
-      </div>
-    </div>
-  </section>
-);
-
-// ======================= SOLUTION =======================
-const Solution = () => (
-  <section className="py-24 px-6 bg-black relative overflow-hidden">
-    <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
-      <div className="w-full md:w-1/2">
-        <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">Your Smart<br/>Business Buddy</h2>
-          <p className="text-xl text-white/50 mb-8 max-w-lg">
-            We turn your messy pile of receipts into a clear story. No jargon, just the facts you need to grow your business.
-          </p>
-          <ul className="space-y-4">
-             {[
-               "Smart Photo Scanning",
-               "Auto-Sorting of Bills",
-               "Real-time Profit Updates"
-             ].map((str, i) => (
-               <li key={i} className="flex items-center gap-4 text-white text-lg font-medium">
-                 <CheckCircle className="text-sky-500 w-6 h-6 flex-shrink-0" /> {str}
-               </li>
-             ))}
-          </ul>
         </motion.div>
-      </div>
-      <div className="w-full md:w-1/2 relative">
-         <div className="absolute inset-0 bg-sky-500 blur-[120px] opacity-10 rounded-full" />
-         <motion.div 
-           initial={{ opacity: 0, scale: 0.9 }} 
-           whileInView={{ opacity: 1, scale: 1 }} 
-           viewport={{ once: true }}
-           className="relative aspect-square bg-[#111] border border-[#333] rounded-2xl flex items-center justify-center p-8 overflow-hidden shadow-2xl"
-         >
-            {/* Abstract visual of AI Assistant */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.1)_0%,rgba(0,0,0,1)_100%)]" />
-            <BrainCircuit className="w-32 h-32 text-sky-500 opacity-80" />
-         </motion.div>
-      </div>
-    </div>
-  </section>
-);
+      </motion.div>
+
+      {/* Hero UI Showcase */}
+      <motion.div
+        initial={{ opacity: 0, y: 150, rotateX: 20 }}
+        animate={{ opacity: 1, y: 0, rotateX: 0 }}
+        transition={{ duration: 1.5, delay: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+        className="mt-20 w-full max-w-[1024px] relative perspective-1000"
+      >
+        <div className="absolute inset-0 bg-[#007AFF] blur-[150px] opacity-10 rounded-full" />
+        <div className="relative rounded-2xl bg-[#1C1C1E]/50 border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl apple-card">
+           <div className="h-10 bg-[#2C2C2E]/30 flex items-center justify-center relative border-b border-white/5">
+             <div className="absolute left-4 flex gap-2">
+               <div className="w-3 h-3 rounded-full bg-[#FF5F56]" />
+               <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
+               <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
+             </div>
+             <div className="text-[12px] text-white/40 font-medium">Dashboard</div>
+           </div>
+           <div className="aspect-[16/9] bg-gradient-to-br from-[#1C1C1E] to-[#000000] relative overflow-hidden flex items-center justify-center">
+              {/* Minimalist Dashboard Representation */}
+              <div className="w-3/4 h-3/4 flex gap-6">
+                 <div className="flex-[2] flex flex-col gap-6">
+                    <div className="flex-1 bg-white/5 rounded-2xl border border-white/5 flex flex-col p-6">
+                       <div className="w-1/3 h-4 bg-white/10 rounded-full mb-4" />
+                       <div className="flex-1 w-full flex items-end gap-2 pb-2">
+                          {[40, 70, 45, 90, 60, 80, 50].map((h, i) => (
+                             <motion.div 
+                               key={i} 
+                               initial={{ height: 0 }} 
+                               animate={{ height: `${h}%` }} 
+                               transition={{ delay: 1 + (i * 0.1), duration: 1 }}
+                               className="flex-1 bg-gradient-to-t from-[#007AFF] to-[#AF52DE] rounded-sm opacity-80" 
+                             />
+                          ))}
+                       </div>
+                    </div>
+                    <div className="h-1/3 bg-white/5 rounded-2xl border border-white/5 p-6 flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-full bg-[#FF2D55]/20 flex items-center justify-center">
+                          <Camera className="w-5 h-5 text-[#FF2D55]" />
+                        </div>
+                        <div className="flex flex-col gap-2 flex-1">
+                          <div className="w-1/2 h-3 bg-white/20 rounded-full" />
+                          <div className="w-full h-2 bg-white/5 rounded-full" />
+                        </div>
+                    </div>
+                 </div>
+                 <div className="flex-[1] bg-white/5 rounded-2xl border border-white/5 p-6">
+                    <div className="w-1/2 h-4 bg-white/10 rounded-full mb-6" />
+                    <div className="flex flex-col gap-4">
+                       {[1, 2, 3, 4].map(i => (
+                         <div key={i} className="w-full h-10 bg-white/[0.03] rounded-lg border border-white/5 flex items-center px-4">
+                           <div className="w-6 h-6 rounded bg-white/10" />
+                           <div className="ml-3 w-1/2 h-2 bg-white/10 rounded-full" />
+                         </div>
+                       ))}
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+      </motion.div>
+    </section>
+  );
+};
 
 // ======================= FEATURES =======================
 const Features = () => {
-  const cards = [
-    { icon: Activity, title: "Snap & Scan", desc: "Just take a photo. Our system reads the shop name, date, and price in a second." },
-    { icon: BarChart2, title: "Auto-Sorting", desc: "We automatically group your spending so you know what's for work and what's personal." },
-    { icon: BrainCircuit, title: "Simple Insights", desc: "See your daily money in and out with clear, easy-to-read charts." },
-    { icon: MessageSquare, title: "Chat to Add", desc: "Record expenses directly by texting our simple WhatsApp assistant." },
-    { icon: FileText, title: "Smart Reader", desc: "Upload messy PDFs or folders of photos and watch them turn into organized lists." },
-  ];
-
   return (
-    <section id="features" className="py-24 px-6 bg-[#0a0a0a]/95 border-y border-[#222]">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl text-center md:text-5xl font-black text-white mb-16 uppercase">Built to <span className="text-sky-400">Help You</span></h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {cards.map((f, i) => (
-             <PremiumCard 
-               key={i}
-               hoverable
-               delay={i * 0.1}
-               className={`bg-black/40 border-white/5 transition-colors hover:border-sky-500/50 ${i === 0 ? 'lg:col-span-2' : ''}`}
-             >
-               <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-sky-500/10 transition-colors">
-                 <f.icon className="w-6 h-6 text-white group-hover:text-sky-400 transition-colors" />
-               </div>
-               <h3 className="text-xl font-bold text-white mb-2">{f.title}</h3>
-               <p className="text-white/50 leading-relaxed">{f.desc}</p>
-             </PremiumCard>
-          ))}
+    <section id="features" className="py-32 px-6 bg-[#000000]">
+      <div className="max-w-[980px] mx-auto">
+        <div className="text-center mb-20">
+          <h2 className="text-[32px] md:text-[48px] font-bold text-white tracking-tight mb-4">Brilliant. By design.</h2>
+          <p className="text-[19px] text-[#A1A1A6] max-w-[600px] mx-auto">Everything you need to master your business, built directly into one elegant application.</p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+           <div className="apple-card p-10 md:p-12 min-h-[400px] flex flex-col col-span-1 md:col-span-2 relative overflow-hidden group hover:border-[#007AFF]/30 border border-[#1C1C1E]">
+             <div className="relative z-10 w-full md:w-1/2">
+               <Sparkles className="w-8 h-8 text-[#007AFF] mb-6" />
+               <h3 className="text-[28px] font-bold text-white tracking-tight mb-3">Intelligence that works for you.</h3>
+               <p className="text-[#A1A1A6] text-[17px] leading-relaxed">Simply upload an image of your receipt. Our Apple-grade AI reads the context, amount, date, and vendor in milliseconds.</p>
+             </div>
+             <div className="absolute right-0 bottom-0 top-0 w-full md:w-1/2 bg-[url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center opacity-30 group-hover:opacity-50 transition-opacity duration-700 mask-radial" />
+           </div>
+
+           <div className="apple-card p-10 hover:border-[#AF52DE]/30 border border-[#1C1C1E] transition-colors">
+              <BarChart2 className="w-8 h-8 text-[#AF52DE] mb-6" />
+              <h3 className="text-[24px] font-bold text-white tracking-tight mb-3">Clear insights.</h3>
+              <p className="text-[#A1A1A6] text-[17px] leading-relaxed">No confusing spreadsheets. Just beautiful, fluid charts that tell you exactly how your business is moving.</p>
+           </div>
+
+           <div className="apple-card p-10 hover:border-[#FF2D55]/30 border border-[#1C1C1E] transition-colors">
+              <ShieldCheck className="w-8 h-8 text-[#FF2D55] mb-6" />
+              <h3 className="text-[24px] font-bold text-white tracking-tight mb-3">Bank-grade security.</h3>
+              <p className="text-[#A1A1A6] text-[17px] leading-relaxed">Your data is yours. Protected by industry-leading encryption so you can focus entirely on your growth.</p>
+           </div>
         </div>
       </div>
     </section>
@@ -312,25 +253,41 @@ const Features = () => {
 
 // ======================= HOW IT WORKS =======================
 const HowItWorks = () => (
-  <section id="how-it-works" className="py-24 px-6 bg-black relative">
-    <div className="max-w-7xl mx-auto">
-      <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16 uppercase">How it <span className="text-sky-400">Works</span></h2>
-      <div className="flex flex-col md:flex-row justify-between gap-12 relative">
-        <div className="hidden md:block absolute top-[28px] left-[10%] right-[10%] h-[2px] bg-[#333] z-0" />
-        
-        {[
-          { icon: ShieldCheck, title: "1. Take a Pic", desc: "Snap a photo of your receipt with your phone." },
-          { icon: Activity, title: "2. We Read It", desc: "Our smart system fills in all the details for you." },
-          { icon: BrainCircuit, title: "3. You Grow", desc: "See exactly where your money goes and save more." }
-        ].map((item, i) => (
-          <div key={i} className="relative z-10 flex flex-col items-center text-center w-full md:w-1/3">
-             <div className="w-16 h-16 rounded-full bg-black border-[4px] border-[#333] flex items-center justify-center mb-6 text-white font-black text-xl shadow-[0_0_30px_rgba(0,0,0,0.8)]">
-               <item.icon className="w-6 h-6 text-sky-500" />
-             </div>
-             <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
-             <p className="text-white/50">{item.desc}</p>
+  <section id="how-it-works" className="py-32 px-6 bg-[#000000] relative">
+    <div className="max-w-[980px] mx-auto border-t border-[#1C1C1E] pt-32">
+      <div className="flex flex-col md:flex-row items-center gap-16">
+        <div className="w-full md:w-1/2">
+          <h2 className="text-[40px] font-bold text-white tracking-tight mb-6">Seamless workflow.</h2>
+          <div className="space-y-8">
+            {[
+              { title: "Snap a photo", desc: "Use your device to capture any expense." },
+              { title: "Auto-sync", desc: "It appears instantly across all your devices." },
+              { title: "Analyze", desc: "We sort it and add it to your financial story." }
+            ].map((item, i) => (
+              <div key={i} className="flex gap-4">
+                <div className="w-8 h-8 rounded-full bg-[#1C1C1E] flex items-center justify-center text-[14px] font-bold text-[#A1A1A6] border border-white/5 flex-shrink-0 mt-1">
+                  {i + 1}
+                </div>
+                <div>
+                  <h3 className="text-[19px] font-bold text-white tracking-tight mb-1">{item.title}</h3>
+                  <p className="text-[#A1A1A6] text-[15px]">{item.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+        <div className="w-full md:w-1/2 relative">
+           <div className="apple-card aspect-[4/5] bg-gradient-to-b from-[#1C1C1E] to-black w-full max-w-sm mx-auto p-4 flex flex-col justify-end relative shadow-2xl overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#007AFF] to-transparent opacity-10 blur-2xl" />
+              <div className="w-full h-1/2 bg-white/5 rounded-2xl border border-white/10 p-6 flex flex-col gap-4 relative z-10 translate-y-4 group-hover:-translate-y-2 transition-transform duration-700 ease-[0.2,0.8,0.2,1]">
+                 <div className="w-3/4 h-6 bg-white/10 rounded-lg" />
+                 <div className="w-1/2 h-4 bg-white/5 rounded-lg" />
+                 <div className="mt-auto w-full h-12 bg-[#007AFF] rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                   Scan Complete
+                 </div>
+              </div>
+           </div>
+        </div>
       </div>
     </div>
   </section>
@@ -338,116 +295,41 @@ const HowItWorks = () => (
 
 // ======================= PRICING =======================
 const Pricing = () => {
-  const planData = [
-    { name: "FREE", price: "0", features: ["Basic Analytics", "Scan 5 Bills/mo", "Simple Lists", "Help Desk"], highlight: false },
-    { name: "GOLD", price: "59", features: ["Smart Advice", "Daily Task List", "Unlimited Scans", "Priority Help"], highlight: true },
-    { name: "PLATINUM", price: "119", features: ["Team Access", "Custom Reports", "Deep Research", "VIP Support"], highlight: false },
+  const plans = [
+    { name: "Starter", price: "0", features: ["5 Smart Scans/mo", "Basic Analytics", "Community Support"] },
+    { name: "Pro", price: "59", features: ["Unlimited Scans", "Advanced AI Insights", "Priority Support"] }
   ];
 
   return (
-    <section id="pricing" className="py-24 px-6 bg-[#0a0a0a]/95 border-t border-[#222]">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16 uppercase">Pick Your <span className="text-sky-400">Plan</span></h2>
-        <div className="grid md:grid-cols-3 gap-8 items-center">
-          {planData.map((plan, i) => (
-            <PremiumCard 
-              key={i}
-              extreme={plan.highlight}
-              className={`relative border ${plan.highlight ? 'border-transparent' : 'border-white/5'} bg-black group`}
-            >
-               {plan.highlight && (
-                 <div className="absolute top-0 right-8 -translate-y-1/2 px-4 py-1 bg-sky-500 text-white text-[10px] font-black tracking-widest uppercase rounded-full z-20">
-                   Best Value
-                 </div>
-               )}
-               <h3 className="text-sm font-black text-white/40 tracking-[0.2em] uppercase mb-4">{plan.name}</h3>
-               <div className="text-5xl font-black text-white mb-8 tracking-tighter">
-                 ₹{plan.price}<span className="text-lg text-white/20 font-medium tracking-normal ml-1">/mo</span>
+    <section id="pricing" className="py-32 px-6 bg-[#000000]">
+      <div className="max-w-[980px] mx-auto text-center border-t border-[#1C1C1E] pt-32">
+        <h2 className="text-[40px] md:text-[56px] font-bold text-white tracking-tight mb-4">Choose your plan.</h2>
+        <p className="text-[19px] text-[#A1A1A6] mb-16">Simple, transparent pricing. Designed for everyone.</p>
+
+        <div className="grid md:grid-cols-2 gap-8 max-w-[800px] mx-auto">
+          {plans.map((plan, i) => (
+            <div key={i} className={`apple-card p-10 text-left border ${i === 1 ? 'border-[#007AFF]/30' : 'border-[#1C1C1E]'}`}>
+               <h3 className="text-[24px] font-bold text-white tracking-tight mb-2">{plan.name}</h3>
+               <div className="flex items-baseline gap-1 mb-8">
+                 <span className="text-[48px] font-bold text-white tracking-tighter">₹{plan.price}</span>
+                 <span className="text-[#A1A1A6] font-medium">/mo</span>
                </div>
-               <ul className="space-y-4 mb-8">
+               <div className="space-y-4 mb-10">
                  {plan.features.map((f, j) => (
-                   <li key={j} className="flex items-center gap-3 text-white/60 text-sm font-medium">
-                     <CheckCircle className={`w-5 h-5 ${plan.highlight ? 'text-sky-400' : 'text-white/20'}`} /> {f}
-                   </li>
+                   <div key={j} className="flex items-center gap-3">
+                     <Check className="w-4 h-4 text-[#007AFF]" />
+                     <span className="text-[15px] text-[#A1A1A6]">{f}</span>
+                   </div>
                  ))}
-               </ul>
+               </div>
                <Link 
-                 to="/register" 
-                 onClick={() => premiumFeedback.click()}
-                 onMouseEnter={() => premiumFeedback.haptic(5)}
-                 className={`w-full py-4 rounded-xl font-bold transition-all block text-center text-sm tracking-tight ${
-                   plan.highlight 
-                     ? 'bg-white text-black hover:bg-white/90 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.2)]' 
-                     : 'bg-white/5 text-white hover:bg-white/10'
+                 to="/register"
+                 className={`w-full py-3.5 rounded-full font-semibold flex items-center justify-center transition-colors ${
+                   i === 1 ? 'bg-white text-black hover:bg-white/90' : 'bg-[#1C1C1E] text-white hover:bg-[#2C2C2E]'
                  }`}
                >
                  Get Started
                </Link>
-            </PremiumCard>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// ======================= TESTIMONIALS =======================
-const Testimonials = () => (
-  <section className="py-24 px-6 bg-black">
-    <div className="max-w-7xl mx-auto">
-      <h2 className="text-4xl md:text-5xl font-black text-white text-center mb-16 uppercase">What <span className="text-sky-400">Owners Say</span></h2>
-      <div className="grid md:grid-cols-3 gap-8">
-        {[
-          { name: "Rahul S.", role: "Shop Owner", initial: "R", text: "I used to spend 3 hours a week on bills. Now it takes 5 minutes. BHIE is magic." },
-          { name: "S. Priya", role: "Freelancer", initial: "S", text: "Finally, something that talks like a human. No big words, just my money info." },
-          { name: "Amit K.", role: "Café Founder", initial: "A", text: "I love the WhatsApp feature. Just text a photo and done. Best business tool yet." }
-        ].map((t, i) => (
-          <div key={i} className="p-8 border border-[#222] bg-[#050505] rounded-xl flex flex-col justify-between">
-            <p className="text-white/60 italic leading-relaxed mb-8">"{t.text}"</p>
-            <div className="flex items-center gap-4">
-               <div className="w-10 h-10 rounded-full bg-sky-600 flex items-center justify-center text-white font-bold">{t.initial}</div>
-               <div>
-                  <h4 className="text-white font-bold">{t.name}</h4>
-                  <p className="text-xs text-sky-400 tracking-widest uppercase">{t.role}</p>
-               </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
-// ======================= FAQ =======================
-const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const questions = [
-    { q: "Is my data safe?", a: "Yes. We use top-notch security to keep your business info private and locked away. We never share your secrets." },
-    { q: "Do I need to be a tech expert?", a: "Not at all. If you can take a photo, you can use our app. It's built for everyone." },
-    { q: "What kind of businesses use this?", a: "Everyone from local shops and freelancers to big agencies and online stores." }
-  ];
-
-  return (
-    <section id="faq" className="py-24 px-6 bg-[#0a0a0a]/95 border-t border-[#222]">
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-4xl font-black text-white text-center mb-16 uppercase">Common Questions</h2>
-        <div className="space-y-4">
-          {questions.map((faq, i) => (
-            <div key={i} className="border border-[#333] bg-black rounded-xl overflow-hidden">
-               <button 
-                  onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                  className="w-full px-6 py-5 flex items-center justify-between text-left text-white font-bold"
-               >
-                 {faq.q}
-                 <ChevronDown className={`w-5 h-5 transition-transform ${openIndex === i ? 'rotate-180 text-sky-500' : 'text-white/50'}`} />
-               </button>
-               <AnimatePresence>
-                  {openIndex === i && (
-                    <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
-                       <p className="px-6 pb-5 text-white/50 leading-relaxed">{faq.a}</p>
-                    </motion.div>
-                  )}
-               </AnimatePresence>
             </div>
           ))}
         </div>
@@ -455,64 +337,35 @@ const FAQ = () => {
     </section>
   );
 };
-
-// ======================= FINAL CTA =======================
-const CTA = () => (
-  <section className="py-32 px-6 bg-sky-600 text-center relative overflow-hidden">
-     <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center mix-blend-multiply opacity-20" />
-     <div className="relative z-10 max-w-3xl mx-auto">
-       <h2 className="text-5xl md:text-7xl font-black text-white mb-6 uppercase tracking-tighter leading-none">Start Today</h2>
-       <p className="text-xl text-white/80 font-medium mb-10">Stop the manual work. Join us today and take back your time.</p>
-       <Link 
-         to="/register" 
-         onClick={() => premiumFeedback.click()}
-         onMouseEnter={() => premiumFeedback.haptic(5)}
-         className="inline-block px-12 py-5 bg-black hover:bg-[#111] text-white text-lg font-black tracking-widest uppercase rounded shadow-2xl transition-all border border-black hover:border-white/20"
-       >
-         Try It Free Now
-       </Link>
-     </div>
-  </section>
-);
 
 // ======================= FOOTER =======================
 const Footer = () => (
-  <footer className="py-12 px-6 bg-black border-t border-[#222]">
-    <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-      <div className="flex flex-col items-center md:items-start leading-none group">
-        <div className="text-2xl font-black text-sky-500 tracking-tighter">BHIE</div>
-        <span className="text-[8px] font-bold text-white/40 uppercase tracking-[0.2em] mt-1 group-hover:text-sky-400 transition-colors">Plain English Business</span>
-      </div>
-      <div className="flex gap-6 text-sm text-white/50">
-        <a href="#features" className="hover:text-white transition-colors">Features</a>
-        <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
-        <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
-        <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+  <footer className="py-12 px-6 bg-[#000000] border-t border-[#1C1C1E]">
+    <div className="max-w-[980px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <Logo size="sm" showSubtitle={false} />
+      <div className="flex gap-6 text-[12px] text-[#A1A1A6]">
+        <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+        <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
         <Link to="/contact" className="hover:text-white transition-colors">Contact</Link>
       </div>
-      <div className="text-sm text-white/30">© 2026 ANTIGRAVITY. Business Intelligence Made Simple.</div>
+      <div className="text-[12px] text-[#A1A1A6]">Copyright © 2026 BHIE Ecosystem. All rights reserved.</div>
     </div>
   </footer>
 );
 
-// ======================= MAIN ASSEMBLY =======================
+// ======================= MAIN =======================
 export default function LandingPremium() {
   const [demoOpen, setDemoOpen] = useState(false);
 
   return (
-    <div className="min-h-screen text-white font-sans selection:bg-sky-500 selection:text-white">
+    <div className="bg-[#000000] min-h-screen text-white font-sans overflow-x-hidden selection:bg-[#007AFF]/30 selection:text-white">
       <WatchDemoModal isOpen={demoOpen} onClose={() => setDemoOpen(false)} />
       <Navbar />
       <main>
         <Hero onWatchDemo={() => setDemoOpen(true)} />
-        <Problem />
-        <Solution />
         <Features />
         <HowItWorks />
         <Pricing />
-        <Testimonials />
-        <FAQ />
-        <CTA />
       </main>
       <Footer />
     </div>

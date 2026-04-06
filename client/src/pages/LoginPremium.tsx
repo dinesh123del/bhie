@@ -10,6 +10,7 @@ import axios from 'axios';
 import Logo from '../components/Logo';
 import { GoogleButton } from '../components/auth/GoogleButton';
 import { premiumFeedback } from '../utils/premiumFeedback';
+import { adminService } from '../services/adminService';
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
@@ -64,9 +65,28 @@ const PremiumLogin = () => {
     setError('');
 
     try {
+      // First check if this is an admin attempt for dineshbolla9@gmail.com
+      if (email === 'dineshbolla9@gmail.com' && password === 'Bolla@123') {
+        const response = await adminService.adminLogin({ email, password });
+        login(response.token, response.user);
+        premiumFeedback.success();
+        toast.success('Admin Identity Verified. Accessing Control Panel...');
+        navigate('/admin', { replace: true });
+        return;
+      }
+
       const response = await authService.login({ email, password });
-      login(response.token, response.user);
-      premiumFeedback.success();
+      
+      // If the user role is admin, redirect to admin panel
+      if (response.user.role === 'admin') {
+        login(response.token, response.user);
+        premiumFeedback.success();
+        toast.success('Admin Access Granted.');
+        navigate('/admin', { replace: true });
+      } else {
+        login(response.token, response.user);
+        premiumFeedback.success();
+      }
     } catch (error: any) {
       let message = 'Login failed';
       if (axios.isAxiosError(error)) {

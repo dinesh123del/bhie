@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "BillSense",
-    "slug": "billsense-mobile",
+    "name": "BHIE",
+    "slug": "bhie-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.billsense.mobile",
+      "bundleIdentifier": "com.bhie.mobile",
       "infoPlist": {
         "NSCameraUsageDescription": "BHIE needs camera access to scan receipts.",
         "NSUserNotificationsUsageDescription": "BHIE sends you business alerts and payment reminders."
@@ -27,7 +27,7 @@
       }
     },
     "android": {
-      "package": "com.billsense.mobile",
+      "package": "com.bhie.mobile",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"

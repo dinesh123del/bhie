@@ -139,6 +139,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     validateAuth();
   }, [validateAuth]);
 
+  // Periodically refetch user data to reflect admin changes (like subscription updates)
+  useEffect(() => {
+    if (!user) return;
+    
+    // Refetch every 30 seconds
+    const interval = setInterval(() => {
+      refetchUser();
+    }, 30000);
+    
+    return () => clearInterval(interval);
+  }, [user]);
+
   // Login
   const login = (
     token: string,
@@ -159,7 +171,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     } catch (error) {
       console.error('Remote logout failed:', error);
     }
-    localStorage.clear();
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setUser(null);
     toast.success('Logged out successfully');
     navigate('/login', { replace: true });

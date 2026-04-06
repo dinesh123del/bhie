@@ -1,5 +1,5 @@
 /* global window */
-export const API = import.meta.env.VITE_API_URL || "https://bhie-api.onrender.com";
+export const API = import.meta.env.VITE_API_URL || "";
 
 export const registerUser = async (data) => {
   const res = await window.fetch(`${API}/api/auth/register`, {

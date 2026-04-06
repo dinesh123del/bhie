@@ -38,9 +38,11 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
 });
 
+import { dsUploadLimiter } from '../middleware/rateLimiters.js';
+
 router.use(authenticateToken);
 
-router.post('/analyze', upload.single('file'), asyncHandler(async (req: AuthRequest, res: any) => {
+router.post('/analyze', dsUploadLimiter, upload.single('file'), asyncHandler(async (req: AuthRequest, res: any) => {
   if (!req.file) {
     throw new AppError(400, 'No file uploaded');
   }

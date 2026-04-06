@@ -46,8 +46,8 @@ export function startCronJobs() {
   cron.schedule("*/5 * * * *", async () => {
     try {
       const serverUrl = env.IS_PRODUCTION 
-        ? `https://${process.env.RENDER_EXTERNAL_HOSTNAME || 'your-backend.onrender.com'}/` 
-        : `http://localhost:${env.PORT}/`;
+        ? `https://${process.env.RENDER_EXTERNAL_HOSTNAME || 'your-backend.onrender.com'}/api/health` 
+        : `http://localhost:${env.PORT}/api/health`;
       
       const response = await fetch(serverUrl);
       if (response.ok) {

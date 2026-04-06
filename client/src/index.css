@@ -4,221 +4,171 @@
 
 /* ─────────────────────────────────────────────
    BHIE DESIGN SYSTEM v4.0 — VISIBILITY & ACCESSIBILITY EDITION
-   (Apple Human Interface Guidelines Inspired)
+   (Apple-inspired Dark UI Base)
    ───────────────────────────────────────────── */
 
 @layer base {
   :root {
-    /* BHIE DARK THEME (SYSTEM DEFAULT) */
-    --bhie-black:      #000000;
-    --bhie-surface:    rgba(28, 28, 30, 0.7);
-    --bhie-border:     rgba(255, 255, 255, 0.12);
-    --bhie-glow:       rgba(94, 92, 230, 0.5);
-    --bhie-primary:    #5E5CE6;
-    --bhie-purple:     #BF5AF2;
-    --brand-gradient:  linear-gradient(135deg, #5E5CE6, #BF5AF2);
-
-    --primary-text:    #FFFFFF;
-    --secondary-text:  #C7C7CC;
-    --tertiary-text:   #8E8E93;
-    --quaternary-text: #48484A;
+    /* APPLE PRO DESIGN SYSTEM (DARK) */
+    --bhie-black:        #000000;
+    --bhie-gray-900:     #1C1C1E;
+    --bhie-gray-800:     #2C2C2E;
+    --bhie-gray-700:     #3A3A3C;
+    --bhie-gray-600:     #48484A;
+    --bhie-gray-500:     #636366;
     
-    --bg:              #000000;
-    --card:            28 28 30;
-    --text:            #FFFFFF;
-    --border:          rgba(255, 255, 255, 0.12);
-  }
-
-  /* Force dark mode behavior even without class */
-  .light {
-    display: none !important; /* Safety measure if anything force-injects light */
+    --bhie-blue:         #007AFF;
+    --bhie-indigo:       #5856D6;
+    --bhie-purple:       #AF52DE;
+    --bhie-pink:         #FF2D55;
+    
+    /* Apple Intelligence Gradient */
+    --brand-gradient:    linear-gradient(135deg, #007AFF, #5856D6, #AF52DE, #FF2D55);
+    --glass-background:  rgba(28, 28, 30, 0.45);
+    --glass-border:      rgba(255, 255, 255, 0.08);
+    
+    --primary-text:      #FFFFFF;
+    --secondary-text:    rgba(255, 255, 255, 0.7);
+    --tertiary-text:     rgba(255, 255, 255, 0.4);
+    
+    --sf-easing:         cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   html, body {
-    @apply min-h-screen selection:bg-bhie-primary/30 selection:text-white;
+    @apply min-h-[100svh];
     background-color: var(--bhie-black);
     color: var(--primary-text);
-    font-family: 'SF Pro Display', 'SF Pro Text', 'Inter', -apple-system, system-ui, sans-serif;
+    font-family: "SF Pro Display", "SF Pro Text", "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     scroll-behavior: smooth;
     overflow-x: hidden;
-    letter-spacing: -0.01em; 
+    letter-spacing: -0.015em;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'SF Pro Display', 'Inter', sans-serif;
     font-weight: 700;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
     color: var(--primary-text);
   }
 
   p {
     color: var(--secondary-text);
-    line-height: 1.5;
-  }
-
-  /* Number fields — Ultra clear & high contrast */
-  .metric-value {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 800;
-    letter-spacing: -0.05em;
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-    color: var(--primary-text);
-    text-shadow: 0 0 40px rgba(94, 92, 230, 0.15);
-  }
-}
-
-/* ─────────────────────────────────────────────
-   GLASSMORPHISM & MATERIAL SYSTEM
-   ───────────────────────────────────────────── */
-@layer components {
-  .glass {
-    backdrop-filter: blur(25px) saturate(200%);
-    -webkit-backdrop-filter: blur(25px) saturate(200%);
-    background: var(--bhie-surface);
-    border: 1px solid var(--bhie-border);
-  }
-
-  .glass-card {
-    @apply relative overflow-hidden;
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    background: var(--bhie-surface);
-    border: 1px solid var(--bhie-border);
-    border-radius: 1.5rem;
-    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-
-  .glass-card:hover {
-    background: rgba(var(--card), 0.95);
-    border-color: var(--bhie-primary);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
-    transform: translateY(-4px) scale(1.01);
-  }
-
-  .dark .glass-card:hover {
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-  }
-
-  /* ── BHIE Glow Card ── */
-  .glow-card {
-    @apply relative overflow-hidden rounded-[2rem];
-    background: var(--bhie-surface);
-    border: 1px solid var(--bhie-border);
-    transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-  
-  .glow-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: var(--brand-gradient);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    opacity: 0.15;
-    transition: opacity 0.5s ease;
-  }
-  
-  .glow-card:hover::before {
-    opacity: 1;
-  }
-
-  /* Premium Buttons */
-  .btn-premium {
-    @apply relative inline-flex items-center justify-center rounded-2xl font-bold transition-all duration-300;
-    background: var(--brand-gradient);
-    color: #FFFFFF;
-    box-shadow: 0 4px 15px rgba(94, 92, 230, 0.4);
-    will-change: transform;
-    min-height: 48px;
-    padding: 0 24px;
-    font-size: 1rem;
+    line-height: 1.6;
     letter-spacing: -0.01em;
   }
-  
-  .btn-premium:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(94, 92, 230, 0.6);
-  }
-
-  .btn-ghost {
-    @apply inline-flex items-center justify-center rounded-2xl font-semibold transition-all duration-300;
-    background: var(--bhie-surface);
-    border: 1px solid var(--bhie-border);
-    color: var(--primary-text);
-    min-height: 48px;
-    padding: 0 24px;
-  }
-  
-  .btn-ghost:hover {
-    background: var(--bhie-border);
-    transform: scale(1.02);
-  }
-
-  .input-premium {
-    @apply w-full rounded-2xl px-4 py-3 outline-none transition-all duration-300;
-    background: var(--bhie-surface);
-    border: 1px solid var(--bhie-border);
-    color: var(--primary-text);
-    font-size: 1rem;
-  }
-  
-  .input-premium:focus {
-    border-color: var(--bhie-primary);
-    box-shadow: 0 0 0 4px var(--bhie-glow);
-  }
 }
 
 /* ─────────────────────────────────────────────
-   VISIBILITY HELPER CLASSES
+   APPLE FLUID COMPONENT SYSTEM
    ───────────────────────────────────────────── */
-.primary-text { color: var(--primary-text); }
-.secondary-text { color: var(--secondary-text); }
-.tertiary-text { color: var(--tertiary-text); }
+@layer components {
+  /* Ultra-refined Glassmorphism (iOS Style) */
+  .apple-glass {
+    backdrop-filter: blur(40px) saturate(210%);
+    -webkit-backdrop-filter: blur(40px) saturate(210%);
+    background: var(--glass-background);
+    border: 1px solid var(--glass-border);
+  }
 
-.text-ink-300 { color: var(--secondary-text) !important; }
-.text-ink-400 { color: var(--tertiary-text) !important; }
+  /* Deep Material Card */
+  .apple-card {
+    @apply relative overflow-hidden transition-all duration-500 ease-[var(--sf-easing)];
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    background: rgba(28, 28, 30, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2rem;
+  }
 
-.text-glow {
-  text-shadow: 0 0 20px var(--bhie-glow);
+  .apple-card:hover {
+    transform: scale(1.01) translateY(-4px);
+    background: rgba(44, 44, 46, 0.8);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7);
+  }
+
+  /* Apple Action Button */
+  .btn-apple {
+    @apply relative inline-flex items-center justify-center px-8 py-3 rounded-full font-bold transition-all duration-500;
+    background: #FFFFFF;
+    color: #000000;
+    font-size: 0.95rem;
+    letter-spacing: -0.02em;
+    will-change: transform, filter;
+  }
+  
+  .btn-apple:hover {
+    transform: scale(1.05);
+    filter: brightness(0.9);
+  }
+
+  .btn-apple:active {
+    transform: scale(0.96);
+  }
+
+  .btn-apple-outline {
+    @apply relative inline-flex items-center justify-center px-8 py-3 rounded-full font-semibold transition-all duration-500;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    backdrop-filter: blur(20px);
+  }
+  
+  .btn-apple-outline:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Intelligence Text Gradient */
+  .text-ai {
+    background: var(--brand-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 30px rgba(175, 82, 222, 0.3));
+  }
 }
 
 /* ─────────────────────────────────────────────
-   BHIE KEYFRAME ANIMATIONS
+   CINEMATIC MICRO-ANIMATIONS
    ───────────────────────────────────────────── */
-@keyframes bhie-glow-pulse {
-  0%, 100% { filter: drop-shadow(0 0 6px var(--bhie-glow)); transform: scale(1); }
-  50%       { filter: drop-shadow(0 0 12px var(--bhie-glow)); transform: scale(1.02); }
+@keyframes apple-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-20px); }
 }
-.animate-bhie-glow { animation: bhie-glow-pulse 3s ease-in-out infinite; }
+.animate-apple-float { animation: apple-float 8s ease-in-out infinite; }
 
-@keyframes bhie-shimmer {
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(100%); }
+@keyframes ai-shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
-.animate-shimmer::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-  animation: bhie-shimmer 2.5s ease-in-out infinite;
+.animate-ai-glow {
+  background-size: 300% 300%;
+  animation: ai-shimmer 12s ease infinite;
 }
 
-@keyframes bhie-fade-up {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+@keyframes entrance-blur {
+  0% { filter: blur(20px); opacity: 0; transform: scale(1.1); }
+  100% { filter: blur(0px); opacity: 1; transform: scale(1); }
 }
-.animate-fade-up { animation: bhie-fade-up 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.animate-entrance { animation: entrance-blur 1.2s var(--sf-easing) both; }
 
-/* ─────────────────────────────────────────────
-   CUSTOM SCROLLBAR (iOS Style)
+/* Scrollbar iOS */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
+
+/* Custom Utilities */
+.mask-radial {
+  mask-image: radial-gradient(circle at center, black, transparent 80%);
+}
+/* CUSTOM SCROLLBAR (iOS Style)
    ───────────────────────────────────────────── */
 .scrollbar-premium::-webkit-scrollbar       { width: 6px; }
 .scrollbar-premium::-webkit-scrollbar-track { background: transparent; }

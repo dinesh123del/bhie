@@ -1,4 +1,5 @@
 import './config/env.js'; // Ensure env is loaded first
+import crypto from 'crypto';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -6,7 +7,7 @@ import express from 'express';
 import helmet from 'helmet';
 import { Server } from 'http';
 import morgan from 'morgan';
-import rateLimit from 'express-rate-limit';
+import { apiLimiter } from './middleware/rateLimiters.js';
 import hpp from 'hpp';
 import mongoSanitize from 'express-mongo-sanitize';
 import path from 'path';
@@ -38,16 +39,23 @@ app.use(helmet({
   contentSecurityPolicy: env.IS_PRODUCTION ? {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "https://checkout.razorpay.com", "https://*.googleapis.com"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      imgSrc: ["'self'", "data:", "blob:", "https://*.googleusercontent.com", "https://*.razorpay.com"],
-      connectSrc: ["'self'", "https://*.razorpay.com", "https://api.openai.com", "https://api.anthropic.com"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://checkout.razorpay.com", "https://*.googleapis.com", "https://accounts.google.com", "https://*.google.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://*.googleapis.com"],
+      imgSrc: ["'self'", "data:", "blob:", "https://*.googleusercontent.com", "https://*.razorpay.com", "https://images.unsplash.com", "https://*.unsplash.com"],
+      connectSrc: ["'self'", "https://*.razorpay.com", "https://api.openai.com", "https://api.anthropic.com", "https://*.googleapis.com", "https://accounts.google.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com", "https://fonts.googleapis.com"],
+      mediaSrc: ["'self'", "https://*.mixkit.co", "https://assets.mixkit.co", "blob:"],
       objectSrc: ["'none'"],
-      frameSrc: ["'self'", "https://api.razorpay.com"],
+      frameSrc: ["'self'", "https://api.razorpay.com", "https://accounts.google.com", "https://*.google.com"],
       upgradeInsecureRequests: [],
     },
   } : false, // Disable CSP in dev for easier testing
+  // HSTS: Force HTTPS for 1 year with subdomains
+  strictTransportSecurity: env.IS_PRODUCTION ? {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true,
+  } : false,
   referrerPolicy: { policy: 'same-origin' },
   frameguard: { action: 'deny' },
   xssFilter: true,
@@ -62,6 +70,8 @@ app.use(morgan(env.IS_PRODUCTION ? 'combined' : 'dev'));
 const allowedOrigins = [
   env.CLIENT_URL,
   ...(env.CLIENT_URLS || []),
+  "http://localhost:5001",
+  "http://127.0.0.1:5001",
   "http://localhost:5173",
   "http://localhost:5174",
   "https://bhie-frontend.vercel.app",
@@ -76,10 +86,12 @@ app.use(cors({
     // Allow exact matches
     if (allowedOrigins.includes(origin)) return callback(null, true);
     // Allow any Vercel preview URL for this project
-    if (origin.match(/https:\/\/.*bhie.*\.vercel\.app$/)) return callback(null, true);
-    if (origin.match(/https:\/\/client.*\.vercel\.app$/)) return callback(null, true);
-    // Allow localtunnel URLs (for testing)
-    if (origin.endsWith('.loca.lt')) return callback(null, true);
+    // Only allow known Vercel deployment patterns (tightened from wildcard)
+    if (origin.match(/^https:\/\/bhie[\w-]*\.vercel\.app$/)) return callback(null, true);
+    if (origin.match(/^https:\/\/client[\w-]*\.vercel\.app$/)) return callback(null, true);
+    if (origin.match(/^https:\/\/dinesh123del-bhie[\w-]*\.vercel\.app$/)) return callback(null, true);
+    // Allow localtunnel URLs only in development
+    if (!env.IS_PRODUCTION && origin.endsWith('.loca.lt')) return callback(null, true);
     callback(null, false);
   },
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
@@ -110,7 +122,8 @@ app.use((req, res, next) => {
   // If the XSRF-TOKEN cookie is missing, set it (e.g. from a random source or session-bound)
   // Our custom middleware will check this cookie matches the X-XSRF-TOKEN header
   if (!req.cookies?.['XSRF-TOKEN']) {
-    const token = Math.random().toString(36).substring(2) + Date.now().toString(36);
+    // SECURITY: Use cryptographically secure random bytes (NOT Math.random)
+    const token = crypto.randomBytes(32).toString('hex');
     res.cookie('XSRF-TOKEN', token, {
       httpOnly: false, // Must be readable by the client to send back in header
       secure: env.IS_PRODUCTION,
@@ -124,10 +137,7 @@ app.use((req, res, next) => {
 // --- Structured Routes ---
 // Handled by apiRouter under /api
 
-app.get("/", (req, res) => {
-  res.send("Backend is LIVE 🚀");
-});
-
+// Removed root text response so frontend serves on /
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });
@@ -136,14 +146,7 @@ app.get("/api/debug-ping", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString(), message: "Server is alive and updated!" });
 });
 
-// Global Rate Limiting
-const apiLimiter = rateLimit({
-  windowMs: env.REQUEST_RATE_LIMIT_WINDOW_MS,
-  max: env.IS_PRODUCTION ? env.REQUEST_RATE_LIMIT_MAX : env.REQUEST_RATE_LIMIT_MAX * 10,
-  standardHeaders: 'draft-7',
-  legacyHeaders: false,
-  message: { message: 'Too many requests. Please try again later.' },
-});
+// Global Rate Limiting is now imported from rateLimiters.js
 
 // Original routes
 app.use('/api', apiLimiter, apiRouter);
@@ -169,7 +172,7 @@ app.use(errorHandler);
 let server: any = null;
 
 async function startServer(): Promise<void> {
-  const PORT = env.PORT || 5001; 
+  const PORT = env.PORT || 5000; 
   return new Promise((resolve, reject) => {
     server = app.listen(PORT, () => {
         logger.info(`🚀 BHIE Dashboard LIVE on PORT ${PORT}`);

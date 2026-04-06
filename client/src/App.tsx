@@ -66,6 +66,8 @@ const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
     : <Navigate to="/login" replace />;
 };
 
+import { API } from './lib/axios';
+
 function MainApp() {
   const location = useLocation();
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -179,14 +181,13 @@ function App() {
   useEffect(() => {
     const preload = async () => {
       try {
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
         // BANK-GRADE SECURITY: Initialize CSRF session
-        await fetch(`${API_URL}/api/auth/csrf-token`, { 
+        await fetch(`${API}/api/auth/csrf-token`, { 
           credentials: 'include',
           signal: AbortSignal.timeout(3000) 
         });
         
-        await fetch(`${API_URL}/api/health`, { signal: AbortSignal.timeout(2500) });
+        await fetch(`${API}/api/health`, { signal: AbortSignal.timeout(2500) });
       } catch (err) {
         console.error('Security handshake failed:', err);
         // Backend unreachable — offline mode

@@ -49,6 +49,13 @@ export const dashboardController = {
     const user = requireUser(req);
     const userId = new Types.ObjectId(user.userId);
 
+    // PERFORMANCE: Check cache FIRST before hitting the database
+    const cacheKey = CacheService.generateKey(req.baseUrl + req.path, user.userId);
+    const cachedData = await CacheService.get<any>(cacheKey);
+    if (cachedData) {
+      return res.json({ ...cachedData, fromCache: true });
+    }
+
     const now = new Date();
     const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     const previousMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
@@ -213,6 +220,7 @@ export const dashboardController = {
           currentPeriod,
           previousPeriod,
           recentTrend: trends,
+          userId: String(user.userId),
         })
       : [];
     const latestRecord =
@@ -307,7 +315,6 @@ export const dashboardController = {
 
     res.json(responseData);
 
-    const cacheKey = CacheService.generateKey(req.baseUrl + req.path, user.userId);
     CacheService.set(cacheKey, responseData, 300).catch(console.error);
   }),
 };

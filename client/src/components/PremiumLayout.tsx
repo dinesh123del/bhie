@@ -12,10 +12,10 @@ const PremiumLayout = ({ children }: PremiumLayoutProps) => {
   const location = useLocation();
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#050505] text-[#F8FAFC]">
+    <div className="flex h-[100svh] w-full overflow-hidden bg-[#000000] text-white">
       
-      {/* Main Navigation Sidebar: Anchored relative to screen (Hidden on Desktop-first, but we'll manage hidden-sm in CSS/Framermotion) */}
-      <div className="hidden md:flex">
+      {/* Main Navigation Sidebar: Anchored relative to screen */}
+      <div className="hidden md:flex flex-shrink-0">
         <PremiumSidebar />
       </div>
 
@@ -24,7 +24,7 @@ const PremiumLayout = ({ children }: PremiumLayoutProps) => {
         <PremiumTopbar />
 
         <main id="main-scroll-container" className="flex-1 overflow-auto overflow-x-hidden pt-12 md:pt-20 px-4 md:px-8 pb-32 md:pb-12 scrollbar-premium relative z-0">
-          <div className="max-w-[1600px] mx-auto w-full min-h-full py-4">
+          <div className="max-w-[1200px] mx-auto w-full min-h-full py-4 pt-10">
             {children}
           </div>
         </main>

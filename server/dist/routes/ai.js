@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import { runAgents, validateBusinessData } from '../agents/orchestrator.js';
 import { asyncHandler } from '../middleware/asyncHandler.js';
 import { authenticateToken } from '../middleware/auth.js';
@@ -7,6 +8,8 @@ import User from '../models/User.js';
 import { AIEngine } from '../utils/aiEngine.js';
 import { AppError } from '../utils/appError.js';
 import { requireUser } from '../utils/request.js';
+import { aiLimiter } from '../middleware/rateLimiters.js';
+import { env } from '../config/env.js';
 const router = express.Router();
 router.get('/health', asyncHandler(async (_req, res) => {
     // Basic connectivity check
@@ -46,8 +49,26 @@ const storage = multer.diskStorage({
         cb(null, `bill-${Date.now()}${file.originalname}`);
     }
 });
-const upload = multer({ storage });
-router.post('/scan-bill', authenticateToken, upload.single('bill'), asyncHandler(async (req, res) => {
+const upload = multer({
+    storage,
+    limits: {
+        fileSize: env.MAX_UPLOAD_FILE_SIZE_BYTES || 10 * 1024 * 1024,
+        files: 1,
+    },
+    fileFilter: (_req, file, cb) => {
+        // Sanitize filename to prevent path traversal
+        const ext = path.extname(file.originalname).toLowerCase();
+        const safeName = `bill-${Date.now()}${ext}`;
+        file.originalname = safeName;
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/bmp', 'image/tiff', 'application/pdf'];
+        if (!allowedTypes.includes(file.mimetype.toLowerCase())) {
+            cb(new AppError(415, 'Unsupported file type. Upload images or PDF.'));
+            return;
+        }
+        cb(null, true);
+    }
+});
+router.post('/scan-bill', authenticateToken, aiLimiter, upload.single('bill'), asyncHandler(async (req, res) => {
     if (!req.file)
         throw new AppError(400, 'No bill image uploaded');
     try {
@@ -136,15 +157,21 @@ router.post('/predict', authenticateToken, asyncHandler(async (req, res) => {
         timestamp: new Date().toISOString()
     });
 }));
-router.post('/translate', authenticateToken, asyncHandler(async (req, res) => {
+router.post('/translate', authenticateToken, aiLimiter, asyncHandler(async (req, res) => {
     const { text, targetLanguage } = req.body;
     if (!text || !targetLanguage) {
         throw new AppError(400, 'Text and targetLanguage are required');
     }
-    const prompt = `Translate the following interface text to ${targetLanguage}. 
+    // SECURITY: Sanitize inputs to prevent prompt injection
+    const sanitizedText = String(text).slice(0, 500).replace(/[\r\n]+/g, ' ');
+    const sanitizedLang = String(targetLanguage).slice(0, 30).replace(/[^a-zA-Z\s-]/g, '');
+    if (!sanitizedLang) {
+        throw new AppError(400, 'Invalid target language');
+    }
+    const prompt = `Translate the following interface text to ${sanitizedLang}. 
     Return ONLY a JSON object with a single key "translation".
     
-    Text: "${text}"`;
+    Text: "${sanitizedText}"`;
     const aiResponse = await AIEngine.generateCompletion(prompt, {
         preferredProvider: 'openai' // OpenAI is better for short translations
     });
