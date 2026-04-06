@@ -10,5 +10,10 @@
     "python.testing.unittestEnabled": true,
     "chat.agent.maxRequests": 500000,
     "chatgpt.openOnStartup": true,
-    "genieai.enableConversationHistory": true
+    "genieai.enableConversationHistory": true,
+    "css.lint.unknownAtRules": "ignore",
+    "scss.lint.unknownAtRules": "ignore",
+    "files.associations": {
+        "*.css": "tailwindcss"
+    }
 }
