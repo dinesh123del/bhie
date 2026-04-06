@@ -25,7 +25,7 @@ services:
       - key: MAX_UPLOAD_FILE_SIZE_MB
         value: 10
       - key: RAZORPAY_KEY_ID
-        sync: false
+        value: rzp_live_SYwkStp5U2NhjF
       - key: RAZORPAY_KEY_SECRET
         sync: false
       - key: OPENAI_API_KEY

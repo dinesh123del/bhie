@@ -139,7 +139,7 @@ const Payments = () => {
 
       // 3. Open Razorpay Checkout
       const options = {
-        key: orderData.key || import.meta.env.VITE_RAZORPAY_KEY || 'rzp_live_SZoJsmhT3ah3jU', // Fallback to provided key
+        key: orderData.key || import.meta.env.VITE_RAZORPAY_KEY || 'rzp_live_SYwkStp5U2NhjF', // Updated to user's live key
         amount: orderData.amount,
         currency: orderData.currency,
         name: 'Finly Platform',
