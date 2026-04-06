@@ -12,7 +12,8 @@
     "client": "cd client && npm run dev -- --host 0.0.0.0 --port 5173 --strictPort",
     "build:client": "npm --prefix client run build",
     "build:server": "npm --prefix server run build",
-    "build": "npm run build:client && npm run build:server"
+    "build": "npm run build:client && npm run build:server",
+    "launch:zero": "concurrently \"npm run server\" \"npm run client\""
   },
   "devDependencies": {
     "@types/node": "^25.5.2",
