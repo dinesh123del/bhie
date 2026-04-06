@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { FilePlus2, FileText, Trash2 } from 'lucide-react';
+import { FilePlus2, FileText, Trash2, CreditCard, Lock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 import { toast } from 'react-hot-toast';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import { Report, reportsService } from '../services/reportsService';
@@ -9,12 +11,21 @@ const REPORT_TEMPLATES = [
     title: 'Monthly Business Summary',
     type: 'summary',
     content: 'Comprehensive overview of business performance, highlighting key operational wins and critical growth trends for the current period.',
+    isPremium: false,
   },
   {
     title: 'Revenue Snapshot',
     type: 'finance',
     content: 'Detailed financial breakdown, covering gross revenue, net profit margins, and expense attribution for optimized financial health tracking.',
+    isPremium: false,
   },
+  {
+    title: 'Comprehensive Tax & Audit Report',
+    type: 'audit_tax',
+    content: 'A full-scale, AI-verified 40-page PDF report designed for CAs and compliance formatting. Unlock advanced export formatting.',
+    isPremium: true,
+    price: '₹199'
+  }
 ];
 
 const getReportId = (report: Report) => report._id ?? report.id;
@@ -41,6 +52,8 @@ const Reports = () => {
   const [loading, setLoading] = useState(true);
   const [creatingType, setCreatingType] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     let active = true;
@@ -79,10 +92,16 @@ const Reports = () => {
   }, [reports.length]);
 
   const handleCreateReport = async (template: typeof REPORT_TEMPLATES[number]) => {
+    if (template.isPremium && user?.plan !== 'premium') {
+      toast('Premium Feature. Please upgrade your plan or purchase one-time pass.', { icon: '🔒' });
+      navigate('/payments');
+      return;
+    }
+
     setCreatingType(template.type);
 
     try {
-      const created = await reportsService.createReport(template);
+      const created = await reportsService.createReport(template as any);
       setReports((current) => [created, ...current]);
       toast.success('Report created');
     } catch {
@@ -135,16 +154,30 @@ const Reports = () => {
             type="button"
             onClick={() => handleCreateReport(template)}
             disabled={creatingType !== null}
-            className="group rounded-2xl border border-dashed border-gray-700 bg-gray-900/70 p-6 text-left transition hover:border-sky-400 hover:bg-sky-500/5 disabled:cursor-not-allowed disabled:opacity-60"
+            className={`group rounded-2xl border p-6 text-left transition disabled:cursor-not-allowed disabled:opacity-60 ${
+              template.isPremium 
+                ? 'border-amber-500/30 bg-amber-500/5 hover:border-amber-400 hover:bg-amber-500/10' 
+                : 'border-dashed border-gray-700 bg-gray-900/70 hover:border-sky-400 hover:bg-sky-500/5'
+            }`}
           >
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-500/15 text-sky-300">
-                <FilePlus2 className="h-5 w-5" />
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${template.isPremium ? 'bg-amber-500/15 text-amber-300' : 'bg-sky-500/15 text-sky-300'}`}>
+                  {template.isPremium ? <Lock className="h-5 w-5" /> : <FilePlus2 className="h-5 w-5" />}
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                    {template.title}
+                  </h2>
+                  <p className="text-sm text-gray-400">Type: {template.type}</p>
+                </div>
               </div>
-              <div>
-                <h2 className="text-lg font-semibold text-white">{template.title}</h2>
-                <p className="text-sm text-gray-400">Type: {template.type}</p>
-              </div>
+              {template.isPremium && (
+                 <span className="flex items-center gap-1.5 text-xs font-bold px-2 py-1 bg-amber-500/20 text-amber-400 rounded-lg">
+                   <CreditCard size={14} />
+                   {template.price}
+                 </span>
+              )}
             </div>
             <p className="mt-4 text-sm leading-6 text-gray-400">
               {creatingType === template.type ? 'Creating report...' : template.content}

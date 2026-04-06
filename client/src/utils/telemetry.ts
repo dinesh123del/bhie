@@ -51,13 +51,10 @@ export const initTelemetry = async () => {
     document.head.appendChild(script);
 
     window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      // @ts-ignore
+    function gtag(...args: any[]) {
       window.dataLayer.push(arguments);
     }
-    // @ts-ignore
     gtag('js', new Date());
-    // @ts-ignore
     gtag('config', GA_MEASUREMENT_ID);
     console.log('📈 Analytics: Tracking active');
   }

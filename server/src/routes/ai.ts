@@ -240,5 +240,62 @@ router.post(
   })
 );
 
-export default router;
+// ──────────────────────────────────────────
+// 10-YEAR ENGINE: Monte Carlo Simulation
+// ──────────────────────────────────────────
+router.post(
+  '/simulate',
+  authenticateToken,
+  asyncHandler(async (req: AuthRequest, res: Response) => {
+    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
 
+    try {
+      const response = await fetch(`${mlServiceUrl}/simulate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(req.body),
+      });
+
+      if (!response.ok) {
+        throw new AppError(response.status, 'Simulation service error');
+      }
+
+      const data = await response.json();
+      res.json(data);
+    } catch (err: any) {
+      if (err instanceof AppError) throw err;
+      throw new AppError(503, 'ML Simulation Service is unavailable. Please ensure it is running on port 8000.');
+    }
+  })
+);
+
+// ──────────────────────────────────────────
+// 10-YEAR ENGINE: Business Health Score
+// ──────────────────────────────────────────
+router.post(
+  '/health-score',
+  authenticateToken,
+  asyncHandler(async (req: AuthRequest, res: Response) => {
+    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+
+    try {
+      const response = await fetch(`${mlServiceUrl}/health-score`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(req.body),
+      });
+
+      if (!response.ok) {
+        throw new AppError(response.status, 'Health Score service error');
+      }
+
+      const data = await response.json();
+      res.json(data);
+    } catch (err: any) {
+      if (err instanceof AppError) throw err;
+      throw new AppError(503, 'ML Health Score Service is unavailable.');
+    }
+  })
+);
+
+export default router;

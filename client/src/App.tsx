@@ -51,6 +51,8 @@ const LandingPremiumPage = lazy(() => import('./pages/LandingPremium'));
 const RecordsPremium = lazy(() => import('./pages/RecordsPremium'));
 const Home = lazy(() => import('./pages/Home'));
 const Notifications = lazy(() => import('./pages/Notifications'));
+const SimulationEngine = lazy(() => import('./pages/SimulationEngine'));
+const ResellerPartner = lazy(() => import('./pages/ResellerPartner'));
 
 // ── Mute preference key ──────────────────────────────────────
 const MUTE_KEY = 'finly_sound_muted';
@@ -150,6 +152,7 @@ function MainApp() {
               <Route path="/reports"  element={<ProtectedRoute><Reports /></ProtectedRoute>} />
               <Route path="/insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
               <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+              <Route path="/reseller-partner" element={<ProtectedRoute><ResellerPartner /></ProtectedRoute>} />
               
               {/* Extra Valid Routes from Standard Sidebar */}
               <Route path="/ai-chat" element={<ProtectedRoute><AIChat /></ProtectedRoute>} />
@@ -161,6 +164,7 @@ function MainApp() {
               <Route path="/dashboard-premium" element={<ProtectedRoute><DashboardPremium /></ProtectedRoute>} />
               <Route path="/landing" element={<ProtectedRoute><LandingPremiumPage /></ProtectedRoute>} />
               <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+              <Route path="/simulate" element={<ProtectedRoute><SimulationEngine /></ProtectedRoute>} />
               <Route path="/ai-analysis" element={<Navigate to="/analysis-report" replace />} />
 
               {/* Catch All */}

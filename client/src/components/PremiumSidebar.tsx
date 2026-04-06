@@ -16,6 +16,8 @@ import {
   Volume2,
   VolumeX,
   FilePlus2,
+  FlaskConical,
+  Briefcase,
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { premiumFeedback } from '../utils/premiumFeedback';
@@ -36,10 +38,12 @@ const navItems: NavItem[] = [
   { id: 'reports', name: 'Reports', path: '/reports', icon: FilePlus2 },
   { id: 'insights', name: 'Insights', path: '/insights', icon: BrainCircuit },
   { id: 'ds-hub', name: 'Expert Check', path: '/ds-hub', icon: GraduationCap },
+  { id: 'simulate', name: 'Simulate', path: '/simulate', icon: FlaskConical },
   { id: 'health', name: 'Health Status', path: '/system-health', icon: Activity },
 ];
 
 const mgmtItems: NavItem[] = [
+  { id: 'partner', name: 'CA Reseller', path: '/reseller-partner', icon: Briefcase },
   { id: 'settings', name: 'Settings', path: '/settings', icon: Settings },
   { id: 'billing', name: 'Billing', path: '/payments', icon: CreditCard },
   { id: 'security', name: 'Admin', path: '/admin', icon: ShieldCheck },

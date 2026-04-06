@@ -7,7 +7,10 @@ import { api } from '../services/api';
 import { recordsAPI } from '../services/api';
 import toast from 'react-hot-toast';
 
+import { useAuth } from '../hooks/useAuth';
+
 const ScanBill = () => {
+  const { user } = useAuth();
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [scanning, setScanning] = useState(false);
@@ -25,11 +28,20 @@ const ScanBill = () => {
 
   const handleScan = async () => {
     if (!file) return;
+
+    if (!user?.hasPremiumAccess && (user?.usageCount || 0) >= 5) {
+      toast('Free tier limit reached (5 scans). Please upgrade to Pro.', { icon: '🔒' });
+      navigate('/payments');
+      // Dispatch an event to open upgrade modal if you want
+      // window.dispatchEvent(new Event('limitReached'));
+      return;
+    }
+
     setScanning(true);
     const formData = new FormData();
     formData.append('bill', file);
 
-      try {
+    try {
       const res = await api.post('/ai/scan-bill', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
@@ -86,9 +98,9 @@ const ScanBill = () => {
               </label>
             </div>
 
-            <PremiumButton 
-              className="w-full" 
-              onClick={handleScan} 
+            <PremiumButton
+              className="w-full"
+              onClick={handleScan}
               disabled={!file || scanning}
               loading={scanning}
             >
@@ -101,33 +113,33 @@ const ScanBill = () => {
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
               <PremiumCard className="p-6 space-y-6 border-indigo-500/30 overflow-hidden relative">
                 <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-                   <Scan className="w-24 h-24 text-sky-400 rotate-12" />
+                  <Scan className="w-24 h-24 text-sky-400 rotate-12" />
                 </div>
 
                 <div className="flex justify-between items-center relative z-10">
                   <h2 className="text-xl font-black text-white italic tracking-tight">Receipt Details</h2>
                   <div className="flex items-center gap-2">
-                     <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-full border ${data.isUnclear ? 'text-amber-400 border-amber-500/20 bg-amber-500/5' : 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5'}`}>
-                        {data.integrityScore}% Accuracy
-                     </span>
+                    <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-full border ${data.isUnclear ? 'text-amber-400 border-amber-500/20 bg-amber-500/5' : 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5'}`}>
+                      {data.integrityScore}% Accuracy
+                    </span>
                   </div>
                 </div>
-                
+
                 <div className="space-y-4 relative z-10">
                   {/* MERCHANT IDENTITY BLOCK */}
                   <div className="p-4 rounded-2xl bg-gradient-to-br from-white/[0.04] to-transparent border border-white/5 space-y-3">
-                     <div className="flex items-center justify-between">
-                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Store Name</div>
-                        {data.gstNumber && (
-                           <div className="flex items-center gap-1 text-[9px] font-black text-sky-400 uppercase tracking-widest">
-                              <Check className="w-3 h-3" /> Verified GST
-                           </div>
-                        )}
-                     </div>
-                     <div>
-                        <p className="text-lg font-black text-white tracking-tight">{data.businessName || 'Unknown Store'}</p>
-                        {data.gstNumber && <p className="text-[11px] font-mono font-bold text-sky-400/60 mt-1 uppercase tracking-wider">{data.gstNumber}</p>}
-                     </div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Store Name</div>
+                      {data.gstNumber && (
+                        <div className="flex items-center gap-1 text-[9px] font-black text-sky-400 uppercase tracking-widest">
+                          <Check className="w-3 h-3" /> Verified GST
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-lg font-black text-white tracking-tight">{data.businessName || 'Unknown Store'}</p>
+                      {data.gstNumber && <p className="text-[11px] font-mono font-bold text-sky-400/60 mt-1 uppercase tracking-wider">{data.gstNumber}</p>}
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -144,14 +156,14 @@ const ScanBill = () => {
 
                   {/* GST DETAILS RECOVERY */}
                   {data.gstDetails && data.gstDetails.legalName && (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       className="p-3 rounded-xl bg-sky-500/5 border border-sky-500/10"
                     >
-                       <div className="text-[9px] font-black uppercase tracking-widest text-sky-400/60 mb-2">Tax Details</div>
-                       <p className="text-xs font-bold text-white/70 italic truncate">{data.gstDetails.legalName}</p>
-                       <p className="text-[10px] font-medium text-white/30 mt-1 truncate">{data.gstDetails.address || 'Confidential Address'}</p>
+                      <div className="text-[9px] font-black uppercase tracking-widest text-sky-400/60 mb-2">Tax Details</div>
+                      <p className="text-xs font-bold text-white/70 italic truncate">{data.gstDetails.legalName}</p>
+                      <p className="text-[10px] font-medium text-white/30 mt-1 truncate">{data.gstDetails.address || 'Confidential Address'}</p>
                     </motion.div>
                   )}
 
@@ -162,9 +174,9 @@ const ScanBill = () => {
                     {data.items.length > 0 ? (
                       <div className="flex flex-wrap gap-2">
                         {data.items.map((item: string, i: number) => (
-                           <span key={i} className="px-2 py-1 rounded-lg bg-white/5 border border-white/5 text-[10px] font-bold text-white/60">
-                              {item.substring(0, 30)}
-                           </span>
+                          <span key={i} className="px-2 py-1 rounded-lg bg-white/5 border border-white/5 text-[10px] font-bold text-white/60">
+                            {item.substring(0, 30)}
+                          </span>
                         ))}
                       </div>
                     ) : (
@@ -174,9 +186,9 @@ const ScanBill = () => {
                 </div>
 
                 <div className="pt-2">
-                   <PremiumButton className="w-full" variant="primary" onClick={handleSave}>
-                     Save to Records
-                   </PremiumButton>
+                  <PremiumButton className="w-full" variant="primary" onClick={handleSave}>
+                    Save to Records
+                  </PremiumButton>
                 </div>
               </PremiumCard>
             </motion.div>

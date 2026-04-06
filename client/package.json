@@ -34,6 +34,7 @@
     "react-razorpay": "^3.0.1",
     "react-router-dom": "^6.30.3",
     "recharts": "^2.12.7",
+    "tesseract.js": "^7.0.0",
     "three": "^0.183.2",
     "zustand": "^4.5.5"
   },
