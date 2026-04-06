@@ -217,7 +217,7 @@ export default function PricingPage() {
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <div>
               <span className="section-kicker">What’s Included</span>
-              <h2 className="mt-6 text-4xl font-black text-white">Every plan carries the BHIE design standard.</h2>
+              <h2 className="mt-6 text-4xl font-black text-white">Every plan carries the Finly design standard.</h2>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               {[

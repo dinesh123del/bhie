@@ -22,7 +22,8 @@ import {
   Lock,
   ChevronRight,
   UserCheck,
-  Mail
+  Mail,
+  Zap
 } from 'lucide-react';
 import { adminService, AdminUser, AdminStats, AdminSettings } from '../services/adminService';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
@@ -71,8 +72,6 @@ const Admin = () => {
     if (user?.role !== 'admin') {
       setLoading(false);
     } else {
-      // If user is admin, we still wait for verification if not already verified
-      // But we can start loading some data in the background if they ARE verified
       if (isVerified) {
         loadData();
       } else {
@@ -245,7 +244,7 @@ const Admin = () => {
           <ShieldAlert className="w-24 h-24 text-rose-500 mb-8 opacity-20 mx-auto" />
           <h1 className="text-4xl font-black text-white mb-4 tracking-tighter uppercase">High Security Sector</h1>
           <p className="text-white/40 max-w-md mb-10 font-medium">
-            This sector of the BHIE Intelligence Engine is strictly restricted to system administrators.
+            This sector of the Finly Intelligence Engine is strictly restricted to system administrators.
           </p>
           <PremiumButton 
             onClick={() => navigate('/dashboard')}
@@ -307,8 +306,8 @@ const Admin = () => {
             <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-4 italic uppercase">
               Admin <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600">Forge.</span>
             </h1>
-            <p className="text-white/30 text-base md:text-lg font-medium max-w-2xl leading-relaxed">
-              Global command center for BHIE operations. Monitor metrics, manage access protocols, and scaling parameters.
+            <p className="text-white/30 text-base md:text-lg font-medium max-w-2xl leading-relaxed text-left">
+              Global command center for Finly operations. Monitor metrics, manage access protocols, and scaling parameters.
             </p>
           </div>
           <div className="flex gap-2 bg-white/[0.02] p-1.5 rounded-2xl border border-white/5 backdrop-blur-3xl">
@@ -331,7 +330,6 @@ const Admin = () => {
         <AnimatePresence mode="wait">
           {activeTab === 'overview' && (
             <motion.div key="overview" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-10">
-              {/* Stats Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
                   { label: 'Total Users', value: stats?.users.total || 0, icon: Users, color: 'text-sky-400' },
@@ -340,7 +338,7 @@ const Admin = () => {
                   { label: 'Records Processed', value: (stats?.records.total || 0).toLocaleString(), icon: TrendingUp, color: 'text-indigo-400' }
                 ].map((stat, i) => (
                   <PremiumCard key={i} className="p-8 border-white/5 flex items-center justify-between group hover:border-indigo-500/20 transition-all duration-500">
-                    <div>
+                    <div className="text-left">
                       <p className="text-white/30 text-[10px] font-black uppercase tracking-widest mb-2">{stat.label}</p>
                       <p className="text-4xl font-black tracking-tighter">{stat.value}</p>
                     </div>
@@ -349,9 +347,8 @@ const Admin = () => {
                 ))}
               </div>
 
-              {/* Data Insights */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <PremiumCard className="p-8 border-white/5">
+                <PremiumCard className="p-8 border-white/5 text-left">
                   <h3 className="text-xl font-black uppercase tracking-tighter mb-8 flex items-center gap-3 italic">
                     <Crown className="w-5 h-5 text-amber-400" />
                     Subscription Distribution
@@ -367,7 +364,7 @@ const Admin = () => {
                           <span className="text-[11px] font-black uppercase tracking-widest text-white/50">{plan.name}</span>
                           <span className="text-sm font-black italic">{plan.count} Users</span>
                         </div>
-                        <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                        <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden text-left">
                           <motion.div 
                             initial={{ width: 0 }} 
                             animate={{ width: `${(plan.count / plan.total) * 100}%` }} 
@@ -379,7 +376,7 @@ const Admin = () => {
                   </div>
                 </PremiumCard>
 
-                <PremiumCard className="p-8 border-white/5">
+                <PremiumCard className="p-8 border-white/5 text-left">
                    <h3 className="text-xl font-black uppercase tracking-tighter mb-8 flex items-center gap-3 italic">
                     <Activity className="w-5 h-5 text-emerald-400" />
                     Growth Metrics
@@ -388,7 +385,7 @@ const Admin = () => {
                      <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/20 tracking-tighter mb-2">
                        {stats?.users.total ? Math.round(((stats.users.paidPro + stats.users.paidPremium) / stats.users.total) * 100) : 0}%
                      </p>
-                     <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Conversion Rate</p>
+                     <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 text-center">Conversion Rate</p>
                   </div>
                 </PremiumCard>
               </div>
@@ -402,8 +399,8 @@ const Admin = () => {
                     <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-sky-400 transition-colors" />
                     <input 
                       type="text" 
-                      placeholder="Search users by name or email..."
-                      className="w-full h-16 pl-14 pr-6 bg-white/[0.02] border border-white/5 rounded-[30px] outline-none text-sm font-medium focus:border-sky-500/40 focus:bg-white/[0.04] transition-all"
+                      placeholder="Search users..."
+                      className="w-full h-16 pl-14 pr-6 bg-white/[0.02] border border-white/5 rounded-[30px] outline-none text-sm font-medium focus:border-sky-500/40 text-white"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -412,7 +409,7 @@ const Admin = () => {
                     <select 
                        value={planFilter} 
                        onChange={(e) => setPlanFilter(e.target.value)}
-                       className="h-16 px-6 bg-white/[0.02] border border-white/5 rounded-[30px] text-[10px] font-black uppercase tracking-widest outline-none cursor-pointer hover:bg-white/5"
+                       className="h-16 px-6 bg-white/[0.02] border border-white/5 rounded-[30px] text-[10px] font-black uppercase tracking-widest outline-none text-white cursor-pointer"
                     >
                        <option value="" className="bg-black">All Plans</option>
                        <option value="free" className="bg-black">Free</option>
@@ -428,21 +425,21 @@ const Admin = () => {
                <PremiumCard className="overflow-hidden border-white/5">
                  <div className="overflow-x-auto">
                     <table className="w-full text-left">
-                      <thead className="bg-white/[0.02] border-b border-white/5">
+                      <thead className="bg-white/[0.02] border-b border-white/5 text-left">
                         <tr>
-                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/30">Intelligence Identity</th>
-                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/30">Plan Level</th>
-                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/30">Nexus Status</th>
-                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/30">Usage</th>
-                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/30">Command</th>
+                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/30 text-left">Identity</th>
+                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/30 text-left">Plan</th>
+                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/30 text-left">Status</th>
+                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/30 text-left">Records</th>
+                          <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-white/30 text-left">Command</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-white/5">
+                      <tbody className="divide-y divide-white/5 text-left">
                         {users.map(u => (
-                          <tr key={u._id} className="hover:bg-white/[0.01] transition-colors group">
+                          <tr key={u._id} className="hover:bg-white/[0.01]">
                             <td className="px-8 py-6">
                               <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center text-xs font-black text-indigo-400 border border-white/5">
+                                <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-xs font-black text-indigo-400">
                                   {u.name.charAt(0).toUpperCase()}
                                 </div>
                                 <div>
@@ -462,29 +459,26 @@ const Admin = () => {
                             </td>
                             <td className="px-8 py-6">
                                <div className="flex items-center gap-2">
-                                  <div className={`w-2 h-2 rounded-full ${u.isActive ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-rose-500'}`} />
-                                  <span className="text-[10px] font-black uppercase tracking-widest text-white/50">{u.isActive ? 'Linked' : 'Severed'}</span>
+                                  <div className={`w-2 h-2 rounded-full ${u.isActive ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                                  <span className="text-[10px] font-black uppercase tracking-widest text-white/50">{u.isActive ? 'Active' : 'Banned'}</span>
                                </div>
                             </td>
                             <td className="px-8 py-6">
-                               <p className="text-sm font-black italic">{u.recordCount} <span className="text-[10px] text-white/20 not-italic uppercase tracking-widest">Records</span></p>
+                                <p className="text-sm font-black italic">{u.recordCount}</p>
                             </td>
                             <td className="px-8 py-6">
                                <div className="flex gap-2">
                                   <select 
                                      value={u.plan} 
                                      onChange={(e) => handleUpdatePlan(u._id, e.target.value as any)}
-                                     className="bg-black/40 border border-white/5 rounded-lg px-2 py-1 text-[9px] font-black uppercase outline-none"
+                                     className="bg-black border border-white/5 rounded-lg px-2 py-1 text-[9px] font-black uppercase text-white"
                                   >
                                      <option value="free">Free</option>
                                      <option value="pro">Pro</option>
                                      <option value="premium">Premium</option>
                                   </select>
-                                  <button 
-                                    onClick={() => handleUpdateStatus(u._id, !u.isActive)}
-                                    className={`p-2 rounded-lg border border-white/5 transition-all ${u.isActive ? 'hover:bg-rose-500/20 text-rose-400' : 'hover:bg-emerald-500/20 text-emerald-400'}`}
-                                  >
-                                    {u.isActive ? <Ban className="w-3.5 h-3.5" /> : <CheckCircle className="w-3.5 h-3.5" />}
+                                  <button onClick={() => handleUpdateStatus(u._id, !u.isActive)} className="p-2 rounded-lg border border-white/5 hover:bg-rose-500/20 text-rose-400">
+                                    <Ban className="w-3.5 h-3.5" />
                                   </button>
                                </div>
                             </td>
@@ -494,100 +488,40 @@ const Admin = () => {
                     </table>
                  </div>
                </PremiumCard>
-               
-               <div className="flex justify-between items-center py-6 px-10 bg-white/[0.01] border border-white/5 rounded-[30px] italic">
-                  <button 
-                    disabled={currentPage === 1} 
-                    onClick={() => setCurrentPage(p => p - 1)}
-                    className="text-[11px] font-black uppercase tracking-widest text-white/30 hover:text-sky-400 disabled:opacity-20 transition-colors"
-                  >
-                    Previous Sector
-                  </button>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-white/20">Segment {currentPage} of {totalPages}</span>
-                  <button 
-                     disabled={currentPage === totalPages} 
-                     onClick={() => setCurrentPage(p => p + 1)}
-                     className="text-[11px] font-black uppercase tracking-widest text-white/30 hover:text-sky-400 disabled:opacity-20 transition-colors"
-                  >
-                    Next Sector
-                  </button>
-               </div>
             </motion.div>
           )}
 
           {activeTab === 'admins' && (
             <motion.div key="admins" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-               {/* Add Admin Form */}
                <div className="lg:col-span-1 space-y-6">
-                 <PremiumCard extreme className="p-8 border-white/5 backdrop-blur-3xl bg-white/[0.01]">
-                    <h3 className="text-xl font-black uppercase tracking-tighter mb-8 flex items-center gap-3 italic">
+                 <PremiumCard extreme className="p-8 border-white/5 text-left">
+                    <h3 className="text-xl font-black uppercase tracking-tighter mb-8 flex items-center gap-3 italic text-left">
                       <UserPlus className="w-5 h-5 text-sky-400" />
-                      Add Forge Admin
+                      Add Admin
                     </h3>
                     <form onSubmit={handleAddAdmin} className="space-y-6">
-                       <PremiumInput 
-                         label="Admin Email" 
-                         value={newAdminEmail} 
-                         onChange={(e: any) => setNewAdminEmail(e.target.value)} 
-                         placeholder="intelligence@bhie.cloud"
-                         icon={<Mail className="w-4 h-4 text-sky-400" />}
-                       />
-                       <PremiumInput 
-                         label="Command Password" 
-                         type="password"
-                         value={newAdminPass} 
-                         onChange={(e: any) => setNewAdminPass(e.target.value)} 
-                         placeholder="Minimum 8 characters"
-                         icon={<Lock className="w-4 h-4 text-indigo-400" />}
-                       />
-                       <p className="text-[9px] text-white/30 font-bold uppercase tracking-widest italic">* Defaults to Bolla@123 if empty</p>
-                       <PremiumButton 
-                         type="submit" 
-                         loading={addingAdmin}
-                         className="w-full h-14 bg-white text-black font-black uppercase tracking-widest text-[11px]"
-                       >
-                         Grant Alpha Access
+                       <PremiumInput label="Email" value={newAdminEmail} onChange={(e: any) => setNewAdminEmail(e.target.value)} placeholder="Email" />
+                       <PremiumInput label="Password" type="password" value={newAdminPass} onChange={(e: any) => setNewAdminPass(e.target.value)} placeholder="Password" />
+                       <PremiumButton type="submit" loading={addingAdmin} className="w-full h-14 bg-white text-black font-black uppercase tracking-widest text-[11px]">
+                         Grant Access
                        </PremiumButton>
                     </form>
                  </PremiumCard>
-                 
-                 <PremiumCard className="p-6 border-white/5 text-center bg-rose-500/5">
-                    <ShieldAlert className="w-10 h-10 text-rose-500/40 mx-auto mb-4" />
-                    <p className="text-[10px] font-black text-rose-200/50 uppercase tracking-widest leading-loose">
-                      Granting Admin status allows full system manipulation, data deletion, and protocol overrides.
-                    </p>
-                 </PremiumCard>
                </div>
-
-               {/* Admins List */}
                <div className="lg:col-span-2 space-y-6">
-                 <PremiumCard className="p-8 border-white/5 h-full">
-                    <h3 className="text-xl font-black uppercase tracking-tighter mb-8 flex items-center gap-3 italic">
+                 <PremiumCard className="p-8 border-white/5 h-full text-left">
+                    <h3 className="text-xl font-black uppercase tracking-tighter mb-8 flex items-center gap-3 italic text-left">
                       <UserCheck className="w-5 h-5 text-indigo-400" />
-                      Active Command Staff
+                      Active Staff
                     </h3>
                     <div className="space-y-4">
                        {admins.map(a => (
-                         <div key={a.id} className="p-6 bg-white/[0.02] border border-white/5 rounded-3xl flex items-center justify-between group hover:border-indigo-500/20 transition-all">
-                            <div className="flex items-center gap-5">
-                               <div className="w-12 h-12 rounded-2xl bg-black border border-white/5 flex items-center justify-center font-black text-white/30">
-                                 AI
-                               </div>
-                               <div>
-                                  <div className="flex items-center gap-2">
-                                    <p className="text-base font-black italic">{a.name || a.email.split('@')[0]}</p>
-                                    {a.isSuperAdmin && (
-                                       <span className="text-[8px] font-black uppercase tracking-widest py-0.5 px-2 bg-amber-500/10 border border-amber-500/40 text-amber-500 rounded-full italic">High Command</span>
-                                    )}
-                                  </div>
-                                  <p className="text-xs font-medium text-white/20">{a.email}</p>
-                               </div>
+                         <div key={a.id} className="p-6 bg-white/[0.02] border border-white/5 rounded-3xl flex items-center justify-between text-left">
+                            <div className="text-left">
+                               <p className="text-base font-black italic">{a.email}</p>
                             </div>
                             {!a.isSuperAdmin && (
-                              <button 
-                                onClick={() => handleRemoveAdmin(a.email)}
-                                className="w-10 h-10 rounded-xl bg-rose-500/5 border border-rose-500/10 flex items-center justify-center text-rose-500 hover:bg-rose-500 hover:text-white transition-all shadow-lg"
-                              >
+                              <button onClick={() => handleRemoveAdmin(a.email)} className="p-2 text-rose-500">
                                 <Trash2 className="w-4 h-4" />
                               </button>
                             )}
@@ -600,125 +534,115 @@ const Admin = () => {
           )}
 
           {activeTab === 'settings' && (
-            <motion.div key="settings" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-               <PremiumCard extreme className="p-10 border-white/5 backdrop-blur-3xl bg-white/[0.01]">
-                  <h3 className="text-2xl font-black uppercase tracking-tighter mb-10 flex items-center gap-3 italic">
+            <motion.div 
+              key="settings" 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              exit={{ opacity: 0, y: -20 }} 
+              className="grid grid-cols-1 lg:grid-cols-2 gap-8"
+            >
+               <PremiumCard extreme className="p-10 border-white/5 backdrop-blur-3xl bg-white/[0.01] text-left">
+                  <h3 className="text-2xl font-black uppercase tracking-tighter mb-10 flex items-center gap-3 italic text-leftv">
                     <Key className="w-6 h-6 text-indigo-400" />
-                    Security Override
+                    Security
                   </h3>
                   <form onSubmit={handleChangeCode} className="space-y-8">
                      <div className="space-y-6">
-                        <PremiumInput 
-                          label="Current Mastery Code" 
-                          type="password"
-                          value={currentCode} 
-                          onChange={(e: any) => setCurrentCode(e.target.value)} 
-                          placeholder="Current code"
-                        />
-                        <PremiumInput 
-                          label="New Authority Protocol" 
-                          type="password"
-                          value={newCode} 
-                          onChange={(e: any) => setNewCode(e.target.value)} 
-                          placeholder="New code"
-                        />
+                        <PremiumInput label="Current Code" type="password" value={currentCode} onChange={(e: any) => setCurrentCode(e.target.value)} />
+                        <PremiumInput label="New Code" type="password" value={newCode} onChange={(e: any) => setNewCode(e.target.value)} />
                      </div>
-                     <PremiumButton 
-                       type="submit" 
-                       loading={updatingCode}
-                       className="w-full h-16 bg-indigo-600 text-white font-black uppercase tracking-widest text-[11px]"
-                     >
-                       Shift Mastery Code
+                     <PremiumButton type="submit" loading={updatingCode} className="w-full h-16 bg-indigo-600 text-white font-black uppercase tracking-widest text-[11px]">
+                       Update Code
                      </PremiumButton>
                   </form>
                </PremiumCard>
 
                <div className="space-y-8">
-                 <PremiumCard className="p-10 border-white/5">
+                 <PremiumCard className="p-10 border-white/5 text-left">
                     <div className="flex items-center justify-between mb-8">
-                      <h3 className="text-xl font-black uppercase tracking-tighter flex items-center gap-3 italic">
+                      <h3 className="text-xl font-black uppercase tracking-tighter flex items-center gap-3 italic text-left">
                         <DollarSign className="w-5 h-5 text-sky-400" />
-                        Plan Parameters
+                        Plan Economics
                       </h3>
-                      <span className="text-[10px] font-black uppercase tracking-tighter text-white/20 italic">Curated Economics</span>
                     </div>
                     
-                    <div className="space-y-6">
+                    <div className="space-y-6 text-left">
                        <div className="flex items-center justify-between p-6 bg-white/[0.01] border border-white/5 rounded-3xl">
-                          <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-1">Professional Delta</p>
+                          <div className="text-left">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-1">PRO</p>
                             <p className="text-3xl font-black italic">₹{settings?.proPrice}</p>
-                          </div>
-                          <ChevronRight className="w-4 h-4 text-white/10" />
-                       </div>
-                       <div className="flex items-center justify-between p-6 bg-white/[0.01] border border-white/5 rounded-3xl">
-                          <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-1">Platinum Delta</p>
-                            <p className="text-3xl font-black italic">₹{settings?.premiumPrice}</p>
                           </div>
                           <ChevronRight className="w-4 h-4 text-white/10" />
                        </div>
                     </div>
                     
                     <div className="mt-8 p-6 bg-indigo-500/5 border border-indigo-500/10 rounded-3xl flex items-center justify-between">
-                        <div>
-                           <p className="text-xs font-black uppercase tracking-widest text-indigo-400">Unlimited Access Probe</p>
-                           <p className="text-[10px] font-medium text-white/30">Allow free upgrades across all modules</p>
+                        <div className="text-left">
+                           <p className="text-xs font-black uppercase tracking-widest text-indigo-400">Free Mode</p>
+                           <p className="text-[10px] font-medium text-white/30">Allow free access</p>
                         </div>
                         <button 
                           onClick={async () => {
-                            try {
-                              const newMode = !settings?.isFreeMode;
-                              await adminService.updateSettings({ isFreeMode: newMode });
-                              toast.success(`Free Mode ${newMode ? 'Enabled' : 'Disabled'}`);
-                              loadSettings();
-                            } catch (error) {
-                              toast.error('Failed to update mode');
-                            }
+                            const newMode = !settings?.isFreeMode;
+                            await adminService.updateSettings({ isFreeMode: newMode });
+                            loadSettings();
                           }}
                           className={`w-12 h-6 rounded-full relative transition-all ${settings?.isFreeMode ? 'bg-emerald-500' : 'bg-white/10'}`}
                         >
                            <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${settings?.isFreeMode ? 'left-7' : 'left-1'}`} />
                         </button>
-                     </div>
+                    </div>
 
-                     <div className="mt-8 space-y-4">
-                        <div className="flex items-center justify-between">
-                          <h3 className="text-xl font-black uppercase tracking-tighter flex items-center gap-3 italic">
+                    <div className="mt-12 space-y-4 pt-8 border-t border-white/5 text-left">
+                        <div className="text-left">
+                          <h3 className="text-xl font-black uppercase tracking-tighter flex items-center gap-3 italic text-left">
                             <Activity className="w-5 h-5 text-purple-400" />
-                            Admin Instructions
+                            Instructions
                           </h3>
                         </div>
                         <textarea
-                          className="w-full h-32 bg-white/[0.02] border border-white/5 rounded-3xl p-6 text-sm font-medium outline-none focus:border-purple-500/40 transition-all resize-none"
-                          placeholder="Enter instructions or announcements to reflect app-wide..."
+                          className="w-full h-32 bg-white/[0.02] border border-white/5 rounded-3xl p-6 text-sm text-white outline-none"
                           value={settings?.adminInstructions || ''}
                           onChange={(e) => setSettings(prev => prev ? { ...prev, adminInstructions: e.target.value } : null)}
                         />
-                        <PremiumButton 
-                          onClick={async () => {
-                            try {
-                              await adminService.updateSettings({ adminInstructions: settings?.adminInstructions });
-                              toast.success('Instructions updated globally');
-                            } catch (error) {
-                              toast.error('Failed to update instructions');
-                            }
-                          }}
-                          className="w-full h-12 bg-white/5 border border-white/10 text-white font-black uppercase tracking-widest text-[10px] hover:bg-white/10"
-                        >
-                          Push Instructions Globally
+                        <PremiumButton onClick={() => adminService.updateSettings({ adminInstructions: settings?.adminInstructions })} className="w-full">
+                          Push Globally
                         </PremiumButton>
-                     </div>
-                 </PremiumCard>
-                 
-                 <div className="p-8 bg-white/[0.01] border border-white/5 rounded-[40px] flex items-center justify-between italic">
-                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/10">Project Intelligence Forge v2.4.0</p>
-                    <div className="flex gap-1">
-                      <div className="w-1 h-1 rounded-full bg-sky-500" />
-                      <div className="w-1 h-1 rounded-full bg-indigo-500" />
-                      <div className="w-1 h-1 rounded-full bg-purple-500" />
                     </div>
-                 </div>
+
+                    <div className="mt-12 space-y-4 pt-8 border-t border-white/5 text-left">
+                        <div className="text-left">
+                          <h3 className="text-xl font-black uppercase tracking-tighter flex items-center gap-3 italic text-left">
+                            <Zap className="w-5 h-5 text-amber-400" />
+                            Splash Ads
+                          </h3>
+                        </div>
+                        <div className="space-y-2">
+                          {settings?.splashAds?.map((ad, i) => (
+                            <div key={i} className="flex items-center justify-between p-3 bg-white/5 rounded-xl text-left">
+                               <p className="text-xs font-bold text-white/60 text-left">{ad}</p>
+                               <button onClick={async () => {
+                                 const next = settings.splashAds?.filter((_, idx) => idx !== i);
+                                 await adminService.updateSettings({ splashAds: next });
+                                 loadSettings();
+                               }} className="text-rose-400"><Trash2 className="w-3 h-3" /></button>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="flex gap-2">
+                           <input id="ad-in" type="text" className="flex-1 bg-white/5 rounded-xl px-4 text-xs text-white" placeholder="Add custom ad..." />
+                           <button onClick={async () => {
+                              const el = document.getElementById('ad-in') as HTMLInputElement;
+                              const val = el.value;
+                              if (!val) return;
+                              const next = [...(settings?.splashAds || []), val];
+                              await adminService.updateSettings({ splashAds: next });
+                              el.value = '';
+                              loadSettings();
+                           }} className="px-4 py-2 bg-amber-500 text-black text-[10px] font-black rounded-xl">ADD</button>
+                        </div>
+                    </div>
+                 </PremiumCard>
                </div>
             </motion.div>
           )}

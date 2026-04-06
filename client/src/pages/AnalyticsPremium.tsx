@@ -81,22 +81,6 @@ const PremiumAnalytics = () => {
     { name: 'No Data', revenue: 0, expenses: 0, profit: 0 }
   ];
 
-  const radarData = metrics?.kpis ? [
-    { subject: 'Marketing', A: 0, B: 0, fullMark: 150 },
-    { subject: 'Payroll', A: 0, B: 0, fullMark: 150 },
-    { subject: 'Software', A: 0, B: 0, fullMark: 150 },
-    { subject: 'Rent', A: 0, B: 0, fullMark: 150 },
-    { subject: 'Travel', A: 0, B: 0, fullMark: 150 },
-    { subject: 'Operations', A: 0, B: 0, fullMark: 150 },
-  ] : [
-    { subject: 'Marketing', A: 0, B: 0, fullMark: 150 },
-    { subject: 'Payroll', A: 0, B: 0, fullMark: 150 },
-    { subject: 'Software', A: 0, B: 0, fullMark: 150 },
-    { subject: 'Rent', A: 0, B: 0, fullMark: 150 },
-    { subject: 'Travel', A: 0, B: 0, fullMark: 150 },
-    { subject: 'Operations', A: 0, B: 0, fullMark: 150 },
-  ];
-
   const performanceData = metrics?.monthlyData ? metrics.monthlyData.map((d: any) => ({
     name: d.month,
     active: d.revenue,
@@ -109,6 +93,22 @@ const PremiumAnalytics = () => {
     { name: 'Fri', active: 0, target: 0 },
     { name: 'Sat', active: 0, target: 0 },
     { name: 'Sun', active: 0, target: 0 },
+  ];
+
+  const radarData = metrics?.scoreData?.breakdown ? [
+    { subject: 'Profitability', A: metrics.scoreData.breakdown.profitability, B: 70, fullMark: 100 },
+    { subject: 'Growth', A: metrics.scoreData.breakdown.growth, B: 65, fullMark: 100 },
+    { subject: 'Activity', A: metrics.scoreData.breakdown.activity, B: 50, fullMark: 100 },
+    { subject: 'Efficiency', A: metrics.scoreData.breakdown.efficiency, B: 80, fullMark: 100 },
+    { subject: 'Resonance', A: metrics.scoreData?.resonanceIndex || 50, B: 60, fullMark: 100 },
+    { subject: 'Stability', A: 100 - (metrics.kpis?.inactiveRatio || 0), B: 75, fullMark: 100 },
+  ] : [
+    { subject: 'Profitability', A: 0, B: 0, fullMark: 100 },
+    { subject: 'Growth', A: 0, B: 0, fullMark: 100 },
+    { subject: 'Activity', A: 0, B: 0, fullMark: 100 },
+    { subject: 'Efficiency', A: 0, B: 0, fullMark: 100 },
+    { subject: 'Resonance', A: 0, B: 0, fullMark: 100 },
+    { subject: 'Stability', A: 0, B: 0, fullMark: 100 },
   ];
 
   if (loading) {
@@ -151,7 +151,31 @@ const PremiumAnalytics = () => {
             <button className="px-4 py-2 rounded-full border border-[#1C1C1E] hover:bg-[#1C1C1E] transition-colors flex items-center gap-2 text-[13px] font-medium text-[#A1A1A6]">
               <Filter className="w-4 h-4" /> Parameters
             </button>
-            <button className="px-4 py-2 rounded-full bg-white text-black hover:bg-white/90 transition-colors flex items-center gap-2 text-[13px] font-medium">
+            <button 
+              onClick={() => {
+                premiumFeedback.click();
+                if (metrics) {
+                    const header = ['Month', 'Revenue', 'Expenses', 'Target'];
+                    const rows = (metrics.monthlyData || []).map((d: any) => [
+                        d.month,
+                        d.revenue,
+                        d.expenses,
+                        d.target
+                    ]);
+                    const csv = [header, ...rows]
+                        .map(row => row.join(','))
+                        .join('\n');
+                    const blob = new Blob([csv], { type: 'text/csv' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `bhie-analytics-${new Date().toISOString().slice(0, 10)}.csv`;
+                    link.click();
+                    premiumFeedback.success();
+                }
+              }}
+              className="px-4 py-2 rounded-full bg-white text-black hover:bg-white/90 transition-colors flex items-center gap-2 text-[13px] font-medium"
+            >
               <Download className="w-4 h-4" /> Export Data
             </button>
           </motion.div>

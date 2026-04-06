@@ -18,7 +18,7 @@ export default function MarketingFooter() {
         <div className="space-y-5">
           <Logo size="md" to="/" subtitle="Business Health Intelligence Engine" />
           <p className="max-w-md text-sm leading-7 text-slate-300">
-            BHIE helps modern businesses turn operational data into decisions, momentum, and measurable growth.
+            Finly helps modern businesses turn operational data into decisions, momentum, and measurable growth.
           </p>
         </div>
 
@@ -57,7 +57,7 @@ export default function MarketingFooter() {
       </div>
 
       <div className="mx-auto mt-12 max-w-7xl border-t border-white/10 pt-6 text-sm text-slate-400">
-        Copyright © 2026 BHIE. All rights reserved.
+        Copyright © 2026 Finly. All rights reserved.
       </div>
     </footer>
   );

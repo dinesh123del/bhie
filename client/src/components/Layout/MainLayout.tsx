@@ -392,7 +392,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {!collapsed ? (
               <div className="flex flex-col gap-4">
                 <div className="space-y-1">
-                  <p className="text-xs uppercase tracking-[0.2em] text-ink-400">BHIE OS</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-ink-400">Finly OS</p>
                   <p className="mt-2 text-sm font-semibold text-white">Simple business workspace</p>
                   <p className="mt-1 text-sm text-ink-300">Use this menu to check records, analytics, and actions without extra noise.</p>
                 </div>

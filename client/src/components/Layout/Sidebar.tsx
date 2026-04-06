@@ -26,7 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose: _onClose }) => {
     <div className="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-gray-900 to-gray-800 text-white shadow-2xl z-40">
       <div className="p-6 border-b border-gray-800">
         <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-          BHIE
+          Finly
         </h1>
         <p className="text-sm text-gray-400 mt-1">{user.role}</p>
       </div>

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 /* ──────────────────────────────────────────────────────────────
-   BHIE APPLE-INTELLIGENCE SPLASH SCREEN
+   Finly APPLE-INTELLIGENCE SPLASH SCREEN
    Pure black · minimalist logo · intelligence mesh · signature sound
    ─────────────────────────────────────────────────────────────── */
 
@@ -64,14 +64,14 @@ function playMacStartup(muted: boolean) {
   }
 }
 
-function BHIELogoSVG({ phase }: { phase: 'awaiting' | 'revealing' | 'exiting' }) {
+function FinlyLogoSVG({ phase }: { phase: 'awaiting' | 'revealing' | 'exiting' }) {
   return (
     <motion.svg
       viewBox="0 0 100 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className="w-20 md:w-28 relative z-10"
-      aria-label="BHIE"
+      aria-label="Finly"
       initial={{ opacity: 0, filter: 'blur(10px)', scale: 0.9 }}
       animate={
         phase === 'revealing'
@@ -121,13 +121,38 @@ function BHIELogoSVG({ phase }: { phase: 'awaiting' | 'revealing' | 'exiting' })
 
 export default function CinematicSplash({
   onComplete,
-  duration = 3000,
+  duration = 5000,
   muted = false,
 }: CinematicSplashProps) {
   const [phase, setPhase] = useState<'awaiting' | 'revealing' | 'exiting'>('awaiting');
+  const [ads, setAds] = useState<string[]>([]);
+  const [currentAdIdx, setCurrentAdIdx] = useState(0);
   const completedRef = useRef(false);
 
   useEffect(() => {
+    // Fetch dynamic ads
+    const fetchAds = async () => {
+      try {
+        const res = await fetch('/api/pricing');
+        const json = await res.json();
+        if (json.success && json.data.splashAds && json.data.splashAds.length > 0) {
+          setAds(json.data.splashAds);
+        } else {
+          // Default fallbacks
+          setAds([
+            "AI-powered receipt scanning.",
+            "Visualizing your financial pulse.",
+            "Smart cash flow predictions.",
+            "Zero manual data entry."
+          ]);
+        }
+      } catch {
+        // Fallback tips
+        setAds(["Intelligence at the speed of thought."]);
+      }
+    };
+    fetchAds();
+
     const timer = setTimeout(() => {
       if (phase !== 'awaiting') return;
       playMacStartup(muted);
@@ -137,13 +162,22 @@ export default function CinematicSplash({
         if (!completedRef.current) {
           completedRef.current = true;
           setPhase('exiting');
-          setTimeout(() => onComplete(), 1000); // Wait for exit anim to finish
+          setTimeout(() => onComplete(), 1000);
         }
       }, duration - 1000);
     }, 400); 
 
     return () => clearTimeout(timer);
   }, []);
+
+  // Cycle ads if they exist
+  useEffect(() => {
+    if (ads.length <= 1) return;
+    const adTimer = setInterval(() => {
+      setCurrentAdIdx(prev => (prev + 1) % ads.length);
+    }, 2500);
+    return () => clearInterval(adTimer);
+  }, [ads]);
 
   return (
     <motion.div
@@ -164,16 +198,16 @@ export default function CinematicSplash({
               transition={{ duration: 2, ease: "easeOut" }}
             >
               <motion.div
-                className="w-64 h-64 md:w-96 md:h-96 rounded-full opacity-40 blur-[60px]"
+                className="w-[500px] h-[500px] rounded-full opacity-25 blur-[100px]"
                 style={{
                   background: 'conic-gradient(from 180deg at 50% 50%, #FF2D55 0deg, #AF52DE 120deg, #007AFF 240deg, #FF2D55 360deg)',
                 }}
                 animate={{
-                  rotate: [0, 180],
-                  scale: [0.8, 1.2, 0.9],
+                  rotate: [0, 360],
+                  scale: [1, 1.3, 1],
                 }}
                 transition={{
-                  duration: 6,
+                  duration: 8,
                   ease: "linear",
                   repeat: Infinity
                 }}
@@ -183,22 +217,41 @@ export default function CinematicSplash({
         </AnimatePresence>
 
         {/* Clean Logo Morph */}
-        <BHIELogoSVG phase={phase} />
+        <FinlyLogoSVG phase={phase} />
         
-        {/* Apple-style minimalist loading bar */}
-        <motion.div
-          className="absolute bottom-20 w-32 h-[3px] bg-[#1C1C1E] rounded-full overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={phase === 'revealing' ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 1.0, delay: 0.5 }}
-        >
-          <motion.div 
-            className="h-full bg-[#FFFFFF]"
-            initial={{ width: '0%' }}
-            animate={{ width: '100%' }}
-            transition={{ duration: (duration / 1000) - 1.2, ease: [0.2, 0.8, 0.2, 1] }}
-          />
-        </motion.div>
+        {/* Bottom Section: Loader + Ad/Tip */}
+        <div className="absolute bottom-24 flex flex-col items-center gap-6 w-full max-w-[280px]">
+          {/* Tip/Ad text */}
+          <AnimatePresence mode="wait">
+            {phase === 'revealing' && ads.length > 0 && (
+              <motion.p
+                key={currentAdIdx}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
+                className="text-white/40 text-[11px] font-bold uppercase tracking-[0.25em] text-center px-4"
+              >
+                {ads[currentAdIdx]}
+              </motion.p>
+            )}
+          </AnimatePresence>
+
+          {/* Apple-style minimalist loading bar */}
+          <motion.div
+            className="w-full h-[2px] bg-white/5 rounded-full overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={phase === 'revealing' ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 1.0, delay: 0.5 }}
+          >
+            <motion.div 
+              className="h-full bg-white/40"
+              initial={{ width: '0%' }}
+              animate={{ width: '100%' }}
+              transition={{ duration: (duration / 1000) - 1.2, ease: "linear" }}
+            />
+          </motion.div>
+        </div>
       </div>
     </motion.div>
   );

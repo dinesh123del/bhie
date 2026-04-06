@@ -82,7 +82,7 @@ function buildRuleBasedInsights(input: GenerateInsightsInput): DashboardInsight[
         type: 'info',
         metric: 'general',
         message: 'Upload records to unlock AI insights',
-        detail: 'Add bills, receipts, or transactions and BHIE will start tracking patterns automatically.',
+        detail: 'Add bills, receipts, or transactions and Finly will start tracking patterns automatically.',
         value: 'No data yet',
       },
     ];
@@ -181,7 +181,7 @@ function buildRuleBasedInsights(input: GenerateInsightsInput): DashboardInsight[
       type: 'info',
       metric: 'activity',
       message: 'Business activity tracking is consistent',
-      detail: `${activeRecords} of ${totalRecords} records are active, giving BHIE stronger data for analysis.`,
+      detail: `${activeRecords} of ${totalRecords} records are active, giving Finly stronger data for analysis.`,
       value: `${Math.round(activeRatio)}% active`,
     });
   } else if (totalRecords > 0 && totalRecords < 5) {
@@ -227,7 +227,7 @@ async function enhanceInsightsWithAI(
   }
 
   const prompt = [
-    'You are a professional Business Analyst and Strategic Consultant for BHIE.',
+    'You are a professional Business Analyst and Strategic Consultant for Finly.',
     'Your goal is to provide clear, actionable business advice to small and medium business owners.',
     'Do not use technical AI jargon or complex financial engineering terms.',
     'Keep the same meaning as the provided rule-based insights.',

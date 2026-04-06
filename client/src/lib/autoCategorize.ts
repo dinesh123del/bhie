@@ -176,7 +176,7 @@ export const analyzeFileMetadata = (
  * Smart categorization algorithm
  * Combines multiple signals for best accuracy
  */
-export const categorizFile = (
+export const categorizeFile = (
   filename: string,
   mimeType: string,
   fileSize: number = 0
@@ -285,7 +285,7 @@ export const categorizeBatch = (
   files: Array<{ name: string; mimeType: string; size?: number }>
 ): CategorizedFile[] => {
   return files.map(file =>
-    categorizFile(file.name, file.mimeType, file.size)
+    categorizeFile(file.name, file.mimeType, file.size)
   );
 };
 
@@ -326,4 +326,4 @@ export const getCategorizationStats = (
   return result;
 };
 
-export default categorizFile;
+export default categorizeFile;

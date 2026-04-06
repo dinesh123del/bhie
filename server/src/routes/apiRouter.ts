@@ -36,7 +36,7 @@ router.use('/ds', dataScienceRoutes); // New Route for Data Science Analysis
 
 
 router.get('/health', (_req, res) => {
-  res.json({ status: 'OK', engine: 'BHIE-v1.0' });
+  res.json({ status: 'OK', engine: 'Finly-v1.0' });
 });
 
 

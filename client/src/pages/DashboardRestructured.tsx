@@ -95,8 +95,8 @@ const DashboardRestructured = () => {
                 variant="ghost" 
                 onClick={() => {
                   navigator.share?.({
-                    title: 'BHIE Weekly Summary',
-                    text: `I've tracked ${user?.usageCount || 0} expenses this month with BHIE! My business health score is ${metrics?.businessHealth || 0}.`,
+                    title: 'Finly Weekly Summary',
+                    text: `I've tracked ${user?.usageCount || 0} expenses this month with Finly! My business health score is ${metrics?.businessHealth || 0}.`,
                     url: window.location.origin,
                   }).then(() => {
                     analyticsService.addMetric('share_summary', 1);

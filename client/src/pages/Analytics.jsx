@@ -485,7 +485,7 @@ export default function Analytics() {
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-400">Live analytics</p>
                 <h2 className="text-3xl font-semibold tracking-[-0.06em] text-white">No chart data yet</h2>
                 <p className="text-sm leading-7 text-ink-300">
-                  BHIE now shows only live analytics. Add dated income and expense records to unlock trend charts and period comparisons.
+                  Finly now shows only live analytics. Add dated income and expense records to unlock trend charts and period comparisons.
                 </p>
                 {loadError ? (
                   <p className="text-sm font-semibold text-amber-200">{loadError}</p>
@@ -510,7 +510,7 @@ export default function Analytics() {
                 <p className="mt-3 max-w-2xl text-sm leading-7 text-ink-300">
                   {hasChartData
                     ? 'These charts are based on your current business records and update with your dashboard data.'
-                    : 'This space is ready for live records. Once entries are added, BHIE will build trend lines and comparisons here automatically.'}
+                    : 'This space is ready for live records. Once entries are added, Finly will build trend lines and comparisons here automatically.'}
                 </p>
               </div>
               <PremiumButton onClick={() => navigate('/dashboard')} icon={<ArrowRight className="h-4 w-4" />}>

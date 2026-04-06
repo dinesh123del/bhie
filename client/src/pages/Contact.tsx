@@ -60,7 +60,7 @@ export default function Contact() {
                 {[
                   { icon: Mail, label: 'Email', value: 'hello@bhie.ai', sub: '24/7 Support' },
                   { icon: MessageSquare, label: 'Chat', value: 'WhatsApp Ready', sub: 'Real-time help' },
-                  { icon: Phone, label: 'Call', value: '+1 (555) 000-BHIE', sub: 'Mon-Fri, 9am-6pm' },
+                  { icon: Phone, label: 'Call', value: '+1 (555) 000-Finly', sub: 'Mon-Fri, 9am-6pm' },
                   { icon: MapPin, label: 'Office', value: 'Silicon Valley', sub: 'California, USA' }
                 ].map((item, idx) => (
                   <motion.div

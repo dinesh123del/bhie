@@ -26,6 +26,22 @@ export interface DailyStatusItem {
   tone: 'positive' | 'warning' | 'brand';
 }
 
+export interface ForesightData {
+  runwayMonths: number;
+  burnRate: number;
+  efficiencyScore: number;
+  riskLevel: 'low' | 'medium' | 'high';
+  recommendation: string;
+}
+
+export interface SurgicalDirective {
+  id: string;
+  type: 'growth' | 'efficiency' | 'equity';
+  directive: string;
+  expectedImpact: string;
+  confidence: number;
+}
+
 const currencyFormatter = new Intl.NumberFormat('en-IN', {
   style: 'currency',
   currency: 'INR',
@@ -213,7 +229,7 @@ export function buildPlainReport(input: {
   lastUpdated: Date;
 }): string {
   const lines = [
-    `BHIE BUSINESS INTELLIGENCE REPORT`,
+    `Finly BUSINESS INTELLIGENCE REPORT`,
     `=============================`,
     `Organization: ${input.companyName || 'Main Account'}`,
     `Report Date: ${input.lastUpdated.toLocaleString('en-IN')}`,
@@ -241,12 +257,85 @@ function clamp(value: number, min = 0, max = 100): number {
   return Math.max(min, Math.min(max, Number.isFinite(value) ? value : min));
 }
 
+export function buildQuantumForesight(input: {
+  revenue: number;
+  expenses: number;
+  profit: number;
+  growthRate: number;
+}): ForesightData {
+  const burnRate = input.expenses / 12 || input.expenses; // Proxy for monthly burn
+  const runwayMonths = input.profit > 0 ? (input.revenue / Math.max(burnRate, 1)) * 2 : 3; // Estimated based on cycles
+  const efficiencyScore = clamp((input.revenue / Math.max(input.expenses, 1)) * 40);
+  
+  let riskLevel: 'low' | 'medium' | 'high' = 'low';
+  if (runwayMonths < 3) riskLevel = 'high';
+  else if (runwayMonths < 6) riskLevel = 'medium';
+
+  const recommendations = [
+    "Your cash engine is optimized. Consider aggressive expansion.",
+    "Maintain current efficiency while building a 6-month buffer.",
+    "Immediate cost surgicality required. Optimize variable overhead.",
+    "Runway is critical. Prioritize high-margin revenue streams."
+  ];
+
+  return {
+    runwayMonths: Math.round(runwayMonths),
+    burnRate,
+    efficiencyScore,
+    riskLevel,
+    recommendation: riskLevel === 'high' ? recommendations[2] : riskLevel === 'medium' ? recommendations[1] : recommendations[0]
+  };
+}
+
+export function buildSurgicalDirectives(input: {
+  revenue: number;
+  expenses: number;
+  profit: number;
+  growthRate: number;
+  profitMargin: number;
+}): SurgicalDirective[] {
+  const directives: SurgicalDirective[] = [];
+  
+  // Growth Logic
+  if (input.profitMargin > 20 && input.growthRate < 10) {
+    directives.push({
+      id: 'growth-1',
+      type: 'growth',
+      directive: 'Aggressive Capital Allocation to Acquisition',
+      expectedImpact: '+18.4% Revenue Scale',
+      confidence: 88
+    });
+  }
+  
+  // Efficiency Logic
+  if (input.expenses > (input.revenue * 0.7)) {
+    directives.push({
+      id: 'efficiency-1',
+      type: 'efficiency',
+      directive: 'Surgical Optimization of Variable Overheads',
+      expectedImpact: '+12.5% Margin Expansion',
+      confidence: 94
+    });
+  }
+  
+  // Equity Logic
+  directives.push({
+     id: 'equity-1',
+     type: 'equity',
+     directive: 'Cash Preservation Protocol: Extend Runway to 18mo',
+     expectedImpact: 'Institutional Stability confirmed',
+     confidence: 99
+  });
+
+  return directives.slice(0, 3);
+}
+
 export function exportReport(content: string = "Business Intelligence Report"): void {
   const blob = new Blob([content], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `BHIE-Report-${new Date().toISOString().split('T')[0]}.txt`;
+  link.download = `Finly-Report-${new Date().toISOString().split('T')[0]}.txt`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

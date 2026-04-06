@@ -14,11 +14,12 @@ import { UpgradeModal } from './components/UpgradeModal';
 import { PageTransition } from './components/ui/MicroInteractions';
 import { OnboardingStep } from './components/ui/EliteUI';
 import { PremiumBackground } from './components/ui/PremiumBackground';
+import { GamificationProvider, GamingHUD } from './components/GamificationEngine';
 
 // Dynamic Page Imports
 const PremiumLogin    = lazy(() => import('./pages/LoginPremium'));
 const PremiumRegister = lazy(() => import('./pages/RegisterPremium'));
-const PremiumLanding  = lazy(() => import('./pages/LandingPremium'));
+const PremiumLanding  = lazy(() => import('./pages/LandingPagePremium'));
 const Dashboard       = lazy(() => import('./pages/DashboardPremium'));
 const Analytics       = lazy(() => import('./pages/AnalyticsPremium'));
 
@@ -91,7 +92,7 @@ function MainApp() {
 
   const onboardingSteps = [
     {
-      title: 'Welcome to BHIE',
+      title: 'Welcome to Finly',
       description: "We help you track your business money and grow. Let's get you set up in one minute.",
     },
     {
@@ -209,53 +210,52 @@ function App() {
     <AuthProvider>
       <LanguageProvider>
         <ThemeProvider>
-          <AnimatePresence mode="wait">
-            {!showApp ? (
-              <motion.div
-                key="bhie-splash"
-                className="fixed inset-0 z-[10000]"
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.8, ease: 'easeInOut' }}
-              >
-                <CinematicSplash
-                  onComplete={handleSplashComplete}
-                  duration={2700}
-                  muted={muted}
-                />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="bhie-app"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, ease: 'easeInOut' }}
-                className="h-full w-full"
-              >
-                <MainApp />
-                <Toaster
-                  position="top-right"
-                  toastOptions={{
-                    duration: 5000,
-                    style: {
-                      background: 'rgba(10, 10, 10, 0.9)',
-                      color: '#fff',
-                      border: '1px solid rgba(79,70,229,0.2)',
-                      backdropFilter: 'blur(20px)',
-                      borderRadius: '16px',
-                      padding: '14px 20px',
-                      fontSize: '14px',
-                      fontWeight: '600',
-                      boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(79,70,229,0.1)',
-                    },
-                    success: {
-                      iconTheme: { primary: '#10b981', secondary: '#fff' },
-                    },
-                  }}
-                />
-                <UpgradeModal />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <GamificationProvider>
+            <AnimatePresence mode="wait">
+              {!showApp ? (
+                <motion.div
+                  key="bhie-loading"
+                  className="fixed inset-0 z-[10000]"
+                  exit={{ opacity: 0, scale: 1.1, filter: 'blur(20px)' }}
+                  transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
+                >
+                  <LoadingScreen onComplete={handleSplashComplete} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="bhie-app"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, ease: 'easeInOut' }}
+                  className="h-full w-full"
+                >
+                  <GamingHUD />
+                  <MainApp />
+                  <Toaster
+                    position="top-right"
+                    toastOptions={{
+                      duration: 5000,
+                      style: {
+                        background: 'rgba(10, 10, 10, 0.9)',
+                        color: '#fff',
+                        border: '1px solid rgba(79,70,229,0.2)',
+                        backdropFilter: 'blur(20px)',
+                        borderRadius: '16px',
+                        padding: '14px 20px',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(79,70,229,0.1)',
+                      },
+                      success: {
+                        iconTheme: { primary: '#10b981', secondary: '#fff' },
+                      },
+                    }}
+                  />
+                  <UpgradeModal />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </GamificationProvider>
         </ThemeProvider>
       </LanguageProvider>
     </AuthProvider>

@@ -76,7 +76,7 @@ const Landing = () => {
       <nav className="fixed top-0 w-full z-50 bg-white/8 backdrop-blur-xl border-b border-white/20">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="text-2xl font-black bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-            BHIE
+            Finly
           </div>
           <div className="hidden md:flex items-center space-x-8">
             <a href="#features" className="text-gray-300 hover:text-white transition-colors font-semibold">Features</a>
@@ -284,7 +284,7 @@ const Landing = () => {
               Ready to Transform Your Business?
             </h2>
             <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto font-medium">
-              Join 10,000+ businesses already using BHIE to unlock hidden growth opportunities.
+              Join 10,000+ businesses already using Finly to unlock hidden growth opportunities.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <button className="px-12 py-6 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-2xl rounded-3xl shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 transition-all duration-300 w-full sm:w-auto">
@@ -311,7 +311,7 @@ const Landing = () => {
           <div className="grid md:grid-cols-4 gap-12">
             <div>
               <div className="text-3xl font-black bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent mb-6">
-                BHIE
+                Finly
               </div>
               <p className="text-gray-300 mb-8 font-medium">
                 AI-powered business intelligence platform for modern companies.
@@ -345,7 +345,7 @@ const Landing = () => {
             </div>
           </div>
           <div className="border-t border-white/10 mt-16 pt-12 text-center text-gray-300 font-medium">
-            <p>&copy; 2024 BHIE. All rights reserved.</p>
+            <p>&copy; 2024 Finly. All rights reserved.</p>
           </div>
         </div>
       </footer>

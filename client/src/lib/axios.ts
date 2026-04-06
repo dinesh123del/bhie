@@ -104,7 +104,7 @@ api.interceptors.response.use(
         errorMessage = 'Our server encountered an issue. Please try again soon.';
       }
     } else if (error.request) {
-      errorMessage = 'Unable to connect to BHIE servers. Please check your internet connection.';
+      errorMessage = 'Unable to connect to Finly servers. Please check your internet connection.';
     }
 
     // Attach human-readable message for easy UI consumption

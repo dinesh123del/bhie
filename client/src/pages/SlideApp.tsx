@@ -394,7 +394,7 @@ function ProfileSlide() {
           Profile
         </span>
         <h2 className="mt-5 text-3xl font-semibold text-white">{user?.name || 'Your workspace profile'}</h2>
-        <p className="mt-2 text-sm text-slate-300">{user?.email || 'Manage your BHIE account and preferences.'}</p>
+        <p className="mt-2 text-sm text-slate-300">{user?.email || 'Manage your Finly account and preferences.'}</p>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <div className="glass-panel rounded-[1.5rem] p-4">

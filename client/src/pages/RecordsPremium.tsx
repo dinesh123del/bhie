@@ -8,6 +8,10 @@ import {
   Search,
   LayoutGrid,
   Network,
+  Edit2,
+  Trash2,
+  Save,
+  X,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { recordsAPI } from '../services/api';
@@ -15,6 +19,7 @@ import { useAuth } from '../hooks/useAuth';
 import { HUDModal } from '../components/HUDModal';
 import { StrategicTopology } from '../components/StrategicTopology';
 import { premiumFeedback } from '../utils/premiumFeedback';
+import { useGamification, BadgeRow } from '../components/GamificationEngine';
 
 interface RecordItem {
   _id: string;
@@ -62,6 +67,7 @@ const PremiumRecords = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user } = useAuth();
+  const { addXP } = useGamification();
   const [records, setRecords] = useState<RecordItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(searchParams.get('q') || '');
@@ -123,7 +129,8 @@ const PremiumRecords = () => {
       premiumFeedback.click();
       await recordsAPI.delete(id);
       setRecords((current) => current.filter((record) => record._id !== id));
-      toast.success('Record deleted');
+      addXP(25);
+      toast.success('Sanitized +25 XP');
       window.dispatchEvent(new CustomEvent('bhie:records-updated'));
     } catch {
       toast.error('Failed to delete record');
@@ -139,6 +146,13 @@ const PremiumRecords = () => {
           isOpen={!!selectedRecord} 
           onClose={() => setSelectedRecord(null)} 
           data={selectedRecord} 
+        />
+
+        {/* Achievement Badges */}
+        <BadgeRow 
+          totalRecords={totals.total} 
+          healthScore={85} // Assuming a default or calculated health score here
+          revenue={totals.income} 
         />
 
         {/* Header */}
@@ -162,6 +176,8 @@ const PremiumRecords = () => {
               onClick={() => {
                 premiumFeedback.click();
                 exportRecords(filteredRecords);
+                addXP(200);
+                toast.success('Data Exported! +200 XP Earned.');
               }}
               className="px-4 py-2 rounded-full border border-[#1C1C1E] hover:bg-[#1C1C1E] transition-colors flex items-center gap-2 text-[13px] font-medium text-[#A1A1A6]"
             >

@@ -96,7 +96,7 @@ export default function Hero({ onPrimaryClick, onSecondaryClick }) {
               <Sparkles className="h-4 w-4" />
             </span>
             <span className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-200">
-              BHIE Premium Intelligence
+              Finly Premium Intelligence
             </span>
           </motion.div>
 

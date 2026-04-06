@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
     }
     
     // Get dynamic settings
-    const settings = await Settings.findOne() || { proPrice: 79, premiumPrice: 299, currency: 'INR', isFreeMode: true, adminInstructions: '' };
+    const settings = await Settings.findOne() || { proPrice: 79, premiumPrice: 200, currency: 'INR', isFreeMode: true, adminInstructions: '', splashAds: [] };
     
     // Pricing Lookups
     const pricing = pricingConfig[country] || pricingConfig['DEFAULT'];
@@ -49,6 +49,7 @@ router.get('/', async (req, res) => {
         premiumPrice: settings.premiumPrice,
         isFreeMode: settings.isFreeMode ?? true,
         adminInstructions: settings.adminInstructions || '',
+        splashAds: settings.splashAds || [],
         ip: ipToTest
       }
     });

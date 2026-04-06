@@ -40,7 +40,7 @@ const PremiumRegister = () => {
         .then(user => {
           if (user) {
             login(token, user);
-            toast.success('Welcome to BHIE Premium via Google!');
+            toast.success('Welcome to Finly Premium via Google!');
           }
         })
         .catch(err => {
@@ -122,7 +122,7 @@ const PremiumRegister = () => {
           >
             <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-semibold text-emerald-200">Welcome to BHIE!</p>
+              <p className="text-sm font-semibold text-emerald-200">Welcome to Finly!</p>
               <p className="text-xs text-emerald-300">Redirecting to dashboard...</p>
             </div>
           </motion.div>
@@ -140,7 +140,7 @@ const PremiumRegister = () => {
           <PremiumCard extreme className="p-6 md:p-8 backdrop-blur-3xl bg-white/[0.01] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)]">
             {/* Heading */}
             <div className="mb-6">
-              <h2 className="text-2xl md:text-3xl font-black text-white mb-1 tracking-tight">Join BHIE</h2>
+              <h2 className="text-2xl md:text-3xl font-black text-white mb-1 tracking-tight">Join Finly</h2>
               <p className="text-gray-400 text-xs md:text-sm font-medium">Start managing your business records today</p>
             </div>
 

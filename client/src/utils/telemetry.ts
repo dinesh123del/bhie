@@ -1,5 +1,5 @@
 /**
- * BHIE Telemetry & Monitoring System
+ * Finly Telemetry & Monitoring System
  * Unified integration for Sentry (Errors) and Google Analytics (Insights).
  */
 

@@ -38,6 +38,10 @@ import { dashboardAPI } from '../services/api';
 import { canUseAIInsights, getPlanLabel as getReadablePlanLabel, getRemainingUploads } from '../utils/plan';
 import BusinessHealthEngine from '../components/BusinessHealthEngine';
 import ActionCenter from '../components/ActionCenter';
+import StoryDashboard from '../components/StoryDashboard';
+import DailyCheckInPanel from '../components/DailyCheckInPanel';
+import UploadImpactCard from '../components/UploadImpactCard';
+import QuestEngine from '../components/QuestEngine';
 import {
   buildDailyStatus,
   buildHealthBreakdown,
@@ -352,7 +356,7 @@ const Dashboard = () => {
     },
     {
       label: 'User',
-      value: user?.name ?? 'BHIE User',
+      value: user?.name ?? 'Finly User',
       icon: <Users className="h-5 w-5" />,
     },
     {
@@ -437,7 +441,7 @@ const Dashboard = () => {
     ? loadError
     : latestUpload
       ? `Latest file processed successfully. ${(latestUpload.file?.originalName || latestUpload.record.title)} was converted into a saved ${latestUpload.record.type} record.`
-      : 'System is healthy, dashboard is synced, and BHIE is ready for your next upload.';
+      : 'System is healthy, dashboard is synced, and Finly is ready for your next upload.';
 
   const handleExportReport = useCallback(() => {
     const report = buildPlainReport({
@@ -607,13 +611,13 @@ const Dashboard = () => {
           transition={{ duration: 0.52, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
           className="grid gap-6 xl:grid-cols-[1.04fr_0.96fr]"
         >
-          {/* <StoryDashboard bullets={storyBullets} dailySummary={storySummary} />
+          <StoryDashboard bullets={storyBullets} dailySummary={storySummary} />
           <DailyCheckInPanel
             items={dailyStatus}
             confirmationMessage={confirmationMessage}
             refreshing={isRefreshing}
             onRefresh={() => void loadDashboard({ silent: true })}
-          /> */}
+          />
         </motion.section>
 
         <motion.section
@@ -624,6 +628,7 @@ const Dashboard = () => {
         >
           <div className="space-y-6">
             <RevenueLineChart data={apiData?.metrics?.monthlyData || []} loading={loading} />
+            <QuestEngine />
           </div>
           <div className="space-y-6">
             <ProfitBarChart data={(apiData?.metrics?.monthlyData || []).map(item => ({
@@ -666,7 +671,7 @@ const Dashboard = () => {
             onAskWhatShouldIDo={handleWhatShouldIDo}
             onExport={handleExportReport}
           />
-          {/* <UploadImpactCard latestUpload={latestUpload} revenue={revenue} expenses={expenses} /> */}
+          <UploadImpactCard latestUpload={latestUpload} revenue={revenue} expenses={expenses} />
         </motion.section>
 
         <motion.section
@@ -753,7 +758,7 @@ const Dashboard = () => {
                     <div className="rounded-[1.2rem] border border-dashed border-white/12 bg-white/[0.02] p-4">
                       <p className="text-sm font-semibold text-white">Action guidance is active</p>
                       <p className="mt-2 text-sm leading-6 text-ink-300">
-                        BHIE is using business rules to keep recommendations useful even when premium insights are unavailable.
+                        Finly is using business rules to keep recommendations useful even when premium insights are unavailable.
                       </p>
                     </div>
                   ) : null}

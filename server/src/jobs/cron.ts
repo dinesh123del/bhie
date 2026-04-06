@@ -43,12 +43,18 @@ export function startCronJobs() {
   });
 
   // 3. Keep Server Alive - pings the server every 5 minutes (*/5 * * * *)
+  //    Uses RENDER_EXTERNAL_HOSTNAME (auto-set by Render) when deployed.
+  //    Falls back to localhost so the job never fails due to a missing/placeholder hostname.
   cron.schedule("*/5 * * * *", async () => {
+    // Only needed on Render to prevent dyno spin-down; skip in local dev.
+    if (!env.IS_PRODUCTION && !process.env.RENDER_EXTERNAL_HOSTNAME) return;
+
     try {
-      const serverUrl = env.IS_PRODUCTION 
-        ? `https://${process.env.RENDER_EXTERNAL_HOSTNAME || 'your-backend.onrender.com'}/api/health` 
-        : `http://localhost:${env.PORT}/api/health`;
-      
+      const host = process.env.RENDER_EXTERNAL_HOSTNAME
+        ? `https://${process.env.RENDER_EXTERNAL_HOSTNAME}`
+        : `http://localhost:${env.PORT}`;
+      const serverUrl = `${host}/api/health`;
+
       const response = await fetch(serverUrl);
       if (response.ok) {
         console.log('💓 [CRON] Keep-alive ping successful.');

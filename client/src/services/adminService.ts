@@ -39,6 +39,7 @@ export interface AdminSettings {
   isFreeMode: boolean;
   adminAccessCode?: string;
   adminInstructions?: string;
+  splashAds?: string[];
 }
 
 export interface UpdateUserPlanRequest {

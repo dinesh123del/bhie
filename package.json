@@ -1,5 +1,5 @@
 {
-  "name": "bhie",
+  "name": "finly",
   "version": "1.0.0",
   "scripts": {
     "predev": "./kill-port.sh || true",

@@ -234,12 +234,13 @@ export const adminController = {
       settings = new Settings();
     }
 
-    const { proPrice, premiumPrice, isFreeMode, currency, adminInstructions } = req.body;
+    const { proPrice, premiumPrice, isFreeMode, currency, adminInstructions, splashAds } = req.body;
     if (proPrice !== undefined) settings.proPrice = proPrice;
     if (premiumPrice !== undefined) settings.premiumPrice = premiumPrice;
     if (isFreeMode !== undefined) settings.isFreeMode = isFreeMode;
     if (currency !== undefined) settings.currency = currency;
     if (adminInstructions !== undefined) settings.adminInstructions = adminInstructions;
+    if (splashAds !== undefined) settings.splashAds = splashAds;
 
     await settings.save();
     res.json({ success: true, data: settings });

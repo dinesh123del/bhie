@@ -176,7 +176,7 @@ const WatchDemoModal: React.FC<WatchDemoModalProps> = ({ isOpen, onClose }) => {
                     <Play className="w-3 h-3 fill-current" /> Product Walkthrough
                   </div>
                   <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter mb-3">
-                    How BHIE Works
+                    How Finly Works
                   </h2>
                   <p className="text-white/50 text-lg max-w-lg mx-auto">
                     From receipt to insight in under 30 seconds. Here's the complete workflow.
@@ -197,7 +197,7 @@ const WatchDemoModal: React.FC<WatchDemoModalProps> = ({ isOpen, onClose }) => {
                   
                   <img 
                     src="/demo.png" 
-                    alt="BHIE Working App Demo" 
+                    alt="Finly Working App Demo" 
                     className="w-full h-auto object-cover opacity-90 shadow-2xl"
                   />
                   

@@ -108,9 +108,9 @@ const Hero = ({ onWatchDemo }: { onWatchDemo?: () => void }) => {
           transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
         >
           <h1 className="text-[48px] md:text-[80px] font-bold text-white tracking-tight leading-[1.05] mb-6">
-            Business intelligence. <br/>
+            Financial intelligence. <br/>
             <span className="bg-gradient-to-r from-[#007AFF] via-[#AF52DE] to-[#FF2D55] bg-clip-text text-transparent">
-              Reimagined.
+              Simplified.
             </span>
           </h1>
         </motion.div>
@@ -221,20 +221,20 @@ const Features = () => {
       <div className="max-w-[980px] mx-auto">
         <div className="text-center mb-20">
           <h2 className="text-[32px] md:text-[48px] font-bold text-white tracking-tight mb-4">Brilliant. By design.</h2>
-          <p className="text-[19px] text-[#A1A1A6] max-w-[600px] mx-auto">Everything you need to master your business, built directly into one elegant application.</p>
+          <p className="text-[19px] text-[#A1A1A6] max-w-[600px] mx-auto">Everything you need to master your finances, built directly into one elegant application.</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-           <div className="apple-card p-10 md:p-12 min-h-[400px] flex flex-col col-span-1 md:col-span-2 relative overflow-hidden group hover:border-[#007AFF]/30 border border-[#1C1C1E]">
+           <div className="finly-card p-10 md:p-12 min-h-[400px] flex flex-col col-span-1 md:col-span-2 relative overflow-hidden group hover:border-[#007AFF]/30 border border-[#1C1C1E]">
              <div className="relative z-10 w-full md:w-1/2">
                <Sparkles className="w-8 h-8 text-[#007AFF] mb-6" />
                <h3 className="text-[28px] font-bold text-white tracking-tight mb-3">Intelligence that works for you.</h3>
-               <p className="text-[#A1A1A6] text-[17px] leading-relaxed">Simply upload an image of your receipt. Our Apple-grade AI reads the context, amount, date, and vendor in milliseconds.</p>
+               <p className="text-[#A1A1A6] text-[17px] leading-relaxed">Simply upload an image of your receipt. Our elite-grade AI reads the context, amount, date, and vendor in milliseconds.</p>
              </div>
              <div className="absolute right-0 bottom-0 top-0 w-full md:w-1/2 bg-[url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center opacity-30 group-hover:opacity-50 transition-opacity duration-700 mask-radial" />
            </div>
 
-           <div className="apple-card p-10 hover:border-[#AF52DE]/30 border border-[#1C1C1E] transition-colors">
+           <div className="finly-card p-10 hover:border-[#AF52DE]/30 border border-[#1C1C1E] transition-colors">
               <BarChart2 className="w-8 h-8 text-[#AF52DE] mb-6" />
               <h3 className="text-[24px] font-bold text-white tracking-tight mb-3">Clear insights.</h3>
               <p className="text-[#A1A1A6] text-[17px] leading-relaxed">No confusing spreadsheets. Just beautiful, fluid charts that tell you exactly how your business is moving.</p>
@@ -348,7 +348,7 @@ const Footer = () => (
         <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
         <Link to="/contact" className="hover:text-white transition-colors">Contact</Link>
       </div>
-      <div className="text-[12px] text-[#A1A1A6]">Copyright © 2026 BHIE Ecosystem. All rights reserved.</div>
+      <div className="text-[12px] text-[#A1A1A6]">Copyright © 2026 Finly Ecosystem. All rights reserved.</div>
     </div>
   </footer>
 );

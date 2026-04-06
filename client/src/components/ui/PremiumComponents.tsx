@@ -135,52 +135,57 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
   };
 
   const variantClasses = {
-    primary: 'bg-white text-black hover:shadow-[0_20px_40px_-12px_rgba(255,255,255,0.2)] shadow-white/10 dark:bg-white dark:text-black',
-    secondary: 'bg-[var(--bhie-primary)]/10 border border-[var(--bhie-primary)]/20 text-[var(--primary-text)] hover:bg-[var(--bhie-primary)]/15 backdrop-blur-xl',
-    ghost: 'text-[var(--secondary-text)] hover:text-[var(--primary-text)] hover:bg-[var(--bhie-primary)]/5',
-    danger: 'bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-500/20',
+    primary: 'bg-white text-black hover:shadow-[0_24px_48px_-12px_rgba(255,255,255,0.25)] shadow-white/10 dark:bg-white dark:text-black',
+    secondary: 'bg-white/5 border border-white/10 text-white hover:bg-white/10 backdrop-blur-xl',
+    ghost: 'text-white/60 hover:text-white hover:bg-white/5',
+    danger: 'bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500/20',
   };
 
   return (
     <motion.button
       ref={buttonRef}
-      whileHover={{ y: -4, scale: 1.05 }}
+      whileHover={{ 
+        y: -4, 
+        scale: 1.02,
+        transition: { type: 'spring', stiffness: 400, damping: 10 }
+      }}
       whileTap={{ scale: 0.96 }}
       onMouseEnter={() => {
         setIsHovered(true);
-        premiumFeedback.haptic(5);
+        premiumFeedback.haptic(2);
       }}
       onMouseLeave={() => setIsHovered(false)}
       onMouseMove={handleMouseMove}
-      transition={springConfig}
       onClick={handleClick}
       className={`${baseStyles} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
       disabled={loading}
       {...props}
     >
-      {/* Dynamic Cursor Spotlight Glow */}
+      {/* 1. MAGNETIC GLOW EFFECT */}
       <AnimatePresence>
         {isHovered && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: variant === 'primary' ? 0.15 : 0.4 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
             className="absolute inset-0 pointer-events-none z-0"
             style={{
-              background: `radial-gradient(circle 80px at ${mousePosition.x}px ${mousePosition.y}px, ${
-                variant === 'primary' ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.4)'
+              background: `radial-gradient(circle 120px at ${mousePosition.x}px ${mousePosition.y}px, ${
+                variant === 'primary' ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.15)'
               }, transparent 100%)`,
             }}
           />
         )}
       </AnimatePresence>
 
-      {/* Ripple/Pulse Effect */}
-      <motion.div
-        className="absolute inset-0 bg-white opacity-0 pointer-events-none z-0"
-        initial={false}
-        whileTap={{ opacity: variant === 'primary' ? 0.3 : 0.1, scale: 1.5, transition: { duration: 0.4 } }}
-      />
+      {/* 2. GLASS SHINE STREAK */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 translate-x-[-100%]"
+          animate={isHovered ? { translateZ: 0, translateX: ['100%', '-100%'] } : {}}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+        />
+      </div>
       
       <AnimatePresence mode="wait">
         {loading ? (
@@ -197,7 +202,7 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
             key="content"
             initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            className="flex items-center gap-2"
+            className="relative z-10 flex items-center gap-2"
           >
             {icon && (
               <motion.span 

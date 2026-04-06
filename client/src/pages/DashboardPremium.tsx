@@ -1,32 +1,26 @@
 import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
   IndianRupee,
-  Settings,
   TrendingUp,
   Wallet,
-  Sparkles,
-  Zap,
-  Plus,
   Camera,
   Database
 } from 'lucide-react';
 import {
-  RiCalendarEventLine,
-  RiSparkling2Fill,
-  RiFlashlightFill,
-  RiRobot2Line,
-  RiPieChart2Line,
   RiHistoryLine
 } from 'react-icons/ri';
-import { PremiumBadge, PremiumCard } from '../components/ui/PremiumComponents';
-import SummaryCard from '../components/SummaryCard';
+import MarketPulse from '../components/MarketPulse';
+import SurgicalDirectives from '../components/SurgicalDirectives';
+import { PremiumCard } from '../components/ui/PremiumComponents';
 import { AnimatedNumber } from '../components/AnimatedNumber';
 import RevenueLineChart from '../components/charts/RevenueLineChart';
-import ProfitBarChart from '../components/charts/ProfitBarChart';
-import ExpensePieChart from '../components/charts/ExpensePieChart';
-import GrowthAreaChart from '../components/charts/GrowthAreaChart';
+import StoryDashboard from '../components/StoryDashboard';
+import QuestEngine from '../components/QuestEngine';
+import { BadgeRow } from '../components/GamificationEngine';
+import DailyCheckInPanel from '../components/DailyCheckInPanel';
+import QuantumForesight from '../components/QuantumForesight';
 
 import { InsightItem } from '../components/InsightsPanel';
 import { useAuth } from '../hooks/useAuth';
@@ -34,21 +28,18 @@ import { FileUpload } from '../components/FileUpload';
 import QuickAdd from '../components/QuickAdd';
 import { UploadedImageRecord } from '../services/uploadService';
 import { dashboardAPI } from '../services/api';
-import { canUseAIInsights, getPlanLabel as getReadablePlanLabel } from '../utils/plan';
 import BusinessHealthEngine from '../components/BusinessHealthEngine';
 import ActionCenter from '../components/ActionCenter';
 import {
+  buildDailyStatus,
   buildHealthBreakdown,
+  buildStoryBullets,
   buildRecommendations,
+  buildQuantumForesight,
+  buildSurgicalDirectives,
   exportReport,
 } from '../utils/dashboardIntelligence';
 import { premiumFeedback } from '../utils/premiumFeedback';
-import { 
-  NeuralSyncEngine, 
-  Scanlines, 
-  MagneticWrapper,
-  GlassShine
-} from '../components/ui/MicroEngines';
 
 interface MetricsSummary {
   kpis?: {
@@ -163,7 +154,6 @@ const normalizeLatestUpload = (value: unknown): UploadedImageRecord | null => {
   } as UploadedImageRecord;
 };
 
-// Premium Section Wrapper with Apple smooth scroll easing
 const PremiumSection = ({ children, delay = 0, className = "" }: { children: React.ReactNode, delay?: number, className?: string }) => (
   <motion.section
     initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
@@ -178,7 +168,7 @@ const PremiumSection = ({ children, delay = 0, className = "" }: { children: Rea
 
 const DashboardPremium = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [metrics, setMetrics] = useState<MetricsSummary | null>(null);
   const [scoreData, setScoreData] = useState<ScoreData | null>(null);
   const [company, setCompany] = useState<CompanyProfile | null>(null);
@@ -192,14 +182,6 @@ const DashboardPremium = () => {
   const hasLoadedRef = useRef(false);
   const mountedRef = useRef(true);
   const requestInFlightRef = useRef(false);
-
-  // Smooth Scroll Progress for parallax
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
 
   const loadDashboard = useCallback(async (options?: { silent?: boolean }) => {
     const silent = options?.silent ?? false;
@@ -265,7 +247,6 @@ const DashboardPremium = () => {
     };
   }, [loadDashboard]);
 
-  // Logic calculation (same as original to maintain data integrity)
   const revenue = company?.revenue ?? metrics?.kpis?.revenue ?? 0;
   const expenses = company?.expenses ?? metrics?.kpis?.expenses ?? 0;
   const profit = company?.profit ?? revenue - expenses;
@@ -273,7 +254,6 @@ const DashboardPremium = () => {
   const profitMargin = company?.profitMargin ?? metrics?.kpis?.profitMargin ?? (revenue > 0 ? (profit / revenue) * 100 : 0);
   const totalRecords = metrics?.kpis?.totalRecords ?? user?.usageCount ?? 0;
   const expenseRatio = revenue > 0 ? (expenses / revenue) * 100 : 0;
-  const aiInsightsEnabled = canUseAIInsights(user);
   
   const previousRevenue = revenue > 0 ? (revenue / Math.max(0.2, 1 + growthRate / 100)) : 0;
   const targetRevenue = previousRevenue > 0 ? previousRevenue * 1.18 : 0;
@@ -284,7 +264,6 @@ const DashboardPremium = () => {
         title: 'Money Made',
         value: <AnimatedNumber value={revenue} format="currency" />,
         change: growthRate > 0 ? `+${growthRate.toFixed(1)}% this month` : 'No growth data',
-        detail: `You've made more money this month! Great job.`,
         tone: 'positive' as const,
         icon: <IndianRupee className="w-5 h-5 text-[#27C93F]" />,
       },
@@ -292,7 +271,6 @@ const DashboardPremium = () => {
         title: 'Money Spent',
         value: <AnimatedNumber value={expenses} format="currency" />,
         change: expenseRatio > 60 ? 'Spending High' : 'Doing Well',
-        detail: expenseRatio > 60 ? 'You are spending a lot of money. Try to save more.' : `Your spending is under control.`,
         tone: expenseRatio > 60 ? ('negative' as const) : ('positive' as const),
         icon: <Wallet className="w-5 h-5 text-[#FFBD2E]" />,
       },
@@ -300,12 +278,11 @@ const DashboardPremium = () => {
         title: 'Leftover Profit',
         value: <AnimatedNumber value={profit} format="currency" />,
         change: `${profitMargin.toFixed(1)}% Profit`,
-        detail: profitMargin > 20 ? 'Your business is healthy and growing.' : 'Your profit is a bit low. Watch your costs.',
         tone: 'accent' as const,
         highlight: true,
         icon: <TrendingUp className="w-5 h-5 text-[#007AFF]" />,
       },
-    ], [expenseRatio, expenses, growthRate, profit, profitMargin, revenue, targetRevenue]);
+    ], [expenseRatio, expenses, growthRate, profit, profitMargin, revenue]);
 
   const healthScore = scoreData?.score ?? overallProgress;
   const healthBreakdown = useMemo(() => buildHealthBreakdown({
@@ -316,11 +293,19 @@ const DashboardPremium = () => {
     revenue, expenses, profit, growthRate, profitMargin, expenseRatio, totalRecords, activeRecords: Math.max(0, Math.round(totalRecords * 0.72)), latestUpload,
   }), [expenseRatio, expenses, growthRate, latestUpload, profit, profitMargin, revenue, totalRecords]);
 
+  const foresightData = useMemo(() => buildQuantumForesight({
+    revenue, expenses, profit, growthRate
+  }), [revenue, expenses, profit, growthRate]);
+
+  const directives = useMemo(() => buildSurgicalDirectives({
+    revenue, expenses, profit, growthRate, profitMargin
+  }), [revenue, expenses, profit, growthRate, profitMargin]);
+
   const confirmationMessage = loadError ? loadError : latestUpload ? `Success: ${latestUpload.record.title} processed.` : 'System operational.';
 
   if (loading) {
     return (
-        <div className="p-8 space-y-12">
+        <div className="p-8 space-y-12 bg-black min-h-screen">
             <div className="h-10 w-1/3 bg-[#1C1C1E] animate-pulse rounded-lg" />
             <div className="grid grid-cols-3 gap-6">
                 <div className="h-32 bg-[#1C1C1E] animate-pulse rounded-xl" />
@@ -333,94 +318,94 @@ const DashboardPremium = () => {
   }
 
   return (
-    <>
-      <div className="relative mx-auto max-w-[1200px] px-6 md:px-8 py-8 space-y-12 pb-24 text-white">
+    <div className="relative mx-auto max-w-[1400px] px-6 md:px-12 py-12 space-y-16 pb-32 text-white">
         
-        {/* APP HEADER: Apple Clean Typography */}
-        <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-[#1C1C1E]">
-          <div className="space-y-2">
+        {/* APP HEADER: Extreme Apple Look */}
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-10">
+          <div className="space-y-4">
             <motion.div 
                initial={{ opacity: 0, scale: 0.95 }}
                animate={{ opacity: 1, scale: 1 }}
-               transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-               className="inline-flex items-center gap-2 mb-2"
+               transition={{ duration: 0.6 }}
+               className="inline-flex items-center gap-2"
             >
-              <div className="w-1.5 h-1.5 rounded-full bg-[#007AFF]" />
-              <span className="text-[11px] font-semibold text-[#A1A1A6] uppercase tracking-wider">Analytics</span>
+              <div className="w-2 h-2 rounded-full bg-[#007AFF] animate-pulse" />
+              <span className="text-[12px] font-black uppercase tracking-[0.3em] text-white/30">Analytics Engine v4.0</span>
             </motion.div>
             
-            <h1 className="text-[32px] md:text-[40px] font-bold tracking-tight text-white leading-tight">
+            <motion.h1 
+              initial={{ opacity: 0, y: 30, filter: 'blur(20px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
+              className="text-[56px] md:text-[82px] font-black tracking-[-0.05em] text-white leading-[0.85]"
+            >
               Hey {user?.name?.split(' ')[0] || 'Partner'}, <br className="hidden md:block" />
-              <span className="text-[#A1A1A6]">Here's your summary.</span>
-            </h1>
+              <span className="text-white/20">Here is your pulse.</span>
+            </motion.h1>
           </div>
 
-          <div className="flex items-center gap-4">
-             <div className="px-5 py-4 flex flex-col gap-1 min-w-[140px] apple-card">
-                <span className="text-[11px] font-medium text-[#A1A1A6] uppercase tracking-wider flex items-center gap-1.5">
+          <div className="flex items-center gap-6">
+             <div className="apple-card p-6 min-w-[180px] bg-white/[0.03] backdrop-blur-3xl border-white/5">
+                <span className="text-[11px] font-black text-white/30 uppercase tracking-[0.2em] mb-3 block">
                     Goal Progress
                 </span>
-                <div className="flex items-baseline gap-2">
-                    <span className="text-[28px] font-bold tracking-tight tabular-nums">{overallProgress}%</span>
-                </div>
-             </div>
-             
-             <div className="px-5 py-4 flex flex-col gap-1 min-w-[140px] apple-card">
-                <span className="text-[11px] font-medium text-[#A1A1A6] uppercase tracking-wider flex items-center gap-1.5">
-                    Current Period
-                </span>
-                <span className="text-[28px] font-bold tracking-tight text-right">Q{Math.ceil((new Date().getMonth() + 1) / 3)}</span>
+                <span className="text-[42px] font-black tracking-tight text-ai-extreme">{overallProgress}%</span>
              </div>
           </div>
         </header>
 
-        {/* QUICK ACTION HUB */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-                { label: 'Capture Receipt', icon: Camera, path: '/scan-bill', desc: 'Scan AI' },
-                { label: 'Intelligence', icon: RiRobot2Line, path: '/analysis-report', desc: 'Ask assistant' },
-                { label: 'Data Hub', icon: Database, path: '/ds-hub', desc: 'Global storage' },
-                { label: 'Ledger', icon: RiHistoryLine, path: '/records', desc: 'Transactions' },
-            ].map((action, i) => (
-                <button 
-                  key={i}
-                  onClick={() => {
-                    if (action.path) navigate(action.path);
-                    premiumFeedback.click();
-                  }}
-                  className="flex flex-col items-start p-5 rounded-2xl bg-[#1C1C1E] border border-white/5 hover:border-white/20 transition-all group text-left"
-                >
-                    <div className="w-10 h-10 rounded-full bg-[#2C2C2E] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
-                        <action.icon className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-[16px] font-semibold tracking-tight text-white mb-1">{action.label}</span>
-                    <span className="text-[12px] font-medium text-[#A1A1A6]">{action.desc}</span>
-                </button>
-            ))}
-        </div>
-
-        {/* METRICS CAROUSEL */}
-        <div className="flex md:grid md:grid-cols-3 gap-6 overflow-x-auto no-scrollbar pb-4 md:pb-0">
+        {/* METRICS BENTO GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {summaryCards.map((card, i) => (
-                <div key={card.title} className="min-w-[85vw] md:min-w-0 apple-card p-6 flex flex-col">
-                   <div className="flex items-center justify-between mb-4">
-                     <span className="text-[13px] font-semibold text-[#A1A1A6]">{card.title}</span>
-                     {card.icon}
+                <motion.div 
+                  key={card.title} 
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  whileHover={{ y: -8, scale: 1.01 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
+                  className="apple-card p-10 flex flex-col group relative overflow-hidden bg-[#0A0A0B] border-white/5"
+                >
+                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                   <div className="flex items-center justify-between mb-8">
+                     <span className="text-[13px] font-black uppercase tracking-[0.25em] text-white/20">{card.title}</span>
+                     <div className="p-4 rounded-3xl bg-white/5 border border-white/10 group-hover:rotate-12 transition-transform duration-500">
+                       {card.icon}
+                     </div>
                    </div>
-                   <div className="mb-2">
+                   <div className="mb-4">
                      {card.value}
                    </div>
-                   <div className={`text-[13px] font-medium ${card.tone === 'positive' ? 'text-[#27C93F]' : card.tone === 'negative' ? 'text-[#FF3B30]' : 'text-[#A1A1A6]'}`}>
+                   <div className={`text-[15px] font-black tracking-tight ${card.tone === 'positive' ? 'text-emerald-400' : card.tone === 'negative' ? 'text-rose-400' : 'text-white/40'}`}>
                      {card.change}
                    </div>
-                </div>
+                </motion.div>
             ))}
         </div>
 
-        {/* STRATEGY SECTION */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
-            <PremiumSection className="space-y-8">
-                <div className="apple-card p-8">
+        {/* MAIN INTELLIGENCE SECTION */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12">
+            <div className="space-y-12">
+                <div className="grid gap-8 xl:grid-cols-2">
+                   <StoryDashboard 
+                        bullets={buildStoryBullets({
+                            revenue, expenses, profit, growthRate, profitMargin, healthScore,
+                            totalRecords, activeRecords: Math.max(0, Math.round(totalRecords * 0.72)),
+                            lastUpdated
+                        })} 
+                        dailySummary={confirmationMessage} 
+                   />
+                   <DailyCheckInPanel
+                        items={buildDailyStatus({
+                            healthScore, lastUpdated, isRefreshing, loadError, latestUpload
+                        })}
+                        confirmationMessage={confirmationMessage}
+                        refreshing={isRefreshing}
+                        onRefresh={() => void loadDashboard({ silent: true })}
+                   />
+                </div>
+                
+                <div className="apple-card p-12 bg-[#0A0A0B] border-white/5">
                    <BusinessHealthEngine
                        score={healthScore}
                        status={scoreData?.status ?? (healthScore >= 80 ? 'Elite' : healthScore >= 60 ? 'Optimal' : 'Standard')}
@@ -428,63 +413,59 @@ const DashboardPremium = () => {
                        breakdown={healthBreakdown}
                    />
                 </div>
+
+                <div className="apple-card p-12 bg-[#0A0A0B] border-white/5">
+                   <QuantumForesight data={foresightData} />
+                </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="apple-card p-6 min-h-[300px]">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-[17px] font-semibold tracking-tight">Revenue Trend</h3>
-                            <div className="px-2 py-1 rounded text-[10px] font-medium bg-[#007AFF]/10 text-[#007AFF]">Live</div>
+                <div className="apple-card p-12 bg-[#0A0A0B] border-white/5">
+                   <SurgicalDirectives directives={directives as any} />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="apple-card p-8 min-h-[350px] bg-[#0A0A0B] border-white/5">
+                        <div className="flex justify-between items-center mb-8">
+                            <h3 className="text-[18px] font-black tracking-tight uppercase text-white/50">Revenue Trend</h3>
+                            <div className="px-3 py-1 rounded-full text-[10px] font-black bg-[#007AFF]/10 text-[#007AFF] tracking-widest">LIVE VIZ</div>
                         </div>
                         <RevenueLineChart data={apiData?.metrics?.monthlyData || []} loading={loading} />
                     </div>
 
                     <ActionCenter
                         recommendations={recommendations}
-                        onAskWhatShouldIDo={() => {
-                            navigate('/analysis-report');
-                            premiumFeedback.click();
-                        }}
-                        onExport={() => {
-                            exportReport();
-                            premiumFeedback.success();
-                        }}
+                        onAskWhatShouldIDo={() => navigate('/analysis-report')}
+                        onExport={exportReport}
                     />
                 </div>
-            </PremiumSection>
+            </div>
 
-            {/* SIDEBAR WIDGETS */}
-            <aside className="space-y-6">
-                <div className="apple-card p-6 bg-gradient-to-br from-[#1C1C1E] to-black relative overflow-hidden">
-                    <div className="relative z-10 space-y-4">
+            <aside className="space-y-8">
+                <div className="apple-card p-8 bg-gradient-to-br from-[#111113] to-black border-white/5 relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-blue-500/5 blur-[80px] -translate-x-1/2 -translate-y-1/2 group-hover:scale-150 transition-transform duration-1000" />
+                    <div className="relative z-10 space-y-6">
                         <div className="flex items-center justify-between">
-                            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#007AFF]">System Status</span>
-                            <div className="w-2 h-2 rounded-full bg-[#27C93F] animate-pulse" />
+                            <span className="text-[11px] font-black uppercase tracking-[0.3em] text-[#007AFF]">Pulse Status</span>
+                            <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)] animate-pulse" />
                         </div>
-                        <p className="text-[17px] font-medium leading-snug tracking-tight text-white">
-                            Monitoring <span className="text-[#007AFF] font-semibold">{totalRecords}</span> financial entries.
-                        </p>
-                        <p className="text-[13px] text-[#A1A1A6]">
-                            {confirmationMessage}
+                        <p className="text-[20px] font-black leading-tight tracking-[-0.03em] text-white">
+                            Monitoring <span className="text-ai-extreme">{totalRecords}</span> points of financial interest.
                         </p>
                     </div>
                 </div >
 
-                <div className="space-y-3">
-                    <div className="flex items-center gap-2 px-1">
-                        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#636366]">Quick Add</span>
-                    </div>
-                    <QuickAdd onRecordAdded={() => void loadDashboard()} className="w-full" />
+                <div className="apple-card p-8 bg-[#0A0A0B] border-white/5 overflow-hidden">
+                   <MarketPulse />
                 </div>
 
-                <div className="apple-card p-6">
-                    <h4 className="text-[11px] font-semibold uppercase tracking-wider text-[#636366] mb-4">AI Observations</h4>
-                    <div className="space-y-4">
+                <QuestEngine />
+
+                <div className="apple-card p-8 bg-[#0A0A0B] border-white/5">
+                    <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-white/20 mb-8">Intelligence Observations</h4>
+                    <div className="space-y-8">
                         {insights.slice(0, 3).map((insight, idx) => (
-                            <div key={idx} className="flex gap-4 group cursor-pointer" onClick={() => navigate('/analysis-report')}>
-                                <div className="space-y-1">
-                                    <p className="text-[14px] font-semibold tracking-tight group-hover:text-[#007AFF] transition-colors">{insight.message}</p>
-                                    <p className="text-[13px] text-[#A1A1A6] line-clamp-2 leading-relaxed">{insight.detail || 'Deep intelligence analysis available.'}</p>
-                                </div>
+                            <div key={idx} className="group cursor-pointer" onClick={() => navigate('/analysis-report')}>
+                                <p className="text-[16px] font-black tracking-tight group-hover:text-[#007AFF] transition-colors mb-2">{insight.message}</p>
+                                <p className="text-[14px] text-white/40 leading-relaxed font-medium">{insight.detail || 'Deep intelligence analysis available.'}</p>
                             </div>
                         ))}
                     </div>
@@ -492,25 +473,26 @@ const DashboardPremium = () => {
             </aside>
         </div>
 
-        {/* FOOTER ACTION */}
-        <PremiumSection delay={0.2} className="pt-8 mb-20">
-            <div className="apple-card p-10 md:p-14 overflow-hidden relative border-t border-[#007AFF]/20">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-[#007AFF]/10 blur-[100px] rounded-full" />
-                <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start justify-between gap-12">
-                    <div className="space-y-4 flex-1">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#007AFF]/10 text-[#007AFF]">
+        {/* EXTREME FOOTER: Vision Engine */}
+        <PremiumSection delay={0.4} className="pb-20">
+            <div className="apple-card p-16 md:p-24 overflow-hidden relative border-white/5 bg-[#0A0A0B]">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/[0.03] blur-[150px] rounded-full" />
+                <div className="relative z-10 flex flex-col lg:flex-row items-center gap-20">
+                    <div className="space-y-8 flex-1">
+                        <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/40">
                             <Camera className="w-4 h-4" />
-                            <span className="text-[11px] font-semibold uppercase tracking-wider">Vision Engine</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.4em]">Vision Pro Engine</span>
                         </div>
-                        <h2 className="text-[32px] md:text-[40px] font-bold tracking-tight leading-tight">Instant extraction.</h2>
-                        <p className="text-[17px] text-[#A1A1A6] max-w-lg leading-relaxed">Simply capture a receipt. Our Apple Intelligence model processes amounts, dates, and vendors instantly.</p>
+                        <h2 className="text-[52px] md:text-[72px] font-black tracking-[-0.06em] leading-[0.88]">Instant <br />Intelligence.</h2>
+                        <p className="text-[19px] text-white/40 max-w-lg leading-relaxed font-medium">Capture any document. Our custom vision models extract deep financial metadata in milliseconds.</p>
                     </div>
                     
-                    <div className="w-full md:w-[400px] shrink-0">
+                    <div className="w-full lg:w-[450px]">
                         <FileUpload
                             onUploadComplete={(items) => {
                                 setLatestUpload(normalizeLatestUpload(items[0]));
                                 void loadDashboard();
+                                premiumFeedback.success();
                             }}
                         />
                     </div>
@@ -519,7 +501,6 @@ const DashboardPremium = () => {
         </PremiumSection>
 
       </div>
-    </>
   );
 };
 

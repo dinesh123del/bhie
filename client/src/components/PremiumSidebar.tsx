@@ -26,7 +26,7 @@ interface NavItem {
   id: string;
   name: string;
   path: string;
-  icon: React.ElementType;
+  icon: React.ComponentType<any>;
 }
 
 const navItems: NavItem[] = [

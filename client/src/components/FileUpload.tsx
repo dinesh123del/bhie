@@ -21,6 +21,7 @@ import { canUploadMore, getRemainingUploads, hasPremiumAccess } from '../utils/p
 import { premiumFeedback } from '../utils/premiumFeedback';
 import { PremiumCard, PremiumBadge } from './ui/PremiumComponents';
 import { GlassShine, Scanlines } from './ui/MicroEngines';
+import { useGamification } from './GamificationEngine';
 
 import { CameraCapture } from './image-intelligence/CameraCapture';
 
@@ -34,6 +35,7 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
   const [latestResults, setLatestResults] = useState<UploadedImageRecord[]>([]);
   const [showCamera, setShowCamera] = useState(false);
   const { user } = useAuth();
+  const { addXP } = useGamification();
   const premiumAccess = hasPremiumAccess(user);
   const remainingUploads = getRemainingUploads(user);
   const uploadsLocked = !canUploadMore(user);
@@ -68,8 +70,9 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
       }
 
       setLatestResults(response.items);
+      addXP(response.items.length * 100);
       premiumFeedback.success();
-      toast.success(`${response.items.length} records synthesized by BHIE Engine`);
+      toast.success(`${response.items.length} records synthesized by Finly Engine`);
 
       window.dispatchEvent(
         new CustomEvent('bhie:records-updated', {
@@ -202,7 +205,7 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
             <div>
               <h3 className="text-3xl font-black tracking-tighter text-white md:text-4xl lg:text-5xl">Direct Intelligence Capture.</h3>
               <p className="max-w-xl text-base md:text-lg font-medium leading-relaxed text-ink-300">
-                Snap any document for instant forensic synthesis. BHIE Engine extracts identity, fiscal data, and taxonomy automatically.
+                Snap any document for instant forensic synthesis. Finly Engine extracts identity, fiscal data, and taxonomy automatically.
               </p>
             </div>
           </div>

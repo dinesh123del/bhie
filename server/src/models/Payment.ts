@@ -7,10 +7,13 @@ export interface PaymentDocument extends mongoose.Document {
   currency: string;
   status: 'created' | 'paid' | 'failed' | 'refunded';
   razorpayOrderId?: string;
+  razorpaySubscriptionId?: string;
   razorpayPaymentId?: string;
   razorpaySignature?: string;
   receipt: string;
   plan: PaidPlanType;
+  billingCycle?: 'monthly' | 'yearly';
+  paymentMethod?: string;
   expiryDate?: Date;
   verifiedAt?: Date;
 }
@@ -39,6 +42,10 @@ const paymentSchema = new mongoose.Schema<PaymentDocument>({
     type: String,
     index: true,
   },
+  razorpaySubscriptionId: {
+    type: String,
+    index: true,
+  },
   razorpayPaymentId: String,
   razorpaySignature: String,
   receipt: {
@@ -47,9 +54,14 @@ const paymentSchema = new mongoose.Schema<PaymentDocument>({
   },
   plan: {
     type: String,
-    enum: ['pro', 'enterprise'],
+    enum: ['pro', 'premium', 'enterprise'],
     required: true,
   },
+  billingCycle: {
+    type: String,
+    enum: ['monthly', 'yearly'],
+  },
+  paymentMethod: String,
   expiryDate: Date,
   verifiedAt: Date,
 }, {

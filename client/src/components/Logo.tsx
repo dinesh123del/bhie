@@ -122,7 +122,7 @@ const LogoInner = ({
         className={`${sizeMap[size].wordmark} font-bold tracking-tight leading-none text-white`}
         style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
       >
-        BHIE<span className="text-[#007AFF]">.</span>
+        Finly<span className="text-[#007AFF]">.</span>
       </span>
       {showSubtitle && (
         <span
@@ -140,7 +140,7 @@ export const Logo = ({
   size = 'md',
   className,
   to,
-  subtitle = 'Intelligence',
+  subtitle = 'Financial Pulse',
   showSubtitle = true,
 }: LogoProps) => {
   const content = (
@@ -157,7 +157,7 @@ export const Logo = ({
   }
 
   return (
-    <Link to={to} aria-label="BHIE logo" className="inline-flex outline-none">
+    <Link to={to} aria-label="Finly logo" className="inline-flex outline-none">
       {content}
     </Link>
   );

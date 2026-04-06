@@ -33,7 +33,7 @@ const Register = () => {
         .then(user => {
           if (user) {
             login(token, user);
-            toast.success('Joined BHIE with Google!');
+            toast.success('Joined Finly with Google!');
           }
         })
         .catch(err => {
@@ -117,7 +117,7 @@ const Register = () => {
           {/* Header */}
           <div className="mb-8">
             <h2 className="text-4xl font-bold text-white mb-2">Create Account</h2>
-            <p className="secondary-text">Join BHIE and start optimizing your business</p>
+            <p className="secondary-text">Join Finly and start optimizing your business</p>
           </div>
 
           {/* Error */}

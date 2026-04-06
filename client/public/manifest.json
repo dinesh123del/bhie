@@ -1,7 +1,7 @@
 {
-  "name": "BHIE - Business Health Implementation Ecosystem",
-  "short_name": "BHIE",
-  "description": "AI-powered business analytics and health monitoring platform",
+  "name": "Finly - Financial Intelligence. Reimagined.",
+  "short_name": "Finly",
+  "description": "Premium AI-powered financial intelligence and pulse monitoring platform.",
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#1e1b4b",

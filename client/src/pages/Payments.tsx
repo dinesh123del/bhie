@@ -36,7 +36,7 @@ const planCards: PlanCard[] = [
     name: 'Free',
     price: PLAN_DETAILS.free.price,
     billingText: PLAN_DETAILS.free.billingText,
-    description: 'Best for getting started with BHIE and managing a small number of uploads.',
+    description: 'Best for getting started with Finly and managing a small number of uploads.',
     features: PLAN_DETAILS.free.features,
   },
   {
@@ -142,7 +142,7 @@ const Payments = () => {
         key: orderData.key || import.meta.env.VITE_RAZORPAY_KEY || 'rzp_live_SZoJsmhT3ah3jU', // Fallback to provided key
         amount: orderData.amount,
         currency: orderData.currency,
-        name: 'BHIE Platform',
+        name: 'Finly Platform',
         description: `Upgrade to ${selectedPlan.toUpperCase()} Plan`,
         order_id: orderData.orderId,
         handler: async (response: any) => {
@@ -231,7 +231,7 @@ const Payments = () => {
         <div className="mb-12 max-w-3xl">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-ink-300">Pricing</p>
           <h1 className="text-4xl font-black tracking-[-0.06em] text-white md:text-5xl">
-            Upgrade BHIE when your business is ready
+            Upgrade Finly when your business is ready
           </h1>
           <p className="mt-4 text-base leading-7 text-ink-300 md:text-lg">
             Free gets you started. Pro and Enterprise unlock unlimited uploads, smart insights, and premium workflows.
@@ -416,7 +416,7 @@ const Payments = () => {
           {[
             {
               title: 'Free',
-              detail: 'Use BHIE dashboard and up to 5 uploads while you set up your workflow.',
+              detail: 'Use Finly dashboard and up to 5 uploads while you set up your workflow.',
             },
             {
               title: 'Pro',

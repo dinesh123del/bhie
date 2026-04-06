@@ -118,7 +118,7 @@ const Login = () => {
           </div>
 
           <div className="w-full text-center mb-8">
-            <h2 className="text-[28px] font-bold tracking-tight text-white mb-2">Sign in to BHIE.</h2>
+            <h2 className="text-[28px] font-bold tracking-tight text-white mb-2">Sign in to Finly.</h2>
             <p className="text-[15px] font-medium text-[#A1A1A6]">Intelligent accounting awaits.</p>
           </div>
 

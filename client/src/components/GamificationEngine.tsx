@@ -1,302 +1,300 @@
-import { useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Trophy, Star, Zap, Shield, Crown, Flame } from 'lucide-react';
 
 /* ──────────────────────────────────────────────────────────────
-   BHIE GAMIFICATION ENGINE
+   Finly GAMIFICATION ENGINE v2.1 (Context Enabled)
    ─ Daily Streak tracker
-   ─ Level / Badge system (Beginner → Smart → Pro → Expert → Boss)
+   ─ Level / Badge system (XP Based)
+   ─ Rank names: Recruit → Guardian → Sentinel → Overlord
    ─ Celebration animation on milestones
    ─────────────────────────────────────────────────────────────── */
 
 // ── Types ────────────────────────────────────────────────────
 export interface UserLevel {
-  name: 'Beginner' | 'Smart' | 'Pro' | 'Expert' | 'Boss';
-  minDays: number;
+  name: string;
+  minXP: number;
   emoji: string;
   color: string;
   glow: string;
 }
 
 const LEVELS: UserLevel[] = [
-  { name: 'Beginner', minDays: 0,  emoji: '🌱', color: 'text-emerald-400', glow: 'rgba(52,211,153,0.3)' },
-  { name: 'Smart',    minDays: 3,  emoji: '⚡', color: 'text-sky-400',     glow: 'rgba(56,189,248,0.3)' },
-  { name: 'Pro',      minDays: 7,  emoji: '🚀', color: 'text-indigo-400',  glow: 'rgba(99,102,241,0.4)' },
-  { name: 'Expert',   minDays: 21, emoji: '💎', color: 'text-violet-400',  glow: 'rgba(167,139,250,0.4)' },
-  { name: 'Boss',     minDays: 60, emoji: '👑', color: 'text-amber-400',   glow: 'rgba(251,191,36,0.4)' },
+  { name: 'Recruit',     minXP: 0,      emoji: '🌱', color: 'text-emerald-400', glow: 'rgba(52,211,153,0.3)' },
+  { name: 'Strategist',  minXP: 500,    emoji: '⚡', color: 'text-sky-400',     glow: 'rgba(56,189,248,0.3)' },
+  { name: 'Sentinel',    minXP: 1500,   emoji: '🛡️', color: 'text-indigo-400',  glow: 'rgba(99,102,241,0.4)' },
+  { name: 'Analyst Pro', minXP: 3000,   emoji: '💎', color: 'text-violet-400',  glow: 'rgba(167,139,250,0.4)' },
+  { name: 'Overlord',    minXP: 6000,   emoji: '👑', color: 'text-amber-400',   glow: 'rgba(251,191,36,0.4)' },
 ];
 
 // ── Local storage helpers ─────────────────────────────────────
-const STREAK_KEY = 'bhie_streak_data';
+const STREAK_KEY = 'bhie_streak_data_v2';
 
-interface StreakData {
+interface ProgressData {
   currentStreak: number;
   lastCheckin: string | null;
   longestStreak: number;
   totalDays: number;
+  xp: number;
 }
 
-function loadStreak(): StreakData {
+interface GamificationContextType {
+  progress: ProgressData;
+  level: UserLevel;
+  nextLevel: UserLevel | null;
+  celebrateLevel: boolean;
+  addXP: (amount: number) => void;
+}
+
+const GamificationContext = createContext<GamificationContextType | undefined>(undefined);
+
+function loadProgress(): ProgressData {
   try {
     const raw = localStorage.getItem(STREAK_KEY);
-    if (raw) return JSON.parse(raw) as StreakData;
+    if (raw) return JSON.parse(raw) as ProgressData;
   } catch { /* ignore */ }
-  return { currentStreak: 0, lastCheckin: null, longestStreak: 0, totalDays: 0 };
+  return { currentStreak: 0, lastCheckin: null, longestStreak: 0, totalDays: 0, xp: 0 };
 }
 
-function saveStreak(data: StreakData) {
+function saveProgress(data: ProgressData) {
   try { localStorage.setItem(STREAK_KEY, JSON.stringify(data)); } catch { /* ignore */ }
 }
 
-function resolveLevel(days: number): UserLevel {
+function resolveLevel(xp: number): UserLevel {
   for (let i = LEVELS.length - 1; i >= 0; i--) {
-    if (days >= LEVELS[i].minDays) return LEVELS[i];
+    if (xp >= LEVELS[i].minXP) return LEVELS[i];
   }
   return LEVELS[0];
 }
 
-// ── Hook ──────────────────────────────────────────────────────
-export function useStreak() {
-  const [streak, setStreakState] = useState<StreakData>(() => loadStreak());
+// ── Provider ──────────────────────────────────────────────────
+export const GamificationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [progress, setProgressState] = useState<ProgressData>(() => loadProgress());
   const [celebrateLevel, setCelebrateLevel] = useState(false);
 
-  const recordCheckin = useCallback(() => {
-    const today = new Date().toDateString();
-    setStreakState(prev => {
-      const yesterday = new Date(Date.now() - 86_400_000).toDateString();
-      let newStreak = 1;
-
-      if (prev.lastCheckin === today) {
-        // Already checked in today — no change
-        return prev;
-      } else if (prev.lastCheckin === yesterday) {
-        newStreak = prev.currentStreak + 1;
-      }
-      // else: streak broken — reset to 1
-
-      const oldLevel = resolveLevel(prev.totalDays);
-      const newTotalDays = prev.totalDays + 1;
-      const newLevel = resolveLevel(newTotalDays);
+  const addXP = useCallback((amount: number) => {
+    setProgressState(prev => {
+      const oldLevel = resolveLevel(prev.xp);
+      const newXP = prev.xp + amount;
+      const newLevel = resolveLevel(newXP);
 
       if (oldLevel.name !== newLevel.name) {
         setCelebrateLevel(true);
-        setTimeout(() => setCelebrateLevel(false), 3000);
+        setTimeout(() => setCelebrateLevel(false), 5000);
       }
 
-      const updated: StreakData = {
-        currentStreak: newStreak,
-        lastCheckin: today,
-        longestStreak: Math.max(prev.longestStreak, newStreak),
-        totalDays: newTotalDays,
-      };
-      saveStreak(updated);
+      const updated = { ...prev, xp: newXP };
+      saveProgress(updated);
       return updated;
     });
   }, []);
 
-  // Auto-checkin on mount (once per day)
+  const recordCheckin = useCallback(() => {
+    const today = new Date().toDateString();
+    setProgressState(prev => {
+      const yesterday = new Date(Date.now() - 86_400_000).toDateString();
+      let newStreak = 1;
+
+      if (prev.lastCheckin === today) return prev;
+      if (prev.lastCheckin === yesterday) newStreak = prev.currentStreak + 1;
+
+      const dailyBonus = 50;
+      const streakBonus = newStreak * 10;
+      const totalXP = prev.xp + dailyBonus + streakBonus;
+
+      const updated: ProgressData = {
+        ...prev,
+        currentStreak: newStreak,
+        lastCheckin: today,
+        longestStreak: Math.max(prev.longestStreak, newStreak),
+        totalDays: prev.totalDays + 1,
+        xp: totalXP
+      };
+      
+      saveProgress(updated);
+      return updated;
+    });
+  }, []);
+
   useEffect(() => { recordCheckin(); }, [recordCheckin]);
 
-  const level = resolveLevel(streak.totalDays);
+  const level = useMemo(() => resolveLevel(progress.xp), [progress.xp]);
+  const nextLevel = LEVELS[LEVELS.findIndex(l => l.name === level.name) + 1] || null;
 
-  return { streak, level, celebrateLevel, recordCheckin };
-}
-
-// ── Streak Badge Component ─────────────────────────────────────
-interface StreakBadgeProps {
-  compact?: boolean;
-}
-
-export function StreakBadge({ compact = false }: StreakBadgeProps) {
-  const { streak, level, celebrateLevel } = useStreak();
-
-  if (compact) {
-    return (
-      <motion.div
-        whileHover={{ scale: 1.05 }}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
-        style={{
-          background: 'rgba(255,255,255,0.05)',
-          border: '1px solid rgba(255,255,255,0.08)',
-        }}
-      >
-        <span className="animate-fire text-base">🔥</span>
-        <span className="text-xs font-bold text-white/80">
-          {streak.currentStreak}d
-        </span>
-      </motion.div>
-    );
-  }
+  const value = useMemo(() => ({
+    progress,
+    level,
+    nextLevel,
+    celebrateLevel,
+    addXP
+  }), [progress, level, nextLevel, celebrateLevel, addXP]);
 
   return (
-    <div className="relative">
+    <GamificationContext.Provider value={value}>
+      {children}
+    </GamificationContext.Provider>
+  );
+};
+
+export const useGamification = () => {
+  const context = useContext(GamificationContext);
+  if (context === undefined) {
+    throw new Error('useGamification must be used within a GamificationProvider');
+  }
+  return context;
+};
+
+// ── Gaming HUD Component ─────────────────────────────────────
+export function GamingHUD() {
+  const { progress, level, nextLevel, celebrateLevel } = useGamification();
+
+  const percentage = useMemo(() => {
+    if (!nextLevel) return 100;
+    const currentLevelMin = level.minXP;
+    const nextLevelMin = nextLevel.minXP;
+    return ((progress.xp - currentLevelMin) / (nextLevelMin - currentLevelMin)) * 100;
+  }, [progress.xp, level, nextLevel]);
+
+  return (
+    <div className="fixed top-20 right-4 z-[100] flex flex-col gap-2">
       <AnimatePresence>
         {celebrateLevel && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.5, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: -20 }}
-            className="absolute -top-14 left-1/2 -translate-x-1/2 whitespace-nowrap z-50"
+            initial={{ opacity: 0, scale: 0.5, x: 100 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.8, x: 100 }}
+            className="bg-gradient-to-r from-indigo-600 to-purple-600 p-4 rounded-2xl shadow-2xl border border-white/20"
           >
-            <div
-              className="px-4 py-2 rounded-2xl text-sm font-bold text-white text-center"
-              style={{
-                background: 'linear-gradient(135deg, #4F46E5, #9333EA)',
-                boxShadow: '0 0 20px rgba(79,70,229,0.5)',
-              }}
-            >
-              🎉 Level Up! You're {level.name} now!
+            <div className="flex items-center gap-3 text-white">
+              <Trophy className="h-6 w-6 text-amber-300" />
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-widest text-white/60 leading-none">Rank Up!</p>
+                <p className="text-xl font-black">{level.name}</p>
+              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
       <motion.div
-        whileHover={{ scale: 1.02 }}
-        className="flex flex-col gap-3 p-4 rounded-2xl"
-        style={{
-          background: 'rgba(255,255,255,0.03)',
-          border: '1px solid rgba(255,255,255,0.06)',
-        }}
+        whileHover={{ scale: 1.02, x: -4 }}
+        className="bg-[#0f172a]/80 backdrop-blur-xl border border-white/10 p-4 rounded-3xl shadow-2xl min-w-[200px]"
       >
-        {/* Streak row */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <span className="text-2xl animate-fire">🔥</span>
+            <div className="bg-white/5 p-1.5 rounded-lg border border-white/10">
+              <span className="text-lg">{level.emoji}</span>
+            </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-white/40">
-                Daily Streak
-              </p>
-              <p className="text-2xl font-black text-white leading-none">
-                {streak.currentStreak}
-                <span className="text-sm font-semibold text-white/40 ml-1">days</span>
-              </p>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 leading-none">Rank</p>
+              <p className={`text-sm font-black ${level.color}`}>{level.name}</p>
             </div>
           </div>
-
-          {/* Level badge */}
-          <motion.div
-            animate={{
-              boxShadow: celebrateLevel
-                ? [`0 0 0px ${level.glow}`, `0 0 20px ${level.glow}`, `0 0 0px ${level.glow}`]
-                : `0 0 8px ${level.glow}`,
-            }}
-            transition={{ duration: 1.5, repeat: celebrateLevel ? Infinity : 0 }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
-            style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid rgba(255,255,255,0.10)` }}
-          >
-            <span className="text-base">{level.emoji}</span>
-            <span className={`text-xs font-black ${level.color}`}>{level.name}</span>
-          </motion.div>
+          <div className="text-right">
+            <p className="text-lg font-black text-white leading-none">{progress.xp}</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-indigo-400">Total XP</p>
+          </div>
         </div>
 
-        {/* Progress bar to next level */}
-        <NextLevelProgress totalDays={streak.totalDays} level={level} />
+        <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/5 relative">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${percentage}%` }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="h-full bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full"
+          />
+        </div>
+        {nextLevel && (
+          <p className="text-[9px] font-bold text-white/20 mt-1 uppercase tracking-widest">
+            {Math.ceil(nextLevel.minXP - progress.xp)} XP to {nextLevel.name}
+          </p>
+        )}
       </motion.div>
     </div>
   );
 }
 
-// ── Next Level Progress Bar ───────────────────────────────────
-function NextLevelProgress({ totalDays, level }: { totalDays: number; level: UserLevel }) {
-  const currentIdx = LEVELS.findIndex(l => l.name === level.name);
-  const nextLevel  = LEVELS[currentIdx + 1];
-  if (!nextLevel) {
+// ── Streak Badge Component ─────────────────────────────────────
+export function StreakBadge({ compact = false }: { compact?: boolean }) {
+  const { progress } = useGamification();
+
+  if (compact) {
     return (
-      <p className="text-[10px] text-amber-400 font-bold uppercase tracking-widest">
-        👑 Max rank achieved
-      </p>
+      <motion.div
+        whileHover={{ scale: 1.05 }}
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10"
+      >
+        <Flame className="h-3.5 w-3.5 text-orange-500 animate-pulse" />
+        <span className="text-xs font-bold text-white/80">{progress.currentStreak}d</span>
+      </motion.div>
     );
   }
-  const progress = Math.min(100, ((totalDays - level.minDays) / (nextLevel.minDays - level.minDays)) * 100);
+
   return (
-    <div className="space-y-1">
-      <div className="flex justify-between items-center">
-        <p className="text-[10px] text-white/30 font-semibold uppercase tracking-wider">
-          Next: {nextLevel.emoji} {nextLevel.name}
-        </p>
-        <p className="text-[10px] text-white/30 font-semibold">
-          {nextLevel.minDays - totalDays}d left
-        </p>
+    <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex items-center justify-between gap-4">
+      <div className="flex items-center gap-3">
+        <div className="p-3 bg-orange-500/10 rounded-2xl border border-orange-500/20">
+          <Flame className="h-6 w-6 text-orange-500" />
+        </div>
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Day Streak</p>
+          <p className="text-2xl font-black text-white leading-none">{progress.currentStreak}</p>
+        </div>
       </div>
-      <div className="h-1 rounded-full bg-white/5 overflow-hidden">
-        <motion.div
-          className="h-full rounded-full"
-          style={{ background: 'linear-gradient(90deg, #4F46E5, #9333EA)' }}
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        />
+      <div className="text-right">
+        <p className="text-[10px] font-black uppercase tracking-widest text-white/30">Best</p>
+        <p className="text-lg font-black text-white/60 leading-none">{progress.longestStreak}</p>
       </div>
     </div>
   );
 }
 
-// ── Human-tone Insight Renderer ──────────────────────────────
-interface SmartInsightProps {
-  revenue: number;
-  profit: number;
-  growthRate: number;
-  expenseRatio: number;
-  streak: number;
+// ── Achievement Badge Component ─────────────────────────────────────
+export function BadgeRow({ totalRecords, healthScore, revenue }: { totalRecords: number, healthScore: number, revenue: number }) {
+  const badges = [
+    { name: 'Founder', icon: '💎', active: true, desc: 'Early Finly Adopter' },
+    { name: 'Data King', icon: '👑', active: totalRecords >= 100, desc: '100+ Records' },
+    { name: 'Efficiency', icon: '⚡', active: healthScore >= 90, desc: '90+ Health Score' },
+    { name: 'Capitalist', icon: '💰', active: revenue >= 50000, desc: '50k+ Revenue' },
+  ];
+
+  return (
+    <div className="flex flex-wrap gap-3">
+      {badges.map(badge => (
+        <motion.div
+          key={badge.name}
+          whileHover={{ y: -5, scale: 1.05 }}
+          className={`p-3 rounded-2xl border flex items-center gap-3 transition-all duration-500 ${
+            badge.active 
+              ? 'bg-indigo-500/10 border-indigo-500/20 shadow-[0_10px_20px_rgba(99,102,241,0.1)]' 
+              : 'bg-white/[0.02] border-white/5 opacity-30 grayscale'
+          }`}
+        >
+          <span className="text-2xl">{badge.icon}</span>
+          <div className="hidden sm:block">
+            <p className="text-[10px] font-black uppercase tracking-widest text-indigo-400">{badge.name}</p>
+            <p className="text-[9px] text-white/40 font-medium">{badge.desc}</p>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  );
 }
 
-export function SmartInsight({ revenue, profit, growthRate, expenseRatio, streak }: SmartInsightProps) {
-  const getMessage = () => {
-    if (growthRate > 15) return `🚀 You're up ${growthRate.toFixed(0)}% — exceptional momentum. Keep it going.`;
-    if (growthRate > 5)  return `📈 Up ${growthRate.toFixed(0)}% this period. Solid trajectory — keep optimizing.`;
-    if (profit > 0)      return `✅ Profitable and stable. Watch expenses at ${expenseRatio.toFixed(0)}% — there's room to win.`;
-    if (expenseRatio > 70) return `⚠️ Expenses at ${expenseRatio.toFixed(0)}% — that's eating margin. Time to tighten.`;
-    return `💡 Your data is flowing in. Give it a moment and your insights will sharpen.`;
-  };
-
+// ── SmartInsight ─────────────────────────────────────────────
+export function SmartInsight({ streak }: { streak: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="flex items-start gap-3 p-4 rounded-2xl"
-      style={{
-        background: 'rgba(79,70,229,0.06)',
-        border: '1px solid rgba(79,70,229,0.15)',
-      }}
+      className="p-4 rounded-2xl bg-indigo-500/5 border border-indigo-500/10"
     >
-      <div className="flex-1">
-        <p className="text-sm font-semibold text-white/80 leading-relaxed">
-          {getMessage()}
-        </p>
-        {streak >= 5 && (
-          <p className="mt-1 text-xs text-indigo-400 font-semibold">
-            🔥 {streak}-day streak! You're building a great habit.
-          </p>
-        )}
-      </div>
+      <p className="text-sm font-semibold text-white/80 leading-relaxed">
+        {streak >= 5 
+          ? `🔥 You're on a roll with a ${streak}-day streak! Your data engine is optimizing at 98% efficiency.` 
+          : "💡 Keep up the daily check-ins to boost your business health score and earn more XP."}
+      </p>
     </motion.div>
   );
 }
 
-// ── Milestone Celebration Overlay ─────────────────────────────
-export function MilestoneCelebration({ show, message }: { show: boolean; message: string }) {
-  return (
-    <AnimatePresence>
-      {show && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.9, y: -10 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-          className="fixed top-6 left-1/2 -translate-x-1/2 z-[9000] pointer-events-none"
-        >
-          <div
-            className="px-6 py-3 rounded-2xl text-sm font-bold text-white shadow-2xl"
-            style={{
-              background: 'linear-gradient(135deg, #4F46E5, #9333EA)',
-              boxShadow: '0 0 40px rgba(79,70,229,0.5), 0 20px 40px rgba(0,0,0,0.5)',
-            }}
-          >
-            {message}
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}

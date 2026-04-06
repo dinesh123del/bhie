@@ -1,568 +1,277 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   ArrowRight,
-  BarChart3,
   Zap,
   Shield,
   TrendingUp,
-  Users,
-  CheckCircle,
-  Star,
   Play,
+  Menu,
+  X,
+  Star as StarIcon,
+  Sparkles,
+  Camera,
+  Target,
+  Globe
 } from 'lucide-react';
-import { PremiumButton } from '../components/ui/PremiumComponents';
-import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { Logo } from '../components/Logo';
+import { premiumFeedback } from '../utils/premiumFeedback';
+import SparkBackground from '../components/ui/SparkBackground';
+import InteractiveGlobe from '../components/ui/InteractiveGlobe';
 
-const heroVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
+const Navbar = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
-const FeatureCard: React.FC<{
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}> = ({ icon, title, description }) => {
-  const { ref, controls } = useScrollAnimation();
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={controls}
-      variants={itemVariants}
-      whileHover={{ y: -8, transition: { duration: 0.2 } }}
-      className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all duration-300 will-change-transform"
-    >
-      <motion.div
-        whileHover={{ scale: 1.1, rotate: 5 }}
-        className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 will-change-transform"
-      >
-        {icon}
-      </motion.div>
-      <h3 className="text-lg font-bold text-white mb-2">{title}</h3>
-      <p className="text-sm text-gray-400">{description}</p>
-    </motion.div>
-  );
-};
-
-const PricingCard: React.FC<{
-  plan: string;
-  price: string;
-  description: string;
-  features: string[];
-  highlighted?: boolean;
-}> = ({ plan, price, description, features, highlighted = false }) => {
-  const { ref, controls } = useScrollAnimation();
-
-  return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={controls}
-      variants={itemVariants}
-      whileHover={highlighted ? { scale: 1.05 } : { y: -4 }}
-      className={`relative rounded-2xl p-8 backdrop-blur-xl transition-all duration-300 will-change-transform ${
-        highlighted
-          ? 'bg-gradient-to-br from-indigo-500/20 to-purple-600/20 border border-indigo-500/50 shadow-xl shadow-indigo-500/20'
-          : 'bg-white/5 border border-white/10 hover:border-white/20'
+    <motion.header 
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 1, ease: [0.2, 0.8, 0.2, 1] }}
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-700 border-b border-white/5 ${
+        scrolled ? 'bg-black/80 backdrop-blur-3xl' : 'bg-transparent border-transparent'
       }`}
     >
-      {highlighted && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="absolute top-0 left-0 right-0 flex justify-center"
-        >
-          <span className="px-4 py-1 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs font-bold rounded-full transform -translate-y-1/2">
-            POPULAR
-          </span>
-        </motion.div>
-      )}
+      <div className="max-w-[1400px] mx-auto px-8 h-20 flex items-center justify-between">
+        <Logo size="sm" showSubtitle={false} to="/" />
+        
+        <nav className="hidden md:flex gap-12 text-[11px] font-black text-white/30 tracking-[0.3em] uppercase">
+          <a href="#features" className="hover:text-white transition-colors">Intelligence</a>
+          <a href="#showcase" className="hover:text-white transition-colors">Ecosystem</a>
+          <a href="#pricing" className="hover:text-white transition-colors">Tiers</a>
+        </nav>
 
-      <h3 className="text-2xl font-bold text-white mb-2">{plan}</h3>
-      <p className="text-gray-400 text-sm mb-6">{description}</p>
-
-      <div className="mb-8">
-        <span className="text-4xl font-bold text-white">${price}</span>
-        <span className="text-gray-400 text-sm">/month</span>
-      </div>
-
-      <PremiumButton
-        variant={highlighted ? 'primary' : 'secondary'}
-        size="lg"
-        className="w-full mb-8"
-      >
-        Get Started
-        <ArrowRight className="w-4 h-4" />
-      </PremiumButton>
-
-      <div className="space-y-4">
-        {features.map((feature, idx) => (
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 + idx * 0.05 }}
-            className="flex items-center gap-3"
+        <div className="hidden md:flex items-center gap-8">
+          <Link to="/login" className="text-[11px] font-black text-white/30 hover:text-white transition-colors uppercase tracking-[0.3em]">Sign In</Link>
+          <motion.button 
+            onClick={() => {
+                premiumFeedback.click();
+                navigate('/register');
+            }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 py-3 bg-white text-black text-[12px] font-black rounded-full shadow-2xl shadow-white/10 uppercase tracking-widest"
           >
-            <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-            <span className="text-sm text-gray-300">{feature}</span>
+            Get Started
+          </motion.button>
+        </div>
+
+        <button className="md:hidden text-white/80" onClick={() => setMobileOpen(!mobileOpen)}>
+          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="md:hidden fixed inset-0 top-20 bg-black/95 backdrop-blur-3xl z-40 p-12"
+          >
+            <div className="flex flex-col gap-10">
+              <a href="#features" onClick={() => setMobileOpen(false)} className="text-[32px] font-black text-white tracking-tight">Intelligence.</a>
+              <a href="#pricing" onClick={() => setMobileOpen(false)} className="text-[32px] font-black text-white tracking-tight">Ecosystem.</a>
+              <div className="pt-12 flex flex-col gap-6">
+                 <Link to="/login" className="w-full py-6 text-center text-white/40 text-[12px] font-black bg-white/5 rounded-3xl uppercase tracking-[0.4em]">Sign In</Link>
+                 <Link to="/register" className="w-full py-6 text-center text-black text-[12px] font-black bg-white rounded-3xl uppercase tracking-[0.4em]">Get Started</Link>
+              </div>
+            </div>
           </motion.div>
-        ))}
-      </div>
-    </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
   );
 };
 
-const TestimonialCard: React.FC<{
-  name: string;
-  role: string;
-  text: string;
-  avatar: string;
-}> = ({ name, role, text, avatar }) => {
-  const { ref, controls } = useScrollAnimation();
-
-  return (
+const FeatureCard = ({ icon: Icon, title, description, delay }: any) => (
     <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={controls}
-      variants={itemVariants}
-      className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 will-change-transform"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay, duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
+      whileHover={{ y: -10 }}
+      className="apple-card p-12 bg-[#0A0A0B] border-white/5 group"
     >
-      <div className="flex items-center gap-1 mb-4">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-        ))}
+      <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-3xl flex items-center justify-center mb-8 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-500">
+        <Icon className="w-8 h-8 text-white" />
       </div>
-
-      <p className="text-gray-300 mb-6 text-sm">{text}</p>
-
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold">
-          {avatar[0]}
-        </div>
-        <div>
-          <p className="font-semibold text-white text-sm">{name}</p>
-          <p className="text-xs text-gray-400">{role}</p>
-        </div>
-      </div>
+      <h3 className="text-[24px] font-black text-white mb-4 tracking-tight leading-tight">{title}</h3>
+      <p className="text-[17px] text-white/40 leading-relaxed font-medium">{description}</p>
     </motion.div>
-  );
-};
+);
 
 export default function LandingPagePremium() {
-  const [_isVideoOpen, setIsVideoOpen] = useState(false);
-
+  const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-black to-slate-900 overflow-hidden">
-      {/* Animated Background */}
-      <motion.div
-        className="fixed inset-0 z-0 pointer-events-none"
-        animate={{
-          background: [
-            'radial-gradient(600px 200px at 50% 50%, rgba(99, 102, 241, 0.1), transparent)',
-            'radial-gradient(600px 200px at 50% 0%, rgba(99, 102, 241, 0.1), transparent)',
-          ],
-        }}
-        transition={{ duration: 20, repeat: Infinity }}
-      />
+    <div className="min-h-screen bg-[#020203] text-white selection:bg-indigo-500/30 overflow-x-hidden">
+      <Navbar />
+      <SparkBackground />
 
-      {/* Hero Section */}
-      <motion.section
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
-        className="relative z-10 pt-32 pb-20 px-4 sm:px-6 lg:px-8"
-      >
-        <div className="max-w-5xl mx-auto text-center">
-          {/* Logo */}
-          <motion.div
-            variants={heroVariants}
-            className="mb-8 flex justify-center"
-          >
-            <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
-              <span className="text-2xl font-bold text-white">B</span>
+      <main className="relative z-10 pt-40 px-6 md:px-12">
+        {/* HERO SECTION: Extreme Apple Look */}
+        <section className="max-w-[1400px] mx-auto mb-40 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 40, filter: 'blur(20px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ duration: 1.4, ease: [0.2, 0.8, 0.2, 1] }}
+              className="space-y-12"
+            >
+              <div className="space-y-6">
+                <motion.span 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                  className="px-6 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.6em] text-white/30"
+                >
+                  BHIE / APPLE INTELLIGENCE
+                </motion.span>
+                
+                <h1 className="text-[72px] md:text-[140px] font-black leading-[0.82] tracking-[-0.06em] text-white">
+                  The Self-Driving <br />
+                  <span className="text-ai-extreme">Business.</span>
+                </h1>
+                
+                <p className="text-[22px] md:text-[28px] text-white/30 max-w-3xl mx-auto font-medium leading-relaxed tracking-tight">
+                  Stop managing. Start directing. <br className="hidden md:block" />
+                  The first autonomous engine that turns data into surgical results.
+                </p>
+              </div>
+
+              <div className="flex flex-col md:flex-row items-center justify-center gap-8 pt-8">
+                <motion.button 
+                   whileHover={{ scale: 1.05, y: -4 }}
+                   whileTap={{ scale: 0.95 }}
+                   onClick={() => navigate('/register')}
+                   className="btn-apple bg-white text-black px-16 py-6 text-[20px] font-black tracking-tight"
+                >
+                  Start Your Journey
+                </motion.button>
+                
+                <motion.button 
+                   whileHover={{ scale: 1.05, y: -4 }}
+                   whileTap={{ scale: 0.95 }}
+                   className="btn-apple-outline px-16 py-6 text-[20px] font-black tracking-tight"
+                >
+                  Watch the Film
+                </motion.button>
+              </div>
+            </motion.div>
+
+            {/* CINEMATIC GLOBE REVEAL */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
+              className="mt-32 relative apple-card p-4 bg-black/40 border-white/5 aspect-video md:aspect-[21/9] overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-[#020203] via-transparent to-transparent z-10" />
+              <InteractiveGlobe />
+            </motion.div>
+        </section>
+
+        {/* THE ORACLE SECTION */}
+        <section id="features" className="max-w-[1400px] mx-auto mb-60">
+            <div className="text-center mb-24">
+                <h2 className="text-[12px] font-black text-white/20 uppercase tracking-[0.6em] mb-6">Strategic Autonomy</h2>
+                <h3 className="text-[42px] font-black tracking-tight">From Startup to Sentinel.</h3>
             </div>
-          </motion.div>
-
-          {/* Heading */}
-          <motion.h1 variants={heroVariants} className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            Transform Your Business with{' '}
-            <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              BHIE
-            </span>
-          </motion.h1>
-
-          {/* Subheading */}
-          <motion.p
-            variants={heroVariants}
-            transition={{ delay: 0.2 }}
-            className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto"
-          >
-            Business Health Intelligence Engine - Real-time analytics, predictions, and insights to drive growth and maximize performance.
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            variants={heroVariants}
-            transition={{ delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-          >
-            <PremiumButton
-              size="lg"
-              icon={<ArrowRight className="w-5 h-5" />}
-              onClick={() => window.location.href = '/register'}
-            >
-              Get Started Free
-            </PremiumButton>
-            <PremiumButton
-              variant="secondary"
-              size="lg"
-              icon={<Play className="w-5 h-5" />}
-              onClick={() => setIsVideoOpen(true)}
-            >
-              Watch Demo
-            </PremiumButton>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            variants={heroVariants}
-            transition={{ delay: 0.4 }}
-            className="mt-16 grid grid-cols-3 gap-4 sm:gap-8"
-          >
-            {[
-              { label: '5000+', value: 'Active Users' },
-              { label: '1M+', value: 'Insights Generated' },
-              { label: '99.9%', value: 'Uptime' },
-            ].map((stat, idx) => (
-              <motion.div key={idx} whileHover={{ y: -4 }}>
-                <p className="text-3xl font-bold text-white">{stat.label}</p>
-                <p className="text-sm text-gray-400">{stat.value}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Features Section */}
-      <motion.section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true, margin: '-100px' }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-              Powerful Features
-            </h2>
-            <p className="text-gray-400 text-lg">
-              Everything you need to understand and grow your business
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            variants={containerVariants}
-            viewport={{ once: true, margin: '-100px' }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            <FeatureCard
-              icon={<BarChart3 className="w-6 h-6 text-white" />}
-              title="Real-time Analytics"
-              description="Live dashboards with instant insights into key metrics and performance indicators."
-            />
-            <FeatureCard
-              icon={<TrendingUp className="w-6 h-6 text-white" />}
-              title="Predictive Intelligence"
-              description="ML-powered predictions to forecast trends and anticipate market changes."
-            />
-            <FeatureCard
-              icon={<Zap className="w-6 h-6 text-white" />}
-              title="Lightning Fast"
-              description="Optimized performance with sub-second response times for all queries."
-            />
-            <FeatureCard
-              icon={<Shield className="w-6 h-6 text-white" />}
-              title="Enterprise Security"
-              description="Bank-level encryption and compliance with ISO 27001 and SOC 2 standards."
-            />
-            <FeatureCard
-              icon={<Users className="w-6 h-6 text-white" />}
-              title="Team Collaboration"
-              description="Work together seamlessly with real-time collaboration and shared insights."
-            />
-            <FeatureCard
-              icon={<ArrowRight className="w-6 h-6 text-white" />}
-              title="API Integration"
-              description="Comprehensive REST API for seamless integration with your existing tools."
-            />
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Product Showcase */}
-      <motion.section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true, margin: '-100px' }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-              Beautiful Dashboard
-            </h2>
-            <p className="text-gray-400 text-lg">
-              Intuitive interface designed for productivity and clarity
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true, margin: '-100px' }}
-            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-1 will-change-transform"
-          >
-            <div className="bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 rounded-3xl aspect-video flex items-center justify-center">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsVideoOpen(true)}
-                className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg shadow-indigo-500/40 hover:shadow-xl hover:shadow-indigo-500/60 transition-all"
-              >
-                <Play className="w-6 h-6 text-white fill-white" />
-              </motion.button>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <FeatureCard 
+                    icon={Target}
+                    title="Surgical Directives."
+                    description="No more dashboards. Our engine gives you prioritized strategic actions to scale or protect your margins."
+                    delay={0.1}
+                />
+                <FeatureCard 
+                    icon={Globe}
+                    title="Global Sentiment."
+                    description="Real-time benchmarking against the world's most efficient business models for absolute context."
+                    delay={0.2}
+                />
+                <FeatureCard 
+                    icon={Zap}
+                    title="Autonomous Growth."
+                    description="Automated capital allocation models that optimize for ROI and equity preservation simultaneously."
+                    delay={0.3}
+                />
             </div>
-          </motion.div>
-        </div>
-      </motion.section>
+        </section>
 
-      {/* Pricing Section */}
-      <motion.section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true, margin: '-100px' }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-              Simple, Transparent Pricing
-            </h2>
-            <p className="text-gray-400 text-lg">
-              Choose the perfect plan for your business
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            variants={containerVariants}
-            viewport={{ once: true, margin: '-100px' }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
-          >
-            <PricingCard
-              plan="Starter"
-              price="29"
-              description="Perfect for small teams"
-              features={[
-                'Up to 10,000 records',
-                'Basic analytics',
-                'Email support',
-                '1 GB storage',
-                'API access',
-              ]}
-            />
-            <PricingCard
-              plan="Professional"
-              price="99"
-              description="For growing businesses"
-              features={[
-                'Unlimited records',
-                'Advanced analytics',
-                'Predictive Logic',
-                'Priority support',
-                '100 GB storage',
-                'Advanced API',
-                'Custom integrations',
-              ]}
-              highlighted
-            />
-            <PricingCard
-              plan="Enterprise"
-              price="Custom"
-              description="For large organizations"
-              features={[
-                'Everything in Pro',
-                'Dedicated support',
-                'On-premise options',
-                'SLA guarantee',
-                'Custom features',
-                'Team management',
-              ]}
-            />
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Testimonials */}
-      <motion.section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true, margin: '-100px' }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-              Trusted by Industry Leaders
-            </h2>
-            <p className="text-gray-400 text-lg">
-              See what our customers have to say
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            variants={containerVariants}
-            viewport={{ once: true, margin: '-100px' }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            <TestimonialCard
-              name="Sarah Chen"
-              role="CEO, TechCorp"
-              text="BHIE transformed how we make decisions. The predictive analytics have saved us thousands in costs."
-              avatar="S"
-            />
-            <TestimonialCard
-              name="Michael Rodriguez"
-              role="CFO, Growth Inc"
-              text="Finally, a tool that actually makes sense. The UI is beautiful and the insights are actionable."
-              avatar="M"
-            />
-            <TestimonialCard
-              name="Emily Watson"
-              role="Founder, Analytics Pro"
-              text="Integrated BHIE in hours. The support team is responsive, and the AI predictions are spot-on."
-              avatar="E"
-            />
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* CTA Section */}
-      <motion.section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true, margin: '-100px' }}
-          className="max-w-3xl mx-auto text-center bg-gradient-to-r from-indigo-500/10 to-purple-600/10 border border-indigo-500/20 rounded-3xl p-12"
-        >
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-            Ready to Transform Your Business?
-          </h2>
-          <p className="text-gray-400 text-lg mb-8">
-            Join thousands of companies using BHIE to make smarter decisions.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <PremiumButton
-              size="lg"
-              icon={<ArrowRight className="w-5 h-5" />}
-              onClick={() => window.location.href = '/register'}
+        {/* FINAL CALL: Extreme Apple Standard */}
+        <section className="max-w-[1400px] mx-auto pb-40 text-center">
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="apple-card p-24 md:p-32 bg-[#0A0A0B] border-white/5 relative overflow-hidden"
             >
-              Start Free Trial
-            </PremiumButton>
-            <PremiumButton
-              variant="secondary"
-              size="lg"
-              onClick={() => window.location.href = '/login'}
-            >
-              Sign In
-            </PremiumButton>
-          </div>
-        </motion.div>
-      </motion.section>
+                <div className="absolute inset-0 bg-blue-500/[0.03] blur-[150px] scale-150" />
+                <div className="relative z-10 space-y-12">
+                    <h2 className="text-[56px] md:text-[92px] font-black tracking-[-0.05em] leading-[0.9] text-white">
+                        Intelligence is <br /> here.
+                    </h2>
+                    <motion.button 
+                      onClick={() => navigate('/register')}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-16 py-6 bg-white text-black text-[22px] font-black rounded-full shadow-2xl"
+                    >
+                      Join the Ecosystem
+                    </motion.button>
+                </div>
+            </motion.div>
+        </section>
+      </main>
 
-      {/* Footer */}
-      <motion.footer
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        viewport={{ once: true }}
-        className="relative z-10 border-t border-white/10 py-12 px-4 sm:px-6 lg:px-8"
-      >
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h4 className="font-semibold text-white mb-4">Product</h4>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Features</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Security</a></li>
-              </ul>
+      {/* FOOTER: Deep Minimalist */}
+      <footer className="border-t border-white/5 py-40 px-12 bg-black">
+        <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-24">
+            <div className="space-y-10">
+                <Logo size="sm" showSubtitle={false} />
+                <p className="text-[18px] text-white/30 font-medium leading-relaxed tracking-tight">
+                    A cinematic financial experience built for modern performance and surgical insights.
+                </p>
             </div>
             <div>
-              <h4 className="font-semibold text-white mb-4">Company</h4>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">About</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Blog</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Careers</a></li>
-              </ul>
+                <h4 className="text-[11px] font-black text-white uppercase tracking-[0.4em] mb-12">Platform</h4>
+                <ul className="space-y-6 text-[15px] font-black text-white/30 tracking-tight">
+                    <li><Link to="/analytics" className="hover:text-white transition-colors">Analytics Engine</Link></li>
+                    <li><Link to="/ds-hub" className="hover:text-white transition-colors">Neural Sync</Link></li>
+                    <li><Link to="/scan-bill" className="hover:text-white transition-colors">Vision Pro</Link></li>
+                </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-white mb-4">Legal</h4>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Terms</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Contact</a></li>
-              </ul>
+                <h4 className="text-[11px] font-black text-white uppercase tracking-[0.4em] mb-12">Company</h4>
+                <ul className="space-y-6 text-[15px] font-black text-white/30 tracking-tight">
+                    <li><Link to="/about" className="hover:text-white transition-colors">Intelligence</Link></li>
+                    <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
+                    <li><Link to="/terms" className="hover:text-white transition-colors">Legal</Link></li>
+                </ul>
             </div>
-            <div>
-              <h4 className="font-semibold text-white mb-4">Social</h4>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Twitter</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">LinkedIn</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">GitHub</a></li>
-              </ul>
+            <div className="space-y-8">
+                <h4 className="text-[11px] font-black text-white uppercase tracking-[0.4em] mb-12">Connect</h4>
+                <div className="flex flex-col gap-6">
+                    {['X', 'LinkedIn', 'Github'].map(s => (
+                        <button key={s} className="text-[15px] font-black text-white/30 text-left hover:text-white transition-colors">{s}</button>
+                    ))}
+                </div>
             </div>
-          </div>
-
-          <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center text-gray-400 text-sm">
-            <p>&copy; 2026 BHIE. All rights reserved.</p>
-            <p>Made with ❤️ by the BHIE team</p>
-          </div>
         </div>
-      </motion.footer>
+        <div className="max-w-[1400px] mx-auto pt-24 mt-24 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-12">
+            <p className="text-[11px] font-black text-white/10 uppercase tracking-[0.4em]">© 2026 BHIE ECOSYSTEM. DESIGNED BY APPLE INTELLIGENCE STANDARDS.</p>
+        </div>
+      </footer>
     </div>
   );
 }

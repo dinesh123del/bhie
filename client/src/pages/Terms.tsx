@@ -6,22 +6,22 @@ const sections = [
   {
     icon: Shield,
     title: '1. Acceptance of Terms',
-    content: 'By accessing or using the BHIE platform, you agree to be bound by these Terms of Service. If you do not agree to all of these terms, you are prohibited from using our services. We reserve the right to modify these terms at any time, and such modifications will be effective immediately upon posting on this page.',
+    content: 'By accessing or using the Finly platform, you agree to be bound by these Terms of Service. If you do not agree to all of these terms, you are prohibited from using our services. We reserve the right to modify these terms at any time, and such modifications will be effective immediately upon posting on this page.',
   },
   {
     icon: Lock,
     title: '2. User Responsibilities',
-    content: 'You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You agree to notify us immediately of any unauthorized use of your account or any other breach of security. BHIE will not be liable for any loss or damage arising from your failure to comply with this security obligation.',
+    content: 'You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You agree to notify us immediately of any unauthorized use of your account or any other breach of security. Finly will not be liable for any loss or damage arising from your failure to comply with this security obligation.',
   },
   {
     icon: FileText,
     title: '3. Intellectual Property Rights',
-    content: 'All content, features, and parts of the BHIE platform, including our smart design and AI analysis, are owned by us. You have the right to use the service for your own business needs.',
+    content: 'All content, features, and parts of the Finly platform, including our smart design and AI analysis, are owned by us. You have the right to use the service for your own business needs.',
   },
   {
     icon: Scale,
     title: '4. Limitation of Liability',
-    content: 'BHIE provides its services on an "as is" and "as available" basis. To the maximum extent permitted by law, BHIE shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses.',
+    content: 'Finly provides its services on an "as is" and "as available" basis. To the maximum extent permitted by law, Finly shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses.',
   },
   {
     icon: Shield,
@@ -31,7 +31,7 @@ const sections = [
   {
     icon: Lock,
     title: '6. Termination',
-    content: 'We may terminate or suspend your access to BHIE immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms. Upon termination, your right to use the Service will immediately cease.',
+    content: 'We may terminate or suspend your access to Finly immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms. Upon termination, your right to use the Service will immediately cease.',
   },
 ];
 
