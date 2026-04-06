@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { PremiumCard, PremiumButton, KPICard } from '../components/ui/PremiumComponents';
 import api from '../lib/axios';
-import { AnalysisDashboard } from '../components/AIAnalysisDashboard';
+import { BusinessInsights } from '../components/BusinessInsights';
 import { aiService, BusinessData, AIAnalysisResponse } from '../services/aiService';
 import { canUseDeepInsights as canUseAIInsights } from '../utils/plan';
 import { premiumFeedback } from '../utils/premiumFeedback';
@@ -372,7 +372,7 @@ const PremiumAnalytics = () => {
                 </div>
               </div>
             ) : aiAnalysis ? (
-              <AnalysisDashboard analysisResult={aiAnalysis} />
+              <BusinessInsights analysisResult={aiAnalysis} />
             ) : (
               <div className="text-center py-20">
                 <div className="w-10 h-10 border-2 border-[#2C2C2E] border-t-[#007AFF] rounded-full animate-spin mx-auto mb-4" />
