@@ -1,6 +1,6 @@
 import { Request } from 'express';
 
-export type UserRole = 'admin' | 'user';
+export type UserRole = 'admin' | 'user' | 'ca';
 
 export interface AuthenticatedUser {
   userId: string;
@@ -24,6 +24,11 @@ export interface Record {
   status: string;
   fileUrl?: string;
   userId: string;
+  // 📜 CA Certification Fields
+  isCertified?: boolean;
+  certifiedBy?: string; // CA User ID
+  certificationDate?: Date;
+  auditNotes?: string;
 }
 
 export interface Alert {

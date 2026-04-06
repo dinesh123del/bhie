@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Building2, Users, IndianRupee, ArrowRight, CheckCircle2,
+  IndianRupee, ArrowRight, CheckCircle2,
   Briefcase, LineChart, ShieldCheck
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -60,8 +60,25 @@ export default function ResellerPartner() {
           </h1>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
             Manage dozens of client businesses from a single dashboard. 
-            Resell Finly's AI intelligence to your clients and earn 20% recurring commission.
+            Resell Finly's deep intelligence, provide <strong>Official Audit Certifications</strong>, and earn 20% recurring commission.
           </p>
+          <div className="mt-8 flex justify-center gap-4">
+            <button 
+              onClick={() => navigate('/ca-portal')}
+              className="px-6 py-3 bg-brand-500 hover:bg-brand-600 text-white font-black rounded-2xl flex items-center gap-2 shadow-xl shadow-brand-500/20 transition-all hover:scale-105"
+            >
+              <ShieldCheck className="w-5 h-5" /> Launch Auditor Workspace
+            </button>
+            <button 
+              onClick={() => {
+                const el = document.getElementById('partnership-form');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-bold rounded-2xl border border-white/10 transition-all"
+            >
+              Apply for Partnership
+            </button>
+          </div>
         </motion.div>
       </div>
 
@@ -123,6 +140,7 @@ export default function ResellerPartner() {
 
         {/* Right Side: Form */}
         <motion.div 
+          id="partnership-form"
           initial={{ opacity: 0, x: 20 }} 
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}

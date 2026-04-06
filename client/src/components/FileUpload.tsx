@@ -7,12 +7,9 @@ import {
   FileText,
   FileType2,
   Loader2,
-  Sparkles,
-  UploadCloud,
   Zap,
   Activity,
   AlertCircle,
-  CheckCircle2,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../hooks/useAuth';
@@ -25,7 +22,7 @@ import { useGamification } from './GamificationEngine';
 
 import { CameraCapture } from './image-intelligence/CameraCapture';
 
-const acceptedFormats = ['JPG', 'PNG', 'WEBP', 'HEIC', 'PDF', 'DOCX', 'ZIP'];
+
 
 export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: UploadedImageRecord[]) => void }) => {
   const [dragActive, setDragActive] = useState(false);
@@ -89,7 +86,7 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
       setProcessingStep('');
       setPreviewFiles([]);
     }
-  }, [onUploadComplete, uploadsLocked]);
+  }, [onUploadComplete, uploadsLocked, addXP]);
 
   const handleDrag = useCallback((event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();

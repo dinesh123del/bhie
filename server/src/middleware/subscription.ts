@@ -105,7 +105,7 @@ export const optionalSubscription: RequestHandler = async (req, res, next) => {
     }
 
     next();
-  } catch (error) {
+  } catch {
     next();
   }
 };

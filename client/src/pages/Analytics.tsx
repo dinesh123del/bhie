@@ -1,390 +1,388 @@
-import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, DollarSign, PieChart, Sparkles, BrainCircuit } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import {
+  BarChart, Bar, AreaChart, Area, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend
+} from 'recharts';
+import {
+  TrendingUp, Download, Filter, Sparkles, Wallet, PieChart as PieIcon, Activity, Zap
+} from 'lucide-react';
+import { PremiumCard, PremiumButton, KPICard } from '../components/ui/PremiumComponents';
 import api from '../lib/axios';
-import { SkeletonCard, SkeletonText, IntelligentMessage } from '../components/ui/EliteUI';
-import { useRetentionEngine } from '../hooks/useRetentionEngine';
-import { PremiumCard } from '../components/ui/PremiumComponents';
+import { AnalysisDashboard } from '../components/AIAnalysisDashboard';
+import { aiService, BusinessData, AIAnalysisResponse } from '../services/aiService';
+import { canUseDeepInsights as canUseAIInsights } from '../utils/plan';
+import { premiumFeedback } from '../utils/premiumFeedback';
+import { generateBrandedPDF } from '../utils/pdfGenerator';
 
-interface AnalyticsData {
-  totalIncome?: number;
-  totalExpenses?: number;
-  profit?: number;
-  growthRate?: number;
-  expenseRatio?: number;
-}
 
-interface ChartData {
-  month: string;
-  income?: number;
-  expenses?: number;
-  profit?: number;
-  value?: number;
-}
-
-const ScrollableSection = ({ title, children }: { title: string; children: React.ReactNode }) => {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-
-  const checkScroll = () => {
-    const container = scrollContainerRef.current;
-    if (container) {
-      setCanScrollLeft(container.scrollLeft > 0);
-      setCanScrollRight(container.scrollLeft < container.scrollWidth - container.clientWidth - 10);
-    }
-  };
-
-  const scroll = (direction: 'left' | 'right') => {
-    const container = scrollContainerRef.current;
-    if (container) {
-      const scrollAmount = 400;
-      container.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
-      });
-      setTimeout(checkScroll, 600);
-    }
-  };
-
-  useEffect(() => {
-    checkScroll();
-    window.addEventListener('resize', checkScroll);
-    return () => window.removeEventListener('resize', checkScroll);
-  }, []);
-
-  return (
-    <div className="mb-8">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold text-white">{title}</h2>
-        <div className="flex gap-2">
-          <motion.button
-            onClick={() => scroll('left')}
-            disabled={!canScrollLeft}
-            className={`p-2 rounded-lg transition-all ${
-              canScrollLeft
-                ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                : 'bg-slate-700 text-slate-500 cursor-not-allowed'
-            }`}
-            whileHover={canScrollLeft ? { scale: 1.1 } : {}}
-            whileTap={canScrollLeft ? { scale: 0.95 } : {}}
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </motion.button>
-          <motion.button
-            onClick={() => scroll('right')}
-            disabled={!canScrollRight}
-            className={`p-2 rounded-lg transition-all ${
-              canScrollRight
-                ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                : 'bg-slate-700 text-slate-500 cursor-not-allowed'
-            }`}
-            whileHover={canScrollRight ? { scale: 1.1 } : {}}
-            whileTap={canScrollRight ? { scale: 0.95 } : {}}
-          >
-            <ChevronRight className="w-5 h-5" />
-          </motion.button>
-        </div>
-      </div>
-
-      {/* Scrollable Container */}
-      <div className="relative">
-        <motion.div
-          ref={scrollContainerRef}
-          className="flex gap-4 overflow-x-auto pb-4 scroll-smooth"
-          style={{
-            scrollBehavior: 'smooth',
-            WebkitOverflowScrolling: 'touch'
-          }}
-          onScroll={checkScroll}
-        >
-          {children}
-        </motion.div>
-      </div>
-    </div>
-  );
-};
-
-const AnalyticsCard = ({
-  title,
-  value,
-  trend,
-  icon: Icon,
-  color
-}: {
-  title: string;
-  value: string | number;
-  trend?: number;
-  icon: React.ComponentType<any>;
-  color: string;
-}) => {
-  const isTrendPositive = (trend || 0) >= 0;
-
-  return (
-    <motion.div
-      className="flex-shrink-0 w-72 p-6 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 hover:border-slate-600 transition-all"
-      whileHover={{
-        scale: 1.05,
-        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)'
-      }}
-      whileTap={{ scale: 0.98 }}
-    >
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <p className="text-sm text-slate-400 mb-1">{title}</p>
-          <p className="text-3xl font-bold text-white">{value}</p>
-        </div>
-        <div className={`p-3 rounded-lg ${color}`}>
-          <Icon className="w-6 h-6 text-white" />
-        </div>
-      </div>
-
-      {trend !== undefined && (
-        <div className={`flex items-center gap-2 text-sm font-semibold ${isTrendPositive ? 'text-green-400' : 'text-red-400'}`}>
-          {isTrendPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
-          {Math.abs(trend)}% from last week
-        </div>
-      )}
-    </motion.div>
-  );
-};
-
-const Analytics = () => {
-  const [data, setData] = useState<AnalyticsData>({});
+const PremiumAnalytics = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
+  const [metrics, setMetrics] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [company, setCompany] = useState<any>(null);
+  const [aiAnalysis, setAiAnalysis] = useState<AIAnalysisResponse | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const aiInsightsEnabled = canUseAIInsights(user);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get('/dashboard');
-        setData(response.data);
-      } catch (error) {
-        console.error('Failed to fetch analytics data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    const userData = localStorage.getItem('user');
+    if (userData) setUser(JSON.parse(userData));
+    loadMetrics();
+    loadCompany();
   }, []);
 
-  const { insights } = useRetentionEngine(data, []);
+  const loadCompany = async () => {
+    try {
+      const response = await api.get('/company');
+      const companyData = response.data.company;
+      setCompany(companyData);
+      if (companyData && canUseAIInsights(JSON.parse(localStorage.getItem('user') || 'null'))) {
+        await generateAIInsights(companyData);
+      }
+    } catch (err) {
+      console.warn('No company data', err);
+    }
+  };
 
-  const mockMonthlyData: ChartData[] = [
-    { month: 'Jan', income: 4000, expenses: 2400, profit: 1600 },
-    { month: 'Feb', income: 3000, expenses: 1398, profit: 1602 },
-    { month: 'Mar', income: 2000, expenses: 9800, profit: -2800 },
-    { month: 'Apr', income: 2780, expenses: 3908, profit: -1128 },
-    { month: 'May', income: 1890, expenses: 4800, profit: -2910 },
-    { month: 'Jun', income: 2390, expenses: 3800, profit: -1410 },
-    { month: 'Jul', income: 3490, expenses: 4300, profit: -810 }
+  const generateAIInsights = async (companyData = company) => {
+    if (!companyData) return;
+    if (!canUseAIInsights(JSON.parse(localStorage.getItem('user') || 'null'))) {
+      return;
+    }
+    setAiLoading(true);
+    try {
+      const data: BusinessData = {
+        revenue: companyData.revenue || 0,
+        expenses: companyData.expenses || 0,
+        customerCount: companyData.employees || 0,
+        industry: companyData.industry,
+      };
+      const result = await aiService.analyzeBusinessData(data);
+      setAiAnalysis(result);
+    } catch (error) {
+      console.error('AI error:', error);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const loadMetrics = async () => {
+    try {
+      const response = await api.get('/analytics/summary');
+      setMetrics(response.data);
+    } catch (err) {
+      console.error('Failed to load metrics:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const cashFlowData = metrics?.monthlyData || [
+    { name: 'No Data', revenue: 0, expenses: 0, profit: 0 }
   ];
 
-  const mockExpenseData = [
-    { category: 'Rent', value: 30 },
-    { category: 'Salaries', value: 25 },
-    { category: 'Marketing', value: 20 },
-    { category: 'Operations', value: 15 },
-    { category: 'Other', value: 10 }
+  const performanceData = metrics?.monthlyData ? metrics.monthlyData.map((d: any) => ({
+    name: d.month,
+    active: d.revenue,
+    target: d.target
+  })) : [
+    { name: 'Mon', active: 0, target: 0 },
+    { name: 'Tue', active: 0, target: 0 },
+    { name: 'Wed', active: 0, target: 0 },
+    { name: 'Thu', active: 0, target: 0 },
+    { name: 'Fri', active: 0, target: 0 },
+    { name: 'Sat', active: 0, target: 0 },
+    { name: 'Sun', active: 0, target: 0 },
+  ];
+
+  const radarData = metrics?.scoreData?.breakdown ? [
+    { subject: 'Profitability', A: metrics.scoreData.breakdown.profitability, B: 70, fullMark: 100 },
+    { subject: 'Growth', A: metrics.scoreData.breakdown.growth, B: 65, fullMark: 100 },
+    { subject: 'Activity', A: metrics.scoreData.breakdown.activity, B: 50, fullMark: 100 },
+    { subject: 'Efficiency', A: metrics.scoreData.breakdown.efficiency, B: 80, fullMark: 100 },
+    { subject: 'Resonance', A: metrics.scoreData?.resonanceIndex || 50, B: 60, fullMark: 100 },
+    { subject: 'Stability', A: 100 - (metrics.kpis?.inactiveRatio || 0), B: 75, fullMark: 100 },
+  ] : [
+    { subject: 'Profitability', A: 0, B: 0, fullMark: 100 },
+    { subject: 'Growth', A: 0, B: 0, fullMark: 100 },
+    { subject: 'Activity', A: 0, B: 0, fullMark: 100 },
+    { subject: 'Efficiency', A: 0, B: 0, fullMark: 100 },
+    { subject: 'Resonance', A: 0, B: 0, fullMark: 100 },
+    { subject: 'Stability', A: 0, B: 0, fullMark: 100 },
   ];
 
   if (loading) {
     return (
-      <div className="space-y-12 animate-in fade-in duration-700">
-        <div className="space-y-4">
-          <SkeletonText width="w-1/3" />
-          <SkeletonText width="w-1/2" />
-        </div>
-        <div className="flex gap-4 overflow-hidden">
-          <SkeletonCard height="h-44" />
-          <SkeletonCard height="h-44" />
-          <SkeletonCard height="h-44" />
-        </div>
         <div className="space-y-6">
-          <SkeletonText width="w-1/4" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <SkeletonCard height="h-64" />
-            <SkeletonCard height="h-64" />
-            <SkeletonCard height="h-64" />
+          <div className="h-10 w-1/3 bg-[#1C1C1E] animate-pulse rounded-lg" />
+          <div className="grid gap-6 md:grid-cols-4">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="h-32 bg-[#1C1C1E] rounded-xl animate-pulse" />
+            ))}
           </div>
+          <div className="h-[400px] bg-[#1C1C1E] animate-pulse rounded-xl" />
         </div>
-      </div>
     );
   }
 
+  const springTransition = { duration: 0.6, ease: [0.2, 0.8, 0.2, 1] };
+
   return (
-    <div className="space-y-12">
-      {/* Page Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h1 className="text-4xl font-bold text-white mb-2">Analytics Dashboard</h1>
-        <p className="text-slate-400">Track your business metrics and trends in real-time</p>
-      </motion.div>
-
-      {/* Summary Metrics */}
-      <ScrollableSection title="Key Metrics">
-        <AnalyticsCard
-          title="Revenue"
-          value={`$${(data.totalIncome || 0).toLocaleString()}`}
-          trend={12}
-          icon={DollarSign}
-          color="bg-green-600"
-        />
-        <AnalyticsCard
-          title="Expenses"
-          value={`$${(data.totalExpenses || 0).toLocaleString()}`}
-          trend={-5}
-          icon={DollarSign}
-          color="bg-red-600"
-        />
-        <AnalyticsCard
-          title="Net Balance"
-          value={`$${(data.profit || 0).toLocaleString()}`}
-          trend={18}
-          icon={TrendingUp}
-          color="bg-blue-600"
-        />
-        <AnalyticsCard
-          title="Growth Rate"
-          value={`${(data.growthRate || 0).toFixed(1)}%`}
-          trend={8}
-          icon={TrendingUp}
-          color="bg-purple-600"
-        />
-      </ScrollableSection>
-
-      {/* Revenue Trends (Mini Charts) */}
-      <ScrollableSection title="Revenue Trends">
-        {mockMonthlyData.map((item, idx) => (
-          <motion.div
-            key={idx}
-            className="flex-shrink-0 w-56 p-6 rounded-xl bg-gradient-to-br from-emerald-900/30 to-slate-900 border border-emerald-700/30 hover:border-emerald-600/50 transition-all"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <p className="text-sm text-slate-400 mb-2">{item.month}</p>
-            <p className="text-2xl font-bold text-emerald-400 mb-4">${(item.income || 0).toLocaleString()}</p>
-            <div className="h-12 bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-lg opacity-20" />
-          </motion.div>
-        ))}
-      </ScrollableSection>
-
-      {/* Expense Breakdown */}
-      <ScrollableSection title="Expense Breakdown">
-        {mockExpenseData.map((item, idx) => (
-          <motion.div
-            key={idx}
-            className="flex-shrink-0 w-56 p-6 rounded-xl bg-gradient-to-br from-red-900/30 to-slate-900 border border-red-700/30 hover:border-red-600/50 transition-all"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <p className="text-sm text-slate-400 mb-1">{item.category}</p>
-                <p className="text-2xl font-bold text-red-400">{item.value}%</p>
-              </div>
-              <PieChart className="w-6 h-6 text-red-500" />
-            </div>
-            <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
-              <motion.div
-                className="h-full bg-gradient-to-r from-red-600 to-red-400"
-                initial={{ width: 0 }}
-                animate={{ width: `${item.value}%` }}
-                transition={{ duration: 1.5, ease: 'easeOut' }}
-              />
-            </div>
-          </motion.div>
-        ))}
-      </ScrollableSection>
-
-      {/* Net Balance Analysis */}
-      <ScrollableSection title="Net Balance Analysis">
-        {mockMonthlyData.map((item, idx) => {
-          const isProfitable = (item.profit || 0) >= 0;
-          return (
-            <motion.div
-              key={idx}
-              className={`flex-shrink-0 w-56 p-6 rounded-xl border transition-all ${
-                isProfitable
-                  ? 'bg-gradient-to-br from-blue-900/30 to-slate-900 border-blue-700/30 hover:border-blue-600/50'
-                  : 'bg-gradient-to-br from-orange-900/30 to-slate-900 border-orange-700/30 hover:border-orange-600/50'
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
+    <>
+      <div className="relative mx-auto max-w-[1200px] px-6 md:px-8 py-8 space-y-12 pb-24 text-white">
+        
+        {/* Header */}
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-[#1C1C1E]">
+          <div className="space-y-2">
+            <motion.div 
+               initial={{ opacity: 0, scale: 0.95 }}
+               animate={{ opacity: 1, scale: 1 }}
+               transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+               className="inline-flex items-center gap-2 mb-2"
             >
-              <p className="text-sm text-slate-400 mb-2">{item.month}</p>
-              <p className={`text-2xl font-bold mb-4 ${isProfitable ? 'text-blue-400' : 'text-orange-400'}`}>
-                ${(item.profit || 0).toLocaleString()}
-              </p>
-              <div className={`h-2 rounded-full overflow-hidden ${isProfitable ? 'bg-blue-600/30' : 'bg-orange-600/30'}`}>
-                <motion.div
-                  className={isProfitable ? 'bg-blue-500' : 'bg-orange-500'}
-                  initial={{ width: 0 }}
-                  animate={{ width: `${Math.abs(item.profit || 0) / 30}%` }}
-                  transition={{ duration: 1.5, ease: 'easeOut' }}
-                />
-              </div>
+              <div className="w-1.5 h-1.5 rounded-full bg-[#AF52DE]" />
+              <span className="text-[11px] font-semibold text-[#A1A1A6] uppercase tracking-wider">Business Intelligence</span>
             </motion.div>
-          );
-        })}
-      </ScrollableSection>
-
-      {/* Intelligent Insights Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-4">
-          <div className="flex items-center gap-3 mb-6">
-            <BrainCircuit className="w-6 h-6 text-indigo-400" />
-            <h3 className="text-xl font-bold text-white tracking-tight">Intelligence Feed</h3>
+            <h1 className="text-[32px] md:text-[40px] font-bold tracking-tight text-white leading-tight">
+              Real-time analysis.
+            </h1>
           </div>
-          
-          <AnimatePresence mode="popLayout">
-            {insights.length > 0 ? insights.map((insight) => (
-              <IntelligentMessage 
-                key={insight.id}
-                title={insight.title}
-                message={insight.message}
-                type={insight.type}
-              />
-            )) : (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="p-8 rounded-[2rem] border border-dashed border-white/10 flex flex-col items-center justify-center text-center"
-              >
-                <Sparkles className="w-8 h-8 text-white/20 mb-4" />
-                <p className="text-white/40 text-sm font-medium">Monitoring your financial patterns...<br/>Deep insights will appear as you interact.</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <motion.div className="flex gap-3">
+            <button className="px-4 py-2 rounded-full border border-[#1C1C1E] hover:bg-[#1C1C1E] transition-colors flex items-center gap-2 text-[13px] font-medium text-[#A1A1A6]">
+              <Filter className="w-4 h-4" /> Parameters
+            </button>
+            <button 
+              onClick={() => {
+                premiumFeedback.click();
+                if (metrics) {
+                    const header = 'Month | Revenue | Expenses | Target\n-----------------------------------------';
+                    const rows = (metrics.monthlyData || []).map((d: any) => 
+                        `${d.month} | ₹${d.revenue} | ₹${d.expenses} | ₹${d.target}`
+                    );
+                    const kpis = `\nKPIs:\nGrowth Rate: ${metrics?.kpis?.growthRate || 0}%\nProfit Margin: ${metrics?.kpis?.profitMargin || 0}%\nRevenue: ₹${metrics?.kpis?.revenue || 0}\nNet Profit: ₹${metrics?.kpis?.profit || 0}\n`;
+                    
+                    const content = `Analytics Premium Export\n\n${kpis}\nMonthly Breakdown:\n${header}\n${rows.join('\n')}`;
+
+                    void generateBrandedPDF({
+                      title: 'Finly Premium Analytics Report',
+                      content: content,
+                      filename: `finly-analytics-${new Date().toISOString().slice(0, 10)}`,
+                      type: 'analytics_export'
+                    });
+                    
+                    premiumFeedback.success();
+                }
+              }}
+              className="px-4 py-2 rounded-full bg-white text-black hover:bg-white/90 transition-colors flex items-center gap-2 text-[13px] font-medium"
+            >
+              <Download className="w-4 h-4" /> Export PDF
+            </button>
+          </motion.div>
+        </header>
+
+        {/* KPIs */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { icon: <Zap className="w-5 h-5 text-[#FF9500]" />, label: "Cash Velocity", value: metrics?.kpis?.growthRate ? `${(metrics.kpis.growthRate / 10).toFixed(1)}x` : "0.0x", trend: metrics?.kpis?.growthRate ? `+${metrics.kpis.growthRate}%` : "0%" },
+            { icon: <TrendingUp className="w-5 h-5 text-[#34C759]" />, label: "Gross Margin", value: metrics?.kpis?.profitMargin ? `${metrics.kpis.profitMargin.toFixed(1)}%` : "0.0%", trend: "0%" },
+            { icon: <Wallet className="w-5 h-5 text-[#007AFF]" />, label: "Total Revenue", value: metrics?.kpis?.revenue ? `₹${(metrics.kpis.revenue / 100000).toFixed(1)}L` : "₹0.0L", trend: "0%" },
+            { icon: <PieIcon className="w-5 h-5 text-[#AF52DE]" />, label: "Net Profit", value: metrics?.kpis?.profit ? `₹${(metrics.kpis.profit / 100000).toFixed(1)}L` : "₹0.0L", trend: "0%" }
+          ].map((kpi, i) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, ...springTransition }}
+              whileHover={{ y: -2 }}
+              className="apple-card p-6 flex flex-col"
+            >
+               <div className="flex items-center justify-between mb-4">
+                 <span className="text-[13px] font-semibold text-[#A1A1A6]">{kpi.label}</span>
+                 {kpi.icon}
+               </div>
+               <div className="text-[28px] font-bold tracking-tight mb-1">{kpi.value}</div>
+               <div className={`text-[13px] font-medium ${kpi.trend.startsWith('+') ? 'text-[#34C759]' : 'text-[#A1A1A6]'}`}>
+                 {kpi.trend}
+               </div>
+            </motion.div>
+          ))}
         </div>
 
-        <PremiumCard gradient className="h-fit">
-          <h3 className="text-xl font-bold text-white mb-6">Behavioral Score</h3>
-          <div className="relative h-48 flex items-center justify-center">
-            <motion.div 
-              className="absolute inset-0 rounded-full border-[12px] border-white/5"
-              initial={{ rotate: -90 }}
-            />
-            <motion.div 
-              className="absolute inset-0 rounded-full border-[12px] border-indigo-500 border-t-transparent border-r-transparent"
-              animate={{ rotate: 45 }}
-              transition={{ duration: 2, ease: "easeOut" }}
-            />
-            <div className="text-center">
-              <span className="text-5xl font-black text-white">84</span>
-              <p className="text-indigo-400 text-xs font-bold uppercase tracking-widest mt-1">Excellent</p>
+        {/* Major Visualizations */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Cash Flow Area Chart */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={springTransition}
+          >
+            <div className="apple-card p-6 md:p-8 h-full">
+              <div className="mb-6">
+                <h3 className="text-[17px] font-semibold tracking-tight text-white">Cumulative Cash Flow</h3>
+                <p className="text-[13px] text-[#A1A1A6] mt-1">Revenue vs Operating Expenses</p>
+              </div>
+              <div className="h-[300px] w-full font-sans">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={cashFlowData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#34C759" stopOpacity={0.4}/>
+                        <stop offset="95%" stopColor="#34C759" stopOpacity={0}/>
+                      </linearGradient>
+                      <linearGradient id="colorExp" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#FF3B30" stopOpacity={0.4}/>
+                        <stop offset="95%" stopColor="#FF3B30" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <XAxis dataKey="name" stroke="#A1A1A6" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontFamily: 'SF Pro Text, -apple-system, system-ui, sans-serif' }} />
+                    <YAxis stroke="#A1A1A6" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontFamily: 'SF Pro Text, -apple-system, system-ui, sans-serif' }} />
+                    <Tooltip 
+                      contentStyle={{ background: 'rgba(28, 28, 30, 0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', backdropFilter: 'blur(20px)', fontSize: '12px' }}
+                      itemStyle={{ fontWeight: '500' }}
+                      labelStyle={{ color: '#fff', fontWeight: '600', marginBottom: '4px' }}
+                    />
+                    <Area type="monotone" dataKey="revenue" stroke="#34C759" fillOpacity={1} fill="url(#colorRev)" strokeWidth={3} />
+                    <Area type="monotone" dataKey="expenses" stroke="#FF3B30" fillOpacity={1} fill="url(#colorExp)" strokeWidth={3} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </div>
+          </motion.div>
+
+          {/* Radar Chart for Resource Allocation */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ ...springTransition, delay: 0.1 }}
+          >
+            <div className="apple-card p-6 md:p-8 h-full">
+              <div className="mb-6">
+                <h3 className="text-[17px] font-semibold tracking-tight text-white">Resource Synthesis</h3>
+                <p className="text-[13px] text-[#A1A1A6] mt-1">Variance across structural domains</p>
+              </div>
+              <div className="h-[300px] w-full font-sans">
+                <ResponsiveContainer width="100%" height="100%">
+                  <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
+                    <PolarGrid stroke="rgba(255,255,255,0.1)" />
+                    <PolarAngleAxis dataKey="subject" tick={{ fill: '#A1A1A6', fontSize: 11, fontFamily: 'SF Pro Text, -apple-system, system-ui, sans-serif' }} />
+                    <PolarRadiusAxis stroke="rgba(255,255,255,0.1)" tick={false} axisLine={false} />
+                    <Radar dataKey="A" stroke="#007AFF" fill="#007AFF" fillOpacity={0.4} />
+                    <Radar dataKey="B" stroke="#AF52DE" fill="#AF52DE" fillOpacity={0.2} />
+                    <Tooltip 
+                      contentStyle={{ background: 'rgba(28, 28, 30, 0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', backdropFilter: 'blur(20px)', fontSize: '12px' }}
+                      itemStyle={{ fontWeight: '500' }}
+                    />
+                  </RadarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Weekly Performance Bar Chart */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={springTransition}
+        >
+          <div className="apple-card p-6 md:p-8">
+             <div className="mb-6">
+               <h3 className="text-[17px] font-semibold tracking-tight text-white">Operational Performance</h3>
+               <p className="text-[13px] text-[#A1A1A6] mt-1">Active vs Target Benchmark</p>
+             </div>
+             <div className="h-[300px] w-full font-sans">
+               <ResponsiveContainer width="100%" height="100%">
+                 <BarChart data={performanceData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                   <XAxis dataKey="name" stroke="#A1A1A6" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontFamily: 'SF Pro Text, -apple-system, system-ui, sans-serif' }} />
+                   <YAxis stroke="#A1A1A6" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontFamily: 'SF Pro Text, -apple-system, system-ui, sans-serif' }} />
+                   <Tooltip 
+                      contentStyle={{ background: 'rgba(28, 28, 30, 0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', backdropFilter: 'blur(20px)', fontSize: '12px' }}
+                      itemStyle={{ fontWeight: '500' }}
+                      cursor={{ fill: 'rgba(255,255,255,0.03)' }}
+                    />
+                   <Bar dataKey="active" fill="#007AFF" radius={[4, 4, 0, 0]} />
+                   <Bar dataKey="target" fill="#2C2C2E" radius={[4, 4, 0, 0]} />
+                 </BarChart>
+               </ResponsiveContainer>
+             </div>
           </div>
-          <p className="text-white/40 text-xs mt-6 leading-relaxed italic text-center">
-            "Your retention of liquid assets has improved by 14% since the last cycle."
-          </p>
-        </PremiumCard>
+        </motion.div>
+
+        {/* AI Insights with Premium Overlay */}
+        <motion.div
+           initial={{ opacity: 0, y: 20 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           viewport={{ once: true }}
+           transition={springTransition}
+           className="relative overflow-hidden apple-card p-8 md:p-12"
+        >
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#007AFF]/10 rounded-full blur-[100px] pointer-events-none" />
+          <div className="relative z-10">
+            <div className="flex items-center justify-between flex-wrap gap-6 mb-10">
+              <div>
+                <motion.div 
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#007AFF]/10 text-[#007AFF] text-[11px] font-semibold uppercase tracking-wider mb-2"
+                  animate={{ scale: [1, 1.02, 1] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  <Sparkles className="w-3.5 h-3.5" /> Intelligence Core
+                </motion.div>
+                <h3 className="text-[28px] font-bold text-white tracking-tight">AI Strategic Analysis.</h3>
+                <p className="text-[15px] font-medium text-[#A1A1A6] mt-1">Synthesized business recommendations based on real-time data.</p>
+              </div>
+              {aiInsightsEnabled ? (
+                <button 
+                  onClick={() => {
+                    premiumFeedback.click();
+                    generateAIInsights();
+                  }}
+                  disabled={aiLoading}
+                  className="px-6 py-2.5 bg-[#007AFF] hover:bg-[#007AFF]/90 text-white text-[14px] font-medium rounded-full shadow-lg transition-colors flex items-center gap-2 disabled:opacity-50"
+                >
+                  {aiLoading ? <span className="animate-spin inline-block">⟳</span> : <TrendingUp className="w-4 h-4" />}
+                  Refresh Analysis
+                </button>
+              ) : null}
+            </div>
+
+            {!aiInsightsEnabled ? (
+              <div className="rounded-2xl border border-white/5 bg-[#1C1C1E]/50 p-12 text-center relative overflow-hidden group">
+                <h3 className="text-[20px] font-bold text-white mb-2">Unlock Strategic Power</h3>
+                <p className="mx-auto max-w-xl text-[15px] text-[#A1A1A6] font-medium leading-relaxed">
+                  The AI Strategic Engine is currently reserved for Pro Tier users. Upgrade today to access predictive forecasting, expense optimization, and growth scaling strategies.
+                </p>
+                <div className="mt-8 flex justify-center">
+                  <button 
+                    onClick={() => {
+                      premiumFeedback.click();
+                      navigate('/pricing');
+                    }} 
+                    className="px-8 py-3 bg-white text-black font-semibold rounded-full hover:scale-105 transition-transform"
+                  >
+                    Upgrade to Pro
+                  </button>
+                </div>
+              </div>
+            ) : aiAnalysis ? (
+              <AnalysisDashboard analysisResult={aiAnalysis} />
+            ) : (
+              <div className="text-center py-20">
+                <div className="w-10 h-10 border-2 border-[#2C2C2E] border-t-[#007AFF] rounded-full animate-spin mx-auto mb-4" />
+                <p className="text-[#A1A1A6] font-semibold text-[13px]">Synthesizing Business Intelligence...</p>
+              </div>
+            )}
+          </div>
+        </motion.div>
       </div>
-    </div>
-  );
+  </>);
 };
 
-export default Analytics;
+export default PremiumAnalytics;

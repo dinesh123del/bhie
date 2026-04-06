@@ -17,12 +17,15 @@ import {
   FileText,
   TrendingUp,
   CheckCircle2,
-  ArrowRight
+  ArrowRight,
+  Download
 } from 'lucide-react';
+import { generateBrandedPDF } from '../utils/pdfGenerator';
+
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
 import { PremiumCard, PremiumButton } from '../components/ui/PremiumComponents';
-import { AnalysisDashboard } from '../components/AIAnalysisDashboard';
+
 
 interface DSAnalysisResult {
   summary: string;
@@ -213,16 +216,47 @@ export const DataScienceHub: React.FC = () => {
                 >
                   {/* Summary Card */}
                   <PremiumCard className="p-8 border-emerald-500/20 bg-emerald-500/[0.02]">
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className="w-12 h-12 rounded-2xl bg-emerald-400/10 flex items-center justify-center text-emerald-400">
-                        <Sparkles className="w-6 h-6" />
+                    <div className="flex items-center justify-between gap-4 mb-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-400/10 flex items-center justify-center text-emerald-400">
+                          <Sparkles className="w-6 h-6" />
+                        </div>
+                        <h2 className="text-3xl font-black text-white italic">What We Found</h2>
                       </div>
-                      <h2 className="text-3xl font-black text-white italic">What We Found</h2>
+                      <PremiumButton
+                        onClick={() => {
+                          const content = `
+Summary:
+${analysis.summary}
+
+Statistics:
+${analysis.statistics.map(s => `${s.metric}: ${s.value}`).join('\n')}
+
+Graduate Advice:
+${analysis.graduateAdvice}
+
+Profitability Roadmap:
+${analysis.profitabilityRoadmap.map(r => `- ${r.step}: ${r.rationale} (${r.impact} impact)`).join('\n')}
+                          `.trim();
+
+                          void generateBrandedPDF({
+                            title: 'Data Science Analysis Report',
+                            content: content,
+                            filename: `Analysis_${file?.name.replace(/\.[^/.]+$/, "")}_${Date.now()}`,
+                            type: 'data_science'
+                          });
+                        }}
+                        className="bg-sky-500 hover:bg-sky-400 text-slate-950 font-black py-2 px-6 flex items-center gap-2"
+                      >
+                        <Download size={18} />
+                        Export PDF
+                      </PremiumButton>
                     </div>
                     <p className="text-xl text-white/70 leading-relaxed font-medium italic">
                       "{analysis.summary}"
                     </p>
                   </PremiumCard>
+
 
                   {/* Profitability Roadmap Section */}
                   <div className="space-y-6">

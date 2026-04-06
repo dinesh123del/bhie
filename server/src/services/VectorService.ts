@@ -1,12 +1,6 @@
-import { RecordDocument } from '../models/Record.js';
 
-interface VectorMetadata {
-  userId: string;
-  type: string;
-  category: string;
-  amount: number;
-  date: number;
-}
+
+
 
 class VectorService {
   private static instance: VectorService;
@@ -46,21 +40,7 @@ class VectorService {
     try {
       // In a real implementation, we would use an embedding model (like OpenAI text-embedding-3-small)
       // For now, we create a structured vector of numerical financial data
-      const vector = [
-        record.amount,
-        record.type === 'income' ? 1 : -1,
-        this.getCategoryValue(record.category),
-        new Date(record.date).getMonth(),
-        new Date(record.date).getDay(),
-      ];
 
-      const metadata: VectorMetadata = {
-        userId: record.userId.toString(),
-        type: record.type,
-        category: record.category,
-        amount: record.amount,
-        date: new Date(record.date).getTime(),
-      };
 
       console.log(`📡 Syncing record ${record._id} to Vector DB...`);
       // Mock sync: Pinecone call would go here
@@ -71,7 +51,7 @@ class VectorService {
     }
   }
 
-  public async findSimilarPatterns(userId: string, targetVector: number[]) {
+  public async findSimilarPatterns(_userId: string, _targetVector: number[]) {
     if (!this.isReady) return [];
     // Similarity search logic would go here
     return [];

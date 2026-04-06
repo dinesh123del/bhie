@@ -78,7 +78,7 @@ const AlertsPanel: React.FC = () => {
   const [alerts, setAlerts] = useState<ClientAlert[]>([]);
   const [loading, setLoading] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [expanded, setExpanded] = useState(false);
+
 
   const refreshAlerts = async () => {
     try {
@@ -86,7 +86,7 @@ const AlertsPanel: React.FC = () => {
       const response = await alertsAPI.getAlerts();
       setAlerts(response.data.alerts);
       setUnreadCount(response.data.unreadCount);
-    } catch (error) {
+    } catch {
       toast.error('Failed to load alerts');
     } finally {
       setLoading(false);
@@ -99,7 +99,7 @@ const AlertsPanel: React.FC = () => {
       setAlerts(prev => prev.map(a => a._id === id ? { ...a, isRead: true } : a));
       setUnreadCount(prev => Math.max(0, prev - 1));
       toast.success('Marked as read');
-    } catch (error) {
+    } catch {
       toast.error('Failed to mark as read');
     }
   };
@@ -110,7 +110,7 @@ const AlertsPanel: React.FC = () => {
       setAlerts(prev => prev.map(a => ({ ...a, isRead: true })));
       setUnreadCount(0);
       toast.success('All alerts marked as read');
-    } catch (error) {
+    } catch {
       toast.error('Failed to mark all as read');
     }
   };

@@ -96,7 +96,7 @@ router.post(
       throw new AppError(400, 'Valid paid plan required');
     }
 
-    const razorpay = getRazorpayClient();
+    const razorpay = await getRazorpayClient();
     const config = PLAN_CONFIG[plan];
     const amount = (config as any).monthlyPrice;
     const receipt = `finly_${plan}_${Date.now()}_${user.userId}`;
@@ -138,7 +138,7 @@ router.post(
       throw new AppError(400, 'Valid paid plan required');
     }
 
-    const razorpay = getRazorpayClient();
+    const razorpay = await getRazorpayClient();
     const config = PLAN_CONFIG[plan];
     const planId = (RAZORPAY_PLAN_IDS as any)[plan];
 

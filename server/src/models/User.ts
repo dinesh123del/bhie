@@ -1,9 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-import type { PlanType } from '../types/index.js';
-import { FREE_UPLOAD_LIMIT, PLAN_CONFIG, type PaidPlanType } from '../utils/planConfig.js';
+import { FREE_UPLOAD_LIMIT } from '../utils/planConfig.js';
 
-type SubscriptionStatus = 'active' | 'inactive' | 'expired';
 
 export interface UserDocument extends mongoose.Document {
   name: string;

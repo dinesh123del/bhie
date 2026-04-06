@@ -1,8 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import AdmZip from 'adm-zip';
-import mammoth from 'mammoth';
-import { PDFParse } from 'pdf-parse';
+
 import { AppError } from '../utils/appError.js';
 import { processDocument } from './documentIntelligenceService.js';
 import type { DocumentIntelligenceResult } from '../types/document.js';
@@ -33,61 +32,13 @@ export interface ExtractedRecordPayload {
 export const AMOUNT_EXTRACTION_REGEX =
   /(?:grand\s*total|total\s*amount|amount\s*due|net\s*amount|subtotal|total|amount|amt|paid|received|balance|inr|rs\.?|₹|\$)\s*[:\-]?\s*([0-9]{1,3}(?:,[0-9]{3})*(?:\.\d{1,2})?|[0-9]+(?:\.\d{1,2})?)/gi;
 
-const FALLBACK_AMOUNT_REGEX = /\b([0-9]{1,3}(?:,[0-9]{3})*(?:\.\d{1,2})|[0-9]+\.\d{1,2})\b/g;
 
-const incomeKeywords = [
-  'income',
-  'sale',
-  'sales',
-  'payment received',
-  'received',
-  'credit',
-  'deposit',
-  'profit',
-  'customer payment',
-  'invoice paid',
-  'cash sale',
-  'upi received',
-];
 
-const expenseKeywords = [
-  'expense',
-  'purchase',
-  'debit',
-  'bill',
-  'invoice',
-  'rent',
-  'fuel',
-  'petrol',
-  'diesel',
-  'grocery',
-  'restaurant',
-  'swiggy',
-  'zomato',
-  'electricity',
-  'water',
-  'internet',
-  'salary',
-  'wages',
-  'subscription',
-  'tax',
-];
 
-const categoryRules: Array<{
-  category: string;
-  keywords: string[];
-  preferredType: UploadedImageType;
-}> = [
-  { category: 'sales', keywords: ['sale', 'sales', 'payment received', 'credit', 'deposit', 'invoice paid'], preferredType: 'income' },
-  { category: 'rent', keywords: ['rent', 'lease'], preferredType: 'expense' },
-  { category: 'utilities', keywords: ['electricity', 'water', 'internet', 'wifi', 'phone', 'telephone', 'gas'], preferredType: 'expense' },
-  { category: 'salary', keywords: ['salary', 'wages', 'payroll', 'staff salary'], preferredType: 'expense' },
-  { category: 'travel', keywords: ['travel', 'uber', 'ola', 'taxi', 'fuel', 'petrol', 'diesel', 'flight', 'train', 'bus'], preferredType: 'expense' },
-  { category: 'food', keywords: ['restaurant', 'food', 'cafe', 'swiggy', 'zomato'], preferredType: 'expense' },
-  { category: 'materials', keywords: ['material', 'raw material', 'inventory', 'stock', 'product', 'items'], preferredType: 'expense' },
-  { category: 'shopping', keywords: ['store', 'purchase', 'shopping', 'mart', 'supermarket'], preferredType: 'expense' },
-  { category: 'fees', keywords: ['fee', 'charges', 'commission', 'service charge'], preferredType: 'expense' },
-];
+
+
+
+
 
 export async function processUploadedFile(filePath: string, originalName: string, mimeType: string): Promise<ExtractedRecordPayload[]> {
   const buffer = await fs.readFile(filePath);
@@ -173,39 +124,7 @@ async function processZipBuffer(buffer: Buffer, originalName: string): Promise<E
   return extractedItems;
 }
 
-async function extractTextFromBuffer(
-  buffer: Buffer,
-  originalName: string,
-  mimeType: string,
-  fileType: SupportedUploadKind
-): Promise<string> {
-  try {
-    if (fileType === 'pdf') {
-      const parser = new PDFParse({ data: buffer });
-      try {
-        const parsed = await parser.getText();
-        return String(parsed.text || '').trim();
-      } finally {
-        await parser.destroy();
-      }
-    }
 
-    if (fileType === 'docx') {
-      const parsed = await mammoth.extractRawText({ buffer });
-      return String(parsed.value || '').trim();
-    }
-
-    // For images, use new engine
-    if (fileType === 'image') {
-      const result = await processDocument(buffer);
-      return result.rawText;
-    }
-  } catch (error) {
-    throw new AppError(422, `Failed to extract text from ${originalName}`);
-  }
-
-  throw new AppError(415, `Unsupported file type for ${originalName}`);
-}
 
 async function buildPayload(sourceName: string, fileType: SupportedUploadKind, buffer: Buffer): Promise<ExtractedRecordPayload> {
   const intelResult: DocumentIntelligenceResult = await processDocument(buffer);
@@ -252,13 +171,7 @@ function extractDate(normalizedText: string): Date {
   return parsed;
 }
 
-function normalizeText(input: string): string {
-  return input
-    .toLowerCase()
-    .replace(/\s+/g, ' ')
-    .replace(/[^\w\s.,:/\-₹$]/g, ' ')
-    .trim();
-}
+
 
 function inferMimeType(fileName: string): string {
   const ext = path.extname(fileName).toLowerCase();

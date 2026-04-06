@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
-import { Server } from 'http';
+
 import morgan from 'morgan';
 import { apiLimiter } from './middleware/rateLimiters.js';
 import hpp from 'hpp';
@@ -16,11 +16,11 @@ import { connectDB, disconnectDB } from './config/db.js';
 import { env } from './config/env.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import { csrfProtection } from './middleware/csrf.js';
-import { AppError } from './utils/appError.js';
+
 import { createDefaultAdmin } from './utils/createDefaultAdmin.js';
-import { ensureUploadDir, uploadDir } from './utils/uploads.js';
+import { ensureUploadDir } from './utils/uploads.js';
 import apiRouter from './routes/apiRouter.js';
-import { SubscriptionManager } from './utils/subscriptionManager.js';
+
 import { connectRedis, disconnectRedis, isRedisConnected } from './config/redisClient.js';
 import { initEventWorker } from './workers/eventWorker.js';
 import { initUploadWorker } from './workers/uploadWorker.js';
@@ -199,7 +199,7 @@ async function init(): Promise<void> {
     // Connect to MongoDB
     try {
       await connectDB();
-    } catch (err) {
+    } catch {
       logger.warn('⚠️ MongoDB connection failed, but starting app anyway');
     }
     

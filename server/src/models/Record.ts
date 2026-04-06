@@ -22,9 +22,18 @@ export interface RecordDocument extends mongoose.Document {
   };
   metadata?: mongoose.Schema.Types.Mixed; // For flexible 10-year growth
   vector_id?: string; // Reference to Pinecone/Vector DB
+  // 📜 CA Certification Fields
+  isCertified: boolean;
+  certifiedBy?: mongoose.Types.ObjectId;
+  certificationDate?: Date;
+  auditNotes?: string;
 }
 
 const recordSchema = new mongoose.Schema<RecordDocument>({
+  isCertified: { type: Boolean, default: false },
+  certifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  certificationDate: Date,
+  auditNotes: String,
   title: {
     type: String,
     required: true,

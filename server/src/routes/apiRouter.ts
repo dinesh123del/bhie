@@ -19,6 +19,7 @@ import analyticsIntelRoutes from './analyticsIntelligence.js';
 import notificationRoutes from './notifications.js';
 import dataScienceRoutes from './dataScience.js';
 import pricingRoutes from './pricing.js';
+import workflowRoutes from './workflow.js';
 
 import healthRoutes from './health.js';
 
@@ -63,5 +64,6 @@ router.use('/transactions', transactionsRoutes);
 router.use('/subscription', subscriptionRoutes);
 router.use('/notifications', notificationRoutes);
 router.use('/pricing', pricingRoutes);
+router.use('/workflow', workflowRoutes);
 
 export default router;

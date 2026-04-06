@@ -5,7 +5,6 @@ import {
   ShieldCheck, 
   Database, 
   Cpu, 
-  Globe, 
   AlertTriangle, 
   RefreshCw,
   CheckCircle2,
@@ -28,7 +27,7 @@ interface HealthReport {
   services: {
     database: { status: 'up' | 'down'; latency?: number };
     redis: { status: 'up' | 'down' };
-    ai: {
+    intelligence: {
       openai: string;
       claude: string;
       blackbox: string;
@@ -45,8 +44,8 @@ const SystemHealth = () => {
     try {
       const data = await systemAPI.getHealthReport();
       setReport(data);
-      toast.success('System audit complete');
-    } catch (error) {
+      toast.success('System check complete');
+    } catch {
       toast.error('Health check failed');
     } finally {
       setLoading(false);
@@ -109,7 +108,7 @@ const SystemHealth = () => {
               <Activity className="w-10 h-10 text-sky-400 opacity-40 animate-pulse" />
             </div>
             <h3 className="text-3xl font-black text-white mb-4 italic tracking-tight">Ready to Check.</h3>
-            <p className="text-white/40 max-w-sm mx-auto font-medium">Click the protocol button to verify backend subsystems and external strategic providers.</p>
+            <p className="text-white/40 max-w-sm mx-auto font-medium">Click the button below to verify if the servers and features are running properly.</p>
           </motion.div>
         ) : loading ? (
           <motion.div 
@@ -171,7 +170,7 @@ const SystemHealth = () => {
 
                 {/* Subsystem Monitoring */}
                 <div className="grid gap-8">
-                  {/* Infrastructure */}
+                  {/* Databases */}
                   <PremiumCard className="p-8 bg-white/[0.01]">
                     <div className="flex items-center justify-between mb-8">
                         <div className="flex items-center gap-3">
@@ -197,7 +196,7 @@ const SystemHealth = () => {
                       <div className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
                         <div>
                             <p className="text-sm font-bold text-white">Redis Cache Layer</p>
-                            <p className="text-[10px] text-white/30 font-medium uppercase tracking-widest">Volatile Cluster</p>
+                            <p className="text-[10px] text-white/30 font-medium uppercase tracking-widest">Temporary Data</p>
                         </div>
                         <StatusIcon status={report.services.redis.status} />
                       </div>
@@ -208,28 +207,28 @@ const SystemHealth = () => {
                   <PremiumCard className="p-8 bg-white/[0.01]">
                     <div className="flex items-center gap-3 mb-8">
                       <Cpu className="w-5 h-5 text-indigo-400" />
-                      <h3 className="text-lg font-black text-white uppercase tracking-tight italic">AI Systems</h3>
+                      <h3 className="text-lg font-black text-white uppercase tracking-tight italic">Analysis Services</h3>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {Object.entries(report.services.ai).map(([name, status]) => (
+                      {Object.entries(report.services.intelligence || {}).map(([name, status]) => (
                         <div key={name} className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
-                          <span className="text-xs font-bold text-white/80 capitalize">{name} API</span>
-                          <StatusIcon status={status} />
+                          <span className="text-xs font-bold text-white/80 capitalize">{name} System</span>
+                          <StatusIcon status={status as string} />
                         </div>
                       ))}
                     </div>
                   </PremiumCard>
                 </div>
 
-                {/* Environmental Safety */}
+                {/* Security & Config */}
                 <div className="flex flex-col gap-8">
                   <PremiumCard extreme className="bg-black/20 p-8 flex-1">
                     <div className="flex items-center justify-between mb-8">
                       <div className="flex items-center gap-3">
                         <ShieldCheck className="w-6 h-6 text-amber-400" />
                         <div>
-                             <h3 className="text-lg font-black text-white uppercase tracking-tight italic leading-tight">System Safety</h3>
-                             <p className="text-[10px] text-white/30 font-black uppercase tracking-[0.2em]">Safety Check</p>
+                             <h3 className="text-lg font-black text-white uppercase tracking-tight italic leading-tight">Security Check</h3>
+                             <p className="text-[10px] text-white/30 font-black uppercase tracking-[0.2em]">Safety & Variables</p>
                         </div>
                       </div>
                       <span className="text-[10px] font-black px-3 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-400/20 uppercase tracking-widest">{report.environment.nodeEnv}</span>
@@ -238,14 +237,14 @@ const SystemHealth = () => {
                     {report.environment.missingVars.length === 0 ? (
                       <div className="flex flex-col items-center justify-center py-10 bg-emerald-500/5 border border-emerald-500/10 rounded-3xl text-center">
                         <CheckCircle2 className="w-10 h-10 text-emerald-400 mb-4 opacity-40" />
-                        <p className="text-sm font-bold text-emerald-200">System configuration is within safety parameters.</p>
-                        <p className="text-[10px] text-emerald-400/50 uppercase tracking-[0.2em] mt-1 font-black">All Secrets Verified</p>
+                        <p className="text-sm font-bold text-emerald-200">System settings look completely safe.</p>
+                        <p className="text-[10px] text-emerald-400/50 uppercase tracking-[0.2em] mt-1 font-black">Everything is safe</p>
                       </div>
                     ) : (
                       <div className="space-y-4">
                         <div className="flex items-center gap-3 text-rose-400 bg-rose-500/5 border border-rose-500/10 p-4 rounded-2xl">
                           <AlertTriangle className="w-5 h-5 flex-shrink-0" />
-                          <span className="text-sm font-bold tracking-tight">Security Breach: Missing Critical Secrets</span>
+                          <span className="text-sm font-bold tracking-tight">Security Warning: Missing Passwords or Keys</span>
                         </div>
                         <div className="grid grid-cols-2 gap-3 font-black text-xs">
                           {report.environment.missingVars.map(v => (

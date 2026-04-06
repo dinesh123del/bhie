@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import {  } from 'mongoose';
 
 /**
  * Business Data for AI Analysis

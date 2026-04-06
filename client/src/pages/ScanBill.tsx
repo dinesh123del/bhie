@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, Scan, Check, AlertCircle, IndianRupee, Calendar, List } from 'lucide-react';
+import { Upload, Scan, Check, List } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PremiumButton, PremiumCard } from '../components/ui/PremiumComponents';
 import { api } from '../services/api';
@@ -47,7 +47,7 @@ const ScanBill = () => {
       });
       setData(res.data.data);
       toast.success('Details detected successfully');
-    } catch (err) {
+    } catch {
       toast.error('Failed to scan receipt');
     } finally {
       setScanning(false);
@@ -68,7 +68,7 @@ const ScanBill = () => {
       });
       toast.success('Saved successfully');
       navigate('/records');
-    } catch (err) {
+    } catch {
       toast.error('Failed to save transaction');
     }
   };

@@ -6,7 +6,7 @@ import { Response } from 'express';
 import { AppError } from '../utils/appError.js';
 import { assertObjectId, requireUser } from '../utils/request.js';
 import { CacheService } from '../services/cacheService.js';
-import MLAgent from '../services/MLAgent.js';
+import AnalysisService from '../services/AnalysisService.js';
 
 export const recordsController = {
   getRecent: asyncHandler(async (req: AuthRequest, res: Response) => {
@@ -67,7 +67,7 @@ export const recordsController = {
     }
 
     // 10-YEAR FEATURE: Autonomous AI Analysis (runs in background, does NOT block the response)
-    MLAgent.analyzeNewRecord(record.toObject()).then(async (analysis) => {
+    AnalysisService.analyzeNewRecord(record.toObject()).then(async (analysis) => {
       try {
         await Record.findByIdAndUpdate(record._id, {
           ai_analysis: {
@@ -82,7 +82,7 @@ export const recordsController = {
         console.warn('⚠️ AI analysis save failed (non-critical):', err);
       }
     }).catch((err) => {
-      console.warn('⚠️ MLAgent background analysis failed (non-critical):', err);
+      console.warn('⚠️ Background analysis failed (non-critical):', err);
     });
 
     CacheService.invalidateUserCache(authUser.userId).catch(console.error);

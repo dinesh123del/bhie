@@ -2,7 +2,7 @@ import jwt, { SignOptions } from 'jsonwebtoken';
 import { env } from '../config/env.js';
 import User from '../models/User.js';
 import { UserRole } from '../types/index.js';
-import { AppError } from '../utils/appError.js';
+
 
 export class AuthService {
   static generateToken(userId: string, role: UserRole): string {

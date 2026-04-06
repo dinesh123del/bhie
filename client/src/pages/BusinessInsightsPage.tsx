@@ -13,12 +13,12 @@ import {
   Zap
 } from 'lucide-react';
 import { useAIAnalysis } from '../hooks/useAIAnalysis';
-import { AnalysisDashboard } from '../components/AIAnalysisDashboard';
+import { BusinessInsights } from '../components/BusinessInsights';
 import { PremiumCard, PremiumButton, PremiumInput } from '../components/ui/PremiumComponents';
 import type { BusinessData } from '../types/ai';
 import { premiumFeedback } from '../utils/premiumFeedback';
 
-export const AnalysisReportPage: React.FC = () => {
+export const BusinessInsightsPage: React.FC = () => {
   const [formData, setFormData] = useState<any>({
     revenue: '',
     expenses: '',
@@ -68,15 +68,15 @@ export const AnalysisReportPage: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-6"
           >
-            <BrainCircuit className="w-4 h-4 text-sky-400" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">AI Analyst v4.2</span>
+            <TrendingUp className="w-4 h-4 text-sky-400" />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Business Analysis v4.2</span>
           </motion.div>
 
           <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-[0.9] mb-4">
-            Ask Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-white to-indigo-400">AI Analyst.</span>
+            Ask for <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-white to-indigo-400">Insights.</span>
           </h1>
           <p className="max-w-2xl text-xl text-white/40 font-medium leading-relaxed">
-            Give our AI your numbers, and it will tell you exactly how to grow. No jargon, just clear steps to help your business.
+            Share your data, and the system will tell you exactly how to grow. No jargon, just clear steps to help your business.
           </p>
         </div>
 
@@ -177,7 +177,7 @@ export const AnalysisReportPage: React.FC = () => {
               <div className="mt-10 p-6 bg-sky-500/5 border border-sky-500/10 rounded-2xl">
                 <div className="flex items-center gap-2 mb-4">
                   <Sparkles className="w-3 h-3 text-sky-400" />
-                  <span className="text-[10px] font-black text-sky-400/80 uppercase tracking-widest">Analysis Tools</span>
+                  <span className="text-[10px] font-black text-sky-400/80 uppercase tracking-widest">Report Features</span>
                 </div>
                 <ul className="space-y-3">
                   {[
@@ -206,7 +206,7 @@ export const AnalysisReportPage: React.FC = () => {
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <AnalysisDashboard
+                  <BusinessInsights
                     analysisResult={analysisResult}
                     loading={loading}
                   />
@@ -234,8 +234,8 @@ export const AnalysisReportPage: React.FC = () => {
                         <BrainCircuit className="w-8 h-8 text-sky-400" />
                       </div>
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-2">Studying Your Numbers...</h3>
-                    <p className="text-white/40 text-sm tracking-widest uppercase font-black">AI is working on your results</p>
+                    <h3 className="text-xl font-bold text-white mb-2">Analyzing Your Numbers...</h3>
+                    <p className="text-white/40 text-sm tracking-widest uppercase font-black">System is generating your insights</p>
                   </PremiumCard>
                 </motion.div>
               ) : (
@@ -250,7 +250,7 @@ export const AnalysisReportPage: React.FC = () => {
                     </div>
                     <h3 className="text-3xl font-black text-white mb-4">Waiting for Your Numbers</h3>
                     <p className="text-white/40 max-w-sm mb-8 font-medium">
-                      Fill in your business info on the left to start the AI analysis.
+                      Fill in your business info on the left to start the analysis.
                     </p>
                     <div className="flex gap-2">
                       <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[9px] font-black text-white/50 uppercase tracking-widest">Ready</div>
@@ -268,4 +268,4 @@ export const AnalysisReportPage: React.FC = () => {
   );
 };
 
-export default AnalysisReportPage;
+export default BusinessInsightsPage;

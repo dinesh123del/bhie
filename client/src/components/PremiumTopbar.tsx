@@ -96,7 +96,7 @@ const PremiumTopbar = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search resources (records, scans, analytics...)"
+                placeholder="Search records, bills, reports..."
                 className="w-full bg-white/[0.08] border border-white/20 rounded-2xl py-2.5 pl-11 pr-12 text-sm text-white placeholder-white/60 focus:outline-none focus:ring-4 focus:ring-brand-500/5 focus:border-brand-500/40 transition-all font-medium"
               />
               <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 px-2 py-0.5 rounded-lg bg-black/[0.05] dark:bg-white/[0.05] text-[10px] font-bold text-black/40 dark:text-white/50 border border-black/10 dark:border-white/10">

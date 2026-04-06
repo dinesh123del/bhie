@@ -126,7 +126,7 @@ class FeedbackEngine {
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
       try {
         navigator.vibrate(ms);
-      } catch (e) {
+      } catch {
         // Ignore haptic failures silently
       }
     }

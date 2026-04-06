@@ -3,10 +3,10 @@ import path from 'path';
 import { runAgents, validateBusinessData } from '../agents/orchestrator.js';
 import { asyncHandler } from '../middleware/asyncHandler.js';
 import { authenticateToken } from '../middleware/auth.js';
-import { redisClient } from '../config/redisClient.js';
+
 import Company from '../models/Company.js';
 import User from '../models/User.js';
-import { AIAnalysisResponse } from '../types/ai.js';
+
 import { AIEngine } from '../utils/aiEngine.js';
 import { AppError } from '../utils/appError.js';
 import { AuthRequest } from '../types/index.js';
@@ -234,14 +234,14 @@ router.post(
     try {
       const parsed = JSON.parse(aiResponse.content);
       res.json({ translation: parsed.translation || aiResponse.content });
-    } catch (e) {
+    } catch {
       res.json({ translation: aiResponse.content });
     }
   })
 );
 
 // ──────────────────────────────────────────
-// 10-YEAR ENGINE: Monte Carlo Simulation
+// Predictive Analytics: Monte Carlo Simulation
 // ──────────────────────────────────────────
 router.post(
   '/simulate',
@@ -262,15 +262,15 @@ router.post(
 
       const data = await response.json();
       res.json(data);
-    } catch (err: any) {
-      if (err instanceof AppError) throw err;
+    } catch (_err: any) {
+      if (_err instanceof AppError) throw _err;
       throw new AppError(503, 'ML Simulation Service is unavailable. Please ensure it is running on port 8000.');
     }
   })
 );
 
 // ──────────────────────────────────────────
-// 10-YEAR ENGINE: Business Health Score
+// Business Performance: Health Score
 // ──────────────────────────────────────────
 router.post(
   '/health-score',
@@ -291,10 +291,95 @@ router.post(
 
       const data = await response.json();
       res.json(data);
-    } catch (err: any) {
-      if (err instanceof AppError) throw err;
+    } catch (_err: any) {
+      if (_err instanceof AppError) throw _err;
       throw new AppError(503, 'ML Health Score Service is unavailable.');
     }
+  })
+);
+
+// ──────────────────────────────────────────
+// Strategic Context: Historical Reference Core
+// ──────────────────────────────────────────
+router.post(
+  '/memory/store',
+  authenticateToken,
+  asyncHandler(async (req: AuthRequest, res: Response) => {
+    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    try {
+      const response = await fetch(`${mlServiceUrl}/memory/store`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(req.body),
+      });
+      const data = await response.json();
+      res.json(data);
+    } catch {
+      throw new AppError(503, 'Historical Context Service is unavailable.');
+    }
+  })
+);
+
+router.post(
+  '/memory/query',
+  authenticateToken,
+  asyncHandler(async (req: AuthRequest, res: Response) => {
+    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    try {
+      const response = await fetch(`${mlServiceUrl}/memory/query`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(req.body),
+      });
+      const data = await response.json();
+      res.json(data);
+    } catch {
+      throw new AppError(503, 'Historical Context Service is unavailable.');
+    }
+  })
+);
+
+// ──────────────────────────────────────────
+// Strategic Insights: Automated Audit Tool
+// ──────────────────────────────────────────
+router.post(
+  '/agent/audit',
+  authenticateToken,
+  asyncHandler(async (req: AuthRequest, res: Response) => {
+    const authUser = requireUser(req);
+    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    
+    // 1. Get recent health score for context
+    const healthResponse = await fetch(`${mlServiceUrl}/health-score`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(req.body),
+    });
+    const healthData = await healthResponse.json();
+
+    // 2. Perform Automated Audit Analysis
+    const auditInsights = healthData.healthScore < 70 
+      ? "SYSTEM ALERT: Financial irregularities detected. Suggesting focus on resilience and efficiency."
+      : "FINANCIAL STATE STABLE: Identifying growth acceleration path.";
+
+    // 3. Commit finding to historical records
+    await fetch(`${mlServiceUrl}/memory/store`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: `audit-${Date.now()}`,
+        content: auditInsights,
+        timestamp: Date.now(),
+        metadata: { userId: authUser.userId }
+      }),
+    });
+
+    res.json({
+      success: true,
+      analysisAction: "Audit Complete",
+      insights: auditInsights,
+      persistedToHistory: true
+    });
   })
 );
 

@@ -1,6 +1,6 @@
 import express from 'express';
 import requestIp from 'request-ip';
-import geoip from 'geoip-lite';
+
 import Settings from '../models/Settings.js';
 
 const router = express.Router();

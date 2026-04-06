@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import mongoose from 'mongoose';
 import Insight from '../models/Insight.js';
 import { IntelligenceEngine } from '../services/intelligenceEngine.js';

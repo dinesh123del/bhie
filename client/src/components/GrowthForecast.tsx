@@ -3,11 +3,11 @@ import { motion } from 'framer-motion';
 import { Activity, ShieldAlert, Zap, Compass } from 'lucide-react';
 import { ForesightData, formatCurrency } from '../utils/dashboardIntelligence';
 
-interface QuantumForesightProps {
+interface GrowthForecastProps {
   data: ForesightData;
 }
 
-const QuantumForesight: React.FC<QuantumForesightProps> = ({ data }) => {
+const GrowthForecast: React.FC<GrowthForecastProps> = ({ data }) => {
   const getRiskColor = (level: string) => {
     switch (level) {
       case 'low': return 'text-emerald-400 bg-emerald-400/10';
@@ -24,7 +24,7 @@ const QuantumForesight: React.FC<QuantumForesightProps> = ({ data }) => {
         <div className="space-y-1">
           <div className="flex items-center gap-3">
             <Compass className="w-5 h-5 text-ai-extreme" />
-            <h3 className="text-[14px] font-black uppercase tracking-[0.3em] text-white/40">Quantum Foresight</h3>
+            <h3 className="text-[14px] font-black uppercase tracking-[0.3em] text-white/40">Growth Forecast</h3>
           </div>
           <p className="text-[28px] font-black tracking-tight text-white">Projected Runway</p>
         </div>
@@ -70,7 +70,7 @@ const QuantumForesight: React.FC<QuantumForesightProps> = ({ data }) => {
             </div>
         </div>
 
-        {/* Intelligence breakdown */}
+        {/* Insights */}
         <div className="space-y-8 flex flex-col justify-center">
             <div className="space-y-4">
                 <div className="flex items-center gap-3">
@@ -90,7 +90,7 @@ const QuantumForesight: React.FC<QuantumForesightProps> = ({ data }) => {
             <div className="space-y-4">
                 <div className="flex items-center gap-3">
                     <Zap className="w-5 h-5 text-white/20" />
-                    <span className="text-[14px] font-bold text-white/40">Burn Intensity</span>
+                    <span className="text-[14px] font-bold text-white/40">Monthly Burn Rate</span>
                     <span className="ml-auto text-[14px] font-black text-white">{formatCurrency(data.burnRate)}/mo</span>
                 </div>
             </div>
@@ -110,4 +110,4 @@ const QuantumForesight: React.FC<QuantumForesightProps> = ({ data }) => {
   );
 };
 
-export default QuantumForesight;
+export default GrowthForecast;

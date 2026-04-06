@@ -32,11 +32,10 @@ router.get('/plans', asyncHandler(async (_req, res) => {
         plans: Object.values(PLAN_CONFIG).map((plan) => ({
             code: plan.code,
             label: plan.label,
-            amount: plan.amount,
+            amount: plan.monthlyPrice || 0,
             currency: plan.currency,
-            durationDays: plan.durationDays,
-            uploads: plan.uploads,
-            aiInsights: plan.aiInsights,
+            uploads: plan.uploads || 0,
+            aiInsights: plan.aiInsights || false,
             features: plan.features,
         })),
     });
@@ -67,18 +66,19 @@ router.post('/create-order', asyncHandler(async (req, res) => {
     if (!plan || !isPaidPlan(plan)) {
         throw new AppError(400, 'Valid paid plan required');
     }
-    const razorpay = getRazorpayClient();
+    const razorpay = await getRazorpayClient();
     const config = PLAN_CONFIG[plan];
-    const receipt = `bhie_${plan}_${Date.now()}_${user.userId}`;
+    const amount = config.monthlyPrice;
+    const receipt = `finly_${plan}_${Date.now()}_${user.userId}`;
     const razorpayOrder = await razorpay.orders.create({
-        amount: config.amount,
+        amount: amount * 100, // Razorpay expects amount in paise
         currency: config.currency,
         receipt,
         notes: { userId: user.userId, plan },
     });
     await Payment.create({
         userId: user.userId,
-        amount: config.amount,
+        amount: config.monthlyPrice,
         currency: config.currency,
         razorpayOrderId: razorpayOrder.id,
         receipt,
@@ -99,7 +99,7 @@ router.post('/create-subscription', asyncHandler(async (req, res) => {
     if (!plan || !isPaidPlan(plan)) {
         throw new AppError(400, 'Valid paid plan required');
     }
-    const razorpay = getRazorpayClient();
+    const razorpay = await getRazorpayClient();
     const config = PLAN_CONFIG[plan];
     const planId = RAZORPAY_PLAN_IDS[plan];
     if (!planId || planId.startsWith('plan_placeholder')) {
@@ -117,7 +117,7 @@ router.post('/create-subscription', asyncHandler(async (req, res) => {
     });
     await Payment.create({
         userId: user.userId,
-        amount: config.amount,
+        amount: config.monthlyPrice || 0,
         currency: config.currency,
         razorpayOrderId: subscription.id, // We'll store subscription ID here for easier lookup
         receipt: `sub_${subscription.id}`,
@@ -126,7 +126,7 @@ router.post('/create-subscription', asyncHandler(async (req, res) => {
     });
     res.json({
         subscriptionId: subscription.id,
-        amount: config.amount,
+        amount: config.monthlyPrice,
         currency: 'INR',
         plan,
         key: env.RAZORPAY_KEY_ID,

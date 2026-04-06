@@ -43,7 +43,8 @@ export default function About() {
               transition={{ duration: 0.8, delay: 0.1 }}
               className="max-w-3xl text-6xl font-black leading-[0.95] tracking-tight text-white sm:text-7xl"
             >
-              Your business story, told in plain English.
+              Your business story,{' '}
+              told simply.
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 24 }}
@@ -83,7 +84,7 @@ export default function About() {
             <div className="absolute bottom-10 left-10 right-10 flex flex-col gap-4">
               <div className="flex w-fit items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3 py-1.5 backdrop-blur-md">
                 <div className="h-2 w-2 animate-pulse rounded-full bg-cyan-400 shadow-[0_0_8px_cyan]" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">AI Assistant Online</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">Assistant Online</span>
               </div>
               <h3 className="text-3xl font-bold text-white">Building the Future of Decisions.</h3>
             </div>
@@ -123,14 +124,14 @@ export default function About() {
       <section className="px-4 py-24 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="mb-16 text-center">
-            <span className="section-kicker mx-auto">Our Leadership</span>
-            <h2 className="mt-6 text-4xl font-black text-white sm:text-5xl">Engineered by Visionaries.</h2>
+            <span className="section-kicker mx-auto">Our Story</span>
+            <h2 className="mt-6 text-4xl font-black text-white sm:text-5xl">Built by people who understand business.</h2>
           </div>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { name: 'Alex Rivian', role: 'Head of Smart Features', bio: 'Expert in making complex data easy to understand and use.' },
-              { name: 'Sarah Chen', role: 'Head of Design', bio: 'Designer focused on making apps feel natural and easy to use.' },
-              { name: 'Marcus Thorne', role: 'Head of Security', bio: 'Over 15 years experience in keeping business data safe and private.' },
+              { name: 'Dinesh Bolla', role: 'Founder & CEO', bio: 'Building tools that help small business owners track their money and grow confidently.' },
+              { name: 'Engineering Team', role: 'Product & Engineering', bio: 'A dedicated team focused on making financial tools simple, fast, and reliable.' },
+              { name: 'Support Team', role: 'Customer Success', bio: 'Real people ready to help you get started and answer any questions along the way.' },
             ].map((member, idx) => (
               <motion.div
                 key={member.name}
@@ -160,7 +161,7 @@ export default function About() {
             <div className="grid gap-16 lg:grid-cols-[0.8fr_1.2fr]">
               <div className="space-y-6">
                 <span className="section-kicker">Our Vision</span>
-                <h2 className="text-4xl font-black text-white sm:text-5xl">Built to help you grow.</h2>
+                <h2 className="text-4xl font-black text-white sm:text-5xl">Built to help you succeed.</h2>
                 <p className="text-lg text-slate-400">Finly is here to make business simple for everyone.</p>
               </div>
               <div className="grid gap-4">

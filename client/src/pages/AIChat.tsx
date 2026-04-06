@@ -1,10 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import api from '../lib/axios';
-import { Send, Bot, AlertTriangle, TrendingUp, Activity } from 'lucide-react';
+import { toast } from 'react-hot-toast';
+
+import { Send, Bot, AlertTriangle, TrendingUp, Activity, Download } from 'lucide-react';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import { generateBrandedPDF } from '../utils/pdfGenerator';
+
 
 interface Message {
-  role: 'user' | 'ai';
+  role: 'user' | 'assistant';
   content: string;
   timestamp: string;
 }
@@ -18,7 +22,7 @@ const SmartChat = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    loadAIInsights();
+    loadStrategicInsights();
     scrollToBottom();
   }, []);
 
@@ -26,7 +30,7 @@ const SmartChat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const loadAIInsights = async () => {
+  const loadStrategicInsights = async () => {
     try {
       const insightsRes = await api.get('/ai/insights');
       setInsights(insightsRes.data);
@@ -53,15 +57,15 @@ const SmartChat = () => {
 
     try {
       const response = await api.post('/ai/chat', { message: input });
-      const aiMessage: Message = {
-        role: 'ai',
+      const assistantMessage: Message = {
+        role: 'assistant',
         content: response.data.response,
         timestamp: new Date().toLocaleTimeString()
       };
-      setMessages(prev => [...prev, aiMessage]);
+      setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       const errorMsg: Message = {
-        role: 'ai',
+        role: 'assistant',
         content: 'Sorry, I could not process that. Try asking about growth, risks, or suggestions.',
         timestamp: new Date().toLocaleTimeString()
       };
@@ -136,13 +140,35 @@ const SmartChat = () => {
       {/* Chat Interface */}
       <div className="bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
         <div className="p-6 bg-white/50 dark:bg-gray-900/50 border-b border-gray-200/50 dark:border-gray-700/50">
-          <div className="flex items-center mb-4">
-            <Bot className="w-10 h-10 bg-blue-100 text-blue-600 p-3 rounded-2xl mr-4" />
-            <div>
-              <h2 className="text-2xl font-bold text-white">Smart Business Assistant</h2>
-              <p className="text-gray-600 dark:text-gray-400">Ask about growth, risks, suggestions</p>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center">
+              <Bot className="w-10 h-10 bg-blue-100 text-blue-600 p-3 rounded-2xl mr-4" />
+              <div>
+                <h2 className="text-2xl font-bold text-white">Smart Business Assistant</h2>
+                <p className="text-gray-600 dark:text-gray-400">Ask about growth, risks, suggestions</p>
+              </div>
             </div>
+            <button
+              onClick={() => {
+                if (messages.length === 0) {
+                  toast.error('No messages to export');
+                  return;
+                }
+                const content = messages.map(m => `${m.role.toUpperCase()} (${m.timestamp}):\n${m.content}\n`).join('\n---\n\n');
+                void generateBrandedPDF({
+                  title: 'Finly AI Strategic Chat Export',
+                  content: content,
+                  filename: `Chat_Export_${Date.now()}`,
+                  type: 'ai_chat_transcript'
+                });
+              }}
+              className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs font-black text-white/60 hover:bg-white/10 transition-all uppercase tracking-widest"
+            >
+              <Download size={14} />
+              Export
+            </button>
           </div>
+
           
           {/* Quick Suggestions */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
@@ -199,7 +225,7 @@ const SmartChat = () => {
             <div className="flex justify-start">
               <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 rounded-2xl shadow-lg max-w-md">
                 <LoadingSpinner />
-                <p className="text-sm text-gray-500 mt-2">Thinking...</p>
+                <p className="text-sm text-gray-500 mt-2">Analyzing...</p>
               </div>
             </div>
           )}

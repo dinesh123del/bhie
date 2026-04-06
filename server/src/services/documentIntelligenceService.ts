@@ -281,7 +281,7 @@ async function searchGSTDetails(gstin: string): Promise<any> {
         const { AIEngine } = await import('../utils/aiEngine.js');
         const response = await AIEngine.generateCompletion(`Provide registration details for GSTIN: ${gstin}. Return as JSON with keys: legalName, tradeName, status, address, taxpayerType, registrationDate.`);
         return JSON.parse(response.content || '{}');
-    } catch (e) {
+    } catch {
         return undefined;
     }
 }

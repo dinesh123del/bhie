@@ -152,7 +152,9 @@ export default function CinematicSplash({
       }
     };
     fetchAds();
+  }, []);
 
+  useEffect(() => {
     const timer = setTimeout(() => {
       if (phase !== 'awaiting') return;
       playMacStartup(muted);
@@ -168,7 +170,7 @@ export default function CinematicSplash({
     }, 400); 
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [phase, muted, duration, onComplete]);
 
   // Cycle ads if they exist
   useEffect(() => {

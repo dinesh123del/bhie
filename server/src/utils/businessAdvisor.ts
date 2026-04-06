@@ -8,7 +8,7 @@ export interface BusinessAdvisorOutput {
 function analyzeBusinessHealth(data: InputData): BusinessAdvisorOutput {
   const { revenue, expenses, profit, growthRate } = data;
   const expenseRatio = revenue > 0 ? (expenses / revenue) : 1;
-  const isGrowing = growthRate > 0;
+
   const isProfitable = profit > 0;
   const expensesHigh = expenseRatio > 0.7;
   const trend = deriveTrend(growthRate);

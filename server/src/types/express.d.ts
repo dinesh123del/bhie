@@ -3,7 +3,7 @@ declare global {
     interface User {
       userId: string;
       id: string;
-      role: 'admin' | 'user';
+      role: 'admin' | 'user' | 'ca';
       plan?: 'free' | 'pro' | 'premium';
       hasPremium?: boolean;
     }

@@ -33,7 +33,7 @@ export const PLAN_DETAILS: Record<AppPlan, {
     price: 79,
     billingText: 'per month',
     premium: true,
-    features: ['Unlimited uploads', 'AI insights', 'Advanced analytics', 'Priority support', 'Export data'],
+    features: ['Unlimited uploads', 'Advanced insights', 'Advanced analytics', 'Priority support', 'Export data'],
   },
   premium: {
     code: 'premium',
@@ -48,7 +48,7 @@ export const PLAN_DETAILS: Record<AppPlan, {
 export const hasPremiumAccess = (user?: PlanAwareUser | null): boolean =>
   Boolean(user && (user.plan === 'pro' || user.plan === 'premium'));
 
-export const canUseAIInsights = (user?: PlanAwareUser | null): boolean => hasPremiumAccess(user);
+export const canUseDeepInsights = (user?: PlanAwareUser | null): boolean => hasPremiumAccess(user);
 
 export const getRemainingUploads = (user?: PlanAwareUser | null): number => {
   const count = Number(user?.usageCount ?? user?.recordCount ?? 0);

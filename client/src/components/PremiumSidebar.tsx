@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  Zap,
+  History as HistoryIcon,
   LayoutDashboard,
-  BrainCircuit,
   BarChart4,
   Settings,
   ChevronLeft,
@@ -21,7 +22,6 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { premiumFeedback } from '../utils/premiumFeedback';
-import { StreakBadge } from './GamificationEngine';
 import { Logo } from './Logo';
 
 interface NavItem {
@@ -34,19 +34,18 @@ interface NavItem {
 const navItems: NavItem[] = [
   { id: 'dashboard', name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { id: 'records', name: 'Records', path: '/records', icon: Activity },
-  { id: 'analytics', name: 'Business Intel', path: '/analytics', icon: BarChart4 },
-  { id: 'reports', name: 'Reports', path: '/reports', icon: FilePlus2 },
-  { id: 'insights', name: 'Insights', path: '/insights', icon: BrainCircuit },
-  { id: 'ds-hub', name: 'Expert Check', path: '/ds-hub', icon: GraduationCap },
-  { id: 'simulate', name: 'Simulate', path: '/simulate', icon: FlaskConical },
-  { id: 'health', name: 'Health Status', path: '/system-health', icon: Activity },
+  { id: 'analytics', name: 'Analytics', path: '/analytics', icon: BarChart4 },
+  { id: 'insights', name: 'Insights', path: '/analysis-report', icon: Zap },
+  { id: 'history', name: 'History', path: '/business-brain', icon: HistoryIcon },
+  { id: 'workflows', name: 'Workflows', path: '/workflows', icon: Zap },
+  { id: 'simulation', name: 'Simulator', path: '/simulation', icon: FlaskConical },
 ];
 
 const mgmtItems: NavItem[] = [
-  { id: 'partner', name: 'CA Reseller', path: '/reseller-partner', icon: Briefcase },
-  { id: 'settings', name: 'Settings', path: '/settings', icon: Settings },
+  { id: 'ca-portal', name: 'CA Portal', path: '/ca-portal', icon: ShieldCheck },
+  { id: 'partner', name: 'Partners', path: '/reseller-partner', icon: Briefcase },
+  { id: 'admin', name: 'Admin', path: '/admin', icon: Settings },
   { id: 'billing', name: 'Billing', path: '/payments', icon: CreditCard },
-  { id: 'security', name: 'Admin', path: '/admin', icon: ShieldCheck },
 ];
 
 const PremiumSidebar = () => {
@@ -145,7 +144,7 @@ const PremiumSidebar = () => {
           )}
           <nav className="space-y-1">
             {mgmtItems.filter(item => {
-              if (item.id === 'security') return user?.role === 'admin';
+              if (item.id === 'admin') return user?.role === 'admin';
               return true;
             }).map((item) => {
               const active = location.pathname === item.path;
@@ -176,7 +175,7 @@ const PremiumSidebar = () => {
       <div className="p-4 border-t border-[#1C1C1E] space-y-2">
         {!isCollapsed && (
           <div className="mb-4 text-center">
-            <StreakBadge compact />
+            {/* Streak Badge Removed */}
           </div>
         )}
 

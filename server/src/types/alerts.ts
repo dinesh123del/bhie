@@ -1,5 +1,4 @@
-import { Types } from 'mongoose';
-import { AlertDoc } from '../models/Alert.js';
+
 
 export type AlertType = 'warning' | 'success' | 'info' | 'danger';
 

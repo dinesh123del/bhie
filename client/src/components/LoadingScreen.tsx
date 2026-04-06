@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SparkBackground from './ui/SparkBackground';
 import InteractiveGlobe from './ui/InteractiveGlobe';
@@ -7,25 +7,15 @@ import { Scanlines, GlassShine } from './ui/MicroEngines';
 const LoadingScreen = ({ onComplete }: { onComplete?: () => void }) => {
   const [progress, setProgress] = useState(0);
   const [statusIdx, setStatusIdx] = useState(0);
-  const [audioStarted, setAudioStarted] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const statuses = [
-    "Intelligence is here.",
-    "Connecting you to the world.",
-    "Preparing your insights.",
-    "You are ready."
+    "Welcome to Finly.",
+    "Loading your data.",
+    "Setting things up.",
+    "Almost ready."
   ];
 
   useEffect(() => {
-    // Attempt auto-play with smooth, highly attractive launch audio
-    if (audioRef.current) {
-        audioRef.current.volume = 0.4;
-        audioRef.current.play().then(() => setAudioStarted(true)).catch(() => {
-           // Autoplay policy prevented playback until user interaction, so we leave it silent
-           console.log("Audio autoplay prevented by browser policy.");
-        });
-    }
 
     const timer = setInterval(() => {
       setProgress((prev) => {
@@ -50,19 +40,8 @@ const LoadingScreen = ({ onComplete }: { onComplete?: () => void }) => {
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 z-[10000] bg-black flex flex-col items-center justify-center overflow-hidden" 
-         onClick={() => {
-           if (!audioStarted && audioRef.current) {
-               audioRef.current.play().catch(() => {});
-               setAudioStarted(true);
-           }
-         }}>
-         
-      <audio 
-         ref={audioRef}
-         src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" 
-         preload="auto" 
-      />
+    <div className="fixed inset-0 z-[10000] bg-black flex flex-col items-center justify-center overflow-hidden">
+
 
       {/* 1. PREMIUM BACKGROUNDS */}
       <SparkBackground />
@@ -138,7 +117,7 @@ const LoadingScreen = ({ onComplete }: { onComplete?: () => void }) => {
                 transition={{ delay: 0.8, duration: 1.5 }}
                 className="text-indigo-400/80 text-xs font-black uppercase tracking-[0.4em] text-center"
               >
-                FINLY INTELLIGENCE STARTING
+                LOADING FINLY
               </motion.p>
             </motion.div>
           </AnimatePresence>
@@ -163,14 +142,14 @@ const LoadingScreen = ({ onComplete }: { onComplete?: () => void }) => {
         >
           <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]" />
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 group-hover:text-white/60 transition-colors">
-            Secure engine actively linking...
+            Connecting securely...
           </span>
         </motion.div>
 
       </div>
 
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[10vw] font-black text-white/[0.02] select-none pointer-events-none tracking-tighter mix-blend-overlay">
-        FINLY OS
+        FINLY
       </div>
     </div>
   );

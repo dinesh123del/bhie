@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, Lock, ArrowRight, AlertCircle, ShieldCheck, Activity } from 'lucide-react';
 import { authService } from '../services/authService';
+import { PremiumButton, PremiumCard, PremiumInput } from '../components/ui/PremiumComponents';
 import { useAuth } from '../hooks/useAuth';
 import axios from 'axios';
+import Logo from '../components/Logo';
 import { GoogleButton } from '../components/auth/GoogleButton';
 import { premiumFeedback } from '../utils/premiumFeedback';
-import { Logo } from '../components/Logo';
 
-const Login = () => {
+
+const PremiumLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -31,7 +33,7 @@ const Login = () => {
         .then(user => {
           if (user) {
             login(token, user);
-            toast.success('Logged in with Google successfully!');
+            toast.success('Signed in with Google.');
           }
         })
         .catch(err => {
@@ -45,221 +47,181 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!email.trim() || !password.trim()) {
       setError('Email and password are required');
-      premiumFeedback.error();
       return;
     }
-
     setLoading(true);
     setError('');
-    premiumFeedback.click();
 
     try {
       const response = await authService.login({ email, password });
-
-      if (!response?.token || !response?.user) {
-        setError('Invalid server response');
-        return;
-      }
-
       login(response.token, response.user);
       premiumFeedback.success();
+
+      // Redirect admins to the admin panel
+      if (response.user.role === 'admin') {
+        toast.success('Welcome back, admin.');
+        navigate('/admin', { replace: true });
+      } else {
+        toast.success('Signed in successfully.');
+      }
     } catch (error: any) {
-      premiumFeedback.error();
       let message = 'Login failed';
       if (axios.isAxiosError(error)) {
-        message = error.response?.data?.message || error.message || 'Unable to connect to server';
-      } else if (error instanceof Error) {
-        message = error.message;
+        message = error.response?.data?.message || 'Unable to connect to server';
       }
       if (message === 'Invalid credentials') {
-        toast.success('No account found. Redirecting to signup...');
-        setTimeout(() => {
-          navigate(`/register?email=${encodeURIComponent(email)}`, { replace: true });
-        }, 1000);
+        toast.error('Incorrect email or password. Try again or create an account.');
+        setTimeout(() => navigate(`/register?email=${encodeURIComponent(email)}`, { replace: true }), 1000);
         setLoading(false);
         return;
       }
       setError(message);
     } finally {
-      setLoading(false);
+      if (loading) setLoading(false);
     }
   };
 
-  const springTransition = { duration: 0.6, ease: [0.2, 0.8, 0.2, 1] };
+  const containerVariants = {
+    initial: { opacity: 0, scale: 0.98 },
+    animate: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: "easeOut", staggerChildren: 0.12 } },
+  };
+
+  const itemVariants = {
+    initial: { opacity: 0, y: 15 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#000000] relative overflow-hidden font-sans text-white">
-      {/* Background Intelligence Glow */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full filter blur-[150px] opacity-20 pointer-events-none"
-        style={{
-          background: 'conic-gradient(from 180deg at 50% 50%, #007AFF 0deg, #AF52DE 180deg, #FF2D55 360deg)'
-        }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-      />
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-black selection:bg-indigo-500/30">
+      
+      {/* Ambient Background */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-slate-950 to-indigo-950/30" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(79,70,229,0.12),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(79,70,229,0.05),transparent_40%)]" />
+      </div>
 
-      {/* Main Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={springTransition}
-        className="relative z-10 w-full max-w-[420px] p-8 md:p-10"
-      >
-        <div className="absolute inset-0 bg-[#1C1C1E]/60 backdrop-blur-3xl border border-white/10 rounded-[32px] shadow-2xl" />
-
-        <div className="relative z-10 flex flex-col items-center">
-          {/* Logo */}
-          <div className="mb-8">
-            <Logo size="md" showSubtitle={false} />
+      <motion.div variants={containerVariants} initial="initial" animate="animate" className="relative z-10 w-full max-w-lg">
+        
+        {/* Header Section */}
+        <motion.div variants={itemVariants} className="text-center mb-10">
+          <div className="flex justify-center mb-6">
+            <Logo size="lg" to="/" subtitle="Intelligence" glow />
           </div>
+        </motion.div>
 
-          <div className="w-full text-center mb-8">
-            <h2 className="text-[28px] font-bold tracking-tight text-white mb-2">Sign in to Finly.</h2>
-            <p className="text-[15px] font-medium text-[#A1A1A6]">Intelligent accounting awaits.</p>
-          </div>
+        <motion.div variants={itemVariants}>
+          <PremiumCard 
+            extreme 
+            className="p-8 md:p-12 backdrop-blur-[60px] bg-white/[0.02] border border-white/5 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] overflow-hidden"
+          >
+            {/* Glossy Reflection Effect */}
+            <div className="absolute -top-1/2 left-0 w-full h-full bg-gradient-to-b from-white/[0.03] to-transparent skew-y-[-15deg] pointer-events-none" />
 
-          {/* Error */}
-          {error && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="w-full mb-6 p-4 bg-[#FF3B30]/10 border border-[#FF3B30]/20 text-[#FF3B30] rounded-xl text-center text-sm font-medium"
-            >
-              {error}
-            </motion.div>
-          )}
+            <div className="relative z-10">
+              <div className="mb-10 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 rounded-full border border-indigo-500/20 bg-indigo-500/10">
+                  <ShieldCheck className="w-3 h-3 text-indigo-400" />
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400">Secure Login</span>
+                </div>
+                <h2 className="text-3xl md:text-5xl font-black text-white mb-2 tracking-tight">Welcome <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400 italic">back.</span></h2>
+                <p className="text-white/40 text-sm font-medium tracking-wide">Sign in to your Finly account.</p>
+              </div>
 
-          {/* Form */}
-          <form className="space-y-5 w-full" onSubmit={handleSubmit}>
-            {/* Email */}
-            <div>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3.5 bg-black/50 border border-white/10 rounded-xl text-[15px] text-white placeholder:text-[#636366] focus:outline-none focus:border-[#007AFF] focus:ring-1 focus:ring-[#007AFF] transition-all"
-                placeholder="Email Address"
-              />
-            </div>
-
-            {/* Password */}
-            <div className="relative">
-              <input
-                id="password"
-                name="password"
-                type={showPassword ? 'text' : 'password'}
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3.5 pr-12 bg-black/50 border border-white/10 rounded-xl text-[15px] text-white placeholder-[#636366] focus:outline-none focus:border-[#007AFF] focus:ring-1 focus:ring-[#007AFF] transition-all"
-                placeholder="Password"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#636366] hover:text-white transition-colors"
-                title={showPassword ? 'Hide password' : 'Show password'}
-              >
-                {showPassword ? (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-4.803m5.596-3.856a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0M15 12a3 3 0 11-6 0 3 3 0 016 0zm6 0c0 1.657-.672 3.157-1.757 4.243A6 6 0 0121 12a6 6 0 00-6-6 6 6 0 00-4.243 1.757M9 1l-3 3m0 0l-3-3m3 3h12" />
-                  </svg>
-                ) : (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                )}
-              </button>
-            </div>
-
-            {/* Submit Button */}
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              type="submit"
-              disabled={loading}
-              className="w-full py-3.5 px-4 bg-white text-black hover:bg-white/90 font-semibold rounded-xl text-[15px] shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
-            >
-              {loading ? (
-                <motion.span
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                  className="inline-block"
+              {error && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }} 
+                  animate={{ opacity: 1, scale: 1 }} 
+                  className="mb-8 p-4 bg-rose-500/5 border border-rose-500/20 rounded-2xl flex items-start gap-4"
                 >
-                  ⟳
-                </motion.span>
-              ) : (
-                'Sign In'
+                  <AlertCircle className="w-5 h-5 text-rose-400 flex-shrink-0" />
+                  <p className="text-[13px] font-semibold text-rose-200">{error}</p>
+                </motion.div>
               )}
-            </motion.button>
-          </form>
 
-          {/* Forgot Password Link */}
-          <div className="mt-6 w-full text-center">
-            <button
-              type="button"
-              onClick={() => {
-                navigate('/forgot-password');
-                premiumFeedback.click();
-              }}
-              className="text-[13px] text-[#007AFF] hover:text-white font-medium transition-colors"
-            >
-              Forgotten your password?
-            </button>
-          </div>
+              <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
+                <div className="space-y-4">
+                  <PremiumInput
+                    floating
+                    label="Email Address"
+                    type="email"
+                    value={email}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                    icon={<Mail className="w-5 h-5 text-sky-400" />}
+                    placeholder="admin@bhie.cloud"
+                    className="bg-white/[0.01] border-white/10 focus:border-sky-500/40"
+                  />
 
-          {/* Divider */}
-          <div className="my-8 flex items-center gap-3 w-full">
-            <div className="flex-1 h-px bg-white/10" />
-            <span className="text-[11px] text-[#636366] font-bold uppercase tracking-widest">Or login with</span>
-            <div className="flex-1 h-px bg-white/10" />
-          </div>
+                  <PremiumInput
+                    floating
+                    label="Password"
+                    type="password"
+                    value={password}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                    icon={<Lock className="w-5 h-5 text-indigo-400" />}
+                    placeholder="••••••••"
+                    className="bg-white/[0.01] border-white/10 focus:border-indigo-500/40"
+                  />
+                </div>
 
-          {/* External Logins */}
-          <div className="w-full space-y-4">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => {
-                navigate('/otp-login');
-                premiumFeedback.click();
-              }}
-              className="w-full py-3 px-4 bg-black/50 border border-white/10 hover:border-white/30 text-white font-semibold text-[15px] rounded-xl transition-all duration-300"
-            >
-              Use Phone OTP
-            </motion.button>
+                <motion.div variants={itemVariants} className="pt-2">
+                  <PremiumButton 
+                    type="submit" 
+                    size="lg" 
+                    loading={loading} 
+                    className="w-full h-14 bg-white text-black font-black uppercase tracking-widest text-[11px] hover:bg-white/90 hover:scale-[1.02] active:scale-[0.98] transition-all relative overflow-hidden group shadow-[0_20px_50px_-10px_rgba(255,255,255,0.3)]"
+                  >
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                      {loading ? 'Signing in...' : 'Sign In Now'}
+                      {!loading && <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                  </PremiumButton>
+                </motion.div>
+              </form>
 
-            <div className="w-full flex justify-center">
-              <GoogleButton />
+              <div className="py-10 flex items-center gap-4">
+                <div className="flex-1 h-px bg-white/5" />
+                <span className="text-[10px] text-white/20 tracking-[0.3em] font-black uppercase">Or continue with</span>
+                <div className="flex-1 h-px bg-white/5" />
+              </div>
+
+              <div className="flex justify-center mb-8">
+                 <GoogleButton />
+              </div>
+
+              <div className="text-center pt-4">
+                <p className="text-white/30 text-xs font-bold tracking-wider">
+                  NEW HERE?{' '}
+                  <Link 
+                    to="/register" 
+                    className="text-white hover:text-sky-400 transition-colors font-black border-b border-white/10 pb-0.5"
+                  >
+                    CREATE AN ACCOUNT
+                  </Link>
+                </p>
+              </div>
             </div>
-          </div>
+          </PremiumCard>
+        </motion.div>
 
-          {/* Footer */}
-          <div className="mt-8 text-center text-[13px] text-[#A1A1A6]">
-            Don't have an account?{' '}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              onClick={() => {
-                navigate('/register');
-                premiumFeedback.click();
-              }}
-              className="text-[#007AFF] hover:text-white font-semibold transition-colors"
-            >
-              Create one now
-            </motion.button>
-          </div>
-        </div>
+        {/* Footer Metrics - Apple-style detail */}
+        <motion.div variants={itemVariants} className="mt-12 flex justify-center items-center gap-6 opacity-30 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
+           <div className="flex items-center gap-2">
+             <Activity className="w-4 h-4" />
+             <span className="text-[10px] font-black uppercase tracking-widest">Smart Analytics</span>
+           </div>
+           <div className="w-1 h-1 rounded-full bg-white/20" />
+           <div className="flex items-center gap-2">
+             <ShieldCheck className="w-4 h-4" />
+             <span className="text-[10px] font-black uppercase tracking-widest">256-bit Encrypted</span>
+           </div>
+        </motion.div>
       </motion.div>
     </div>
   );
 };
 
-export default Login;
+export default PremiumLogin;

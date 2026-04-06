@@ -4,9 +4,7 @@ import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, 
   Activity, 
-  BrainCircuit, 
   BarChart4, 
-  Plus,
   Camera,
   Settings
 } from 'lucide-react';

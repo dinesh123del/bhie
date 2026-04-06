@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Star, Zap, Shield, Crown, Flame } from 'lucide-react';
+import { Trophy, Flame } from 'lucide-react';
 
 /* ──────────────────────────────────────────────────────────────
    Finly GAMIFICATION ENGINE v2.1 (Context Enabled)

@@ -1,4 +1,4 @@
-import { Worker, Job } from 'bullmq';
+import { Worker } from 'bullmq';
 import { isRedisConnected } from '../config/redisClient.js';
 
 let uploadProcessingWorker: Worker | null = null;

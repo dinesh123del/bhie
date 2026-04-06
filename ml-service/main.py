@@ -7,7 +7,7 @@ import numpy as np
 from sklearn.ensemble import IsolationForest
 from sklearn.linear_model import LinearRegression
 
-app = FastAPI(title="BHIE ML Intelligence Service", version="2.0.0")
+app = FastAPI(title="Finly Core Intelligence Service", version="2.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -53,11 +53,11 @@ class HealthScoreRequest(BaseModel):
 
 @app.get("/")
 async def root():
-    return {"status": "BHIE ML Service v2.0 (10-Year Engine)", "version": "2.0.0"}
+    return {"status": "Finly Core Intelligence v2.0", "version": "2.0.0"}
 
 @app.get("/health")
 async def health():
-    return {"status": "healthy", "engine": "10-year-growth"}
+    return {"status": "healthy", "engine": "core-intelligence"}
 
 # ──────────────────────────────────────────
 # Anomaly Detection (Isolation Forest)
@@ -122,7 +122,7 @@ async def predict_next_month(request: AnalysisRequest):
 async def compute_health_score(request: HealthScoreRequest):
     """
     Compute a 0–100 Business Health Score.
-    This is the "Financial Certainty" metric that no competitor offers.
+    This metric provides an objective assessment of overall financial performance.
     """
     profit = request.total_income - request.total_expenses
     profit_margin = (profit / request.total_income * 100) if request.total_income > 0 else 0
@@ -171,8 +171,8 @@ async def compute_health_score(request: HealthScoreRequest):
 async def simulate_scenarios(scenario: SimulationScenario):
     """
     Run 1,000 Monte Carlo simulations of the business's future.
-    This is the "Digital Twin" feature — the user asks "What if?"
-    and the AI shows probabilities across 1,000 parallel futures.
+    This feature allows users to model 'What if' scenarios
+    and see probable outcomes across 1,000 simulation runs.
     """
     num_simulations = 1000
     months = scenario.months_to_simulate
@@ -232,6 +232,50 @@ async def simulate_scenarios(scenario: SimulationScenario):
         ),
     }
 
+
+class MemoryItem(BaseModel):
+    id: str
+    content: str
+    metadata: Optional[dict] = {}
+    timestamp: int
+
+class MemoryQuery(BaseModel):
+    query: str
+    top_k: int = 5
+
+# Simulated In-Memory Vector Store
+# In a real 30-year evolution, this would be Pinecone or ChromaDB
+memory_db = []
+
+@app.post("/memory/store")
+async def store_memory(item: MemoryItem):
+    """Store a business insight or context for historical reference."""
+    memory_db.append(item)
+    return {"status": "success", "insight_id": item.id}
+
+@app.post("/memory/query")
+async def query_memory(request: MemoryQuery):
+    """
+    Search historical business insights. 
+    Currently uses basic keyword relevance for simulation.
+    """
+    results = []
+    # Simple keyword relevance for simulation
+    query_terms = request.query.lower().split()
+    
+    for item in memory_db:
+        score = 0
+        content_lower = item.content.lower()
+        for term in query_terms:
+            if term in content_lower:
+                score += 1
+        
+        if score > 0:
+            results.append({"item": item, "relevance": score})
+            
+    # Sort by relevance
+    results.sort(key=lambda x: x["relevance"], reverse=True)
+    return {"results": results[:request.top_k]}
 
 if __name__ == "__main__":
     import uvicorn

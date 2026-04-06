@@ -1,14 +1,12 @@
 import { motion } from 'framer-motion';
 import {
   TrendingUp,
-  TrendingDown,
   AlertTriangle,
   CheckCircle,
   Zap,
   Target,
   Clock,
   DollarSign,
-  Lightbulb
 } from 'lucide-react';
 
 interface StoryInsight {

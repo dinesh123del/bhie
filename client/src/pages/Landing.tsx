@@ -1,357 +1,296 @@
-import { motion } from 'framer-motion';
-import { ArrowRight, Shield, Zap, Brain, BarChart3, DollarSign, CheckCircle, Play, Sparkles } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, Link } from 'react-router-dom';
+import {
+  ArrowRight,
+  Zap,
+  Shield,
+  TrendingUp,
+  Play,
+  Menu,
+  X,
+  Star as StarIcon,
+  Sparkles,
+  Camera,
+  Target,
+  Globe
+} from 'lucide-react';
+import { Logo } from '../components/Logo';
+import { premiumFeedback } from '../utils/premiumFeedback';
+import SparkBackground from '../components/ui/SparkBackground';
+import InteractiveGlobe from '../components/ui/InteractiveGlobe';
 
-const Landing = () => {
-  const features = [
-    {
-      icon: Shield,
-      title: 'Business Intelligence Hub',
-      description: 'Centralize all your business data in one secure dashboard with enterprise-grade protection.',
-    },
-    {
-      icon: Zap,
-      title: 'AI-Powered Insights',
-      description: 'Get instant recommendations and predictions using cutting-edge AI analysis.',
-    },
-    {
-      icon: BarChart3,
-      title: 'Real-time Analytics',
-      description: 'Interactive charts and reports that update as your data flows in.',
-    },
-    {
-      icon: DollarSign,
-      title: 'Revenue Optimization',
-      description: 'Identify profitable patterns and growth opportunities instantly.',
-    },
-  ];
+const Navbar = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const steps = [
-    {
-      number: '01',
-      title: 'Connect Data Sources',
-      description: 'Link your CRM, accounting, and analytics platforms seamlessly.',
-      icon: Play,
-    },
-    {
-      number: '02',
-      title: 'AI Analyzes & Predicts',
-      description: 'Our AI engines process your data and generate actionable insights.',
-      icon: Brain,
-    },
-    {
-      number: '03',
-      title: 'Grow Your Business',
-      description: 'Implement recommendations and watch your key metrics improve.',
-      icon: Sparkles,
-    },
-  ];
-
-  const pricing = [
-    {
-      name: 'Starter',
-      price: 0,
-      period: '/month',
-      features: ['5 Records', 'Basic Reports', 'Email Support'],
-      mostPopular: false,
-    },
-    {
-      name: 'Pro',
-      price: 499,
-      period: '/month',
-      features: ['Unlimited Records', 'Advanced AI Reports', 'Priority Support', 'Custom Dashboards'],
-      mostPopular: true,
-    },
-    {
-      name: 'Enterprise',
-      price: '1999+',
-      period: '/month',
-      features: ['Everything in Pro', 'Dedicated Server', '24/7 Support', 'Custom AI Models'],
-      mostPopular: false,
-    },
-  ];
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-purple-900/20 to-slate-900 text-white overflow-hidden">
-      {/* Navbar */}
-      <nav className="fixed top-0 w-full z-50 bg-white/8 backdrop-blur-xl border-b border-white/20">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="text-2xl font-black bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-            Finly
-          </div>
-          <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-300 hover:text-white transition-colors font-semibold">Features</a>
-            <a href="#pricing" className="text-gray-300 hover:text-white transition-colors font-semibold">Pricing</a>
-            <a href="/register" className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 no-underline">
-              Get Started Free
-            </a>
+    <motion.header 
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 1, ease: [0.2, 0.8, 0.2, 1] }}
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-700 border-b border-white/5 ${
+        scrolled ? 'bg-black/80 backdrop-blur-3xl' : 'bg-transparent border-transparent'
+      }`}
+    >
+      <div className="max-w-[1400px] mx-auto px-8 h-20 flex items-center justify-between">
+        <Logo size="sm" showSubtitle={false} to="/" />
+        
+        <nav className="hidden md:flex gap-12 text-[11px] font-black text-white/30 tracking-[0.3em] uppercase">
+          <a href="#features" className="hover:text-white transition-colors">Features</a>
+          <a href="#showcase" className="hover:text-white transition-colors">How It Works</a>
+          <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+        </nav>
 
-          </div>
+        <div className="hidden md:flex items-center gap-8">
+          <Link to="/login" className="text-[11px] font-black text-white/30 hover:text-white transition-colors uppercase tracking-[0.3em]">Sign In</Link>
+          <motion.button 
+            onClick={() => {
+                premiumFeedback.click();
+                navigate('/register');
+            }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 py-3 bg-white text-black text-[12px] font-black rounded-full shadow-2xl shadow-white/10 uppercase tracking-widest"
+          >
+            Get Started
+          </motion.button>
         </div>
-      </nav>
 
-      {/* Hero */}
-      <section className="pt-32 pb-32 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+        <button className="md:hidden text-white/80" onClick={() => setMobileOpen(!mobileOpen)}>
+          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      <AnimatePresence>
+        {mobileOpen && (
           <motion.div 
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="md:hidden fixed inset-0 top-20 bg-black/95 backdrop-blur-3xl z-40 p-12"
           >
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-black text-white leading-tight mb-6">
-              Understand Your <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Business.</span>
-            </h1>
-            <p className="text-2xl text-gray-300 mb-12 max-w-lg leading-relaxed font-medium">
-              Improve it with AI-powered insights. From data chaos to business clarity in seconds.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a href="/register" className="group px-10 py-5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xl rounded-3xl shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 flex items-center no-underline">
-                Start Free Trial
-                <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" />
-              </a>
-
-              <a href="/login" className="px-10 py-5 border-2 border-white/40 bg-white/12 backdrop-blur-xl rounded-3xl font-bold text-xl hover:bg-white/20 transition-all duration-300 no-underline text-white">
-                Login
-              </a>
-
-            </div>
-          </motion.div>
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <div className="relative">
-              <div className="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 backdrop-blur-xl rounded-3xl p-12 shadow-2xl border border-white/20">
-                <div className="grid grid-cols-2 gap-4">
-                  {Array.from({ length: 12 }, (_, i) => (
-                    <div key={i} className="h-24 bg-white/10 rounded-2xl border border-white/20 animate-pulse" />
-                  ))}
-                </div>
+            <div className="flex flex-col gap-10">
+              <a href="#features" onClick={() => setMobileOpen(false)} className="text-[32px] font-black text-white tracking-tight">Features.</a>
+              <a href="#pricing" onClick={() => setMobileOpen(false)} className="text-[32px] font-black text-white tracking-tight">Pricing.</a>
+              <div className="pt-12 flex flex-col gap-6">
+                 <Link to="/login" className="w-full py-6 text-center text-white/40 text-[12px] font-black bg-white/5 rounded-3xl uppercase tracking-[0.4em]">Sign In</Link>
+                 <Link to="/register" className="w-full py-6 text-center text-black text-[12px] font-black bg-white rounded-3xl uppercase tracking-[0.4em]">Get Started</Link>
               </div>
             </div>
           </motion.div>
-        </div>
-        <div className="absolute -bottom-40 right-0 w-96 h-96 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-full blur-3xl animate-pulse" />
-      </section>
+        )}
+      </AnimatePresence>
+    </motion.header>
+  );
+};
 
-      {/* Features */}
-      <section id="features" className="py-32">
-        <div className="max-w-7xl mx-auto px-6">
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-center mb-24"
-          >
-            <h2 className="text-5xl md:text-6xl font-black text-white mb-6">
-              Everything You Need
-            </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto font-medium">
-              Built for modern businesses that demand speed, accuracy, and intelligence
-            </p>
-          </motion.div>
+const FeatureCard = ({ icon: Icon, title, description, delay }: any) => (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay, duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
+      whileHover={{ y: -10 }}
+      className="apple-card p-12 bg-[#0A0A0B] border-white/5 group"
+    >
+      <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-3xl flex items-center justify-center mb-8 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-500">
+        <Icon className="w-8 h-8 text-white" />
+      </div>
+      <h3 className="text-[24px] font-black text-white mb-4 tracking-tight leading-tight">{title}</h3>
+      <p className="text-[17px] text-white/40 leading-relaxed font-medium">{description}</p>
+    </motion.div>
+);
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div 
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group p-8 bg-white/8 backdrop-blur-xl rounded-3xl border border-white/20 hover:bg-white/15 transition-all duration-500 hover:-translate-y-4 hover:shadow-2xl"
+export default function LandingPagePremium() {
+  const navigate = useNavigate();
+
+  return (
+    <div className="min-h-screen bg-[#020203] text-white selection:bg-indigo-500/30 overflow-x-hidden">
+      <Navbar />
+      <SparkBackground />
+
+      <main className="relative z-10 pt-32 px-6 md:px-12">
+        {/* HERO SECTION: Extreme Apple Look with 8k Logo Reveal */}
+        <section className="max-w-[1400px] mx-auto mb-40 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 40, filter: 'blur(20px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ duration: 1.4, ease: [0.2, 0.8, 0.2, 1] }}
+              className="space-y-10"
+            >
+              
+              <div className="flex justify-center mb-8">
+                  <motion.div 
+                     initial={{ scale: 0.5, opacity: 0, filter: 'blur(20px)', rotateY: -90 }}
+                     animate={{ scale: 1, opacity: 1, filter: 'blur(0px)', rotateY: 0 }}
+                     transition={{ duration: 1.8, delay: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
+                     className="w-32 h-32 md:w-48 md:h-48 rounded-[3rem] bg-black/40 backdrop-blur-3xl border border-white/20 p-2 shadow-[0_0_120px_rgba(79,70,229,0.3)] relative group transform-gpu perspective-[1000px]"
+                  >
+                     <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 via-transparent to-purple-500/10 rounded-[3rem] opacity-50" />
+                     <motion.img 
+                        src="/icon.png" 
+                        alt="Finly 8k Logo" 
+                        className="w-full h-full object-contain relative z-10 drop-shadow-2xl"
+                        animate={{ y: [0, -10, 0] }}
+                        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                     />
+                     <div className="absolute -inset-4 bg-indigo-500/20 blur-[50px] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  </motion.div>
+              </div>
+
+              <div className="space-y-6">
+                <motion.span 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                  className="px-6 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.6em] text-white/30 tracking-widest block max-w-max mx-auto shadow-[0_0_30px_rgba(255,255,255,0.05)]"
                 >
-                  <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <Icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold mb-4 text-white">{feature.title}</h3>
-                  <p className="text-gray-300 leading-relaxed font-medium">{feature.description}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+                  FINLY / BUSINESS FINANCE
+                </motion.span>
+                
+                <h1 className="text-[64px] md:text-[130px] font-black leading-[0.82] tracking-[-0.06em] text-white">
+                  Your money, <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-indigo-200 to-indigo-800 animate-gradient-slow drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">made clear.</span>
+                </h1>
+                
+                <p className="text-[20px] md:text-[26px] text-white/40 max-w-3xl mx-auto font-medium leading-relaxed tracking-tight">
+                  Track your income, expenses, and profit — all in one place. <br className="hidden md:block" />
+                  Simple tools that help your business grow.
+                </p>
+              </div>
 
-      {/* How It Works */}
-      <section className="py-32 bg-white/8 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-6">
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-center mb-24"
-          >
-            <h2 className="text-5xl md:text-6xl font-black text-white mb-6">
-              Simple as 1-2-3
-            </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto font-medium">
-              No technical setup. No data scientists. Just results.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-12">
-            {steps.map((step, index) => {
-              const Icon = step.icon;
-              return (
-                <motion.div 
-                  key={step.title}
-                  initial={{ opacity: 0, x: -50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="text-center group"
+              <div className="flex flex-col md:flex-row items-center justify-center gap-8 pt-8">
+                <motion.button 
+                   whileHover={{ scale: 1.05, y: -4 }}
+                   whileTap={{ scale: 0.95 }}
+                   onClick={() => navigate('/register')}
+                   className="btn-apple bg-white text-black px-16 py-6 text-[20px] font-black tracking-tight"
                 >
-                  <div className="w-24 h-24 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl group-hover:scale-110 transition-all duration-500">
-                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center font-bold text-indigo-600 text-lg">
-                      {step.number}
-                    </div>
-                  </div>
-                  <Icon className="w-16 h-16 mx-auto mb-6 text-indigo-300 group-hover:text-indigo-200 transition-colors" />
-                  <h3 className="text-2xl font-bold mb-4 text-white">{step.title}</h3>
-                  <p className="text-gray-300 leading-relaxed max-w-md mx-auto font-medium">{step.description}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+                  Try It Free
+                </motion.button>
+                
+                <motion.button 
+                   whileHover={{ scale: 1.05, y: -4 }}
+                   whileTap={{ scale: 0.95 }}
+                   className="btn-apple-outline px-16 py-6 text-[20px] font-black tracking-tight"
+                >
+                  Watch the Film
+                </motion.button>
+              </div>
+            </motion.div>
 
-      {/* Pricing */}
-      <section id="pricing" className="py-32">
-        <div className="max-w-7xl mx-auto px-6">
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-center mb-24"
-          >
-            <h2 className="text-5xl md:text-6xl font-black text-white mb-6">
-              Simple Transparent Pricing
-            </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto font-medium">
-              No hidden fees. Upgrade anytime. Cancel anytime.
-            </p>
-          </motion.div>
+            {/* CINEMATIC GLOBE REVEAL */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
+              className="mt-32 relative apple-card p-4 bg-black/40 border-white/5 aspect-video md:aspect-[21/9] overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-[#020203] via-transparent to-transparent z-10" />
+              <InteractiveGlobe />
+            </motion.div>
+        </section>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {pricing.map((plan, index) => (
-              <motion.div 
-                key={plan.name}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`relative bg-white/8 backdrop-blur-xl rounded-3xl p-10 border-4 border-white/20 shadow-2xl hover:shadow-3xl hover:-translate-y-4 transition-all duration-500 group ${
-                  plan.mostPopular ? 'border-indigo-400 bg-gradient-to-b from-indigo-500/15' : ''
-                }`}
-              >
-                {plan.mostPopular && (
-                  <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-2 rounded-2xl font-bold text-white shadow-xl">
-                    Most Popular
-                  </div>
-                )}
-                <h3 className="text-3xl font-bold mb-6 text-white">{plan.name}</h3>
-                <div className="text-5xl font-black mb-2 text-white">
-                  ₹{plan.price}
+        <section id="features" className="max-w-[1400px] mx-auto mb-60">
+            <div className="text-center mb-24">
+                <h2 className="text-[12px] font-black text-white/20 uppercase tracking-[0.6em] mb-6">How It Works</h2>
+                <h3 className="text-[42px] font-black tracking-tight">Everything you need to grow.</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <FeatureCard 
+                    icon={Target}
+                    title="Clear Action Steps."
+                    description="No confusing charts. See exactly what to do next to save money and grow your business."
+                    delay={0.1}
+                />
+                <FeatureCard 
+                    icon={Globe}
+                    title="Know Your Market."
+                    description="See how your business compares to similar ones in your area and industry."
+                    delay={0.2}
+                />
+                <FeatureCard 
+                    icon={Zap}
+                    title="Grow Smarter."
+                    description="Track your profit, cut waste, and invest wisely — with tools that guide you every step."
+                    delay={0.3}
+                />
+            </div>
+        </section>
+
+        {/* FINAL CALL: Extreme Apple Standard */}
+        <section className="max-w-[1400px] mx-auto pb-40 text-center">
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="apple-card p-24 md:p-32 bg-[#0A0A0B] border-white/5 relative overflow-hidden"
+            >
+                <div className="absolute inset-0 bg-blue-500/[0.03] blur-[150px] scale-150" />
+                <div className="relative z-10 space-y-12">
+                    <h2 className="text-[56px] md:text-[92px] font-black tracking-[-0.05em] leading-[0.9] text-white">
+                        Ready to <br /> start?
+                    </h2>
+                    <motion.button 
+                      onClick={() => navigate('/register')}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-16 py-6 bg-white text-black text-[22px] font-black rounded-full shadow-2xl"
+                    >
+                      Create Free Account
+                    </motion.button>
                 </div>
-                <div className="text-xl text-gray-300 mb-12 font-medium">{plan.period}</div>
-                <ul className="space-y-4 mb-12">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-center text-gray-200 font-medium">
-                      <CheckCircle className="w-6 h-6 text-emerald-400 mr-4 flex-shrink-0" />
-                      {feature}
-                    </li>
-                  ))}
+            </motion.div>
+        </section>
+      </main>
+
+      {/* FOOTER: Deep Minimalist */}
+      <footer className="border-t border-white/5 py-40 px-12 bg-black">
+        <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-24">
+            <div className="space-y-10">
+                <Logo size="sm" showSubtitle={false} />
+                <p className="text-[18px] text-white/30 font-medium leading-relaxed tracking-tight">
+                    A beautiful system built to help you understand your money clearly.
+                </p>
+            </div>
+            <div>
+                <h4 className="text-[11px] font-black text-white uppercase tracking-[0.4em] mb-12">Platform</h4>
+                <ul className="space-y-6 text-[15px] font-black text-white/30 tracking-tight">
+                    <li><Link to="/analytics" className="hover:text-white transition-colors">Analytics</Link></li>
+                    <li><Link to="/ds-hub" className="hover:text-white transition-colors">Data Hub</Link></li>
+                    <li><Link to="/scan-bill" className="hover:text-white transition-colors">Bill Scanner</Link></li>
                 </ul>
-                <button className={`w-full py-6 px-8 font-bold text-xl rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 ${
-                  plan.mostPopular 
-                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:from-indigo-600 hover:to-purple-700 shadow-2xl hover:shadow-3xl' 
-                    : 'bg-white/20 border-2 border-white/40 text-white hover:bg-white/30'
-                }`}>
-                  {plan.mostPopular ? 'Get Started - Most Popular' : 'Get Started'}
-                </button>
-              </motion.div>
-            ))}
-          </div>
+            </div>
+            <div>
+                <h4 className="text-[11px] font-black text-white uppercase tracking-[0.4em] mb-12">Company</h4>
+                <ul className="space-y-6 text-[15px] font-black text-white/30 tracking-tight">
+                    <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
+                    <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
+                    <li><Link to="/terms" className="hover:text-white transition-colors">Legal</Link></li>
+                </ul>
+            </div>
+            <div className="space-y-8">
+                <h4 className="text-[11px] font-black text-white uppercase tracking-[0.4em] mb-12">Connect</h4>
+                <div className="flex flex-col gap-6">
+                    {['X', 'LinkedIn', 'Github'].map(s => (
+                        <button key={s} className="text-[15px] font-black text-white/30 text-left hover:text-white transition-colors">{s}</button>
+                    ))}
+                </div>
+            </div>
         </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="py-32 bg-gradient-to-r from-indigo-900/40 to-purple-900/40 backdrop-blur-xl">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-          >
-            <h2 className="text-5xl md:text-6xl font-black text-white mb-6">
-              Ready to Transform Your Business?
-            </h2>
-            <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto font-medium">
-              Join 10,000+ businesses already using Finly to unlock hidden growth opportunities.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <button className="px-12 py-6 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-2xl rounded-3xl shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 transition-all duration-300 w-full sm:w-auto">
-                Start Free Trial
-                <ArrowRight className="w-6 h-6 ml-3 inline animate-pulse" />
-              </button>
-              <button className="px-12 py-6 border-2 border-white/50 bg-white/10 text-white font-bold text-2xl rounded-3xl hover:bg-white/20 transition-all duration-300 w-full sm:w-auto">
-                Book Demo
-              </button>
-            </div>
-            <div className="mt-16 grid grid-cols-4 gap-8 text-sm text-gray-300 font-medium">
-              <div>14 day free trial</div>
-              <div>Cancel anytime</div>
-              <div>No credit card</div>
-              <div>24/7 support</div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-white/10 py-16 bg-white/6 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-12">
-            <div>
-              <div className="text-3xl font-black bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent mb-6">
-                Finly
-              </div>
-              <p className="text-gray-300 mb-8 font-medium">
-                AI-powered business intelligence platform for modern companies.
-              </p>
-            </div>
-            <div>
-              <h5 className="font-bold text-white mb-6">Product</h5>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="#features" className="hover:text-white transition-colors font-medium">Features</a></li>
-                <li><a href="#pricing" className="hover:text-white transition-colors font-medium">Pricing</a></li>
-                <li><a href="#" className="hover:text-white transition-colors font-medium">Documentation</a></li>
-                <li><a href="#" className="hover:text-white transition-colors font-medium">Changelog</a></li>
-              </ul>
-            </div>
-            <div>
-              <h5 className="font-bold text-white mb-6">Company</h5>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="#" className="hover:text-white transition-colors font-medium">About</a></li>
-                <li><a href="#" className="hover:text-white transition-colors font-medium">Careers</a></li>
-                <li><a href="#" className="hover:text-white transition-colors font-medium">Press</a></li>
-                <li><a href="#" className="hover:text-white transition-colors font-medium">Contact</a></li>
-              </ul>
-            </div>
-            <div>
-              <h5 className="font-bold text-white mb-6">Legal</h5>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="#" className="hover:text-white transition-colors font-medium">Privacy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors font-medium">Terms</a></li>
-                <li><a href="#" className="hover:text-white transition-colors font-medium">Security</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-white/10 mt-16 pt-12 text-center text-gray-300 font-medium">
-            <p>&copy; 2024 Finly. All rights reserved.</p>
-          </div>
+        <div className="max-w-[1400px] mx-auto pt-24 mt-24 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-12">
+            <p className="text-[11px] font-black text-white/10 uppercase tracking-[0.4em]">© 2026 FINLY. ALL RIGHTS RESERVED.</p>
         </div>
       </footer>
     </div>
   );
-};
-
-export default Landing;
-
+}

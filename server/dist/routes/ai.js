@@ -183,4 +183,118 @@ router.post('/translate', authenticateToken, aiLimiter, asyncHandler(async (req,
         res.json({ translation: aiResponse.content });
     }
 }));
+// ──────────────────────────────────────────
+// 10-YEAR ENGINE: Monte Carlo Simulation
+// ──────────────────────────────────────────
+router.post('/simulate', authenticateToken, asyncHandler(async (req, res) => {
+    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    try {
+        const response = await fetch(`${mlServiceUrl}/simulate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(req.body),
+        });
+        if (!response.ok) {
+            throw new AppError(response.status, 'Simulation service error');
+        }
+        const data = await response.json();
+        res.json(data);
+    }
+    catch (err) {
+        if (err instanceof AppError)
+            throw err;
+        throw new AppError(503, 'ML Simulation Service is unavailable. Please ensure it is running on port 8000.');
+    }
+}));
+// ──────────────────────────────────────────
+// 10-YEAR ENGINE: Business Health Score
+// ──────────────────────────────────────────
+router.post('/health-score', authenticateToken, asyncHandler(async (req, res) => {
+    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    try {
+        const response = await fetch(`${mlServiceUrl}/health-score`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(req.body),
+        });
+        if (!response.ok) {
+            throw new AppError(response.status, 'Health Score service error');
+        }
+        const data = await response.json();
+        res.json(data);
+    }
+    catch (err) {
+        if (err instanceof AppError)
+            throw err;
+        throw new AppError(503, 'ML Health Score Service is unavailable.');
+    }
+}));
+// ──────────────────────────────────────────
+// 30-YEAR VISION: Semantic Memory Core
+// ──────────────────────────────────────────
+router.post('/memory/store', authenticateToken, asyncHandler(async (req, res) => {
+    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    try {
+        const response = await fetch(`${mlServiceUrl}/memory/store`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(req.body),
+        });
+        const data = await response.json();
+        res.json(data);
+    }
+    catch (err) {
+        throw new AppError(503, 'Semantic Memory Service is unavailable.');
+    }
+}));
+router.post('/memory/query', authenticateToken, asyncHandler(async (req, res) => {
+    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    try {
+        const response = await fetch(`${mlServiceUrl}/memory/query`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(req.body),
+        });
+        const data = await response.json();
+        res.json(data);
+    }
+    catch (err) {
+        throw new AppError(503, 'Semantic Memory Service is unavailable.');
+    }
+}));
+// ──────────────────────────────────────────
+// 30-YEAR VISION: Autonomous Auditor Agent
+// ──────────────────────────────────────────
+router.post('/agent/audit', authenticateToken, asyncHandler(async (req, res) => {
+    const authUser = requireUser(req);
+    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    // 1. Get recent health score for context
+    const healthResponse = await fetch(`${mlServiceUrl}/health-score`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(req.body),
+    });
+    const healthData = await healthResponse.json();
+    // 2. Perform Autonomous Audit Strategy
+    const auditInsights = healthData.healthScore < 70
+        ? "SYSTEM ALERT: High financial entropy detected. Suggesting transition to resilience mode."
+        : "ECOSYSTEM STABLE: Identifying growth acceleration path.";
+    // 3. Commit finding to Long-Term Memory (Vision 2050)
+    await fetch(`${mlServiceUrl}/memory/store`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            id: `audit-${Date.now()}`,
+            content: auditInsights,
+            timestamp: Date.now(),
+            metadata: { userId: authUser.userId }
+        }),
+    });
+    res.json({
+        success: true,
+        agentAction: "Audit Complete",
+        insights: auditInsights,
+        persistedToLTM: true
+    });
+}));
 export default router;

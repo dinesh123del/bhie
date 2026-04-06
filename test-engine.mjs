@@ -1,6 +1,6 @@
 // Using global fetch (available in Node.js 18+)
 const DEFAULT_PORT = 5001;
-const BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || DEFAULT_PORT}`;
+const BACKEND_URL = process.env.BACKEND_URL || `http://127.0.0.1:${process.env.PORT || DEFAULT_PORT}`;
 
 async function fetchWithTimeout(resource, options = {}) {
   const { timeout = 5000 } = options;

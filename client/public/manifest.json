@@ -4,8 +4,8 @@
   "description": "Premium AI-powered financial intelligence and pulse monitoring platform.",
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#1e1b4b",
-  "background_color": "#0f0f23",
+  "theme_color": "#000000",
+  "background_color": "#000000",
   "orientation": "portrait-primary",
   "icons": [
     {

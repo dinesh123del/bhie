@@ -29,7 +29,7 @@ import { adminService, AdminUser, AdminStats, AdminSettings } from '../services/
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../hooks/useAuth';
-import { PremiumCard, PremiumButton, PremiumInput } from '../components/ui/PremiumComponents';
+import { PremiumCard, PremiumButton, PremiumInput, PremiumBadge } from '../components/ui/PremiumComponents';
 import { premiumFeedback } from '../utils/premiumFeedback';
 
 const Admin = () => {
@@ -610,7 +610,71 @@ const Admin = () => {
                         </PremiumButton>
                     </div>
 
-                    <div className="mt-12 space-y-4 pt-8 border-t border-white/5 text-left">
+                  <PremiumCard className="p-10 border-white/5 text-left bg-gradient-to-br from-indigo-900/10 to-transparent mt-8">
+                    <div className="flex items-center justify-between mb-8">
+                      <h3 className="text-xl font-black uppercase tracking-tighter flex items-center gap-3 italic text-left">
+                        <Zap className="w-5 h-5 text-brand-500" />
+                        2050 Evolution Strategy
+                      </h3>
+                      <PremiumBadge variant="info">TOP 1%</PremiumBadge>
+                    </div>
+
+                    <div className="space-y-8">
+                       <div className="space-y-2">
+                          <div className="flex justify-between items-end">
+                             <p className="text-[10px] font-black uppercase tracking-widest text-indigo-400">Operating Autonomy Level</p>
+                             <span className="text-xl font-black italic">{settings?.aiAutonomousLevel || 0}%</span>
+                          </div>
+                          <input 
+                            type="range" min="0" max="100" 
+                            value={settings?.aiAutonomousLevel || 0} 
+                            onChange={async (e) => {
+                              const val = parseInt(e.target.value);
+                              const next = { ...settings!, aiAutonomousLevel: val };
+                              setSettings(next);
+                              await adminService.updateSettings({ aiAutonomousLevel: val });
+                            }}
+                            className="w-full h-1 bg-white/10 rounded-full appearance-none cursor-pointer accent-brand-500"
+                          />
+                       </div>
+
+                       <div className="flex items-center justify-between p-6 bg-white/[0.02] border border-white/5 rounded-3xl">
+                          <div className="text-left">
+                             <p className="text-xs font-black uppercase tracking-widest text-emerald-400">Global Benchmarking</p>
+                             <p className="text-[10px] font-medium text-white/30">Connect real-time sector averages</p>
+                          </div>
+                          <button 
+                            onClick={async () => {
+                              const nextVal = !settings?.globalBenchmarkingEnabled;
+                              setSettings(prev => prev ? { ...prev, globalBenchmarkingEnabled: nextVal } : null);
+                              await adminService.updateSettings({ globalBenchmarkingEnabled: nextVal });
+                            }}
+                            className={`w-12 h-6 rounded-full relative transition-all ${settings?.globalBenchmarkingEnabled ? 'bg-emerald-500' : 'bg-white/10'}`}
+                          >
+                             <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${settings?.globalBenchmarkingEnabled ? 'left-7' : 'left-1'}`} />
+                          </button>
+                       </div>
+
+                       <div className="flex items-center justify-between p-6 bg-white/[0.02] border border-white/5 rounded-3xl">
+                          <div className="text-left">
+                             <p className="text-xs font-black uppercase tracking-widest text-sky-400">Anti-Fragility Mode</p>
+                             <p className="text-[10px] font-medium text-white/30">Activate resilience-first auditing</p>
+                          </div>
+                          <button 
+                            onClick={async () => {
+                              const nextVal = !settings?.resilienceModeEnabled;
+                              setSettings(prev => prev ? { ...prev, resilienceModeEnabled: nextVal } : null);
+                              await adminService.updateSettings({ resilienceModeEnabled: nextVal });
+                            }}
+                            className={`w-12 h-6 rounded-full relative transition-all ${settings?.resilienceModeEnabled ? 'bg-sky-500' : 'bg-white/10'}`}
+                          >
+                             <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${settings?.resilienceModeEnabled ? 'left-7' : 'left-1'}`} />
+                          </button>
+                       </div>
+                    </div>
+                  </PremiumCard>
+
+                  <div className="mt-12 space-y-4 pt-8 border-t border-white/5 text-left">
                         <div className="text-left">
                           <h3 className="text-xl font-black uppercase tracking-tighter flex items-center gap-3 italic text-left">
                             <Zap className="w-5 h-5 text-amber-400" />

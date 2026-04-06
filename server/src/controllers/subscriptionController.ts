@@ -52,8 +52,8 @@ export const subscriptionController = {
       });
     }
 
-    const razorpay = getRazorpayClient();
-    const planId = plan === 'pro' ? RAZORPAY_PLAN_IDS.pro : RAZORPAY_PLAN_IDS.premium;
+    const razorpay = await getRazorpayClient();
+    const planId = plan === 'pro' ? RAZORPAY_PLAN_IDS.pro_monthly : RAZORPAY_PLAN_IDS.premium_monthly;
 
     const subscription = await razorpay.subscriptions.create({
       plan_id: planId,
@@ -100,7 +100,7 @@ export const subscriptionController = {
       return res.status(400).json({ success: false, message: 'Invalid payment signature' });
     }
 
-    const razorpay = getRazorpayClient();
+    const razorpay = await getRazorpayClient();
     const subscription = await razorpay.subscriptions.fetch(razorpay_subscription_id);
     const planFromNotes = (subscription.notes as Record<string, string>)?.plan as 'pro' | 'premium';
     const plan = ['pro', 'premium'].includes(planFromNotes) ? planFromNotes : 'pro';
@@ -132,7 +132,7 @@ export const subscriptionController = {
     }
 
     if (user.subscriptionId) {
-      const razorpay = getRazorpayClient();
+      const razorpay = await getRazorpayClient();
       try {
         await razorpay.subscriptions.cancel(user.subscriptionId);
       } catch (error) {

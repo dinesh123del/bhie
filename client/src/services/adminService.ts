@@ -40,6 +40,9 @@ export interface AdminSettings {
   adminAccessCode?: string;
   adminInstructions?: string;
   splashAds?: string[];
+  aiAutonomousLevel?: number;
+  globalBenchmarkingEnabled?: boolean;
+  resilienceModeEnabled?: boolean;
 }
 
 export interface UpdateUserPlanRequest {

@@ -1,33 +1,25 @@
 import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
-  AlertTriangle,
-  BarChart3,
-  ChevronDown,
-  ChevronUp,
-  FileText,
   IndianRupee,
-  ScanSearch,
-  Settings,
   TrendingUp,
-  UploadCloud,
-  Users,
   Wallet,
+  Camera,
+  Database,
+  Zap,
+  ArrowRight
 } from 'lucide-react';
 import {
-  RiCalendarEventLine,
-  RiSparkling2Fill,
+  RiHistoryLine
 } from 'react-icons/ri';
-import { MainLayout } from '../components/Layout/MainLayout';
-import { PremiumBadge, PremiumButton, PremiumCard } from '../components/ui/PremiumComponents';
-import { SkeletonGrid } from '../components/ui/Skeleton';
-import SummaryCard from '../components/SummaryCard';
+import MarketPulse from '../components/MarketPulse';
+import StrategicActions from '../components/StrategicActions';
+import { PremiumCard, PremiumButton } from '../components/ui/PremiumComponents';
 import { AnimatedNumber } from '../components/AnimatedNumber';
 import RevenueLineChart from '../components/charts/RevenueLineChart';
-import ProfitBarChart from '../components/charts/ProfitBarChart';
-import ExpensePieChart from '../components/charts/ExpensePieChart';
-import GrowthAreaChart from '../components/charts/GrowthAreaChart';
+import StoryDashboard from '../components/StoryDashboard';
+import GrowthForecast from '../components/GrowthForecast';
 
 import { InsightItem } from '../components/InsightsPanel';
 import { useAuth } from '../hooks/useAuth';
@@ -35,22 +27,17 @@ import { FileUpload } from '../components/FileUpload';
 import QuickAdd from '../components/QuickAdd';
 import { UploadedImageRecord } from '../services/uploadService';
 import { dashboardAPI } from '../services/api';
-import { canUseAIInsights, getPlanLabel as getReadablePlanLabel, getRemainingUploads } from '../utils/plan';
 import BusinessHealthEngine from '../components/BusinessHealthEngine';
 import ActionCenter from '../components/ActionCenter';
-import StoryDashboard from '../components/StoryDashboard';
-import DailyCheckInPanel from '../components/DailyCheckInPanel';
-import UploadImpactCard from '../components/UploadImpactCard';
-import QuestEngine from '../components/QuestEngine';
 import {
   buildDailyStatus,
   buildHealthBreakdown,
-  buildPlainReport,
-  buildRecommendations,
   buildStoryBullets,
-  formatCurrency,
+  buildRecommendations,
+  buildQuantumForesight,
+  buildSurgicalDirectives,
+  exportReport,
 } from '../utils/dashboardIntelligence';
-import { QuickActionsBar } from '../components/QuickActionsBar';
 import { premiumFeedback } from '../utils/premiumFeedback';
 
 interface MetricsSummary {
@@ -76,6 +63,7 @@ interface Breakdown {
 interface ScoreData {
   score: number;
   status: string;
+  resonanceIndex: number;
   breakdown: Breakdown;
 }
 
@@ -107,26 +95,7 @@ interface DashboardResponse {
   refreshedAt?: string;
 }
 
-const DASHBOARD_REFRESH_INTERVAL = 7000;
-
-const sidebarItems = [
-  { icon: <BarChart3 className="h-5 w-5" />, label: 'Dashboard', href: '/dashboard' },
-  { icon: <FileText className="h-5 w-5" />, label: 'Records', href: '/records' },
-  { icon: <UploadCloud className="h-5 w-5" />, label: 'Uploads', href: '/uploads' },
-  { icon: <TrendingUp className="h-5 w-5" />, label: 'Analytics', href: '/analytics' },
-  { icon: <Settings className="h-5 w-5" />, label: 'Settings', href: '/settings' },
-];
-
-const dateFormatter = new Intl.DateTimeFormat('en-IN', {
-  weekday: 'long',
-  day: 'numeric',
-  month: 'long',
-});
-
-const timeFormatter = new Intl.DateTimeFormat('en-IN', {
-  hour: 'numeric',
-  minute: '2-digit',
-});
+const DASHBOARD_REFRESH_INTERVAL = 45000;
 
 const clamp = (value: number, min: number = 0, max: number = 100) =>
   Math.max(min, Math.min(max, Number.isFinite(value) ? value : min));
@@ -184,9 +153,21 @@ const normalizeLatestUpload = (value: unknown): UploadedImageRecord | null => {
   } as UploadedImageRecord;
 };
 
+const PremiumSection = ({ children, delay = 0, className = "" }: { children: React.ReactNode, delay?: number, className?: string }) => (
+  <motion.section
+    initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
+    whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.8, delay, ease: [0.2, 0.8, 0.2, 1] }}
+    className={className}
+  >
+    {children}
+  </motion.section>
+);
+
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [metrics, setMetrics] = useState<MetricsSummary | null>(null);
   const [scoreData, setScoreData] = useState<ScoreData | null>(null);
   const [company, setCompany] = useState<CompanyProfile | null>(null);
@@ -197,8 +178,6 @@ const Dashboard = () => {
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [latestUpload, setLatestUpload] = useState<UploadedImageRecord | null>(null);
   const [apiData, setApiData] = useState<DashboardResponse | null>(null);
-  const [detailsOpen, setDetailsOpen] = useState({ recent: true, insights: true });
-  const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
   const hasLoadedRef = useRef(false);
   const mountedRef = useRef(true);
   const requestInFlightRef = useRef(false);
@@ -242,19 +221,12 @@ const Dashboard = () => {
       if (!mountedRef.current) {
         return;
       }
-
       setLoadError(getDashboardErrorMessage(error));
     }
     finally {
       requestInFlightRef.current = false;
-
-      if (!mountedRef.current) {
-        return;
-      }
-
-      if (isInitialLoad) {
-        setLoading(false);
-      }
+      if (!mountedRef.current) return;
+      if (isInitialLoad) setLoading(false);
       setIsRefreshing(false);
     }
   }, []);
@@ -264,10 +236,7 @@ const Dashboard = () => {
     void loadDashboard();
 
     const intervalId = window.setInterval(() => {
-      if (document.visibilityState === 'hidden') {
-        return;
-      }
-
+      if (document.visibilityState === 'hidden') return;
       void loadDashboard({ silent: true });
     }, DASHBOARD_REFRESH_INTERVAL);
 
@@ -277,498 +246,267 @@ const Dashboard = () => {
     };
   }, [loadDashboard]);
 
-  useEffect(() => {
-    const handleRecordsUpdated = (event: Event) => {
-      const customEvent = event as CustomEvent<UploadedImageRecord | UploadedImageRecord[] | undefined>;
-      const eventPayload = Array.isArray(customEvent.detail) ? customEvent.detail[0] : customEvent.detail;
-      const nextUpload = normalizeLatestUpload(eventPayload);
-
-      if (nextUpload) {
-        setLatestUpload(nextUpload);
-      }
-
-      void loadDashboard({ silent: true });
-    };
-
-    window.addEventListener('finly:records-updated', handleRecordsUpdated);
-    return () => window.removeEventListener('finly:records-updated', handleRecordsUpdated);
-  }, [loadDashboard]);
-
   const revenue = company?.revenue ?? metrics?.kpis?.revenue ?? 0;
-  const expenses = company?.expenses ?? (metrics?.kpis?.expenses ?? 0);
-  const profit = company?.profit ?? (revenue - expenses);
+  const expenses = company?.expenses ?? metrics?.kpis?.expenses ?? 0;
+  const profit = company?.profit ?? revenue - expenses;
   const growthRate = company?.growthRate ?? metrics?.kpis?.growthRate ?? 0;
-  const profitMargin =
-    company?.profitMargin ??
-    metrics?.kpis?.profitMargin ??
-    (revenue > 0 ? (profit / revenue) * 100 : 0);
+  const profitMargin = company?.profitMargin ?? metrics?.kpis?.profitMargin ?? (revenue > 0 ? (profit / revenue) * 100 : 0);
   const totalRecords = metrics?.kpis?.totalRecords ?? user?.usageCount ?? 0;
-  const activeRecords = metrics?.kpis?.activeRecords ?? totalRecords;
   const expenseRatio = revenue > 0 ? (expenses / revenue) * 100 : 0;
-  const smartInsightsEnabled = canUseAIInsights(user);
-  const remainingUploads = getRemainingUploads(user);
-  const remainingUploadsLabel = Number.isFinite(remainingUploads)
-    ? `${remainingUploads} free uploads left`
-    : 'Unlimited uploads available';
+  
   const previousRevenue = revenue > 0 ? (revenue / Math.max(0.2, 1 + growthRate / 100)) : 0;
-  const targetRevenue = previousRevenue * 1.18;
-  const revenueProgress = clamp(targetRevenue > 0 ? (revenue / targetRevenue) * 100 : 0);
-  const expenseControlProgress = clamp(revenue > 0 ? (125 - expenseRatio) : 0);
-  const profitGrowthProgress = clamp(profitMargin * 1.45 + Math.max(growthRate, 0) * 0.95);
-  const overallProgress = Math.round((revenueProgress + expenseControlProgress + profitGrowthProgress) / 3);
+  const targetRevenue = previousRevenue > 0 ? previousRevenue * 1.18 : 0;
+  const overallProgress = targetRevenue > 0 ? Math.round((clamp((revenue / targetRevenue) * 100) + clamp(revenue > 0 ? 125 - expenseRatio : 0) + clamp(profitMargin * 1.45 + Math.max(growthRate, 0) * 0.95)) / 3) : 0;
 
-  const summaryCards = useMemo(
-    () => [
+  const summaryCards = useMemo(() => [
       {
-        title: 'Revenue',
-        value: formatCurrency(revenue),
-        change: `Growth: +${growthRate.toFixed(1)}%`,
-        detail: revenue > 0 ? `On track toward ${formatCurrency(targetRevenue)} this cycle.` : 'No revenue recorded yet.',
+        title: 'Money Made',
+        value: <AnimatedNumber value={revenue} format="currency" />,
+        change: growthRate > 0 ? `+${growthRate.toFixed(1)}% this month` : 'No growth data',
         tone: 'positive' as const,
-        icon: <IndianRupee className="h-7 w-7" />,
+        icon: <IndianRupee className="w-5 h-5 text-[#27C93F]" />,
       },
       {
-        title: 'Expenses',
-        value: formatCurrency(expenses),
-        change: expenseRatio > 60 ? 'Cost pressure' : 'Cost under control',
-        detail: revenue > 0 ? `${expenseRatio.toFixed(1)}% of revenue is spent.` : 'Add expenses as you upload records.',
+        title: 'Money Spent',
+        value: <AnimatedNumber value={expenses} format="currency" />,
+        change: expenseRatio > 60 ? 'Spending High' : 'Doing Well',
         tone: expenseRatio > 60 ? ('negative' as const) : ('positive' as const),
-        icon: <Wallet className="h-7 w-7" />,
+        icon: <Wallet className="w-5 h-5 text-[#FFBD2E]" />,
       },
       {
-        title: 'Profit',
-        value: formatCurrency(profit),
-        change: `${profitMargin.toFixed(1)}% margin`,
-        detail: profit >= 0 ? 'Profit is positive, keep the trend.' : 'Profit needs a cost review.',
+        title: 'Leftover Profit',
+        value: <AnimatedNumber value={profit} format="currency" />,
+        change: `${profitMargin.toFixed(1)}% Profit`,
         tone: 'accent' as const,
         highlight: true,
-        icon: <TrendingUp className="h-7 w-7" />,
+        icon: <TrendingUp className="w-5 h-5 text-[#007AFF]" />,
       },
-    ],
-    [expenseRatio, expenses, growthRate, profit, profitMargin, revenue, targetRevenue]
-  );
-
-  const statusCards = [
-    {
-      label: 'Date',
-      value: dateFormatter.format(new Date()),
-      icon: <RiCalendarEventLine className="h-5 w-5" />,
-    },
-    {
-      label: 'User',
-      value: user?.name ?? 'Finly User',
-      icon: <Users className="h-5 w-5" />,
-    },
-    {
-      label: 'Plan',
-      value: getReadablePlanLabel(user?.plan),
-      icon: <RiSparkling2Fill className="h-5 w-5" />,
-    },
-  ];
+    ], [expenseRatio, expenses, growthRate, profit, profitMargin, revenue]);
 
   const healthScore = scoreData?.score ?? overallProgress;
-  const healthBreakdown = useMemo(
-    () =>
-      buildHealthBreakdown({
-        revenue,
-        expenses,
-        profit,
-        growthRate,
-        expenseRatio,
-        profitMargin,
-        healthScore,
-      }),
-    [expenseRatio, expenses, growthRate, healthScore, profit, profitMargin, revenue]
-  );
+  const healthBreakdown = useMemo(() => buildHealthBreakdown({
+    revenue, expenses, profit, growthRate, expenseRatio, profitMargin, healthScore,
+  }), [expenseRatio, expenses, growthRate, healthScore, profit, profitMargin, revenue]);
 
-  const storyBullets = useMemo(
-    () =>
-      buildStoryBullets({
-        revenue,
-        expenses,
-        profit,
-        growthRate,
-        profitMargin,
-        healthScore,
-        totalRecords,
-        activeRecords,
-        lastUpdated,
-      }),
-    [activeRecords, expenses, growthRate, healthScore, lastUpdated, profit, profitMargin, revenue, totalRecords]
-  );
+  const recommendations = useMemo(() => buildRecommendations({
+    revenue, expenses, profit, growthRate, profitMargin, expenseRatio, totalRecords, activeRecords: Math.max(0, Math.round(totalRecords * 0.72)), latestUpload,
+  }), [expenseRatio, expenses, growthRate, latestUpload, profit, profitMargin, revenue, totalRecords]);
 
-  const storySummary = useMemo(() => {
-    if (healthScore >= 80) {
-      return `Today looks healthy. You are converting ${formatCurrency(revenue)} revenue into ${formatCurrency(profit)} profit with strong control.`;
-    }
+  const foresightData = useMemo(() => buildQuantumForesight({
+    revenue, expenses, profit, growthRate
+  }), [revenue, expenses, profit, growthRate]);
 
-    if (healthScore >= 60) {
-      return `Today is stable, but costs need a closer watch. Protect profit while keeping revenue momentum moving.`;
-    }
+  const directives = useMemo(() => buildSurgicalDirectives({
+    revenue, expenses, profit, growthRate, profitMargin
+  }), [revenue, expenses, profit, growthRate, profitMargin]);
 
-    return `Today needs action. Reduce cost leakage, review the latest records, and focus on restoring margin quickly.`;
-  }, [healthScore, profit, revenue]);
-
-  const recommendations = useMemo(
-    () =>
-      buildRecommendations({
-        revenue,
-        expenses,
-        profit,
-        growthRate,
-        profitMargin,
-        expenseRatio,
-        totalRecords,
-        activeRecords,
-        latestUpload,
-      }),
-    [activeRecords, expenseRatio, expenses, growthRate, latestUpload, profit, profitMargin, revenue, totalRecords]
-  );
-
-  const dailyStatus = useMemo(
-    () =>
-      buildDailyStatus({
-        healthScore,
-        lastUpdated,
-        isRefreshing,
-        loadError,
-        latestUpload,
-      }),
-    [healthScore, isRefreshing, lastUpdated, latestUpload, loadError]
-  );
-
-  const confirmationMessage = loadError
-    ? loadError
-    : latestUpload
-      ? `Latest file processed successfully. ${(latestUpload.file?.originalName || latestUpload.record.title)} was converted into a saved ${latestUpload.record.type} record.`
-      : 'System is healthy, dashboard is synced, and Finly is ready for your next upload.';
-
-  const handleExportReport = useCallback(() => {
-    const report = buildPlainReport({
-      companyName: company?.name,
-      healthScore,
-      revenue,
-      expenses,
-      profit,
-      growthRate,
-      profitMargin,
-      recommendations,
-      storyBullets,
-      lastUpdated,
-    });
-
-    const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `finly-daily-report-${new Date().toISOString().slice(0, 10)}.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  }, [company?.name, expenses, growthRate, healthScore, lastUpdated, profit, profitMargin, recommendations, revenue, storyBullets]);
-
-  const handleWhatShouldIDo = useCallback(() => {
-    const topPriority = recommendations[0];
-    if (!topPriority) {
-      return;
-    }
-
-    window.alert(`${topPriority.title}\n\n${topPriority.description}\n\nImpact: ${topPriority.impact}`);
-  }, [recommendations]);
+  const confirmationMessage = loadError ? loadError : latestUpload ? `Success: ${latestUpload.record.title} processed.` : 'System operational.';
 
   if (loading) {
     return (
-      <MainLayout
-        sidebarItems={sidebarItems}
-        activePage="/dashboard"
-        onNavigate={(href) => navigate(href)}
-        onLogout={logout}
-        userName={user?.name}
-      >
-        <div className="space-y-6">
-          <div className="space-y-3">
-            <div className="h-4 w-40 animate-pulse rounded-full bg-white/10" />
-            <div className="h-14 w-80 animate-pulse rounded-2xl bg-white/10" />
-            <div className="h-5 w-96 animate-pulse rounded-full bg-white/10" />
-          </div>
-
-          <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-            <div className="glass-panel h-[430px] animate-pulse border border-white/10" />
-            <div className="glass-panel h-[430px] animate-pulse border border-white/10" />
-          </div>
-
-          <SkeletonGrid count={3} className="grid-cols-1 xl:grid-cols-3" />
-          <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-            <div className="glass-panel h-[440px] animate-pulse border border-white/10" />
-            <div className="glass-panel h-[440px] animate-pulse border border-white/10" />
-          </div>
+        <div className="p-8 space-y-12 bg-black min-h-screen">
+            <div className="h-10 w-1/3 bg-[#1C1C1E] animate-pulse rounded-lg" />
+            <div className="grid grid-cols-3 gap-6">
+                <div className="h-32 bg-[#1C1C1E] animate-pulse rounded-xl" />
+                <div className="h-32 bg-[#1C1C1E] animate-pulse rounded-xl" />
+                <div className="h-32 bg-[#1C1C1E] animate-pulse rounded-xl" />
+            </div>
+            <div className="h-[400px] bg-[#1C1C1E] animate-pulse rounded-xl" />
         </div>
-      </MainLayout>
     );
   }
 
   return (
-    <MainLayout
-      sidebarItems={sidebarItems}
-      activePage="/dashboard"
-      onNavigate={(href) => navigate(href)}
-      onLogout={logout}
-      userName={user?.name}
-    >
-      <div className="mx-auto max-w-6xl space-y-10 px-4 sm:px-6">
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="grid gap-8 xl:grid-cols-[1.1fr_0.9fr]"
-        >
-          <div className="space-y-5">
-            <div className="section-kicker">
-              <RiSparkling2Fill className="h-3.5 w-3.5" />
-              Performance overview
-            </div>
-
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-ink-400">
-                {dateFormatter.format(new Date())}
-              </p>
-              <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-[-0.07em] text-white md:text-[3.4rem]">
-                Business performance dashboard
-              </h1>
-              <p className="mt-4 max-w-2xl text-base leading-8 text-ink-300 md:text-lg">
-                Track revenue, cost control, profit momentum, and daily activity in one premium view.
-              </p>
-            </div>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-3">
-            {statusCards.map((card) => (
-              <PremiumCard key={card.label} hoverable={false} className="min-h-[158px] border border-white/10 bg-white/[0.04]">
-                <div className="flex h-full flex-col justify-between gap-4">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white backdrop-blur-md">
-                    {card.icon}
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-400">{card.label}</p>
-                    <p className="mt-2 text-lg font-semibold tracking-[-0.04em] text-white">{card.value}</p>
-                  </div>
-                </div>
-              </PremiumCard>
-            ))}
-          </div>
-        </motion.section>
-
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <QuickActionsBar 
-            onQuickAdd={() => {
-              setIsQuickAddOpen(true);
-              premiumFeedback.haptic(10);
-            }} 
-          />
-        </motion.section>
-
-        <motion.section
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-          className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3"
-        >
-          {summaryCards.map((card) => (
-            <SummaryCard
-              key={card.title}
-              title={card.title}
-              value={card.value}
-              change={card.change}
-              detail={card.detail}
-              tone={card.tone}
-              highlight={card.highlight}
-              icon={card.icon}
-            />
-          ))}
-        </motion.section>
-
-        <motion.section
-          initial={{ opacity: 0, y: 26 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.52, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <BusinessHealthEngine
-            score={healthScore}
-            status={scoreData?.status ?? (healthScore >= 80 ? 'Excellent' : healthScore >= 60 ? 'Good' : 'Needs attention')}
-            breakdown={healthBreakdown}
-          />
-        </motion.section>
-
-
-        <motion.section
-          initial={{ opacity: 0, y: 26 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.52, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
-          className="grid gap-6 xl:grid-cols-[1.04fr_0.96fr]"
-        >
-          <StoryDashboard bullets={storyBullets} dailySummary={storySummary} />
-          <DailyCheckInPanel
-            items={dailyStatus}
-            confirmationMessage={confirmationMessage}
-            refreshing={isRefreshing}
-            onRefresh={() => void loadDashboard({ silent: true })}
-          />
-        </motion.section>
-
-        <motion.section
-          initial={{ opacity: 0, y: 26 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.52, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="grid grid-cols-1 gap-8 lg:grid-cols-2"
-        >
-          <div className="space-y-6">
-            <RevenueLineChart data={apiData?.metrics?.monthlyData || []} loading={loading} />
-            <QuestEngine />
-          </div>
-          <div className="space-y-6">
-            <ProfitBarChart data={(apiData?.metrics?.monthlyData || []).map(item => ({
-              ...item,
-              profit: item.target
-            }))} loading={loading} />
-          </div>
-        </motion.section>
-
-        <motion.section
-          initial={{ opacity: 0, y: 26 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.52, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
-          className="grid grid-cols-1 gap-8 lg:grid-cols-2"
-        >
-          <ExpensePieChart 
-            data={[
-              { name: 'Operating', value: 45, color: '#ef4444' },
-              { name: 'Marketing', value: 25, color: '#f59e0b' },
-              { name: 'Salaries', value: 20, color: '#10b981' },
-              { name: 'Other', value: 10, color: '#3b82f6' },
-            ]}
-            loading={loading}
-          />
-          <GrowthAreaChart 
-            data={apiData?.trends?.map((t: any) => ({ name: t.name, value: t.value })) || []}
-            loading={loading}
-          />
-        </motion.section>
-
-
-        <motion.section
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.52, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="grid gap-6 xl:grid-cols-[1fr_1fr]"
-        >
-          <ActionCenter
-            recommendations={recommendations}
-            onAskWhatShouldIDo={handleWhatShouldIDo}
-            onExport={handleExportReport}
-          />
-          <UploadImpactCard latestUpload={latestUpload} revenue={revenue} expenses={expenses} />
-        </motion.section>
-
-        <motion.section
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.52, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
-          className="grid gap-6 xl:grid-cols-[1.02fr_0.98fr]"
-        >
+    <div className="relative mx-auto max-w-[1400px] px-6 md:px-12 py-12 space-y-16 pb-32 text-white">
+        
+        {/* APP HEADER: Extreme Apple Look */}
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-10">
           <div className="space-y-4">
-            <FileUpload
-              onUploadComplete={(items) => {
-                setLatestUpload(normalizeLatestUpload(items[0]));
-                void loadDashboard();
-              }}
-            />
-            <QuickAdd 
-              onRecordAdded={() => void loadDashboard()} 
-              externalOpen={isQuickAddOpen}
-              onExternalClose={() => setIsQuickAddOpen(false)}
-            />
+            <motion.div 
+               initial={{ opacity: 0, scale: 0.95 }}
+               animate={{ opacity: 1, scale: 1 }}
+               transition={{ duration: 0.6 }}
+               className="inline-flex items-center gap-2"
+            >
+              <div className="w-2 h-2 rounded-full bg-[#007AFF] animate-pulse" />
+              <span className="text-[12px] font-black uppercase tracking-[0.3em] text-white/30">Live Dashboard</span>
+            </motion.div>
+            
+            <motion.h1 
+              initial={{ opacity: 0, y: 30, filter: 'blur(20px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
+              className="text-[56px] md:text-[82px] font-black tracking-[-0.05em] text-white leading-[0.85]"
+            >
+              Hey {user?.name?.split(' ')[0] || 'there'}, <br className="hidden md:block" />
+              <span className="text-white/20">here's your overview.</span>
+            </motion.h1>
           </div>
 
-          <PremiumCard hoverable={false} className="min-h-[420px] border border-white/10">
-            <div className="flex h-full flex-col gap-6">
-              <div className="flex items-start justify-between gap-4">
-                <div className="space-y-3">
-                  <PremiumBadge tone={loadError ? 'warning' : 'positive'}>
-                    Trust center
-                  </PremiumBadge>
-                  <div>
-                    <h3 className="text-2xl font-semibold tracking-[-0.05em] text-white md:text-3xl">Sync, clarity, and guidance</h3>
-                    <p className="mt-2 text-sm leading-7 text-ink-300">
-                      Keep the experience calm and focused with status, guidance, and only the most useful signals.
-                    </p>
-                  </div>
-                </div>
-                <PremiumButton
-                  variant="secondary"
-                  onClick={() => navigate('/analytics')}
-                  icon={<TrendingUp className="h-4 w-4" />}
+          <div className="flex items-center gap-6">
+             <div className="apple-card p-6 min-w-[180px] bg-white/[0.03] backdrop-blur-3xl border-white/5">
+                <span className="text-[11px] font-black text-white/30 uppercase tracking-[0.2em] mb-3 block">
+                    Monthly Goal
+                </span>
+                <span className="text-[42px] font-black tracking-tight text-ai-extreme">{overallProgress}%</span>
+             </div>
+          </div>
+        </header>
+
+        {/* METRICS BENTO GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {summaryCards.map((card, i) => (
+                <motion.div 
+                  key={card.title} 
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  whileHover={{ y: -8, scale: 1.01 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
+                  className="apple-card p-10 flex flex-col group relative overflow-hidden bg-[#0A0A0B] border-white/5"
                 >
-                  View Analytics
-                </PremiumButton>
-              </div>
+                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                   <div className="flex items-center justify-between mb-8">
+                     <span className="text-[13px] font-black uppercase tracking-[0.25em] text-white/20">{card.title}</span>
+                     <div className="p-4 rounded-3xl bg-white/5 border border-white/10 group-hover:rotate-12 transition-transform duration-500">
+                       {card.icon}
+                     </div>
+                   </div>
+                   <div className="mb-4">
+                     {card.value}
+                   </div>
+                   <div className={`text-[15px] font-black tracking-tight ${card.tone === 'positive' ? 'text-emerald-400' : card.tone === 'negative' ? 'text-rose-400' : 'text-white/40'}`}>
+                     {card.change}
+                   </div>
+                </motion.div>
+            ))}
+        </div>
 
-              {loadError ? (
-                <div className="rounded-[1.5rem] border border-amber-400/18 bg-amber-500/10 p-5 backdrop-blur-md">
-                  <div className="flex items-start gap-3">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-amber-400/18 bg-amber-500/10 text-amber-200">
-                      <AlertTriangle className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-white">Dashboard needs attention</p>
-                      <p className="mt-2 text-sm leading-6 text-ink-200">{loadError}</p>
-                    </div>
-                  </div>
+        {/* MAIN INTELLIGENCE SECTION */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12">
+            <div className="space-y-12">
+                <div className="grid gap-8 xl:grid-cols-2">
+                   <StoryDashboard 
+                        bullets={buildStoryBullets({
+                            revenue, expenses, profit, growthRate, profitMargin, healthScore,
+                            totalRecords, activeRecords: Math.max(0, Math.round(totalRecords * 0.72)),
+                            lastUpdated
+                        })} 
+                        dailySummary={confirmationMessage} 
+                   />
+                   <div className="apple-card p-12 bg-[#0A0A0B] border-white/5 flex flex-col justify-center">
+                        <div className="flex items-center gap-3 mb-6">
+                            <Zap className="w-6 h-6 text-amber-400" />
+                            <h3 className="text-xl font-black text-white italic">Run Workflows</h3>
+                        </div>
+                        <p className="text-white/40 text-sm font-medium mb-8 leading-relaxed">
+                            Automate your business tasks. Optimize expenses and check tax readiness in one click.
+                        </p>
+                        <PremiumButton 
+                            onClick={() => navigate('/workflows')}
+                            variant="primary"
+                            className="bg-white text-black border-none"
+                            icon={<ArrowRight className="w-4 h-4" />}
+                        >
+                            Open Workflows
+                        </PremiumButton>
+                   </div>
                 </div>
-              ) : null}
+                
+                <div className="apple-card p-12 bg-[#0A0A0B] border-white/5">
+                   <BusinessHealthEngine
+                       score={healthScore}
+                       status={scoreData?.status ?? (healthScore >= 80 ? 'Elite' : healthScore >= 60 ? 'Optimal' : 'Standard')}
+                       healthIndex={scoreData?.resonanceIndex ?? 50}
+                       breakdown={healthBreakdown}
+                   />
+                </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="rounded-[1.45rem] border border-white/10 bg-white/[0.04] p-4 backdrop-blur-md">
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-400">Last sync time</p>
-                  <p className="mt-2 text-xl font-semibold tracking-[-0.05em] text-white">{timeFormatter.format(lastUpdated)}</p>
-                  <p className="mt-2 text-sm leading-6 text-ink-300">Fresh data builds trust and keeps actions grounded.</p>
+                <div className="apple-card p-12 bg-[#0A0A0B] border-white/5">
+                   <GrowthForecast data={foresightData} />
                 </div>
-                <div className="rounded-[1.45rem] border border-white/10 bg-white/[0.04] p-4 backdrop-blur-md">
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-400">System status</p>
-                  <p className="mt-2 text-xl font-semibold tracking-[-0.05em] text-white">{loadError ? 'Warning' : isRefreshing ? 'Refreshing' : 'Online'}</p>
-                  <p className="mt-2 text-sm leading-6 text-ink-300">{confirmationMessage}</p>
+                
+                <div className="apple-card p-12 bg-[#0A0A0B] border-white/5">
+                   <StrategicActions directives={directives as any} />
                 </div>
-              </div>
-
-              <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-5 backdrop-blur-md">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-400">Smart insights</p>
-                <div className="mt-4 grid gap-3">
-                  {(smartInsightsEnabled ? insights : []).slice(0, 3).map((insight) => (
-                    <div key={insight.message} className="rounded-[1.2rem] border border-white/10 bg-black/10 p-4">
-                      <p className="text-sm font-semibold text-white">{insight.message}</p>
-                      {insight.detail ? <p className="mt-2 text-sm leading-6 text-ink-300">{insight.detail}</p> : null}
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="apple-card p-8 min-h-[350px] bg-[#0A0A0B] border-white/5">
+                        <div className="flex justify-between items-center mb-8">
+                            <h3 className="text-[18px] font-black tracking-tight uppercase text-white/50">Revenue Trend</h3>
+                            <div className="px-3 py-1 rounded-full text-[10px] font-black bg-[#007AFF]/10 text-[#007AFF] tracking-widest">LIVE</div>
+                        </div>
+                        <RevenueLineChart data={apiData?.metrics?.monthlyData || []} loading={loading} />
                     </div>
-                  ))}
 
-                  {!smartInsightsEnabled || insights.length === 0 ? (
-                    <div className="rounded-[1.2rem] border border-dashed border-white/12 bg-white/[0.02] p-4">
-                      <p className="text-sm font-semibold text-white">Action guidance is active</p>
-                      <p className="mt-2 text-sm leading-6 text-ink-300">
-                        Finly is using business rules to keep recommendations useful even when premium insights are unavailable.
-                      </p>
-                    </div>
-                  ) : null}
+                    <ActionCenter
+                        recommendations={recommendations}
+                        onAskWhatShouldIDo={() => navigate('/analysis-report')}
+                        onExport={exportReport}
+                    />
                 </div>
-              </div>
             </div>
-          </PremiumCard>
-        </motion.section>
+
+            <aside className="space-y-8">
+                <div className="apple-card p-8 bg-gradient-to-br from-[#111113] to-black border-white/5 relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-blue-500/5 blur-[80px] -translate-x-1/2 -translate-y-1/2 group-hover:scale-150 transition-transform duration-1000" />
+                    <div className="relative z-10 space-y-6">
+                        <div className="flex items-center justify-between">
+                            <span className="text-[11px] font-black uppercase tracking-[0.3em] text-[#007AFF]">System Status</span>
+                            <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)] animate-pulse" />
+                        </div>
+                        <p className="text-[20px] font-black leading-tight tracking-[-0.03em] text-white">
+                            Tracking <span className="text-ai-extreme">{totalRecords}</span> financial records.
+                        </p>
+                    </div>
+                </div >
+
+                <div className="apple-card p-8 bg-[#0A0A0B] border-white/5 overflow-hidden">
+                   <MarketPulse />
+                </div>
+
+                <div className="apple-card p-8 bg-[#0A0A0B] border-white/5">
+                    <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-white/20 mb-8">Recent Insights</h4>
+                    <div className="space-y-8">
+                        {insights.slice(0, 3).map((insight, idx) => (
+                            <div key={idx} className="group cursor-pointer" onClick={() => navigate('/analysis-report')}>
+                                <p className="text-[16px] font-black tracking-tight group-hover:text-[#007AFF] transition-colors mb-2">{insight.message}</p>
+                                <p className="text-[14px] text-white/40 leading-relaxed font-medium">{insight.detail || 'Deep intelligence analysis available.'}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        {/* EXTREME FOOTER: Vision Engine */}
+        <PremiumSection delay={0.4} className="pb-20">
+            <div className="apple-card p-16 md:p-24 overflow-hidden relative border-white/5 bg-[#0A0A0B]">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/[0.03] blur-[150px] rounded-full" />
+                <div className="relative z-10 flex flex-col lg:flex-row items-center gap-20">
+                    <div className="space-y-8 flex-1">
+                        <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/40">
+                            <Camera className="w-4 h-4" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.4em]">Smart Scanner</span>
+                        </div>
+                        <h2 className="text-[52px] md:text-[72px] font-black tracking-[-0.06em] leading-[0.88]">Scan & <br />Save.</h2>
+                        <p className="text-[19px] text-white/40 max-w-lg leading-relaxed font-medium">Take a photo of any bill or receipt. We'll read it and save the details for you automatically.</p>
+                    </div>
+                    
+                    <div className="w-full lg:w-[450px]">
+                        <FileUpload
+                            onUploadComplete={(items) => {
+                                setLatestUpload(normalizeLatestUpload(items[0]));
+                                void loadDashboard();
+                                premiumFeedback.success();
+                            }}
+                        />
+                    </div>
+                </div>
+            </div>
+        </PremiumSection>
+
       </div>
-    </MainLayout>
   );
 };
 

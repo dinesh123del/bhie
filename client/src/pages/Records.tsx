@@ -1,624 +1,381 @@
-import React, { useState, useEffect } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
+  Download,
+  Filter,
   Plus,
+  Search,
+  LayoutGrid,
+  Network,
   Edit2,
   Trash2,
-  Search,
+  Save,
   X,
-  Loader,
-  AlertCircle,
-  CheckCircle,
-  Clock,
-  IndianRupee,
-  TrendingUp,
-  TrendingDown,
 } from 'lucide-react';
-import api from '../lib/axios';
-import { PremiumInput, PremiumButton } from '../components/ui/PremiumComponents';
+import { toast } from 'react-hot-toast';
+import { recordsAPI } from '../services/api';
+import { useAuth } from '../hooks/useAuth';
+import { HUDModal } from '../components/HUDModal';
+import { StrategicTopology } from '../components/StrategicTopology';
+import { premiumFeedback } from '../utils/premiumFeedback';
+import { useGamification, BadgeRow } from '../components/GamificationEngine';
 
-interface DataRecord {
+interface RecordItem {
   _id: string;
   title: string;
+  description?: string;
   category: string;
-  description: string;
   type: 'income' | 'expense';
   amount: number;
   status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
+  date: string;
   createdAt: string;
-  updatedAt: string;
 }
 
-interface FormData {
-  title: string;
-  category: string;
-  description: string;
-  type: 'income' | 'expense';
-  amount: number;
-  status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
-}
+const formatStatusLabel = (status: RecordItem['status']) =>
+  status.replace('_', ' ');
 
-const CATEGORIES = ['Finance', 'Operations', 'HR', 'Sales', 'Marketing', 'Support', 'Legal', 'Bill', 'Tax', 'Other'];
+const exportRecords = (records: RecordItem[]) => {
+  const header = ['Title', 'Category', 'Type', 'Amount', 'Status', 'Date', 'Description'];
+  const rows = records.map((record) => [
+    record.title,
+    record.category,
+    record.type,
+    String(record.amount),
+    record.status,
+    new Date(record.date || record.createdAt).toISOString(),
+    record.description || '',
+  ]);
 
-const STATUS_CONFIG = {
-  pending: { color: 'gray', icon: Clock, label: 'Pending' },
-  in_progress: { color: 'blue', icon: Clock, label: 'Progress' },
-  completed: { color: 'green', icon: CheckCircle, label: 'Completed' },
-  cancelled: { color: 'red', icon: AlertCircle, label: 'Cancelled' },
+  const csv = [header, ...rows]
+    .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+    .join('\n');
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `finly-records-${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 };
 
-const INITIAL_FORM: FormData = {
-  title: '',
-  category: '',
-  description: '',
-  type: 'expense',
-  amount: 0,
-  status: 'pending',
-};
-
-const Records: React.FC = () => {
-  const [records, setRecords] = useState<DataRecord[]>([]);
-  const [filteredRecords, setFilteredRecords] = useState<DataRecord[]>([]);
+const PremiumRecords = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { user } = useAuth();
+  const { addXP } = useGamification();
+  const [records, setRecords] = useState<RecordItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('');
+  const [search, setSearch] = useState(searchParams.get('q') || '');
+  const [statusFilter, setStatusFilter] = useState<'all' | RecordItem['status']>('all');
+  const [viewMode, setViewMode] = useState<'list' | 'topology'>('list');
+  const [selectedRecord, setSelectedRecord] = useState<RecordItem | null>(null);
 
-  // Modal & Form state
-  const [showModal, setShowModal] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [formData, setFormData] = useState<FormData>(INITIAL_FORM);
-  const [formErrors, setFormErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+  const springTransition = { duration: 0.6, ease: [0.2, 0.8, 0.2, 1] };
 
-  // Delete confirmation
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [deleting, setDeleting] = useState(false);
-
-  // Fetch records on mount
   useEffect(() => {
-    fetchRecords();
+    let active = true;
+    const loadRecords = async () => {
+      try {
+        const response = await recordsAPI.getAll();
+        if (active) {
+          setRecords(Array.isArray(response) ? response : []);
+        }
+      } catch {
+        if (active) {
+          setRecords([]);
+          toast.error('Failed to load records');
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+    void loadRecords();
+    return () => { active = false; };
   }, []);
 
-  // Filter records when search or category changes
-  useEffect(() => {
-    filterRecords();
-  }, [records, searchTerm, categoryFilter]);
-
-  const fetchRecords = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get('/records');
-      const data = Array.isArray(response.data) ? response.data : response.data.records || [];
-      setRecords(data);
-    } catch (error) {
-      console.error('Failed to fetch records:', error);
-      toast.error('Failed to load records');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const filterRecords = () => {
-    let filtered = records;
-
-    if (searchTerm) {
-      filtered = filtered.filter(
-        (r) =>
-          r.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          r.description.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    if (categoryFilter) {
-      filtered = filtered.filter((r) => r.category === categoryFilter);
-    }
-
-    setFilteredRecords(filtered);
-  };
-
-  const validateForm = (): boolean => {
-    const errors: Partial<Record<keyof FormData, string>> = {};
-
-    if (!formData.title.trim()) {
-      errors.title = 'Title is required';
-    }
-
-    if (!formData.category) {
-      errors.category = 'Category is required';
-    }
-
-    if (formData.amount <= 0) {
-      errors.amount = 'Amount must be greater than 0';
-    }
-
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      toast.error('Please fix the form errors');
-      return;
-    }
-
-    try {
-      setSubmitting(true);
-
-      if (editingId) {
-        await api.put(`/records/${editingId}`, formData);
-        toast.success('Record updated successfully!');
-      } else {
-        await api.post('/records', formData);
-        toast.success('Record created successfully!');
-      }
-
-      await fetchRecords();
-      closeModal();
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message || error.message || 'Operation failed';
-      toast.error(message);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleEdit = (record: DataRecord) => {
-    setEditingId(record._id);
-    setFormData({
-      title: record.title,
-      category: record.category,
-      description: record.description || '',
-      type: record.type,
-      amount: record.amount,
-      status: record.status,
+  const filteredRecords = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    return records.filter((record) => {
+      const matchesSearch =
+        query.length === 0 ||
+        [record.title, record.description, record.category, record.type]
+          .filter(Boolean)
+          .some((value) => String(value).toLowerCase().includes(query));
+      const matchesStatus = statusFilter === 'all' || record.status === statusFilter;
+      return matchesSearch && matchesStatus;
     });
-    setFormErrors({});
-    setShowModal(true);
-  };
+  }, [records, search, statusFilter]);
 
-  const openDeleteConfirm = (id: string) => {
-    setDeleteId(id);
-    setShowDeleteConfirm(true);
-  };
+  const totals = useMemo(() => {
+    return filteredRecords.reduce((accumulator, record) => {
+      if (record.type === 'income') accumulator.income += record.amount;
+      else accumulator.expenses += record.amount;
+      accumulator.total += 1;
+      return accumulator;
+    }, { total: 0, income: 0, expenses: 0 });
+  }, [filteredRecords]);
 
-  const handleDelete = async () => {
-    if (!deleteId) return;
-
+  const handleDelete = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!window.confirm('Delete this record?')) return;
     try {
-      setDeleting(true);
-      await api.delete(`/records/${deleteId}`);
-      toast.success('Record deleted successfully!');
-      await fetchRecords();
-      setShowDeleteConfirm(false);
-      setDeleteId(null);
-    } catch (error: any) {
-      const message = error.response?.data?.message || 'Delete failed';
-      toast.error(message);
-    } finally {
-      setDeleting(false);
+      premiumFeedback.click();
+      await recordsAPI.delete(id);
+      setRecords((current) => current.filter((record) => record._id !== id));
+      addXP(25);
+      toast.success('Sanitized +25 XP');
+      window.dispatchEvent(new CustomEvent('finly:records-updated'));
+    } catch {
+      toast.error('Failed to delete record');
     }
   };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setEditingId(null);
-    setFormData(INITIAL_FORM);
-    setFormErrors({});
-  };
-
-  const getStatusIcon = (status: string) => {
-    const config = STATUS_CONFIG[status as keyof typeof STATUS_CONFIG];
-    const Icon = config?.icon || Clock;
-    return <Icon size={16} />;
-  };
-
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-white p-4 md:p-8">
-      <Toaster position="top-right" />
+    <>
+      <div className="relative mx-auto max-w-[1200px] px-6 md:px-8 py-8 space-y-10 pb-24 text-white">
+        
+        {/* HUD INTERROGATION MODAL */}
+        <HUDModal 
+          isOpen={!!selectedRecord} 
+          onClose={() => setSelectedRecord(null)} 
+          data={selectedRecord} 
+        />
 
-      {/* Fixed background grid */}
-      <div className="fixed inset-0 opacity-10 pointer-events-none">
-        <div
-          className="absolute inset-0 bg-repeat"
-          style={{
-            backgroundImage:
-              'linear-gradient(0deg, transparent 24%, rgba(79, 172, 254, 0.1) 25%, rgba(79, 172, 254, 0.1) 26%, transparent 27%, transparent 74%, rgba(79, 172, 254, 0.1) 75%, rgba(79, 172, 254, 0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(79, 172, 254, 0.1) 25%, rgba(79, 172, 254, 0.1) 26%, transparent 27%, transparent 74%, rgba(79, 172, 254, 0.1) 75%, rgba(79, 172, 254, 0.1) 76%, transparent 77%, transparent)',
-            backgroundSize: '60px 60px',
-          }}
-        ></div>
-      </div>
+        {/* Achievement Badges */}
+        <BadgeRow 
+          totalRecords={totals.total} 
+          healthScore={85} // Assuming a default or calculated health score here
+          revenue={totals.income} 
+        />
 
-      <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 animate-fadeIn">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-2 tracking-tighter">Business Records</h1>
-            <p className="text-gray-400">Streamline your financial activity with precision.</p>
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-[#1C1C1E]">
+          <div className="space-y-2">
+            <motion.div 
+               initial={{ opacity: 0, scale: 0.95 }}
+               animate={{ opacity: 1, scale: 1 }}
+               transition={springTransition}
+               className="inline-flex items-center gap-2 mb-2"
+            >
+              <div className="w-1.5 h-1.5 rounded-full bg-[#007AFF]" />
+              <span className="text-[11px] font-semibold text-[#A1A1A6] uppercase tracking-wider">Financial Ledger</span>
+            </motion.div>
+            <h1 className="text-[32px] md:text-[40px] font-bold tracking-tight text-white leading-tight">
+              All transactions.
+            </h1>
           </div>
-          <PremiumButton
-            onClick={() => {
-              setFormData(INITIAL_FORM);
-              setEditingId(null);
-              setFormErrors({});
-              setShowModal(true);
-            }}
-            icon={<Plus size={20} />}
-          >
-            Add New Record
-          </PremiumButton>
+          <motion.div className="flex gap-3">
+            <button 
+              onClick={() => {
+                premiumFeedback.click();
+                exportRecords(filteredRecords);
+                addXP(200);
+                toast.success('Data Exported! +200 XP Earned.');
+              }}
+              className="px-4 py-2 rounded-full border border-[#1C1C1E] hover:bg-[#1C1C1E] transition-colors flex items-center gap-2 text-[13px] font-medium text-[#A1A1A6]"
+            >
+              <Download className="w-4 h-4" /> Export CSV
+            </button>
+            <button 
+               onClick={() => {
+                 premiumFeedback.click();
+                 navigate('/dashboard');
+               }}
+               className="px-4 py-2 rounded-full bg-white text-black hover:bg-white/90 transition-colors flex items-center gap-2 text-[13px] font-medium"
+            >
+              <Plus className="w-4 h-4" /> Log New Bill
+            </button>
+          </motion.div>
+        </header>
+
+        {/* View Toggle & Summary Stats */}
+        <div className="flex flex-col md:flex-row justify-between items-center bg-[#1C1C1E]/50 border border-white/5 p-4 rounded-3xl backdrop-blur-3xl gap-6">
+           <div className="flex gap-2 p-1.5 bg-black/50 rounded-2xl border border-white/5">
+               <button 
+                 onClick={() => {
+                   premiumFeedback.click();
+                   setViewMode('list');
+                 }}
+                 className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[12px] font-semibold transition-all ${viewMode === 'list' ? 'bg-[#1C1C1E] text-white shadow-lg' : 'text-[#A1A1A6] hover:text-white'}`}
+               >
+                  <LayoutGrid className="w-4 h-4" /> Grid
+               </button>
+               <button 
+                 onClick={() => {
+                   premiumFeedback.click();
+                   setViewMode('topology');
+                 }}
+                 className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[12px] font-semibold transition-all ${viewMode === 'topology' ? 'bg-[#1C1C1E] text-white shadow-lg' : 'text-[#A1A1A6] hover:text-white'}`}
+               >
+                  <Network className="w-4 h-4" /> Visual
+               </button>
+           </div>
+           
+           <div className="flex flex-wrap md:flex-nowrap gap-12 px-8 py-2">
+               <div className="flex flex-col items-center">
+                  <p className="text-[11px] font-semibold text-[#A1A1A6] uppercase tracking-wider mb-1">Total Entries</p>
+                  <p className="text-[24px] font-bold text-white tracking-tight">{totals.total}</p>
+               </div>
+               <div className="flex flex-col items-center">
+                  <p className="text-[11px] font-semibold text-[#A1A1A6] uppercase tracking-wider mb-1">Capital In</p>
+                  <p className="text-[24px] font-bold text-[#34C759] tracking-tight">₹{totals.income.toLocaleString()}</p>
+               </div>
+               <div className="flex flex-col items-center">
+                  <p className="text-[11px] font-semibold text-[#A1A1A6] uppercase tracking-wider mb-1">Money Out</p>
+                  <p className="text-[24px] font-bold text-[#FF3B30] tracking-tight">₹{totals.expenses.toLocaleString()}</p>
+               </div>
+            </div>
         </div>
 
-        {/* Search and Filter Bar */}
-        <div className="mb-8 space-y-4 md:space-y-0 md:flex gap-4">
-          {/* Search */}
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-            <input
-              type="text"
-              placeholder="Search records by title or description..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
-            />
-          </div>
+        <AnimatePresence mode="wait">
+          {viewMode === 'topology' ? (
+            <motion.div
+              key="topology"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.02 }}
+              transition={springTransition}
+            >
+               <StrategicTopology records={filteredRecords} />
+            </motion.div>
+          ) : (
+            <div className="space-y-8">
+                {/* Search & Filter */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={springTransition}
+                  className="flex flex-col md:flex-row gap-4"
+                >
+                  <div className="relative w-full md:max-w-[400px]">
+                    <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                      <Search className="h-4 w-4 text-[#A1A1A6]" />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Search bills, categories..."
+                      value={search}
+                      onChange={(event) => setSearch(event.target.value)}
+                      className="w-full rounded-2xl bg-[#1C1C1E] border border-white/5 py-3 pl-11 pr-4 text-[15px] text-white placeholder:text-[#636366] focus:outline-none focus:border-[#007AFF] focus:ring-1 focus:ring-[#007AFF] transition-all"
+                    />
+                  </div>
 
-          {/* Category Filter */}
-          <select
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-4 py-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl text-white focus:outline-none focus:border-blue-500 transition-colors"
-          >
-            <option value="">All Categories</option>
-            {CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Loading State */}
-        {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="text-center">
-              <Loader className="animate-spin text-blue-400 mx-auto mb-4" size={40} />
-              <p className="text-gray-400 font-medium">Synchronizing records...</p>
-            </div>
-          </div>
-        ) : filteredRecords.length === 0 ? (
-          <div className="text-center py-24 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl">
-            <AlertCircle className="mx-auto mb-4 text-gray-400/50" size={60} />
-            <h3 className="text-2xl font-bold mb-2">No records found</h3>
-            <p className="text-gray-400 mb-8 max-w-sm mx-auto">
-              {records.length === 0
-                ? 'Your ledger is empty. Start tracking your business activity now.'
-                : 'No results matches your forensic search parameters.'}
-            </p>
-            {records.length === 0 && (
-              <PremiumButton
-                onClick={() => setShowModal(true)}
-                icon={<Plus size={20} />}
-              >
-                Create First Record
-              </PremiumButton>
-            )}
-          </div>
-        ) : (
-          /* Table */
-          <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 rounded-3xl backdrop-blur-3xl border border-white/10"></div>
-            <div className="relative overflow-hidden rounded-3xl">
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-white/10 bg-white/5">
-                      <th className="px-6 py-4 text-left text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
-                        Data Point
-                      </th>
-                      <th className="px-6 py-4 text-left text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
-                        Type
-                      </th>
-                      <th className="px-6 py-4 text-left text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
-                        Total Amount
-                      </th>
-                      <th className="px-6 py-4 text-left text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
-                        Status
-                      </th>
-                      <th className="px-6 py-4 text-left text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
-                        Created
-                      </th>
-                      <th className="px-6 py-4 text-right text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
-                        Command
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/10">
-                    {filteredRecords.map((record, index) => {
-                      const statusConfig =
-                        STATUS_CONFIG[record.status as keyof typeof STATUS_CONFIG];
-                      const Icon = statusConfig?.icon || Clock;
-
-                      return (
-                        <tr
-                          key={record._id}
-                          className="hover:bg-white/10 transition-colors animate-fadeIn"
-                          style={{ animationDelay: `${index * 50}ms` }}
-                        >
-                          <td className="px-6 py-5">
-                            <div className="flex flex-col">
-                              <p className="font-bold text-white text-lg tracking-tight">{record.title}</p>
-                              <div className="flex items-center gap-2 mt-1">
-                                <span className="inline-flex items-center px-2 py-0.5 bg-blue-500/10 border border-blue-500/20 rounded text-[9px] font-black text-blue-400 uppercase tracking-widest">
-                                  {record.category}
-                                </span>
-                                <p className="text-[11px] text-gray-500 font-medium truncate max-w-[200px]">
-                                  {record.description}
-                                </p>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-5">
-                            <div className={`flex items-center gap-2 text-xs font-bold uppercase tracking-tight ${record.type === 'income' ? 'text-emerald-400' : 'text-rose-400'}`}>
-                              {record.type === 'income' ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
-                              {record.type}
-                            </div>
-                          </td>
-                          <td className="px-6 py-5">
-                            <p className="text-xl font-black text-white italic">
-                              ₹{record.amount.toLocaleString()}
-                            </p>
-                          </td>
-                          <td className="px-6 py-5">
-                            <div className={`flex items-center gap-2 px-3 py-1 rounded-full border w-fit ${
-                                  record.status === 'completed'
-                                    ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                                    : record.status === 'pending'
-                                    ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
-                                    : record.status === 'in_progress'
-                                    ? 'bg-sky-500/10 border-sky-500/20 text-sky-400'
-                                    : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
-                                }`}>
-                              <Icon size={12} />
-                              <span className="text-[10px] font-black uppercase tracking-widest">
-                                {record.status.replace('_', ' ')}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-5 text-xs text-gray-400 font-medium font-mono">
-                            {new Date(record.createdAt).toLocaleDateString('en-GB')}
-                          </td>
-                          <td className="px-6 py-5 text-right">
-                            <div className="flex items-center justify-end gap-2">
-                              <button
-                                onClick={() => handleEdit(record)}
-                                className="p-3 hover:bg-blue-500/20 rounded-xl transition-all text-blue-400 hover:text-blue-300 border border-transparent hover:border-blue-500/30"
-                                title="Edit record"
-                              >
-                                <Edit2 size={18} />
-                              </button>
-                              <button
-                                onClick={() => openDeleteConfirm(record._id)}
-                                className="p-3 hover:bg-red-500/20 rounded-xl transition-all text-red-400 hover:text-red-300 border border-transparent hover:border-red-500/30"
-                                title="Delete record"
-                              >
-                                <Trash2 size={18} />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Results info */}
-        {!loading && records.length > 0 && (
-          <div className="mt-8 text-xs font-black uppercase tracking-[0.2em] text-gray-500 flex items-center justify-between">
-            <p>
-              Displaying {filteredRecords.length} / {records.length} Core Nodes
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Add/Edit Modal */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fadeIn">
-          <div className="bg-[#0D0D0D] border border-white/10 rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.5)] w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-slideUp">
-            {/* Header */}
-            <div className="sticky top-0 bg-[#0D0D0D]/80 backdrop-blur-md p-8 border-b border-white/5 flex items-center justify-between z-10">
-              <h2 className="text-3xl font-black italic tracking-tighter text-white">
-                {editingId ? 'Edit Synthetic Record' : 'Initialize New Record'}
-              </h2>
-              <button
-                onClick={closeModal}
-                disabled={submitting}
-                className="p-3 hover:bg-white/10 rounded-2xl transition-colors disabled:opacity-50 text-white/50"
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="p-8 space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Title */}
-                <div className="md:col-span-2">
-                  <PremiumInput
-                    label="Record Title"
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    error={formErrors.title}
-                    placeholder="Enter identifying title"
-                    floating
-                  />
-                </div>
-
-                {/* Amount */}
-                <PremiumInput
-                  label="Transaction Amount (₹)"
-                  type="number"
-                  value={formData.amount}
-                  onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) || 0 })}
-                  error={formErrors.amount}
-                  icon={<IndianRupee size={16} />}
-                  placeholder="0.00"
-                  floating
-                />
-
-                {/* Type Selection */}
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-1">Classification</label>
-                  <div className="flex gap-2">
-                    {(['income', 'expense'] as const).map((t) => (
-                      <button
-                        key={t}
-                        type="button"
-                        onClick={() => setFormData({ ...formData, type: t })}
-                        className={`flex-1 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest border transition-all ${
-                          formData.type === t
-                            ? t === 'income' 
-                              ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' 
-                              : 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                            : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10'
-                        }`}
-                      >
-                        {t}
-                      </button>
+                  <div className="flex flex-wrap items-center gap-2 bg-[#1C1C1E] p-1.5 rounded-2xl border border-white/5">
+                    {(['all', 'pending', 'in_progress', 'completed', 'cancelled'] as const).map((filter) => (
+                       <button
+                         key={filter}
+                         type="button"
+                         onClick={() => {
+                           premiumFeedback.click();
+                           setStatusFilter(filter);
+                         }}
+                         className={`relative px-4 py-2 text-[13px] font-medium transition-all rounded-xl ${
+                           statusFilter === filter
+                             ? 'bg-[#2C2C2E] text-white shadow-sm'
+                             : 'text-[#A1A1A6] hover:text-white'
+                         }`}
+                       >
+                         {filter === 'all' ? 'All' : formatStatusLabel(filter)}
+                       </button>
                     ))}
                   </div>
-                </div>
+                </motion.div>
 
-                {/* Category */}
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-1">Business Domain</label>
-                  <select
-                    value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className={`w-full px-6 py-3 bg-white/5 border rounded-2xl text-white font-bold text-sm focus:outline-none transition-colors ${
-                      formErrors.category ? 'border-rose-500/50' : 'border-white/10 focus:border-blue-500'
-                    }`}
-                  >
-                    <option value="" className="bg-[#0D0D0D]">Select Sector</option>
-                    {CATEGORIES.map((cat) => (
-                      <option key={cat} value={cat} className="bg-[#0D0D0D]">
-                        {cat}
-                      </option>
+                {loading ? (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {[1, 2, 3, 4, 5, 6].map((item) => (
+                      <div key={item} className="h-48 animate-pulse rounded-2xl bg-[#1C1C1E]" />
                     ))}
-                  </select>
-                </div>
+                  </div>
+                ) : filteredRecords.length === 0 ? (
+                   <div className="border border-white/10 bg-[#1C1C1E]/50 py-24 text-center rounded-[32px] backdrop-blur-xl">
+                     <div className="w-20 h-20 rounded-[2rem] bg-[#2C2C2E] flex items-center justify-center mx-auto mb-6">
+                       <Search className="w-8 h-8 text-[#A1A1A6]" />
+                     </div>
+                     <h3 className="text-xl font-bold text-white tracking-tight">No records found</h3>
+                     <p className="mx-auto mt-2 text-[15px] text-[#A1A1A6] max-w-sm">
+                       Try adjusting your search or filters to find what you're looking for.
+                     </p>
+                   </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredRecords.map((record, index) => (
+                      <motion.div
+                        key={record._id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.05, ...springTransition }}
+                        whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                        onClick={() => setSelectedRecord(record)}
+                        className="apple-card p-6 cursor-pointer flex flex-col group"
+                      >
+                         <div className="flex justify-between items-start mb-4">
+                           <div className="space-y-3">
+                             <div className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider inline-flex ${
+                               record.type === 'income' ? 'bg-[#34C759]/10 text-[#34C759]' : 'bg-[#FF3B30]/10 text-[#FF3B30]'
+                             }`}>
+                               {record.type}
+                             </div>
+                             <h2 className="text-[17px] font-semibold text-white tracking-tight line-clamp-1 group-hover:text-[#007AFF] transition-colors">
+                               {record.title}
+                             </h2>
+                           </div>
+                           
+                           <div className="text-right">
+                              <span className="text-[20px] font-bold tabular-nums tracking-tight">
+                                ₹{record.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                              </span>
+                           </div>
+                         </div>
 
-                {/* Status Selection */}
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-1">Lifecycle Status</label>
-                  <select
-                    value={formData.status}
-                    onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-                    className="w-full px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-blue-500 transition-colors"
-                  >
-                    {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-                      <option key={key} value={key} className="bg-[#0D0D0D]">
-                        {config.label}
-                      </option>
+                         <p className="text-[13px] leading-relaxed text-[#A1A1A6] line-clamp-2 min-h-[40px] mb-6">
+                           {record.description || 'No additional details provided.'}
+                         </p>
+
+                        <div className="flex justify-between items-center mt-auto pt-4 border-t border-white/5">
+                           <div className="flex items-center gap-2">
+                              <span className="text-[11px] text-[#636366] font-medium uppercase tracking-wider">
+                                {new Date(record.date || record.createdAt).toLocaleDateString('en-IN', {
+                                  day: '2-digit', month: 'short', year: 'numeric'
+                                })}
+                              </span>
+                           </div>
+                           
+                           <div className="flex items-center gap-3">
+                              <span className={`text-[11px] font-bold uppercase tracking-wider ${
+                                record.status === 'completed' ? 'text-[#34C759]' :
+                                record.status === 'pending' ? 'text-[#FF9500]' :
+                                record.status === 'in_progress' ? 'text-[#007AFF]' :
+                                'text-[#A1A1A6]'
+                              }`}>
+                                {formatStatusLabel(record.status)}
+                              </span>
+                              <button 
+                                onClick={(e) => handleDelete(record._id, e)}
+                                className="text-[#A1A1A6] hover:text-[#FF3B30] transition-colors"
+                                title="Delete Record"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                              </button>
+                           </div>
+                        </div>
+                      </motion.div>
                     ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="space-y-2">
-                 <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-1">Tactical Observations</label>
-                 <textarea
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="Enter detailed observations relative to this record..."
-                    rows={4}
-                    className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-3xl text-white font-medium text-sm focus:outline-none focus:border-blue-500 transition-colors resize-none placeholder-white/20"
-                  />
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-4 pt-6">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  disabled={submitting}
-                  className="flex-1 px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-black uppercase tracking-widest text-xs rounded-2xl transition-colors disabled:opacity-50"
-                >
-                  Terminate
-                </button>
-                <PremiumButton
-                  type="submit"
-                  disabled={submitting}
-                  loading={submitting}
-                  className="flex-1"
-                >
-                  {editingId ? 'Execute Update' : 'Initialize Record'}
-                </PremiumButton>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-fadeIn">
-          <div className="bg-[#0D0D0D] border border-red-500/20 rounded-[2.5rem] shadow-2xl max-w-sm w-full p-10 animate-slideUp text-center">
-            <div className="flex items-center justify-center w-20 h-20 mx-auto mb-8 rounded-3xl bg-red-500/10 border border-red-500/20">
-              <AlertCircle className="text-red-500" size={40} />
+                  </div>
+                )}
             </div>
-            <h3 className="text-2xl font-black text-white italic mb-4">Purge Record?</h3>
-            <p className="text-white/40 font-medium mb-10 leading-relaxed">
-              This action executes a permanent deletion protocol. This cannot be undone.
-            </p>
-            <div className="flex gap-4">
-              <button
-                onClick={() => setShowDeleteConfirm(false)}
-                disabled={deleting}
-                className="flex-1 px-4 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] transition-colors disabled:opacity-50"
-              >
-                abort
-              </button>
-              <button
-                onClick={handleDelete}
-                disabled={deleting}
-                className="flex-1 px-4 py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {deleting ? <Loader size={12} className="animate-spin" /> : 'confirm purge'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Animations */}
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(40px) scale(0.95); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .animate-fadeIn { animation: fadeIn 0.6s ease-out forwards; }
-        .animate-slideUp { animation: slideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      `}</style>
-    </div>
+          )}
+        </AnimatePresence>
+      </div>
+    </>
   );
 };
 
-export default Records;
-
+export default PremiumRecords;

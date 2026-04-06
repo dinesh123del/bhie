@@ -19,7 +19,7 @@ let _paymentProcessingQueue: Queue | null = null;
 const createQueueSafe = (name: string, opts: any): Queue | null => {
   try {
     return new Queue(name, opts);
-  } catch (error) {
+  } catch {
     console.warn(`⚠️ Queue "${name}" could not be created (Redis unavailable)`);
     return null;
   }

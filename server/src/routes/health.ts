@@ -2,7 +2,7 @@ import express, { Response } from 'express';
 import mongoose from 'mongoose';
 import { redisClient } from '../config/redisClient.js';
 import { env } from '../config/env.js';
-import { AIEngine } from '../utils/aiEngine.js';
+
 import { asyncHandler } from '../middleware/asyncHandler.js';
 
 
@@ -43,7 +43,7 @@ router.get(
     let dbStatus: 'up' | 'down' = 'down';
     try {
       if (mongoose.connection.readyState === 1) dbStatus = 'up';
-    } catch (err) {
+    } catch {
       dbStatus = 'down';
     }
 
@@ -51,7 +51,7 @@ router.get(
     let redisStatus: 'up' | 'down' = 'down';
     try {
       if (redisClient.isReady) redisStatus = 'up';
-    } catch (err) {
+    } catch {
       redisStatus = 'down';
     }
 

@@ -10,19 +10,19 @@ export interface Directive {
   confidence: number;
 }
 
-interface SurgicalDirectivesProps {
+interface StrategicActionsProps {
   directives: Directive[];
 }
 
-const SurgicalDirectives: React.FC<SurgicalDirectivesProps> = ({ directives }) => {
+const StrategicActions: React.FC<StrategicActionsProps> = ({ directives }) => {
   return (
     <div className="space-y-10">
       <header className="space-y-2">
         <div className="flex items-center gap-3">
           <Target className="w-5 h-5 text-ai-extreme" />
-          <h3 className="text-[14px] font-black uppercase tracking-[0.4em] text-white/40">Surgical Directives</h3>
+          <h3 className="text-[14px] font-black uppercase tracking-[0.4em] text-white/40">Strategic Actions</h3>
         </div>
-        <p className="text-[28px] font-black tracking-tight text-white">Quantum Action Plan</p>
+        <p className="text-[28px] font-black tracking-tight text-white">Action Plan</p>
       </header>
 
       <div className="grid gap-6">
@@ -72,11 +72,11 @@ const SurgicalDirectives: React.FC<SurgicalDirectivesProps> = ({ directives }) =
       <div className="flex items-center justify-center pt-6">
           <p className="text-[12px] font-bold text-white/20 uppercase tracking-[0.2em] flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            Decision Engine Active: Analyzing 14.2k scenarios
+            System Active: Continuous analysis of your records
           </p>
       </div>
     </div>
   );
 };
 
-export default SurgicalDirectives;
+export default StrategicActions;

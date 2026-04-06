@@ -36,7 +36,7 @@ export interface ProcessedImagePayload {
   gstDetails?: any;
 }
 
-export async function processImageForRecord(filePath: string, originalName: string): Promise<ProcessedImagePayload> {
+export async function processImageForRecord(filePath: string, _originalName: string): Promise<ProcessedImagePayload> {
   const intelResult: DocumentIntelligenceResult = await processDocument(filePath);
   const normalizedText = intelResult.rawText.toLowerCase();
   const date = extractDate(normalizedText);

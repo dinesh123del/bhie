@@ -150,7 +150,7 @@ const Profile = () => {
             </div>
 
             <div className="p-8 rounded-[2.5rem] bg-indigo-500/5 border border-indigo-500/10 shadow-xl">
-              <h3 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em] mb-6">Subscription Engine</h3>
+              <h3 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em] mb-6">Subscription Plan</h3>
               <div className="flex items-center justify-between p-4 rounded-2xl bg-white/50 dark:bg-black/20 border border-indigo-500/10">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-xl bg-indigo-500/10">
@@ -183,7 +183,7 @@ const Profile = () => {
 
               <div className="mt-8 space-y-4">
                 <div className="flex items-center justify-between text-xs font-black uppercase tracking-[0.2em] text-gray-400">
-                  <span>Quota Resonance</span>
+                  <span>Usage Limit</span>
                   <span>{Math.min(100, (user?.usageCount || 0) / 5)}%</span>
                 </div>
                 <div className="h-2 w-full bg-black/5 dark:bg-white/5 rounded-full overflow-hidden">
@@ -204,8 +204,8 @@ const Profile = () => {
                   </div>
                   <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Special Access</h3>
                 </div>
-                <p className="text-xl font-bold text-gray-900 dark:text-white mb-2 leading-tight">Unlock Surgical Precision with Premium.</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">Get advanced AI analysis, global multi-currency support, and surgical data precision.</p>
+                <p className="text-xl font-bold text-gray-900 dark:text-white mb-2 leading-tight">Unlock more insights with Pro.</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">Get advanced AI analysis, global multi-currency support, and better data insights.</p>
                 <button className="w-full py-4 rounded-2xl bg-black dark:bg-white text-white dark:text-black font-black text-sm uppercase tracking-widest hover:scale-[1.02] transition-transform">Upgrade Now</button>
               </div>
               <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-500/20 blur-[60px] rounded-full" />

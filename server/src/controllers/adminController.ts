@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import mongoose from 'mongoose';
+
 import User from '../models/User.js';
 import BusinessRecord from '../models/Record.js';
 import Settings from '../models/Settings.js';
@@ -234,13 +234,20 @@ export const adminController = {
       settings = new Settings();
     }
 
-    const { proPrice, premiumPrice, isFreeMode, currency, adminInstructions, splashAds } = req.body;
+    const { 
+      proPrice, premiumPrice, isFreeMode, currency, adminInstructions, splashAds,
+      aiAutonomousLevel, globalBenchmarkingEnabled, resilienceModeEnabled 
+    } = req.body;
+
     if (proPrice !== undefined) settings.proPrice = proPrice;
     if (premiumPrice !== undefined) settings.premiumPrice = premiumPrice;
     if (isFreeMode !== undefined) settings.isFreeMode = isFreeMode;
     if (currency !== undefined) settings.currency = currency;
     if (adminInstructions !== undefined) settings.adminInstructions = adminInstructions;
     if (splashAds !== undefined) settings.splashAds = splashAds;
+    if (aiAutonomousLevel !== undefined) settings.aiAutonomousLevel = aiAutonomousLevel;
+    if (globalBenchmarkingEnabled !== undefined) settings.globalBenchmarkingEnabled = globalBenchmarkingEnabled;
+    if (resilienceModeEnabled !== undefined) settings.resilienceModeEnabled = resilienceModeEnabled;
 
     await settings.save();
     res.json({ success: true, data: settings });

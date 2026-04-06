@@ -1,23 +1,30 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useSearchParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { User, Mail, Lock, ArrowRight, AlertCircle, CheckCircle } from 'lucide-react';
+import { registerUser } from '../api';
+import { PremiumButton, PremiumCard, PremiumInput } from '../components/ui/PremiumComponents';
+import { useAuth } from '../hooks/useAuth';
+import Logo from '../components/Logo';
+import { GoogleButton } from '../components/auth/GoogleButton';
 import { toast } from 'react-hot-toast';
 import { authService } from '../services/authService';
-import { useAuth } from '../hooks/useAuth';
-import axios from 'axios';
-import { GoogleButton } from '../components/auth/GoogleButton';
-import { premiumFeedback } from '../utils/premiumFeedback';
 
-const Register = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-  });
-  const [showPassword, setShowPassword] = useState(false);
+const PremiumRegister = () => {
+  const [searchParams] = useSearchParams();
+  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+
+  useEffect(() => {
+    const emailParam = searchParams.get('email');
+    if (emailParam) {
+      setFormData(prev => ({ ...prev, email: decodeURIComponent(emailParam) }));
+    }
+  }, [searchParams]);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const [success, setSuccess] = useState(false);
+
   const location = useLocation();
   const { login } = useAuth();
 
@@ -33,7 +40,7 @@ const Register = () => {
         .then(user => {
           if (user) {
             login(token, user);
-            toast.success('Joined Finly with Google!');
+            toast.success('Welcome to Finly Premium via Google!');
           }
         })
         .catch(err => {
@@ -47,213 +54,213 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name.trim() || !formData.email.trim() || !formData.password.trim()) {
-      setError('All fields are required');
-      premiumFeedback.error();
+      setError('Please fill in all required fields.');
       return;
     }
 
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
-      premiumFeedback.error();
+    if (formData.password.length < 8) {
+      setError('Password must be at least 8 characters long.');
       return;
     }
 
     setLoading(true);
     setError('');
-    premiumFeedback.click();
 
     try {
-      const response = await authService.register(formData);
-
-      if (!response?.token || !response?.user) {
-        setError('Invalid server response');
-        return;
+      const response = await registerUser(formData);
+      setSuccess(true);
+      // Assuming registerUser returns { token, user } as per original logic
+      if (response.token && response.user) {
+        setTimeout(() => login(response.token, response.user), 1200);
       }
-
-      login(response.token, response.user);
-      premiumFeedback.success();
     } catch (err: any) {
-      premiumFeedback.error();
-      let message = 'Registration failed';
-      if (axios.isAxiosError(err)) {
-        message = err.response?.data?.message || err.message || 'Unable to connect to server';
-      } else if (err instanceof Error) {
-        message = err.message;
-      }
-      setError(message);
+      console.error('Registration Technical Error:', err);
+      setError(err.message || 'We encountered an issue creating your account. Please try again or contact support.');
     } finally {
       setLoading(false);
     }
   };
 
+  const containerVariants = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1, transition: { staggerChildren: 0.1 } },
+  };
+
+  const itemVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-purple-900/20 to-slate-950 relative overflow-hidden">
-      {/* Background Orbs */}
+    <div className="min-h-screen bg-transparent flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated Background */}
       <motion.div
-        className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/20 rounded-full filter blur-3xl"
+        className="absolute top-0 left-0 w-96 h-96 bg-indigo-600/20 rounded-full filter blur-3xl"
         animate={{ y: [0, 50, 0], x: [0, 30, 0] }}
-        transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+        transition={{ duration: 20, repeat: Infinity }}
       />
       <motion.div
-        className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full filter blur-3xl"
+        className="absolute bottom-0 right-0 w-96 h-96 bg-purple-600/20 rounded-full filter blur-3xl"
         animate={{ y: [0, -50, 0], x: [0, -30, 0] }}
-        transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
+        transition={{ duration: 25, repeat: Infinity }}
       />
 
-      {/* Card */}
+      {/* Content */}
       <motion.div
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.6 }}
-        className="relative z-10 max-w-md w-full p-8 rounded-2xl"
+        variants={containerVariants}
+        initial="initial"
+        animate="animate"
+        className="relative z-10 w-full max-w-md"
       >
-        {/* Glassmorphism Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/12 via-white/6 to-transparent backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl" />
-
-        {/* Content */}
-        <div className="relative z-10">
-          {/* Header */}
-          <div className="mb-8">
-            <h2 className="text-4xl font-bold text-white mb-2">Create Account</h2>
-            <p className="secondary-text">Join Finly and start optimizing your business</p>
-          </div>
-
-          {/* Error */}
-          {error && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-6 p-4 bg-red-500/25 border border-red-400/50 text-red-150 rounded-lg font-medium"
-            >
-              {error}
-            </motion.div>
-          )}
-
-          {/* Form */}
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* Name */}
+        {success && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-start gap-3"
+          >
+            <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
             <div>
-              <label htmlFor="name" className="block text-sm font-bold text-white mb-3">
-                Full Name
-              </label>
-              <input
-                id="name"
+              <p className="text-sm font-semibold text-emerald-200">Welcome to Finly!</p>
+              <p className="text-xs text-emerald-300">Redirecting to dashboard...</p>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Logo & Header */}
+        <motion.div variants={itemVariants} className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <Logo size="lg" to="/" subtitle="Forge Your Advantage" glow />
+          </div>
+        </motion.div>
+
+        {/* Card */}
+        <motion.div variants={itemVariants}>
+          <PremiumCard extreme className="p-6 md:p-8 backdrop-blur-3xl bg-white/[0.01] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)]">
+            {/* Heading */}
+            <div className="mb-6">
+              <h2 className="text-2xl md:text-3xl font-black text-white mb-1 tracking-tight">Join Finly</h2>
+              <p className="text-gray-400 text-xs md:text-sm font-medium">Start managing your business records today</p>
+            </div>
+
+            {/* Error Alert */}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-8 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-start gap-3"
+              >
+                <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-200">{error}</p>
+              </motion.div>
+            )}
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
+              <PremiumInput
+                floating
+                label="Your Name"
                 type="text"
-                required
                 value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
-                className="w-full px-4 py-3 bg-white/[0.08] border border-white/20 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })}
+                icon={<User className="w-5 h-5" />}
                 placeholder="John Doe"
               />
-            </div>
 
-            {/* Email */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-bold text-white mb-3">
-                Email Address
-              </label>
-              <input
-                id="email"
+              <PremiumInput
+                floating
+                label="Email Address"
                 type="email"
-                required
                 value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
-                className="w-full px-4 py-3 bg-white/[0.08] border border-white/20 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value })}
+                icon={<Mail className="w-5 h-5" />}
                 placeholder="you@example.com"
               />
-            </div>
 
-            {/* Password */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-bold text-white mb-3">
-                Password
-              </label>
-              <div className="relative">
+              <PremiumInput
+                floating
+                label="Password"
+                type="password"
+                value={formData.password}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, password: e.target.value })}
+                icon={<Lock className="w-5 h-5" />}
+                placeholder="••••••••"
+              />
+
+              {/* Terms */}
+              <motion.div variants={itemVariants} className="flex items-start gap-3 pt-2">
                 <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type="checkbox"
+                  id="terms"
+                  className="w-4 h-4 bg-white/10 border border-white/10 rounded accent-sky-500 mt-1 cursor-pointer transition-all focus:ring-sky-500/50"
                   required
-                  minLength={6}
-                  value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  className="w-full px-4 py-3 pr-12 bg-white/[0.08] border border-white/20 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all"
-                  placeholder="••••••••"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 secondary-text hover:text-white transition-colors"
-                  title={showPassword ? 'Hide password' : 'Show password'}
+                <label htmlFor="terms" className="text-[10px] uppercase font-black tracking-widest text-white/40 leading-relaxed cursor-pointer select-none">
+                  Agree to <Link to="/terms" className="text-sky-400 hover:text-sky-300 transition-colors">Terms</Link> &{' '}
+                  <Link to="/privacy" className="text-sky-400 hover:text-sky-300 transition-colors">Privacy Policy</Link>
+                </label>
+              </motion.div>
+
+              {/* Submit Button */}
+              <motion.div variants={itemVariants} className="pt-6">
+                <PremiumButton
+                  type="submit"
+                  size="lg"
+                  loading={loading}
+                  className="w-full bg-gradient-to-r from-sky-400 to-indigo-500 hover:from-sky-300 hover:to-indigo-400 text-white border-none shadow-[0_20px_40px_-10px_rgba(56,189,248,0.3)]"
+                  icon={<ArrowRight className="w-5 h-5" />}
                 >
-                  {showPassword ? (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-4.803m5.596-3.856a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0M15 12a3 3 0 11-6 0 3 3 0 016 0zm6 0c0 1.657-.672 3.157-1.757 4.243A6 6 0 0121 12a6 6 0 00-6-6 6 6 0 00-4.243 1.757M9 1l-3 3m0 0l-3-3m3 3h12" />
-                    </svg>
-                  ) : (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  )}
-                </button>
-              </div>
-              <p className="text-xs text-gray-400 mt-2 font-medium">Minimum 6 characters</p>
+                  {loading ? 'Creating Account...' : 'Create My Account'}
+                </PremiumButton>
+              </motion.div>
+            </form>
+
+            {/* Divider */}
+            <motion.div variants={itemVariants} className="py-6 flex items-center gap-4">
+              <div className="flex-1 h-px bg-white/10" />
+              <span className="text-xs text-gray-500 px-2">OR CONTINUE WITH</span>
+              <div className="flex-1 h-px bg-white/10" />
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="flex justify-center mb-6">
+              <GoogleButton />
+            </motion.div>
+
+            {/* Login Link */}
+            <motion.div variants={itemVariants} className="text-center">
+              <p className="text-gray-400 text-sm">
+                Already have an account?{' '}
+                <Link
+                  to="/login"
+                  className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors"
+                >
+                  Sign in
+                </Link>
+              </p>
+            </motion.div>
+          </PremiumCard>
+        </motion.div>
+
+        {/* Benefits */}
+        <motion.div
+          variants={itemVariants}
+          className="mt-8 grid grid-cols-3 gap-4 text-center"
+        >
+          {[
+            { icon: '✨', text: 'Free Trial' },
+            { icon: '🔒', text: 'Secure' },
+            { icon: '⚡', text: 'Instant' },
+          ].map((benefit, idx) => (
+            <div key={idx} className="text-xs">
+              <p className="text-lg mb-2">{benefit.icon}</p>
+              <p className="text-gray-400">{benefit.text}</p>
             </div>
-
-            {/* Submit Button */}
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 px-4 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <motion.span
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                >
-                  ⟳
-                </motion.span>
-              ) : (
-                'Create Account'
-              )}
-            </motion.button>
-          </form>
-
-          {/* Divider */}
-          <div className="my-6 flex items-center gap-3">
-            <div className="flex-1 h-px bg-white/10" />
-            <span className="text-xs tertiary-text font-medium">OR</span>
-            <div className="flex-1 h-px bg-white/10" />
-          </div>
-
-          <div className="flex justify-center w-full mb-6">
-            <GoogleButton />
-          </div>
-
-          {/* Footer */}
-          <div className="text-center">
-            <p className="secondary-text">
-              Already have an account?{' '}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                onClick={() => {
-                  navigate('/login');
-                  premiumFeedback.click();
-                }}
-                className="text-indigo-300 hover:text-indigo-200 font-bold transition-colors"
-              >
-                Sign in
-              </motion.button>
-            </p>
-          </div>
-        </div>
+          ))}
+        </motion.div>
       </motion.div>
     </div>
   );
 };
 
-export default Register;
+export default PremiumRegister;

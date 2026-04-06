@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { FilePlus2, FileText, Trash2, CreditCard, Lock } from 'lucide-react';
+import { FilePlus2, FileText, Trash2, CreditCard, Lock, Download } from 'lucide-react';
+import { generateBrandedPDF } from '../utils/pdfGenerator';
+
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { toast } from 'react-hot-toast';
@@ -131,6 +133,17 @@ const Reports = () => {
     }
   };
 
+  const handleDownloadReport = (report: Report) => {
+    void generateBrandedPDF({
+      title: report.title,
+      content: report.content,
+      filename: `Report_${report.title.replace(/\s+/g, '_')}_${new Date().getTime()}`,
+      type: report.type
+    });
+    toast.success('Downloading report...');
+  };
+
+
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -220,15 +233,26 @@ const Reports = () => {
                       </p>
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteReport(report)}
-                      disabled={!reportId || deletingId === reportId}
-                      className="inline-flex items-center gap-2 rounded-xl border border-red-500/30 px-3 py-2 text-sm font-medium text-red-300 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                      {deletingId === reportId ? 'Deleting...' : 'Delete'}
-                    </button>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => handleDownloadReport(report)}
+                        className="inline-flex items-center gap-2 rounded-xl border border-sky-500/30 px-3 py-2 text-sm font-medium text-sky-300 transition hover:bg-sky-500/10"
+                      >
+                        <Download className="h-4 w-4" />
+                        Download
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteReport(report)}
+                        disabled={!reportId || deletingId === reportId}
+                        className="inline-flex items-center gap-2 rounded-xl border border-red-500/30 px-3 py-2 text-sm font-medium text-red-300 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        {deletingId === reportId ? 'Deleting...' : 'Delete'}
+                      </button>
+                    </div>
+
                   </div>
                 </div>
               );

@@ -9,28 +9,26 @@ import { LanguageProvider } from './contexts/LanguageContext';
 // Layout Components
 import PremiumLayout from './components/PremiumLayout';
 import LoadingScreen from './components/LoadingScreen';
-import CinematicSplash from './components/CinematicSplash';
 import { UpgradeModal } from './components/UpgradeModal';
 import { PageTransition } from './components/ui/MicroInteractions';
 import { OnboardingStep } from './components/ui/EliteUI';
 import { PremiumBackground } from './components/ui/PremiumBackground';
-import { GamificationProvider, GamingHUD } from './components/GamificationEngine';
 
 // Dynamic Page Imports
-const PremiumLogin    = lazy(() => import('./pages/LoginPremium'));
-const PremiumRegister = lazy(() => import('./pages/RegisterPremium'));
-const PremiumLanding  = lazy(() => import('./pages/LandingPagePremium'));
-const Dashboard       = lazy(() => import('./pages/DashboardPremium'));
-const Analytics       = lazy(() => import('./pages/AnalyticsPremium'));
+const LoginPage    = lazy(() => import('./pages/Login'));
+const RegisterPage = lazy(() => import('./pages/Register'));
+const LandingPage  = lazy(() => import('./pages/Landing'));
+const Dashboard    = lazy(() => import('./pages/Dashboard'));
+const Analytics    = lazy(() => import('./pages/Analytics'));
+const Records      = lazy(() => import('./pages/Records'));
 
-const AnalysisReport  = lazy(() => import('./pages/AIAnalysisPage'));
-const Settings        = lazy(() => import('./pages/Admin'));
+const AnalysisReport  = lazy(() => import('./pages/BusinessInsightsPage'));
 const AdminPanel      = lazy(() => import('./pages/Admin'));
-const Records         = lazy(() => import('./pages/RecordsPremium'));
 const SystemHealth    = lazy(() => import('./pages/SystemHealth'));
 const Payments        = lazy(() => import('./pages/Payments'));
 const ScanBill        = lazy(() => import('./pages/ScanBill'));
 const DataScienceHub  = lazy(() => import('./pages/DataScienceHub'));
+
 
 const Pricing = lazy(() => import('./pages/Pricing'));
 const Profile = lazy(() => import('./pages/Home'));
@@ -42,17 +40,14 @@ const Reports = lazy(() => import('./pages/Reports'));
 const Insights = lazy(() => import('./pages/Insights'));
 const AIChat = lazy(() => import('./pages/AIChat'));
 const Prediction = lazy(() => import('./pages/Prediction'));
-const InnovativeDashboard = lazy(() => import('./pages/InnovativeDashboard'));
-const ImageIntelligence = lazy(() => import('./pages/ImageIntelligence'));
+const ImageScanner = lazy(() => import('./pages/ImageIntelligence'));
 const CompanySetup = lazy(() => import('./pages/CompanySetup'));
-const AnalyticsPremium = lazy(() => import('./pages/AnalyticsPremium'));
-const DashboardPremium = lazy(() => import('./pages/DashboardPremium'));
-const LandingPremiumPage = lazy(() => import('./pages/LandingPremium'));
-const RecordsPremium = lazy(() => import('./pages/RecordsPremium'));
-const Home = lazy(() => import('./pages/Home'));
 const Notifications = lazy(() => import('./pages/Notifications'));
 const SimulationEngine = lazy(() => import('./pages/SimulationEngine'));
+const CAPortal = lazy(() => import('./pages/CAPortal'));
+const BusinessBrain = lazy(() => import('./pages/BusinessBrain'));
 const ResellerPartner = lazy(() => import('./pages/ResellerPartner'));
+const Workflows = lazy(() => import('./pages/Workflows'));
 
 // ── Mute preference key ──────────────────────────────────────
 const MUTE_KEY = 'finly_sound_muted';
@@ -126,9 +121,9 @@ function MainApp() {
           <PageTransition key={location.pathname}>
             <Routes location={location}>
               {/* Public Routes */}
-              <Route path="/"        element={<PremiumLanding />} />
-              <Route path="/login"   element={<PremiumLogin />} />
-              <Route path="/register" element={<PremiumRegister />} />
+              <Route path="/"        element={<LandingPage />} />
+              <Route path="/login"   element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/about"   element={<About />} />
               <Route path="/terms"   element={<Terms />} />
@@ -142,7 +137,7 @@ function MainApp() {
               <Route path="/system-health"   element={<ProtectedRoute><SystemHealth /></ProtectedRoute>} />
               <Route path="/scan-bill"       element={<ProtectedRoute><ScanBill /></ProtectedRoute>} />
               <Route path="/ds-hub"          element={<ProtectedRoute><DataScienceHub /></ProtectedRoute>} />
-              <Route path="/settings"        element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+              <Route path="/settings"        element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
               <Route path="/admin"           element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
 
               {/* Support Modules */}
@@ -151,21 +146,19 @@ function MainApp() {
               <Route path="/profile"  element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="/reports"  element={<ProtectedRoute><Reports /></ProtectedRoute>} />
               <Route path="/insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
+              <Route path="/business-brain" element={<ProtectedRoute><BusinessBrain /></ProtectedRoute>} />
               <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
               <Route path="/reseller-partner" element={<ProtectedRoute><ResellerPartner /></ProtectedRoute>} />
               
-              {/* Extra Valid Routes from Standard Sidebar */}
-              <Route path="/ai-chat" element={<ProtectedRoute><AIChat /></ProtectedRoute>} />
+              {/* Extra Valid Routes */}
+              <Route path="/assistant" element={<ProtectedRoute><AIChat /></ProtectedRoute>} />
               <Route path="/predictions" element={<ProtectedRoute><Prediction /></ProtectedRoute>} />
-              <Route path="/innovative-dashboard" element={<ProtectedRoute><InnovativeDashboard /></ProtectedRoute>} />
-              <Route path="/image-intelligence" element={<ProtectedRoute><ImageIntelligence /></ProtectedRoute>} />
+              <Route path="/image-scanner" element={<ProtectedRoute><ImageScanner /></ProtectedRoute>} />
               <Route path="/company-setup" element={<ProtectedRoute><CompanySetup /></ProtectedRoute>} />
-              <Route path="/analytics-premium" element={<ProtectedRoute><AnalyticsPremium /></ProtectedRoute>} />
-              <Route path="/dashboard-premium" element={<ProtectedRoute><DashboardPremium /></ProtectedRoute>} />
-              <Route path="/landing" element={<ProtectedRoute><LandingPremiumPage /></ProtectedRoute>} />
-              <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-              <Route path="/simulate" element={<ProtectedRoute><SimulationEngine /></ProtectedRoute>} />
-              <Route path="/ai-analysis" element={<Navigate to="/analysis-report" replace />} />
+              <Route path="/simulation" element={<ProtectedRoute><SimulationEngine /></ProtectedRoute>} />
+              <Route path="/ca-portal" element={<ProtectedRoute><CAPortal /></ProtectedRoute>} />
+              <Route path="/workflows" element={<ProtectedRoute><Workflows /></ProtectedRoute>} />
+              <Route path="/analysis-sync" element={<Navigate to="/analysis-report" replace />} />
 
               {/* Catch All */}
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
@@ -180,7 +173,7 @@ function MainApp() {
 function App() {
   const [splashDone, setSplashDone] = useState(false);
   const [dataReady, setDataReady]   = useState(false);
-  const muted = getMutePreference();
+
 
   // Preload backend during splash (non-blocking)
   useEffect(() => {
@@ -214,52 +207,49 @@ function App() {
     <AuthProvider>
       <LanguageProvider>
         <ThemeProvider>
-          <GamificationProvider>
-            <AnimatePresence mode="wait">
-              {!showApp ? (
-                <motion.div
-                  key="finly-loading"
-                  className="fixed inset-0 z-[10000]"
-                  exit={{ opacity: 0, scale: 1.1, filter: 'blur(20px)' }}
-                  transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
-                >
-                  <LoadingScreen onComplete={handleSplashComplete} />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="finly-app"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.8, ease: 'easeInOut' }}
-                  className="h-full w-full"
-                >
-                  <GamingHUD />
-                  <MainApp />
-                  <Toaster
-                    position="top-right"
-                    toastOptions={{
-                      duration: 5000,
-                      style: {
-                        background: 'rgba(10, 10, 10, 0.9)',
-                        color: '#fff',
-                        border: '1px solid rgba(79,70,229,0.2)',
-                        backdropFilter: 'blur(20px)',
-                        borderRadius: '16px',
-                        padding: '14px 20px',
-                        fontSize: '14px',
-                        fontWeight: '600',
-                        boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(79,70,229,0.1)',
-                      },
-                      success: {
-                        iconTheme: { primary: '#10b981', secondary: '#fff' },
-                      },
-                    }}
-                  />
-                  <UpgradeModal />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </GamificationProvider>
+          <AnimatePresence mode="wait">
+            {!showApp ? (
+              <motion.div
+                key="finly-loading"
+                className="fixed inset-0 z-[10000]"
+                exit={{ opacity: 0, scale: 1.1, filter: 'blur(20px)' }}
+                transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
+              >
+                <LoadingScreen onComplete={handleSplashComplete} />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="finly-app"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, ease: 'easeInOut' }}
+                className="h-full w-full"
+              >
+                <MainApp />
+                <Toaster
+                  position="top-right"
+                  toastOptions={{
+                    duration: 5000,
+                    style: {
+                      background: 'rgba(10, 10, 10, 0.9)',
+                      color: '#fff',
+                      border: '1px solid rgba(79,70,229,0.2)',
+                      backdropFilter: 'blur(20px)',
+                      borderRadius: '16px',
+                      padding: '14px 20px',
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      boxShadow: '0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(79,70,229,0.1)',
+                    },
+                    success: {
+                      iconTheme: { primary: '#10b981', secondary: '#fff' },
+                    },
+                  }}
+                />
+                <UpgradeModal />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </ThemeProvider>
       </LanguageProvider>
     </AuthProvider>

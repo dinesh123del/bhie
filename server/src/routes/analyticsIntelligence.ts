@@ -1,7 +1,7 @@
 import express, { Response } from 'express';
 import { authenticateToken } from '../middleware/auth.js';
 import { asyncHandler } from '../middleware/asyncHandler.js';
-import BusinessRecord from '../models/Record.js';
+
 import DailySummary from '../models/DailySummary.js';
 import { AuthRequest } from '../types/index.js';
 import Company from '../models/Company.js';
@@ -48,7 +48,7 @@ router.get(
 
     const totalRevenue = summaries.reduce((sum, s) => sum + s.totalRevenue, 0);
     const totalExpenses = summaries.reduce((sum, s) => sum + s.totalExpenses, 0);
-    const profit = totalRevenue - totalExpenses;
+
 
     res.json({
       comparison: [

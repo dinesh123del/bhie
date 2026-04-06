@@ -1,5 +1,5 @@
-import { AuthRequest } from './index.js';
-import type { PlanType } from './index.js';
+
+
 import type { PaidPlanType } from '../utils/planConfig.js';
 
 export interface CreateOrderRequest {
