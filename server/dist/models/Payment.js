@@ -23,6 +23,10 @@ const paymentSchema = new mongoose.Schema({
         type: String,
         index: true,
     },
+    razorpaySubscriptionId: {
+        type: String,
+        index: true,
+    },
     razorpayPaymentId: String,
     razorpaySignature: String,
     receipt: {
@@ -31,9 +35,14 @@ const paymentSchema = new mongoose.Schema({
     },
     plan: {
         type: String,
-        enum: ['pro', 'enterprise'],
+        enum: ['pro', 'premium', 'enterprise'],
         required: true,
     },
+    billingCycle: {
+        type: String,
+        enum: ['monthly', 'yearly'],
+    },
+    paymentMethod: String,
     expiryDate: Date,
     verifiedAt: Date,
 }, {

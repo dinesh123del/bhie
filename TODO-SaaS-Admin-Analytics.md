@@ -1,4 +1,4 @@
-# BHIE Admin SaaS Analytics Dashboard TODO
+# Finly Admin SaaS Analytics Dashboard TODO
 
 ## Progress Tracker
 

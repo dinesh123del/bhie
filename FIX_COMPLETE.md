@@ -1,4 +1,4 @@
-# BHIE Project - Fixed & Ready to Run ✅
+# Finly Project - Fixed & Ready to Run ✅
 
 **Status:** Production Ready  
 **Last Fixed:** April 2, 2026
@@ -127,13 +127,13 @@ VITE_API_URL=http://localhost:4000/api  # ← Fixed from :5000
 
 ### Option 1: Run All at Once
 ```bash
-cd /Users/srilekha/Desktop/BHIE
+cd /Users/srilekha/Desktop/Finly
 npm run dev
 ```
 
 **Output should show:**
 ```
-[0] 🚀 BHIE Backend Running
+[0] 🚀 Finly Backend Running
 [0] 🌐 http://localhost:4000
 [1] ➜  Local:   http://localhost:5173/
 ```

@@ -75,7 +75,7 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
       toast.success(`${response.items.length} records synthesized by Finly Engine`);
 
       window.dispatchEvent(
-        new CustomEvent('bhie:records-updated', {
+        new CustomEvent('finly:records-updated', {
           detail: response.items,
         })
       );

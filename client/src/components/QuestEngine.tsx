@@ -37,7 +37,7 @@ export interface Quest {
   category?: 'AI' | 'SECURITY' | 'FINANCE' | 'SYSTEM';
 }
 
-const QUEST_STORAGE_KEY = 'bhie_quests_v2';
+const QUEST_STORAGE_KEY = 'finly_quests_v2';
 
 export default function QuestEngine() {
   const { user } = useAuth();

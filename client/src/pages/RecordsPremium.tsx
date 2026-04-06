@@ -56,7 +56,7 @@ const exportRecords = (records: RecordItem[]) => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `bhie-records-${new Date().toISOString().slice(0, 10)}.csv`;
+  link.download = `finly-records-${new Date().toISOString().slice(0, 10)}.csv`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -131,7 +131,7 @@ const PremiumRecords = () => {
       setRecords((current) => current.filter((record) => record._id !== id));
       addXP(25);
       toast.success('Sanitized +25 XP');
-      window.dispatchEvent(new CustomEvent('bhie:records-updated'));
+      window.dispatchEvent(new CustomEvent('finly:records-updated'));
     } catch {
       toast.error('Failed to delete record');
     }

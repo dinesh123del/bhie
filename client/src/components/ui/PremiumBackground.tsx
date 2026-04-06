@@ -13,42 +13,8 @@ export const PremiumBackground: React.FC<{ children?: React.ReactNode }> = ({ ch
       {/* Layer 1: Deep base gradient */}
       <div className="fixed inset-0 z-0 bg-gradient-to-b from-[#020617] via-[#0f172a] to-[#020617]" />
 
-      {/* Layer 2: Slow-moving ambient blobs */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute -left-[15%] -top-[15%] h-[60%] w-[60%] rounded-full"
-          style={{
-            background: 'radial-gradient(circle, rgba(56,189,248,0.03) 0%, transparent 70%)',
-          }}
-          animate={{
-            x: [0, 40, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{ duration: 40, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute -right-[10%] top-[20%] h-[55%] w-[55%] rounded-full"
-          style={{
-            background: 'radial-gradient(circle, rgba(129,140,248,0.02) 0%, transparent 70%)',
-          }}
-          animate={{
-            x: [0, -30, 0],
-            y: [0, 40, 0],
-          }}
-          transition={{ duration: 50, repeat: Infinity, ease: 'easeInOut', delay: 5 }}
-        />
-        <motion.div
-          className="absolute left-[20%] bottom-[5%] h-[45%] w-[45%] rounded-full"
-          style={{
-            background: 'radial-gradient(circle, rgba(168,85,247,0.02) 0%, transparent 70%)',
-          }}
-          animate={{
-            x: [0, 25, 0],
-            y: [0, -20, 0],
-          }}
-          transition={{ duration: 45, repeat: Infinity, ease: 'easeInOut', delay: 10 }}
-        />
-      </div>
+      {/* Layer 2: Removed Slow-moving ambient blobs to keep a solid premium background */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none" />
 
       {/* Layer 3: Subtle noise texture for depth */}
       <div 

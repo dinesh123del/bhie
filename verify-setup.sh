@@ -4,7 +4,7 @@ set -e
 
 BACKEND_PORT=5001
 
-echo "BHIE setup verification"
+echo "Finly setup verification"
 echo "======================="
 echo ""
 

@@ -48,7 +48,7 @@ const mgmtItems: NavItem[] = [
 const PremiumSidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMuted, setIsMuted] = useState(() => {
-    try { return localStorage.getItem('bhie_sound_muted') === 'true'; } catch { return false; }
+    try { return localStorage.getItem('finly_sound_muted') === 'true'; } catch { return false; }
   });
   const location = useLocation();
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ const PremiumSidebar = () => {
   const toggleMute = () => {
     const next = !isMuted;
     setIsMuted(next);
-    try { localStorage.setItem('bhie_sound_muted', String(next)); } catch { /* ignore */ }
+    try { localStorage.setItem('finly_sound_muted', String(next)); } catch { /* ignore */ }
     premiumFeedback.click();
   };
 

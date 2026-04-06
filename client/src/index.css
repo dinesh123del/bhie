@@ -34,6 +34,11 @@
     --secondary-text:    rgba(255, 255, 255, 0.65);
     --tertiary-text:     rgba(255, 255, 255, 0.4);
     
+    --finly-border:      var(--glass-border);
+    --finly-surface:     rgba(255, 255, 255, 0.03);
+    --finly-primary:     var(--finly-blue);
+    --finly-glow:        rgba(0, 122, 255, 0.15);
+    
     --sf-easing:         cubic-bezier(0.2, 0.8, 0.2, 1);
     --spring-easing:     cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
@@ -196,8 +201,8 @@
    ───────────────────────────────────────────── */
 .bg-mesh {
   background-image:
-    radial-gradient(at 10% 10%, var(--bhie-glow) 0px, transparent 40%),
-    radial-gradient(at 90% 10%, var(--bhie-glow) 0px, transparent 40%);
+    radial-gradient(at 10% 10%, var(--finly-glow) 0px, transparent 40%),
+    radial-gradient(at 90% 10%, var(--finly-glow) 0px, transparent 40%);
 }
 
 .text-gradient-brand {

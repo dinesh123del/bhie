@@ -258,7 +258,7 @@ export const PremiumInput: React.FC<{
         </motion.label>
 
         <input
-          className={`w-full bg-transparent border-b border-[var(--bhie-border)] py-3 text-white caret-sky-400 outline-none focus:border-sky-400/50 transition-all ${icon ? 'pl-10' : ''} ${error ? 'border-red-500/40' : ''} ${className}`}
+          className={`w-full bg-transparent border-b border-[var(--finly-border)] py-3 text-white caret-sky-400 outline-none focus:border-sky-400/50 transition-all ${icon ? 'pl-10' : ''} ${error ? 'border-red-500/40' : ''} ${className}`}
           onFocus={(e) => {
             setIsFocused(true);
             props.onFocus?.(e);
@@ -303,7 +303,7 @@ export const PremiumInput: React.FC<{
           </span>
         )}
         <input
-          className={`w-full bg-[var(--bhie-surface)] border border-[var(--bhie-border)] rounded-2xl px-4 py-3 placeholder:text-[var(--tertiary-text)] text-white caret-[var(--bhie-primary)] outline-none focus:border-[var(--bhie-primary)]/40 focus:bg-[var(--bhie-surface)]/80 transition-all ${icon ? 'pl-11' : ''} ${error ? 'border-red-500/40 focus:border-red-500' : ''} ${className}`}
+          className={`w-full bg-[var(--finly-surface)] border border-[var(--finly-border)] rounded-2xl px-4 py-3 placeholder:text-[var(--tertiary-text)] text-white caret-[var(--finly-primary)] outline-none focus:border-[var(--finly-primary)]/40 focus:bg-[var(--finly-surface)]/80 transition-all ${icon ? 'pl-11' : ''} ${error ? 'border-red-500/40 focus:border-red-500' : ''} ${className}`}
           onFocus={(e) => {
             props.onFocus?.(e);
             premiumFeedback.haptic(5);
@@ -377,7 +377,7 @@ export const KPICard: React.FC<{
   <PremiumCard floating gradient className="h-full">
     <div className="flex justify-between items-start mb-4">
       <p className="text-xs font-bold uppercase tracking-widest text-[var(--secondary-text)]">{label}</p>
-      <div className="p-3 bg-[var(--bhie-surface)] rounded-xl border border-[var(--bhie-border)] text-[var(--primary-text)]">
+      <div className="p-3 bg-[var(--finly-surface)] rounded-xl border border-[var(--finly-border)] text-[var(--primary-text)]">
         {icon}
       </div>
     </div>
@@ -416,7 +416,7 @@ export const PremiumBadge: React.FC<{
   })();
 
   const toneClasses = {
-    neutral: 'border-[var(--bhie-border)] bg-[var(--bhie-surface)] text-[var(--secondary-text)]',
+    neutral: 'border-[var(--finly-border)] bg-[var(--finly-surface)] text-[var(--secondary-text)]',
     positive: 'border-emerald-400/15 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300',
     warning: 'border-amber-400/15 bg-amber-500/10 text-amber-600 dark:text-amber-300',
     brand: 'border-sky-300/18 bg-sky-400/10 text-sky-600 dark:text-sky-200',

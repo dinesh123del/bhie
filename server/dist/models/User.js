@@ -56,8 +56,14 @@ const userSchema = new mongoose.Schema({
     },
     subscriptionStatus: {
         type: String,
-        enum: ['active', 'cancelled', 'expired'],
+        enum: ['active', 'cancelled', 'expired', 'halted', 'pending'],
     },
+    nextBillingDate: Date,
+    billingCycle: {
+        type: String,
+        enum: ['monthly', 'yearly'],
+    },
+    razorpayCustomerId: String,
     pushToken: {
         type: String,
         default: null,
@@ -138,18 +144,25 @@ userSchema.methods.resetUsageCount = async function () {
     this.usageCount = 0;
     await this.save();
 };
-userSchema.methods.upgradePlan = async function (plan, subscriptionId) {
+userSchema.methods.upgradePlan = async function (plan, subscriptionId, cycle = 'monthly') {
     const now = new Date();
-    // Set expiry to 30 days from now for monthly plans
+    // Set expiry and next billing date
     const expiryDate = new Date(now);
-    expiryDate.setDate(expiryDate.getDate() + 30);
+    if (cycle === 'yearly') {
+        expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+    }
+    else {
+        expiryDate.setDate(expiryDate.getDate() + 30);
+    }
     this.plan = plan;
     this.isPremium = true;
+    this.billingCycle = cycle;
     if (subscriptionId) {
         this.subscriptionId = subscriptionId;
         this.subscriptionStatus = 'active';
     }
     this.planExpiry = expiryDate;
+    this.nextBillingDate = expiryDate;
     this.isActive = true;
     this.usageCount = 0;
     await this.save();

@@ -157,7 +157,7 @@ async function startServer() {
     const PORT = env.PORT || 5000;
     return new Promise((resolve, reject) => {
         server = app.listen(PORT, () => {
-            logger.info(`🚀 BHIE Dashboard LIVE on PORT ${PORT}`);
+            logger.info(`🚀 Finly Dashboard LIVE on PORT ${PORT}`);
             resolve();
         }).on('error', (err) => {
             if (err.code === 'EADDRINUSE') {
@@ -169,7 +169,7 @@ async function startServer() {
 }
 async function init() {
     try {
-        logger.info('🏗️  Starting BHIE Integration Engine...');
+        logger.info('🏗️  Starting Finly Integration Engine...');
         await ensureUploadDir();
         logger.info('🔌 Connecting to infrastructure...');
         // Connect to MongoDB
@@ -194,10 +194,10 @@ async function init() {
         logger.info('⏰ Background cron engine initialized');
         await createDefaultAdmin();
         await startServer();
-        logger.info('🚀 BHIE Engine initialised successfully');
+        logger.info('🚀 Finly Engine initialised successfully');
     }
     catch (error) {
-        logger.error('❌ Fatal: BHIE startup failed:', error);
+        logger.error('❌ Fatal: Finly startup failed:', error);
         process.exit(1);
     }
 }

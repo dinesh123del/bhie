@@ -53,7 +53,7 @@ const Home = lazy(() => import('./pages/Home'));
 const Notifications = lazy(() => import('./pages/Notifications'));
 
 // ── Mute preference key ──────────────────────────────────────
-const MUTE_KEY = 'bhie_sound_muted';
+const MUTE_KEY = 'finly_sound_muted';
 
 function getMutePreference(): boolean {
   try { return localStorage.getItem(MUTE_KEY) === 'true'; } catch { return false; }
@@ -214,7 +214,7 @@ function App() {
             <AnimatePresence mode="wait">
               {!showApp ? (
                 <motion.div
-                  key="bhie-loading"
+                  key="finly-loading"
                   className="fixed inset-0 z-[10000]"
                   exit={{ opacity: 0, scale: 1.1, filter: 'blur(20px)' }}
                   transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
@@ -223,7 +223,7 @@ function App() {
                 </motion.div>
               ) : (
                 <motion.div
-                  key="bhie-app"
+                  key="finly-app"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.8, ease: 'easeInOut' }}

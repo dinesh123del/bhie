@@ -117,33 +117,53 @@ export default function LandingPagePremium() {
       <Navbar />
       <SparkBackground />
 
-      <main className="relative z-10 pt-40 px-6 md:px-12">
-        {/* HERO SECTION: Extreme Apple Look */}
+      <main className="relative z-10 pt-32 px-6 md:px-12">
+        {/* HERO SECTION: Extreme Apple Look with 8k Logo Reveal */}
         <section className="max-w-[1400px] mx-auto mb-40 text-center">
             <motion.div
               initial={{ opacity: 0, y: 40, filter: 'blur(20px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               transition={{ duration: 1.4, ease: [0.2, 0.8, 0.2, 1] }}
-              className="space-y-12"
+              className="space-y-10"
             >
+              
+              <div className="flex justify-center mb-8">
+                  <motion.div 
+                     initial={{ scale: 0.5, opacity: 0, filter: 'blur(20px)', rotateY: -90 }}
+                     animate={{ scale: 1, opacity: 1, filter: 'blur(0px)', rotateY: 0 }}
+                     transition={{ duration: 1.8, delay: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
+                     className="w-32 h-32 md:w-48 md:h-48 rounded-[3rem] bg-black/40 backdrop-blur-3xl border border-white/20 p-2 shadow-[0_0_120px_rgba(79,70,229,0.3)] relative group transform-gpu perspective-[1000px]"
+                  >
+                     <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 via-transparent to-purple-500/10 rounded-[3rem] opacity-50" />
+                     <motion.img 
+                        src="/icon.png" 
+                        alt="Finly 8k Logo" 
+                        className="w-full h-full object-contain relative z-10 drop-shadow-2xl"
+                        animate={{ y: [0, -10, 0] }}
+                        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                     />
+                     <div className="absolute -inset-4 bg-indigo-500/20 blur-[50px] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  </motion.div>
+              </div>
+
               <div className="space-y-6">
                 <motion.span 
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8 }}
-                  className="px-6 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.6em] text-white/30"
+                  className="px-6 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.6em] text-white/30 tracking-widest block max-w-max mx-auto shadow-[0_0_30px_rgba(255,255,255,0.05)]"
                 >
-                  BHIE / APPLE INTELLIGENCE
+                  FINLY 2.0 / UNPRECEDENTED INTELLIGENCE
                 </motion.span>
                 
-                <h1 className="text-[72px] md:text-[140px] font-black leading-[0.82] tracking-[-0.06em] text-white">
+                <h1 className="text-[64px] md:text-[130px] font-black leading-[0.82] tracking-[-0.06em] text-white">
                   The Self-Driving <br />
-                  <span className="text-ai-extreme">Business.</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-indigo-200 to-indigo-800 animate-gradient-slow drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">Business.</span>
                 </h1>
                 
-                <p className="text-[22px] md:text-[28px] text-white/30 max-w-3xl mx-auto font-medium leading-relaxed tracking-tight">
+                <p className="text-[20px] md:text-[26px] text-white/40 max-w-3xl mx-auto font-medium leading-relaxed tracking-tight">
                   Stop managing. Start directing. <br className="hidden md:block" />
-                  The first autonomous engine that turns data into surgical results.
+                  The first autonomous engine that fuses your data with cinematic clarity.
                 </p>
               </div>
 
@@ -269,7 +289,7 @@ export default function LandingPagePremium() {
             </div>
         </div>
         <div className="max-w-[1400px] mx-auto pt-24 mt-24 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-12">
-            <p className="text-[11px] font-black text-white/10 uppercase tracking-[0.4em]">© 2026 BHIE ECOSYSTEM. DESIGNED BY APPLE INTELLIGENCE STANDARDS.</p>
+            <p className="text-[11px] font-black text-white/10 uppercase tracking-[0.4em]">© 2026 FINLY ECOSYSTEM. DESIGNED BY APPLE INTELLIGENCE STANDARDS.</p>
         </div>
       </footer>
     </div>

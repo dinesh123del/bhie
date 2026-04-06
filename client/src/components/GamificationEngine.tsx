@@ -28,7 +28,7 @@ const LEVELS: UserLevel[] = [
 ];
 
 // ── Local storage helpers ─────────────────────────────────────
-const STREAK_KEY = 'bhie_streak_data_v2';
+const STREAK_KEY = 'finly_streak_data_v2';
 
 interface ProgressData {
   currentStreak: number;

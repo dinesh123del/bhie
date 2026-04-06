@@ -113,7 +113,7 @@ export default function Terms() {
           >
             <p className="text-sm text-slate-400">
               Last updated: April 5, 2026. If you have any questions, please email us at 
-              <span className="ml-2 font-semibold text-cyan-300 hover:underline">hello@bhie.ai</span>
+              <span className="ml-2 font-semibold text-cyan-300 hover:underline">hello@finly.ai</span>
             </p>
           </motion.div>
         </div>

@@ -87,8 +87,10 @@ app.use(cors({
     if (allowedOrigins.includes(origin)) return callback(null, true);
     // Allow any Vercel preview URL for this project
     // Only allow known Vercel deployment patterns (tightened from wildcard)
+    if (origin.match(/^https:\/\/finly[\w-]*\.vercel\.app$/)) return callback(null, true);
     if (origin.match(/^https:\/\/bhie[\w-]*\.vercel\.app$/)) return callback(null, true);
     if (origin.match(/^https:\/\/client[\w-]*\.vercel\.app$/)) return callback(null, true);
+    if (origin.match(/^https:\/\/dinesh123del-finly[\w-]*\.vercel\.app$/)) return callback(null, true);
     if (origin.match(/^https:\/\/dinesh123del-bhie[\w-]*\.vercel\.app$/)) return callback(null, true);
     // Allow localtunnel URLs only in development
     if (!env.IS_PRODUCTION && origin.endsWith('.loca.lt')) return callback(null, true);

@@ -290,8 +290,8 @@ const Dashboard = () => {
       void loadDashboard({ silent: true });
     };
 
-    window.addEventListener('bhie:records-updated', handleRecordsUpdated);
-    return () => window.removeEventListener('bhie:records-updated', handleRecordsUpdated);
+    window.addEventListener('finly:records-updated', handleRecordsUpdated);
+    return () => window.removeEventListener('finly:records-updated', handleRecordsUpdated);
   }, [loadDashboard]);
 
   const revenue = company?.revenue ?? metrics?.kpis?.revenue ?? 0;
@@ -461,7 +461,7 @@ const Dashboard = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `bhie-daily-report-${new Date().toISOString().slice(0, 10)}.txt`;
+    link.download = `finly-daily-report-${new Date().toISOString().slice(0, 10)}.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

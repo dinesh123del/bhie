@@ -48,11 +48,10 @@ router.get(
       plans: Object.values(PLAN_CONFIG).map((plan) => ({
         code: plan.code,
         label: plan.label,
-        amount: plan.amount,
+        amount: (plan as any).monthlyPrice || 0,
         currency: plan.currency,
-        durationDays: plan.durationDays,
-        uploads: plan.uploads,
-        aiInsights: plan.aiInsights,
+        uploads: (plan as any).uploads || 0,
+        aiInsights: (plan as any).aiInsights || false,
         features: plan.features,
       })),
     });
@@ -99,10 +98,11 @@ router.post(
 
     const razorpay = getRazorpayClient();
     const config = PLAN_CONFIG[plan];
-    const receipt = `bhie_${plan}_${Date.now()}_${user.userId}`;
+    const amount = (config as any).monthlyPrice;
+    const receipt = `finly_${plan}_${Date.now()}_${user.userId}`;
 
     const razorpayOrder = await razorpay.orders.create({
-      amount: config.amount,
+      amount: amount * 100, // Razorpay expects amount in paise
       currency: config.currency,
       receipt,
       notes: { userId: user.userId, plan },
@@ -110,7 +110,7 @@ router.post(
 
     await Payment.create({
       userId: user.userId,
-      amount: config.amount,
+      amount: (config as any).monthlyPrice,
       currency: config.currency,
       razorpayOrderId: razorpayOrder.id,
       receipt,
@@ -169,7 +169,7 @@ router.post(
 
     res.json({
       subscriptionId: subscription.id,
-      amount: config.amount,
+      amount: (config as any).monthlyPrice,
       currency: 'INR',
       plan,
       key: env.RAZORPAY_KEY_ID,

@@ -169,7 +169,7 @@ const PremiumAnalytics = () => {
                     const url = URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = url;
-                    link.download = `bhie-analytics-${new Date().toISOString().slice(0, 10)}.csv`;
+                    link.download = `finly-analytics-${new Date().toISOString().slice(0, 10)}.csv`;
                     link.click();
                     premiumFeedback.success();
                 }

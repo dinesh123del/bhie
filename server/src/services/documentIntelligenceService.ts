@@ -108,7 +108,7 @@ async function openaiVisionFallback(buffer: Buffer, ocrText: string): Promise<st
         content: [
           {
             type: 'text',
-            text: `You are an Elite Forensic Business Accountant for BHIE. Parse this document with 100% accuracy.
+            text: `You are an Elite Forensic Business Accountant for Finly. Parse this document with 100% accuracy.
                    Target: [Merchant Name, Date, Currency, Final Amount, Type (Income/Expense), Category].
                    Context: Digital OCR scan results were low confidence: "${ocrText.substring(0, 300)}".
                    Return ONLY the primary detected text block content. Be meticulous.`

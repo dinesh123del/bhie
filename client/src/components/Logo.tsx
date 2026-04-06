@@ -53,51 +53,8 @@ const LogoGraphic = ({ size }: { size: LogoSize }) => {
         transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
       />
       
-      {/* Flat Minimalist Apple App Icon Style */}
-      <div className="absolute inset-[10%] rounded-xl bg-black border border-white/10 shadow-lg overflow-hidden flex items-center justify-center">
-        {/* Subtle inner gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.08] to-transparent" />
-        
-        <svg 
-          viewBox="0 0 100 100" 
-          className="w-[65%] h-[65%] relative z-10"
-        >
-          <path
-            d="M50 10 C 20 10 10 20 10 50 C 10 80 20 90 50 90 C 80 90 90 80 90 50 C 90 20 80 10 50 10 Z"
-            fill="url(#iconAura)"
-            opacity="0.1"
-          />
-          <path 
-            d="M32 40 L45 40 Q55 40 55 50 Q55 60 45 60 L32 60 Z"
-            stroke="white" 
-            strokeWidth="8" 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            fill="none"
-          />
-          <path 
-            d="M32 40 L32 60"
-            stroke="white" 
-            strokeWidth="8" 
-            strokeLinecap="round" 
-          />
-          <path 
-            d="M32 50 L48 50"
-            stroke="white" 
-            strokeWidth="8" 
-            strokeLinecap="round" 
-          />
-          <circle cx="68" cy="50" r="5" fill="url(#iconAura)" />
-          
-          <defs>
-            <linearGradient id="iconAura" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#007AFF" />
-              <stop offset="50%" stopColor="#AF52DE" />
-              <stop offset="100%" stopColor="#FF2D55" />
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
+      {/* Generated App Logo replacing SVG architecture */}
+      <img src="/icon.png" alt="Finly Icon" className="w-[85%] h-[85%] relative z-10 object-contain drop-shadow-[0_4px_6px_rgba(175,82,222,0.4)] hover:scale-105 transition-transform" />
     </div>
   );
 };
