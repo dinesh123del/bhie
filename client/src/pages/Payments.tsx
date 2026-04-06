@@ -11,14 +11,11 @@ import {
   Sparkles,
   UploadCloud,
 } from 'lucide-react';
-import { loadStripe } from '@stripe/stripe-js';
 import { useAuth } from '../hooks/useAuth';
 import { PremiumBadge, PremiumButton, PremiumCard } from '../components/ui/PremiumComponents';
 import paymentService, { SubscriptionResponse } from '../services/paymentService';
 import { PLAN_DETAILS, getPlanLabel, getRemainingUploads, hasPremiumAccess, type AppPlan } from '../utils/plan';
 import { premiumFeedback } from '../utils/premiumFeedback';
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_51TI7iCAeY3RTYbZZ8bUJrYZBRhFFb24pPVU8CJTy4yjCkGol9ebphzJLMnCVJqYZEAlcoo8WyhQ5MzHQ8RAZOiXd00TkDKcyLx');
 
 type PaidPlan = Exclude<AppPlan, 'free'>;
 
@@ -128,15 +125,61 @@ const Payments = () => {
     premiumFeedback.click();
 
     try {
-      // 1. Create Stripe Checkout Session
-      const { url } = await paymentService.createStripeSession(selectedPlan as PaidPlan);
+      // 1. Create order on backend
+      const orderData = await paymentService.createOrder(selectedPlan as PaidPlan);
       
-      // 2. Redirect to Stripe Checkout
-      if (url) {
-        window.location.href = url;
-      } else {
-        throw new Error('Could not generate checkout session');
+      // 2. Ensure Razorpay is loaded
+      await paymentService.ensureRazorpayLoaded();
+
+      if (!window.Razorpay) {
+        throw new Error('Razorpay SDK failed to load');
       }
+
+      // 3. Open Razorpay Checkout
+      const options = {
+        key: orderData.key || import.meta.env.VITE_RAZORPAY_KEY || 'rzp_live_SYwkStp5U2NhjF',
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: 'Finly Platform',
+        description: `Upgrade to ${selectedPlan.toUpperCase()} Plan`,
+        order_id: orderData.orderId,
+        handler: async (response: any) => {
+          try {
+            toast.loading('Verifying payment...', { id: loadingToast });
+            await paymentService.verify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+            
+            toast.success(`${currentSelection.name} plan activated!`, { id: loadingToast });
+            premiumFeedback.success();
+            await refetchUser();
+            const latestSubscription = await paymentService.getSubscription();
+            setSubscription(latestSubscription);
+            setTimeout(() => navigate('/dashboard'), 1500);
+          } catch (err: any) {
+            toast.error(err?.response?.data?.message || 'Payment verification failed', { id: loadingToast });
+            setPaymentLoading(false);
+          }
+        },
+        prefill: {
+          name: user.name,
+          email: user.email,
+        },
+        theme: {
+          color: '#0ea5e9',
+        },
+        modal: {
+          ondismiss: () => {
+            setPaymentLoading(false);
+            toast.dismiss(loadingToast);
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
 
     } catch (error: any) {
       setPaymentLoading(false);
@@ -180,7 +223,7 @@ const Payments = () => {
             Back to dashboard
           </PremiumButton>
 
-          <PremiumBadge tone="neutral">Secure payments with Stripe</PremiumBadge>
+          <PremiumBadge tone="neutral">Secure payments in INR</PremiumBadge>
         </div>
 
         <div className="mb-12 max-w-3xl">
@@ -298,7 +341,7 @@ const Payments = () => {
               ? 'Continue with Free'
               : effectivePlan === currentSelection.code && premiumActive
                 ? `${currentSelection.name} already active`
-                : `Pay with Stripe & Upgrade`}
+                : `Pay & Upgrade to ${currentSelection.name}`}
           </PremiumButton>
 
           {!premiumActive && (
