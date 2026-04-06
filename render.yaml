@@ -15,8 +15,7 @@ services:
           name: bhie-db
           property: connectionString
       - key: JWT_SECRET
-        scope: run_and_build
-        isFile: false
+        sync: false
       - key: CLIENT_URL
         sync: false
       - key: JWT_EXPIRES_IN
@@ -26,14 +25,11 @@ services:
       - key: MAX_UPLOAD_FILE_SIZE_MB
         value: 10
       - key: RAZORPAY_KEY_ID
-        scope: run_and_build
-        isFile: false
+        sync: false
       - key: RAZORPAY_KEY_SECRET
-        scope: run_and_build
-        isFile: false
+        sync: false
       - key: OPENAI_API_KEY
-        scope: run_and_build
-        isFile: false
+        sync: false
     healthCheckPath: /api/health
 
 databases:
