@@ -11,6 +11,7 @@ import { AppError } from '../utils/appError.js';
 import { requireUser } from '../utils/request.js';
 import { PLAN_CONFIG, RAZORPAY_PLAN_IDS, isPaidPlan, type PaidPlanType } from '../utils/planConfig.js';
 import { getRazorpayClient } from '../utils/razorpay.js';
+import { getStripeClient } from '../utils/stripe.js';
 import { subscriptionController } from '../controllers/subscriptionController.js';
 import { checkAdmin } from '../middleware/subscription.js';
 
@@ -159,7 +160,7 @@ router.post(
 
     await Payment.create({
       userId: user.userId,
-      amount: config.amount,
+      amount: (config as any).monthlyPrice || 0,
       currency: config.currency,
       razorpayOrderId: subscription.id, // We'll store subscription ID here for easier lookup
       receipt: `sub_${subscription.id}`,
@@ -174,6 +175,50 @@ router.post(
       plan,
       key: env.RAZORPAY_KEY_ID,
     });
+  })
+);
+
+router.post(
+  '/create-checkout-session',
+  asyncHandler(async (req: AuthRequest, res: Response) => {
+    const user = requireUser(req);
+    const { plan } = req.body as { plan: 'pro' | 'premium' };
+
+    if (!plan || !isPaidPlan(plan)) {
+      throw new AppError(400, 'Valid paid plan required');
+    }
+
+    const config = PLAN_CONFIG[plan];
+    const account = await User.findById(user.userId);
+    if (!account) throw new AppError(404, 'User not found');
+
+    const stripe = getStripeClient();
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'inr',
+            product_data: {
+              name: `Finly ${plan.charAt(0).toUpperCase() + plan.slice(1)} Subscription`,
+            },
+            unit_amount: (config as any).monthlyPrice * 100, // Stripe expects amount in paise (cents)
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: `${env.CLIENT_URL}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${env.CLIENT_URL}/payments`,
+      customer_email: account.email,
+      metadata: {
+        userId: user.userId,
+        plan,
+      },
+    });
+
+    res.json({ sessionId: session.id, url: session.url });
   })
 );
 
@@ -301,6 +346,50 @@ router.post(
          user.subscriptionStatus = 'cancelled';
          await user.save();
        }
+    }
+
+    res.json({ received: true });
+  })
+);
+
+router.post(
+  '/stripe-webhook',
+  express.raw({ type: 'application/json' }),
+  asyncHandler(async (req, res: Response) => {
+    const stripe = getStripeClient();
+    const sig = req.headers['stripe-signature'] as string;
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(
+        (req as any).rawBody || req.body,
+        sig,
+        process.env.STRIPE_WEBHOOK_SECRET || '' // Placeholder, user will need to set this
+      );
+    } catch (err: any) {
+      console.error(`Webhook Error: ${err.message}`);
+      res.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object as any;
+      const { userId, plan } = session.metadata;
+
+      const user = await User.findById(userId);
+      if (user) {
+        await user.upgradePlan(plan as PaidPlanType);
+        
+        await Payment.create({
+          userId: user.id,
+          amount: session.amount_total / 100,
+          currency: session.currency,
+          status: 'paid',
+          plan,
+          verifiedAt: new Date(),
+          receipt: session.id
+        });
+      }
     }
 
     res.json({ received: true });

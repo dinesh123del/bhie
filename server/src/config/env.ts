@@ -23,6 +23,8 @@ const envSchema = z
     GOOGLE_CLIENT_SECRET: z.string().trim().min(1).optional(),
     RAZORPAY_KEY_ID: z.string().trim().min(1).optional(),
     RAZORPAY_KEY_SECRET: z.string().trim().min(1).optional(),
+    STRIPE_PUBLISHABLE_KEY: z.string().trim().min(1).optional(),
+    STRIPE_SECRET_KEY: z.string().trim().min(1).optional(),
     REQUEST_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(15 * 60 * 1000),
     REQUEST_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(100),
     AUTH_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(15 * 60 * 1000),

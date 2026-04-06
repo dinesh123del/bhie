@@ -11,12 +11,14 @@ import {
   Sparkles,
   UploadCloud,
 } from 'lucide-react';
+import { loadStripe } from '@stripe/stripe-js';
 import { useAuth } from '../hooks/useAuth';
 import { PremiumBadge, PremiumButton, PremiumCard } from '../components/ui/PremiumComponents';
 import paymentService, { SubscriptionResponse } from '../services/paymentService';
 import { PLAN_DETAILS, getPlanLabel, getRemainingUploads, hasPremiumAccess, type AppPlan } from '../utils/plan';
 import { premiumFeedback } from '../utils/premiumFeedback';
 
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_51TI7iCAeY3RTYbZZ8bUJrYZBRhFFb24pPVU8CJTy4yjCkGol9ebphzJLMnCVJqYZEAlcoo8WyhQ5MzHQ8RAZOiXd00TkDKcyLx');
 
 type PaidPlan = Exclude<AppPlan, 'free'>;
 
@@ -80,7 +82,6 @@ const Payments = () => {
           setSelectedPlan(response.plan);
         }
       } catch (err: any) {
-        // Use standardized displayMessage from our axios interceptor if available
         const errorMsg = err?.displayMessage || 'Unable to load subscription details';
         toast.error(errorMsg, { id: 'subscription-load-error' });
         console.error('[Billing] Status Fetch Failed:', err);
@@ -127,61 +128,15 @@ const Payments = () => {
     premiumFeedback.click();
 
     try {
-      // 1. Create order on backend
-      const orderData = await paymentService.createOrder(selectedPlan as PaidPlan);
+      // 1. Create Stripe Checkout Session
+      const { url } = await paymentService.createStripeSession(selectedPlan as PaidPlan);
       
-      // 2. Ensure Razorpay is loaded
-      await paymentService.ensureRazorpayLoaded();
-
-      if (!window.Razorpay) {
-        throw new Error('Razorpay SDK failed to load');
+      // 2. Redirect to Stripe Checkout
+      if (url) {
+        window.location.href = url;
+      } else {
+        throw new Error('Could not generate checkout session');
       }
-
-      // 3. Open Razorpay Checkout
-      const options = {
-        key: orderData.key || import.meta.env.VITE_RAZORPAY_KEY || 'rzp_live_SYwkStp5U2NhjF', // Updated to user's live key
-        amount: orderData.amount,
-        currency: orderData.currency,
-        name: 'Finly Platform',
-        description: `Upgrade to ${selectedPlan.toUpperCase()} Plan`,
-        order_id: orderData.orderId,
-        handler: async (response: any) => {
-          try {
-            toast.loading('Verifying payment...', { id: loadingToast });
-            await paymentService.verify({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-            });
-            
-            toast.success(`${currentSelection.name} plan activated!`, { id: loadingToast });
-            premiumFeedback.success();
-            await refetchUser();
-            const latestSubscription = await paymentService.getSubscription();
-            setSubscription(latestSubscription);
-            setTimeout(() => navigate('/dashboard'), 1500);
-          } catch (err: any) {
-            toast.error(err?.response?.data?.message || 'Payment verification failed', { id: loadingToast });
-            setPaymentLoading(false);
-          }
-        },
-        prefill: {
-          name: user.name,
-          email: user.email,
-        },
-        theme: {
-          color: '#0ea5e9',
-        },
-        modal: {
-          ondismiss: () => {
-            setPaymentLoading(false);
-            toast.dismiss(loadingToast);
-          },
-        },
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.open();
 
     } catch (error: any) {
       setPaymentLoading(false);
@@ -225,7 +180,7 @@ const Payments = () => {
             Back to dashboard
           </PremiumButton>
 
-          <PremiumBadge tone="neutral">Secure payments in INR</PremiumBadge>
+          <PremiumBadge tone="neutral">Secure payments with Stripe</PremiumBadge>
         </div>
 
         <div className="mb-12 max-w-3xl">
@@ -239,8 +194,7 @@ const Payments = () => {
         </div>
 
         {loadingSubscription ? null : (
-          <>
-            <PremiumCard gradient hoverable={false} className="mb-8 border border-white/10">
+          <PremiumCard gradient hoverable={false} className="mb-8 border border-white/10">
             <div className="flex flex-wrap items-center justify-between gap-6">
               <div>
                 <p className="text-sm uppercase tracking-[0.18em] text-ink-400">Current Plan</p>
@@ -271,45 +225,6 @@ const Payments = () => {
               </div>
             </div>
           </PremiumCard>
-          
-          {/* Live System Preview */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="mb-12 rounded-[2.5rem] border border-white/10 bg-black/40 p-1 overflow-hidden shadow-2xl relative"
-          >
-            <div className="absolute top-4 left-6 z-10 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">{selectedPlan.toUpperCase()} INTERFACE PREVIEW</span>
-            </div>
-            
-            <div className="aspect-[21/9] w-full bg-slate-900 overflow-hidden rounded-[2.4rem] relative group">
-              {/* Mock Dashboard Representation */}
-              <div className={`absolute inset-0 transition-all duration-1000 ${selectedPlan === 'free' ? 'opacity-40 grayscale blur-sm' : 'opacity-100 grayscale-0 blur-0'}`}>
-                <img 
-                  src="/demo.png" 
-                  alt="System Preview" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              
-              {/* Overlay for 'Locked' state if Free is selected */}
-              {selectedPlan === 'free' && (
-                <div className="absolute inset-0 flex items-center justify-center z-20">
-                  <div className="bg-black/60 backdrop-blur-xl px-10 py-6 rounded-3xl border border-white/10 text-center">
-                    <Lock className="w-10 h-10 text-white/20 mx-auto mb-4" />
-                    <h3 className="text-xl font-bold text-white">Full Analytics Locked</h3>
-                    <p className="text-sm text-white/40 mt-1">Upgrade to Pro to unlock interactive charts & smart insights.</p>
-                  </div>
-                </div>
-              )}
-              
-              {/* Glow effects based on plan */}
-              <div className={`absolute -inset-[100px] bg-sky-500/10 blur-[120px] transition-opacity duration-1000 ${selectedPlan === 'pro' ? 'opacity-100' : 'opacity-0'}`} />
-              <div className={`absolute -inset-[100px] bg-indigo-500/15 blur-[120px] transition-opacity duration-1000 ${selectedPlan === 'premium' ? 'opacity-100' : 'opacity-0'}`} />
-            </div>
-          </motion.div>
-          </>
         )}
 
         <div className="mb-12 grid grid-cols-1 gap-6 xl:grid-cols-3">
@@ -355,22 +270,6 @@ const Payments = () => {
                   ))}
                 </ul>
 
-                {plan.code === 'free' ? (
-                  <div className="mt-auto rounded-[1.35rem] border border-white/10 bg-white/[0.04] px-4 py-4">
-                    <div className="flex items-center gap-3">
-                      <UploadCloud className="h-5 w-5 text-sky-300" />
-                      <p className="text-sm font-semibold text-white">Up to 5 uploads included</p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="mt-auto rounded-[1.35rem] border border-white/10 bg-white/[0.04] px-4 py-4">
-                    <div className="flex items-center gap-3">
-                      <Sparkles className="h-5 w-5 text-indigo-300" />
-                      <p className="text-sm font-semibold text-white">Unlock smart insights and premium automation</p>
-                    </div>
-                  </div>
-                )}
-
                 <PremiumButton
                   onClick={() => {
                     setSelectedPlan(plan.code);
@@ -399,7 +298,7 @@ const Payments = () => {
               ? 'Continue with Free'
               : effectivePlan === currentSelection.code && premiumActive
                 ? `${currentSelection.name} already active`
-                : `Pay & Upgrade to ${currentSelection.name}`}
+                : `Pay with Stripe & Upgrade`}
           </PremiumButton>
 
           {!premiumActive && (
@@ -410,28 +309,6 @@ const Payments = () => {
               Skip Payment (Developer Mode)
             </button>
           )}
-        </div>
-
-        <div className="mt-10 grid gap-4 md:grid-cols-3">
-          {[
-            {
-              title: 'Free',
-              detail: 'Use Finly dashboard and up to 5 uploads while you set up your workflow.',
-            },
-            {
-              title: 'Pro',
-              detail: 'Unlock unlimited uploads, smart insights, and advanced analytics for daily business use.',
-            },
-            {
-              title: 'Premium',
-              detail: 'Add premium support and enterprise-ready workflows for teams and larger operations.',
-            },
-          ].map((item) => (
-            <PremiumCard key={item.title} className="min-h-[180px]" hoverable={false}>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-ink-400">{item.title}</p>
-              <p className="mt-4 text-sm leading-7 text-ink-200">{item.detail}</p>
-            </PremiumCard>
-          ))}
         </div>
       </div>
     </div>

@@ -82,6 +82,11 @@ export const paymentService = {
     return response.data;
   },
 
+  async createStripeSession(plan: 'pro' | 'premium') {
+    const response = await api.post<{ sessionId: string; url: string }>('/payment/create-checkout-session', { plan });
+    return response.data;
+  },
+
   async directUpgrade(plan: 'pro' | 'premium') {
     const response = await api.post('/payment/direct-upgrade', { plan });
     return response.data;

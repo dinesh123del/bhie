@@ -28,6 +28,10 @@ services:
         value: rzp_live_SYwkStp5U2NhjF
       - key: RAZORPAY_KEY_SECRET
         sync: false
+      - key: STRIPE_PUBLISHABLE_KEY
+        value: pk_test_51TI7iCAeY3RTYbZZ8bUJrYZBRhFFb24pPVU8CJTy4yjCkGol9ebphzJLMnCVJqYZEAlcoo8WyhQ5MzHQ8RAZOiXd00TkDKcyLx
+      - key: STRIPE_SECRET_KEY
+        sync: false
       - key: OPENAI_API_KEY
         sync: false
     healthCheckPath: /api/health
