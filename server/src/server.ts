@@ -156,7 +156,6 @@ app.get("/api/debug-ping", (req, res) => {
 
 // Original routes
 import apiRouter from './routes/apiRouter.js';
-import { apiLimiter } from './middleware/rateLimiters.js';
 app.use('/api', apiLimiter, apiRouter);
 
 // NEW: Admin WhatsApp Analytics APIs
@@ -323,7 +322,6 @@ const gracefulShutdown = async (signal: string) => {
   console.log(`\n🛑 ${signal} received. Closing connections...`);
   if (server) {
     server.close(async () => {
-      await disconnectRedis();
       await disconnectDB();
       console.log('✅ Shutdown complete. Bye!');
       process.exit(0);

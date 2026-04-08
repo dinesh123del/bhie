@@ -44,7 +44,7 @@ export interface OrganizationDocument extends mongoose.Document {
   metadata: Map<string, any>;
   createdAt: Date;
   updatedAt: Date;
-  
+
   // Methods
   hasFeature(feature: keyof OrganizationDocument['features']): boolean;
   isInTrial(): boolean;
@@ -156,20 +156,18 @@ const organizationSchema = new mongoose.Schema<OrganizationDocument>(
   }
 );
 
-// Indexes for performance
-organizationSchema.index({ slug: 1 }, { unique: true });
-organizationSchema.index({ ownerId: 1 });
+// Indexes for performance (slug/ownerId have index: true already)
 organizationSchema.index({ memberIds: 1 });
 organizationSchema.index({ plan: 1, subscriptionStatus: 1 });
 organizationSchema.index({ createdAt: -1 });
 
 // Virtual for member count
-organizationSchema.virtual('memberCount').get(function() {
+organizationSchema.virtual('memberCount').get(function () {
   return this.memberIds?.length || 0;
 });
 
 // Pre-save middleware to set features based on plan
-organizationSchema.pre('save', function(next) {
+organizationSchema.pre('save', function (next) {
   const planFeatures = {
     free: {
       maxUsers: 1,
@@ -226,20 +224,20 @@ organizationSchema.pre('save', function(next) {
 });
 
 // Methods
-organizationSchema.methods.hasFeature = function(
+organizationSchema.methods.hasFeature = function (
   this: OrganizationDocument,
   feature: keyof OrganizationDocument['features']
 ): boolean {
   return this.features[feature] === true;
 };
 
-organizationSchema.methods.isInTrial = function(this: OrganizationDocument): boolean {
+organizationSchema.methods.isInTrial = function (this: OrganizationDocument): boolean {
   if (this.subscriptionStatus !== 'trial') return false;
   if (!this.trialEndsAt) return false;
   return this.trialEndsAt.getTime() > Date.now();
 };
 
-organizationSchema.methods.getEffectivePlan = function(
+organizationSchema.methods.getEffectivePlan = function (
   this: OrganizationDocument
 ): 'free' | 'starter' | 'growth' | 'enterprise' {
   if (this.isInTrial()) return this.plan;
@@ -252,11 +250,11 @@ organizationSchema.methods.getEffectivePlan = function(
   return 'free';
 };
 
-organizationSchema.methods.canAddMember = function(this: OrganizationDocument): boolean {
+organizationSchema.methods.canAddMember = function (this: OrganizationDocument): boolean {
   return this.memberIds.length < this.features.maxUsers;
 };
 
-organizationSchema.methods.incrementUsage = async function(
+organizationSchema.methods.incrementUsage = async function (
   this: OrganizationDocument,
   metric: string,
   value: number = 1
@@ -267,16 +265,16 @@ organizationSchema.methods.incrementUsage = async function(
   await this.save();
 };
 
-organizationSchema.methods.getUsage = function(this: OrganizationDocument): Record<string, number> {
+organizationSchema.methods.getUsage = function (this: OrganizationDocument): Record<string, number> {
   const usage: Record<string, number> = {};
   const usagePrefix = 'usage.';
-  
+
   for (const [key, value] of this.metadata.entries()) {
     if (key.startsWith(usagePrefix)) {
       usage[key.substring(usagePrefix.length)] = value as number;
     }
   }
-  
+
   return usage;
 };
 

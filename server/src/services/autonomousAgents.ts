@@ -207,7 +207,7 @@ export class AutonomousAgents extends EventEmitter {
       const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
       return priorityOrder[a.priority] - priorityOrder[b.priority];
     });
-    
+
     if (!this.isProcessing) {
       this.processTasks();
     }
@@ -225,11 +225,11 @@ export class AutonomousAgents extends EventEmitter {
     if (this.isProcessing || this.taskQueue.length === 0) return;
 
     this.isProcessing = true;
-    
+
     try {
       while (this.taskQueue.length > 0) {
         const task = this.taskQueue.shift()!;
-        
+
         // Check if task is scheduled for future
         if (task.scheduledFor && task.scheduledFor > new Date()) {
           this.taskQueue.push(task); // Put back at the end
@@ -256,10 +256,10 @@ export class AutonomousAgents extends EventEmitter {
       }
 
       const result = await agent.execute(task.data.context);
-      
+
       task.status = 'completed';
       task.result = result;
-      
+
       // Publish result to real-time clients
       await this.realTimeIntelligence.publishEvent({
         type: 'insight',
@@ -390,7 +390,7 @@ export class AutonomousAgents extends EventEmitter {
       });
     }
 
-    if (context.metrics.growthRate < -10) {
+    if (context.metrics.growth < -10) {
       risks.push({
         type: 'growth',
         severity: 'high',

@@ -1,46 +1,36 @@
 import mongoose from 'mongoose';
+import { string } from 'zod';
 
 export interface RecordDocument extends mongoose.Document {
-  title: string;
-  category: string;
+  userId: mongoose.Types.ObjectId;
+  organizationId?: mongoose.Types.ObjectId;
   type: 'income' | 'expense';
   amount: number;
-  date: Date;
-  description?: string;
-  status: string;
+  title?: string;
+  description: string;
   fileUrl?: string;
-  userId: mongoose.Types.ObjectId;
   gstNumber?: string;
-  gstDetails?: any;
-  // NEW: Evolution Schema Fields for 10-Year Growth
-  ai_analysis?: {
-    confidence_score: number;
-    anomalies_detected: boolean;
-    recommendation?: string;
-    prediction_impact?: number;
-    extracted_data?: any;
-  };
-  metadata?: mongoose.Schema.Types.Mixed; // For flexible 10-year growth
-  vector_id?: string; // Reference to Pinecone/Vector DB
-  // 📜 CA Certification Fields
-  isCertified: boolean;
-  certifiedBy?: mongoose.Types.ObjectId;
-  certificationDate?: Date;
-  auditNotes?: string;
+  category?: string;
+  vendor?: string;
+  date: Date;
+  tags?: string[];
+  status: 'pending' | 'confirmed' | 'rejected';
+  metadata: mongoose.Schema.Types.Mixed;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const recordSchema = new mongoose.Schema<RecordDocument>({
-  isCertified: { type: Boolean, default: false },
-  certifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  certificationDate: Date,
-  auditNotes: String,
-  title: {
-    type: String,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
+    index: true,
   },
-  category: {
-    type: String,
-    required: true,
+  organizationId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Organization',
+    index: true,
   },
   type: {
     type: String,
@@ -52,47 +42,38 @@ const recordSchema = new mongoose.Schema<RecordDocument>({
     required: true,
     min: 0,
   },
+  title: String,
+  description: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  fileUrl: String,
+  gstNumber: String,
+  category: String,
+  vendor: String,
   date: {
     type: Date,
     default: Date.now,
   },
-  description: String,
+  tags: [String],
   status: {
     type: String,
-    enum: ['pending', 'in_progress', 'completed', 'cancelled'],
+    enum: ['pending', 'confirmed', 'rejected'],
     default: 'pending',
-  },
-  fileUrl: String,
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  gstNumber: String,
-  gstDetails: mongoose.Schema.Types.Mixed,
-  // Evolution Fields
-  ai_analysis: {
-    confidence_score: { type: Number, default: 0 },
-    anomalies_detected: { type: Boolean, default: false },
-    recommendation: String,
-    prediction_impact: Number,
-    extracted_data: mongoose.Schema.Types.Mixed,
   },
   metadata: {
     type: mongoose.Schema.Types.Mixed,
     default: {},
   },
-  vector_id: String,
 }, {
   timestamps: true,
 });
 
-// Optimized indexes for dashboard analytics and filtering
 recordSchema.index({ userId: 1, date: -1 });
-recordSchema.index({ userId: 1, type: 1, date: -1 });
-recordSchema.index({ userId: 1, category: 1 });
-recordSchema.index({ userId: 1, status: 1 });
-recordSchema.index({ vector_id: 1 }); // For vector lookups
+recordSchema.index({ organizationId: 1, date: -1 });
+recordSchema.index({ type: 1, category: 1 });
+recordSchema.index({ date: -1 });
 
 const Record = mongoose.model<RecordDocument>('Record', recordSchema);
 export default Record;

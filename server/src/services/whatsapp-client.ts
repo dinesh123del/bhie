@@ -5,7 +5,13 @@ export class WhatsAppClient {
   private phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
   private accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
 
+  private isDev = process.env.NODE_ENV === 'development';
+
   async sendText(to: string, text: string) {
+    if (this.isDev) {
+      console.log('[WhatsApp MOCK] sendText to', to, ':', text.slice(0, 50) + '...');
+      return { success: true };
+    }
     try {
       await axios.post(
         `${this.apiUrl}/${this.phoneNumberId}/messages`,
@@ -35,6 +41,10 @@ export class WhatsAppClient {
     buttons?: Array<{ id: string; title: string }>;
     list?: { title: string; sections: any[] };
   }) {
+    if (this.isDev) {
+      console.log('[WhatsApp MOCK] sendInteractive to', to, options.type);
+      return { success: true };
+    }
     try {
       let interactive: any = {
         type: options.type,
@@ -77,6 +87,10 @@ export class WhatsAppClient {
   }
 
   async sendDocument(to: string, document: { url: string; caption?: string; filename: string }) {
+    if (this.isDev) {
+      console.log('[WhatsApp MOCK] sendDocument to', to);
+      return { success: true };
+    }
     try {
       await axios.post(
         `${this.apiUrl}/${this.phoneNumberId}/messages`,
@@ -105,6 +119,10 @@ export class WhatsAppClient {
   }
 
   async downloadMedia(mediaId: string): Promise<Buffer> {
+    if (this.isDev) {
+      console.log('[WhatsApp MOCK] downloadMedia', mediaId);
+      return Buffer.from('mock receipt image data');
+    }
     try {
       const mediaUrlResponse = await axios.get(
         `${this.apiUrl}/${mediaId}`,
@@ -114,7 +132,7 @@ export class WhatsAppClient {
       );
 
       const mediaUrl = mediaUrlResponse.data.url;
-      
+
       const mediaResponse = await axios.get(mediaUrl, {
         headers: { Authorization: `Bearer ${this.accessToken}` },
         responseType: 'arraybuffer'
@@ -128,6 +146,10 @@ export class WhatsAppClient {
   }
 
   async getMediaUrl(mediaId: string): Promise<string> {
+    if (this.isDev) {
+      console.log('[WhatsApp MOCK] getMediaUrl', mediaId);
+      return 'https://mock-media-url.com/image.jpg';
+    }
     try {
       const response = await axios.get(
         `${this.apiUrl}/${mediaId}`,

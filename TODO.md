@@ -1,11 +1,13 @@
-# Redis Caching Integration TODO
+# Backend Startup Fix - Port Conflict
 
-## Steps:
-- [x] 1. Install redis deps
-- [x] 2. Create redisClient.ts 
-- [x] 3. Create cache middleware
-- [x] 4. Update server.ts init (import + connect + disconnect)
-- [x] 5. Add middleware to analytics/dashboard routes
-- [x] 6. Add cache.set in analytics & dashboard & ai controllers
-- [x] 7. Add cache invalidation in upload/records/payments routes after POST/PUT
-- [x] 8. Test: curl APIs, check Redis, verify cache hit/miss/invalidation
+## Current Issue
+- Backend uses PORT=5001 (env.ts/server.ts)
+- start.sh expects 10000 → health fail/crash
+
+## Steps
+- [ ] 1. bash kill-port.sh
+- [ ] 2. Edit start.sh: BACKEND_PORT=5001, update kill/curl to 5001
+- [ ] 3. bash start.sh
+- [ ] 4. curl localhost:5001/api/health
+- [ ] 5. Test smooth flows
+

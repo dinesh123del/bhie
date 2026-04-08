@@ -7,292 +7,557 @@
 [33m[nodemon] watching path(s): server.js src/**/* .env[39m
 [33m[nodemon] watching extensions: js,mjs,cjs,json,ts[39m
 [32m[nodemon] starting `tsx src/server.ts`[39m
-✅ ENV CONFIG LOADED:
- -> PORT: 5001
- -> NODE_ENV: development
- -> MONGODB: CONNECTED [HIDDEN]
- -> REDIS: CONFIGURED [HIDDEN]
- -> OPENAI: CONFIGURED [HIDDEN]
-⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
-[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 15:00:56"}
-[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 15:00:56"}
-(node:88575) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-(Use `node --trace-warnings ...` to show where the warning was created)
-(node:88575) [MONGOOSE] Warning: Duplicate schema index on {"ownerId":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-✅ MongoDB connected
-⏰ Background cron engine initialized successfully.
-[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 15:00:56"}
-[32minfo[39m: 🚀 Finly Dashboard LIVE on PORT 5001 {"service":"finly-api","timestamp":"2026-04-08 15:00:56"}
-[32minfo[39m: 📊 Real-time business monitoring initialized {"service":"finly-api","timestamp":"2026-04-08 15:00:56"}
-[32minfo[39m: 🔍 Business analysis tools initialized {"service":"finly-api","timestamp":"2026-04-08 15:00:56"}
-🧠 Global Neural Network initialized
-[32minfo[39m: 🧠 Neural prediction engine initialized {"service":"finly-api","timestamp":"2026-04-08 15:00:56"}
-⚛️ Initializing quantum computing architecture...
-🔬 Using quantum simulator (development mode)
-✅ Quantum architecture initialized successfully
-[32minfo[39m: ⚛️ Quantum computing architecture initialized {"service":"finly-api","timestamp":"2026-04-08 15:00:56"}
-[32minfo[39m: 📈 Business insights engine started {"service":"finly-api","timestamp":"2026-04-08 15:00:56"}
-[32minfo[39m: 🚀 Finly Engine initialised successfully {"service":"finly-api","timestamp":"2026-04-08 15:00:56"}
-[32minfo[39m: ✨ Advanced business analytics with neural prediction fully operational {"service":"finly-api","timestamp":"[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `tsx src/server.ts`[39m
-✅ ENV CONFIG LOADED:
- -> PORT: 5001
- -> NODE_ENV: development
- -> MONGODB: CONNECTED [HIDDEN]
- -> REDIS: CONFIGURED [HIDDEN]
- -> OPENAI: CONFIGURED [HIDDEN]
-⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
-[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 16:23:42"}
-[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 16:23:42"}
-(node:98327) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-(Use `node --trace-warnings ...` to show where the warning was created)
-(node:98327) [MONGOOSE] Warning: Duplicate schema index on {"ownerId":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-✅ MongoDB connected
-⏰ Background cron engine initialized successfully.
-[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:23:42"}
-[32minfo[39m: 🚀 Finly Dashboard LIVE on PORT 5001 {"service":"finly-api","timestamp":"2026-04-08 16:23:42"}
-[32minfo[39m: 📊 Real-time business monitoring initialized {"service":"finly-api","timestamp":"2026-04-08 16:23:42"}
-[32minfo[39m: 🔍 Business analysis tools initialized {"service":"finly-api","timestamp":"2026-04-08 16:23:42"}
-🧠 Global Neural Network initialized
-[32minfo[39m: 🧠 Neural prediction engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:23:42"}
-⚛️ Initializing quantum computing architecture...
-🔬 Using quantum simulator (development mode)
-✅ Quantum architecture initialized successfully
-[32minfo[39m: ⚛️ Quantum computing architecture initialized {"service":"finly-api","timestamp":"2026-04-08 16:23:42"}
-[32minfo[39m: 📈 Business insights engine started {"service":"finly-api","timestamp":"2026-04-08 16:23:42"}
-[32minfo[39m: 🚀 Finly Engine initialised successfully {"service":"finly-api","timestamp":"2026-04-08 16:23:42"}
-[32minfo[39m: ✨ Advanced business analytics with neural prediction fully operational {"service":"finly-api","timestamp":"2026-04-08 16:23:44"}
-🌍 Training global neural network with aggregated business data...
-⚠️ No training data available for global model
-[32minfo[39m: 🎯 Global neural network training completed {"service":"finly-api","timestamp":"2026-04-08 16:24:12"}
+❌ Invalid environment configuration:
+- JWT_SECRET: Required
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `tsx src/server.ts`[39m
-✅ ENV CONFIG LOADED:
- -> PORT: 5001
- -> NODE_ENV: development
- -> MONGODB: CONNECTED [HIDDEN]
- -> REDIS: CONFIGURED [HIDDEN]
- -> OPENAI: CONFIGURED [HIDDEN]
-⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
-[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 16:24:36"}
-[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 16:24:36"}
-(node:98507) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-(Use `node --trace-warnings ...` to show where the warning was created)
-(node:98507) [MONGOOSE] Warning: Duplicate schema index on(node:98506) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.i✅ MongoDB connected
-⏰ Background cron engine initialized successfully.
-[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:24:36"}
-[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 16:24:36"}
-[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha🧠 Global Neural Network initialized
-[32minfo[39m: 🧠 Neural prediction engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:24:36"}
-⚛️ Initializing quantum computing architecture...
-🔬 Using quantum simulator (development mode)
-✅ Quantum architecture initialized successfully
-[32minfo[39m: ⚛️ Quantum computing architecture initia[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+❌ Invalid environment configuration:
+- JWT_SECRET: Required
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+❌ Invalid environment configuration:
+- GOOGLE_CLIENT_ID: String must contain at least 1 character(s)
+- GOOGLE_CLIENT_SECRET: String must contain at least 1 character(s)
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `tsx src/server.ts`[39m
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `tsx src/server.ts`[39m
-✅ ENV CONFIG LOADED:
- -> PORT: 5001
- -> NODE_ENV: development
- -> MONGODB: CONNECTED [HIDDEN]
- -> REDIS: CONFIGURED [HIDDEN]
- -> OPENAI: CONFIGURED [HIDDEN]
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [TransformError]: Transform failed with 1 error:
+/Users/srilekha/Desktop/BHIE/server/src/models/Record.ts:41:7: ERROR: Expected "}" but found "?"
+    at failureErrorWithLog (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1748:15)
+    at /Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1017:50
+    at responseCallbacks.<computed> (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:884:9)
+    at handleIncomingPacket (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:939:12)
+    at Socket.readFromStdout (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:862:7)
+    at Socket.emit (node:events:508:20)
+    at addChunk (node:internal/streams/readable:564:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:515:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+
+Node.js v25.8.2
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `tsx src/server.ts`[39m
-✅ ENV CONFIG LOADED:
- -> PORT: 5001
- -> NODE_ENV: development
- -> MONGODB: CONNECTED [HIDDEN]
- -> REDIS: CONFIGURED [HIDDEN]
- -> OPENAI: CONFIGURED [HIDDEN]
-⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
-[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 16:26:50"}
-[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 16:26:50"}
-(node:1027) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-(Use `node --trace-warnings ...` to show where the warning was created)
-(node:1027) [MONGOOSE] Warning: Duplicate schema index on {"ownerId":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-✅ MongoDB connected
-⏰ Background cron engine initialized successfully.
-[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:26:50"}
-[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 16:26:50"}
-[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/server.ts:205:18)\n    at new Promise (<anonymous>)\n    at startServer (/Users/srilekha/Desktop/BHIE/server/src/server.ts:204:10)\n    at init (/Users/srilekha/Desktop/BHIE/server/src/server.ts:303:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)","syscall":"listen","timestamp":"2026-04-08 16:26:50"}
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [TransformError]: Transform failed with 1 error:
+/Users/srilekha/Desktop/BHIE/server/src/models/Record.ts:48:9: ERROR: Expected "}" but found "?"
+    at failureErrorWithLog (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1748:15)
+    at /Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1017:50
+    at responseCallbacks.<computed> (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:884:9)
+    at handleIncomingPacket (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:939:12)
+    at Socket.readFromStdout (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:862:7)
+    at Socket.emit (node:events:508:20)
+    at addChunk (node:internal/streams/readable:564:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:515:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+
+Node.js v25.8.2
 [31m[nodemon] app crashed - waiting for file changes before starting...[39m
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `tsx src/server.ts`[39m
 ✅ ENV CONFIG LOADED:
  -> PORT: 5001
  -> NODE_ENV: development
- -> MONGODB: CONNECTED [HIDDEN]
+ -> MONGODB: MISSING
  -> REDIS: CONFIGURED [HIDDEN]
  -> OPENAI: CONFIGURED [HIDDEN]
-⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
-[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 16:27:37"}
-[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 16:27:37"}
-(node:1222) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-(Use `node --trace-warnings ...` to show where the warning was created)
-(node:1222) [MONGOOSE] Warning: Duplicate schema index on {"ownerId":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-✅ MongoDB connected
-⏰ Background cron engine initialized successfully.
-[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:27:37"}
-[32minfo[39m: 🚀 Finly Dashboard LIVE on PORT 5001 {"service":"finly-api","timestamp":"2026-04-08 16:27:37"}
-[32minfo[39m: 📊 Real-time business monitoring initialized {"service":"finly-api","timestamp":"2026-04-08 16:27:37"}
-[32minfo[39m: 🔍 Business analysis tools initialized {"service":"finly-api","timestamp":"2026-04-08 16:27:37"}
-🧠 Global Neural Network initialized
-[32minfo[39m: 🧠 Neural prediction engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:27:37"}
-⚛️ Initializing quantum computing architecture...
-🔬 Using quantum simulator (development mode)
-✅ Quantum architecture initialized successfully
-[32minfo[39m: ⚛️ Quantum computing architecture initialized {"service":"finly-api","timestamp":"2026-04-08 16:27:37"}
-[32minfo[39m: 📈 Business insights engine started {"service":"finly-api","timestamp":"2026-04-08 16:27:37"}
-[32minfo[39m: 🚀 Finly Engine initialised successfully {"service":"finly-api","timestamp":"2026-04-08 16:27:37"}
-[32minfo[39m: ✨ Advanced business analytics with neural prediction fully operational {"service":"finly-api","timestamp":"2026-04-08 16:27:39"}
-🌍 Training global neural network with aggregated business data...
-⚠️ No training data available for global model
-[32minfo[39m: 🎯 Global neural network training completed {"service":"finly-api","timestamp":"2026-04-08 16:28:07"}
-🔄 [CRON] Checking for expired subscriptions...
-✅ [CRON] Subscription check complete. Downgraded 0 users.
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `tsx src/server.ts`[39m
-✅ ENV CONFIG LOADED:
- -> PORT: 5001
- -> NODE_ENV: development
- -> MONGODB: CONNECTED [HIDDEN]
- -> REDIS: CONFIGURED [HIDDEN]
- -> OPENAI: CONFIGURED [HIDDEN]
-⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
-[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 16:30:42"}
-[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 16:30:42"}
-(node:1561) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-(Use `node --trace-warnings ...` to show where the warning was created)
-(node:1561) [MONGOOSE] Warning: Duplicate schema index on {"ownerId":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-✅ MongoDB connected
-⏰ Background cron engine initialized successfully.
-[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:30:42"}
-[32minfo[39m: 🚀 Finly Dashboard LIVE on PORT 5001 {"service":"finly-api","timestamp":"2026-04-08 16:30:42"}
-[32minfo[39m: 📊 Real-time business monitoring initialized {"service":"finly-api","timestamp":"2026-04-08 16:30:42"}
-[32minfo[39m: 🔍 Business analysis tools initialized {"service":"finly-api","timestamp":"2026-04-08 16:30:42"}
-🧠 Global Neural Network initialized
-[32minfo[39m: 🧠 Neural prediction engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:30:42"}
-⚛️ Initializing quantum computing architecture...
-🔬 Using quantum simulator (development mode)
-✅ Quantum architecture initialized successfully
-[32minfo[39m: ⚛️ Quantum computing architecture initialized {"service":"finly-api","timestamp":"2026-04-08 16:30:42"}
-[32minfo[39m: 📈 Business insights engine started {"service":"finly-api","timestamp":"2026-04-08 16:30:42"}
-[32minfo[39m: 🚀 Finly Engine initialised successfully {"service":"finly-api","timestamp":"2026-04-08 16:30:42"}
-[32minfo[39m: ✨ Advanced business analytics with neural prediction fully operational {"service":"finly-api","timestamp":"2026-04-08 16:30:44"}
-🌍 Training global neural network with aggregated business data...
-⚠️ No training data available for global model
-[32minfo[39m: 🎯 Global neural network training completed {"service":"finly-api","timestamp":"2026-04-08 16:31:12"}
-🔄 [CRON] Checking for expired subscriptions...
-✅ [CRON] Subscription check complete. Downgraded 0 users.
-🔄 [CRON] Checking for expired subscriptions...
-✅ [CRON] Subscription check complete. Downgraded 0 users.
+/Users/srilekha/Desktop/BHIE/server/node_modules/razorpay/dist/razorpay.js:34
+      throw new Error('`key_id` or `oauthToken` is mandatory');
+            ^
+
+Error: `key_id` or `oauthToken` is mandatory
+    at new Razorpay (/Users/srilekha/Desktop/BHIE/server/node_modules/razorpay/dist/razorpay.js:34:13)
+    at new WhatsAppPaymentService (/Users/srilekha/Desktop/BHIE/server/src/services/whatsapp-payment-service.ts:24:21)
+    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/routes/whatsapp.ts:20:24)
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:639:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v25.8.2
 [31m[nodemon] app crashed - waiting for file changes before starting...[39m
 [32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `tsx src/server.ts[32m[n✅ ENV CONFIG LOADED:
- -> PORT: 5001
- -> ✅ ENV CONFIG LOADED:
+[32m[nodemon] starting `tsx src/server.ts`[39m
+✅ ENV CONFIG LOADED:
  -> PORT: 5001
  -> NODE_ENV: development
- -> MONGODB: CONNECTED [HIDDEN]
- -> REDIS: CONFIGURED⚠️ Vector Service: PINECONE_API_KEY mi⚠️ Vector Service: PINECONE_API_KEY missing. [32minfo[39m: 🏗️  Starting Finly In[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 16:40:55"}
-[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finl(node:2927) [MONGOOSE] Warning: Duplicate (node:2928) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-(Use `node --trace-warnings ...` to show where the warning was created)
-(node:2928) [MONGOOSE] Warning: Duplicate schema index on {"ownerId":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Plea✅ MongoDB connected
-⏰ Background cron engine initialized suc⏰ Background cron engine initialized successfully.
-[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:40:55"}
-[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 16:40:55"}
-[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":🧠 Global Neural Network initialized
-[32minfo[39m: 🧠 Neural prediction engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:40:55"}
+ -> MONGODB: MISSING
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
+[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+✅ MongoDB connected
+⏰ Background cron engine initialized successfully.
+[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/server.ts:212:18)\n    at new Promise (<anonymous>)\n    at startServer (/Users/srilekha/Desktop/BHIE/server/src/server.ts:211:10)\n    at init (/Users/srilekha/Desktop/BHIE/server/src/server.ts:310:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)","syscall":"listen","timestamp":"2026-04-08 17:18:19"}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: MISSING
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
+[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+✅ MongoDB connected
+⏰ Background cron engine initialized successfully.
+[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/server.ts:212:18)\n    at new Promise (<anonymous>)\n    at startServer (/Users/srilekha/Desktop/BHIE/server/src/server.ts:211:10)\n    at init (/Users/srilekha/Desktop/BHIE/server/src/server.ts:310:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)","syscall":"listen","timestamp":"2026-04-08 17:20:16"}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: MISSING
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
+[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+✅ MongoDB connected
+⏰ Background cron engine initialized successfully.
+[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/server.ts:212:18)\n    at new Promise (<anonymous>)\n    at startServer (/Users/srilekha/Desktop/BHIE/server/src/server.ts:211:10)\n    at init (/Users/srilekha/Desktop/BHIE/server/src/server.ts:310:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)","syscall":"listen","timestamp":"2026-04-08 17:22:39"}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 [32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+❌ Invalid environment configuration:
+- JWT_SECRET: Required
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+❌ Invalid environment configuration:
+- GOOGLE_CLIENT_ID: String must contain at least 1 character(s)
+- GOOGLE_CLIENT_SECRET: String must contain at least 1 character(s)
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [TransformError]: Transform failed with 1 error:
+/Users/srilekha/Desktop/BHIE/server/src/models/Record.ts:41:7: ERROR: Expected "}" but found "?"
+    at failureErrorWithLog (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1748:15)
+    at /Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1017:50
+    at responseCallbacks.<computed> (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:884:9)
+    at handleIncomingPacket (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:939:12)
+    at Socket.readFromStdout (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:862:7)
+    at Socket.emit (node:events:508:20)
+    at addChunk (node:internal/streams/readable:564:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:515:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+
+Node.js v25.8.2
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [TransformError]: Transform failed with 1 error:
+/Users/srilekha/Desktop/BHIE/server/src/models/Record.ts:41:7: ERROR: Expected "}" but found "?"
+    at failureErrorWithLog (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1748:15)
+    at /Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1017:50
+    at responseCallbacks.<computed> (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:884:9)
+    at handleIncomingPacket (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:939:12)
+    at Socket.readFromStdout (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:862:7)
+    at Socket.emit (node:events:508:20)
+    at addChunk (node:internal/streams/readable:564:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:515:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+
+Node.js v25.8.2
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [TransformError]: Transform failed with 1 error:
+/Users/srilekha/Desktop/BHIE/server/src/models/Record.ts:48:9: ERROR: Expected "}" but found "?"
+    at failureErrorWithLog (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1748:15)
+    at /Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1017:50
+    at responseCallbacks.<computed> (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:884:9)
+    at handleIncomingPacket (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:939:12)
+    at Socket.readFromStdout (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:862:7)
+    at Socket.emit (node:events:508:20)
+    at addChunk (node:internal/streams/readable:564:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:515:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+
+Node.js v25.8.2
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: MISSING
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+/Users/srilekha/Desktop/BHIE/server/node_modules/razorpay/dist/razorpay.js:34
+      throw new Error('`key_id` or `oauthToken` is mandatory');
+            ^
+
+Error: `key_id` or `oauthToken` is mandatory
+    at new Razorpay (/Users/srilekha/Desktop/BHIE/server/node_modules/razorpay/dist/razorpay.js:34:13)
+    at new WhatsAppPaymentService (/Users/srilekha/Desktop/BHIE/server/src/services/whatsapp-payment-service.ts:24:21)
+    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/routes/whatsapp.ts:20:24)
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:639:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v25.8.2
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: MISSING
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
+[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+✅ MongoDB connected
+⏰ Background cron engine initialized successfully.
+[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[32minfo[39m: 🚀 Finly Dashboard LIVE on PORT 5001 {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[32minfo[39m: 📊 Real-time business monitoring initialized {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[32minfo[39m: 🔍 Business analysis tools initialized {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+🧠 Global Neural Network initialized
+[32minfo[39m: 🧠 Neural prediction engine initialized {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
 ⚛️ Initializing quantum computing architecture...
 🔬 Using quantum simulator (development mode)
 ✅ Quantum architecture initialized successfully
-[32minfo[39m: ⚛️ Quantum computing architecture initialized {"service":"finly-api","timestamp":"2026-04-08 16:40:55"}
-[32minfo[39m: 📈 Business insights engine started {"service":"finly-api","timestamp":"2026-04-08 16:40:55"}
-[32minfo[39m: 🚀 Finly Engine initialised successfully {"service":"finly-api","timestamp":"2026-04-08 16:40:55"}
-[32minfo[39m: ✨ Advanced business analytics with neural prediction fully operational {"service":"finly-api","timestamp":"2026-04-08 16:40:57"}
-[0mGET /webhook/wha[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `tsx src/server.ts`[39m
-✅ ENV CONFIG LOADED:
- -> PORT: 5001
- -> NODE_ENV: development
- -> MONGODB: CONNECTED [HIDDEN]
- -> REDIS: CONFIGURED [HIDDEN]
- -> OPENAI: CONFIGURED [HIDDEN]
-⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
-[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 16:41:47"}
-[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 16:41:47"}
-(node:3361) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-(Use `node --trace-warnings ...` to show where the warning was created)
-(node:3361) [MONGOOSE] Warning: Duplicate schema index on {"ownerId":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-✅ MongoDB connected
-⏰ Background cron engine initialized successfully.
-[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:41:47"}
-[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 16:41:47"}
-[31merror[39m: ❌✅ MongoDB connected
-⏰ Background cron engine initialized successfully.
-[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:41:47"}
-[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 16:41:47"}
-[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha/Deskto[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32minfo[39m: ⚛️ Quantum computing architecture initialized {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[32minfo[39m: 📈 Business insights engine started {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[32minfo[39m: 🚀 Finly Engine initialised successfully {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[32minfo[39m: ✨ Advanced business analytics with neural prediction fully operational {"service":"finly-api","timestamp":"2026-04-08 17:18:21"}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `tsx src/server.ts`[39m
 ✅ ENV CONFIG LOADED:
  -> PORT: 5001
  -> NODE_ENV: development
- -> MONGODB: CONNECTED [HIDDEN]
+ -> MONGODB: MISSING
  -> REDIS: CONFIGURED [HIDDEN]
  -> OPENAI: CONFIGURED [HIDDEN]
 ⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
-[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 16:42:36"}
-[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 16:42:36"}
-(node:3708) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-(Use `node --trace-warnings ...` to show where the warning was created)
-(node:3708) [MONGOOSE] Warning: Duplicate schema index on {"ownerId":1} found. (node:3709) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.in⏰ Background cron engine initialized successfully.
-[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:42:36"}
-[32minfo[39m: 🚀 Finly Dashboard LIVE on PORT 5001 {"service":"finly-api","timestamp":"2026-04-08 16:42:36"}
-[32minfo[39m: 📊 Real-time business monitoring initialized {"service":"finly-⏰ Background cron engine initialized successfully.
-[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 🧠 Global Neural Network initialized
-[32minfo[39m: 🧠 Neural prediction engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:42:36"}
-⚛️ I[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen ([32minfo[39m: 🚀 Finly Engine initialised successfully {"service":"finly-api","timestamp":"2026-04-08 16:42:36"}
-[32minfo[39m: ✨ Advanced business analytics with neural prediction fully operational {"service":"finly-api","timestamp":"2026-04-08 16:42:38"}
-🌍 Training global neural network with aggregated business data...
-⚠️ No training data available for global model
-[32minfo[39m: 🎯 Global neural network training completed {"service":"finly-api","timestamp":"2026-04-08 16:43:06"}
+[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+✅ MongoDB connected
+⏰ Background cron engine initialized successfully.
+[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/server.ts:212:18)\n    at new Promise (<anonymous>)\n    at startServer (/Users/srilekha/Desktop/BHIE/server/src/server.ts:211:10)\n    at init (/Users/srilekha/Desktop/BHIE/server/src/server.ts:310:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)","syscall":"listen","timestamp":"2026-04-08 17:20:16"}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `tsx src/server.ts`[39m
 ✅ ENV CONFIG LOADED:
  -> PORT: 5001
  -> NODE_ENV: development
- -> MONGODB: CONNECTED [HIDDEN]
- -> REDIS: CONFIGURED [HI -> PORT: 5001
- -> NODE_ENV: developme⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
-[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 16:43:18"}
-[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 16:43:18"}
-(node:3965) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-(Use `node --trace-warnings ...` to show where the warning was created)
-(node:3965) [MONGOOSE] Warning: Duplicate schema index on {"ownerId":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+ -> MONGODB: MISSING
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
+[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
 ✅ MongoDB connected
 ⏰ Background cron engine initialized successfully.
-[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 16:43:18"}
-[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 16:43:18"}
-[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/server.ts:209:18)\n    at new Promise (<anonymous>)\n    at startServer (/Users/srilekha/Desktop/BHIE/server/src/server.ts:208:10)\n    at init (/Users/srilekha/Desktop/BHIE/server/src/server.ts:307:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)","syscall":"listen","timestamp":"20[32m[nodemon] restarting due to changes...[39m
+[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/server.ts:212:18)\n    at new Promise (<anonymous>)\n    at startServer (/Users/srilekha/Desktop/BHIE/server/src/server.ts:211:10)\n    at init (/Users/srilekha/Desktop/BHIE/server/src/server.ts:310:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)","syscall":"listen","timestamp":"2026-04-08 17:22:39"}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            [32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+❌ Invalid environment configuration:
+- JWT_SECRET: Required
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+❌ Invalid environment configuration:
+- GOOGLE_CLIENT_ID: String must contain at least 1 character(s)
+- GOOGLE_CLIENT_SECRET: String must contain at least 1 character(s)
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [TransformError]: Transform failed with 1 error:
+/Users/srilekha/Desktop/BHIE/server/src/models/Record.ts:41:7: ERROR: Expected "}" but found "?"
+    at failureErrorWithLog (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1748:15)
+    at /Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1017:50
+    at responseCallbacks.<computed> (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:884:9)
+    at handleIncomingPacket (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:939:12)
+    at Socket.readFromStdout (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:862:7)
+    at Socket.emit (node:events:508:20)
+    at addChunk (node:internal/streams/readable:564:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:515:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+
+Node.js v25.8.2
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [TransformError]: Transform failed with 1 error:
+/Users/srilekha/Desktop/BHIE/server/src/models/Record.ts:48:9: ERROR: Expected "}" but found "?"
+    at failureErrorWithLog (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1748:15)
+    at /Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1017:50
+    at responseCallbacks.<computed> (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:884:9)
+    at handleIncomingPacket (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:939:12)
+    at Socket.readFromStdout (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:862:7)
+    at Socket.emit (node:events:508:20)
+    at addChunk (node:internal/streams/readable:564:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:515:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+
+Node.js v25.8.2
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `tsx src/server.ts`[39m
 ✅ ENV CONFIG LOADED:
  -> PORT: 5001
  -> NODE_ENV: development
- -> MONGODB: CONNECTED [HIDDEN]
+ -> MONGODB: MISSING
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+/Users/srilekha/Desktop/BHIE/server/node_modules/razorpay/dist/razorpay.js:34
+      throw new Error('`key_id` or `oauthToken` is mandatory');
+            ^
+
+Error: `key_id` or `oauthToken` is mandatory
+    at new Razorpay (/Users/srilekha/Desktop/BHIE/server/node_modules/razorpay/dist/razorpay.js:34:13)
+    at new WhatsAppPaymentService (/Users/srilekha/Desktop/BHIE/server/src/services/whatsapp-payment-service.ts:24:21)
+    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/routes/whatsapp.ts:20:24)
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:639:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v25.8.2
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: MISSING
  -> REDIS: CONFIGURED [HIDDEN]
  -> OPENAI: CONFIGURED [HIDDEN]
 ⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
-[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 16:43:57"}
-[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 16:43:57"}
-(node:4220) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
-(Use `node --trace-warnings ...` to show where the warning was created)
-(node:4220) [MONGOOSE] Warning: Duplicate schema index on {"ownerId":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
 ✅ MongoDB connected
 ⏰ Background cron engine initialized successfully.
-[32minfo[39m: ⏰ Background cron engine in⏰ Background cron engine initialized successfully.
-[32minfo[39m:[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"se[31merror[39m: ❌ Port 5001 is already in use. Plea[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::500[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/server.ts:213:18)\n    at new Promise (<anonymous>)\n    at startServer (/Users/srilekha/Desktop/BHIE/server/src/server.ts:212:10)\n    at init (/Users/srilekha/Desktop/BHIE/server/src/server.ts:311:11)\n    at process.processTicksAndRejections[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-26-04-08 16:43:57"}
+[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/server.ts:212:18)\n    at new Promise (<anonymous>)\n    at startServer (/Users/srilekha/Desktop/BHIE/server/src/server.ts:211:10)\n    at init (/Users/srilekha/Desktop/BHIE/server/src/server.ts:310:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)","syscall":"listen","timestamp":"2026-04-08 17:18:19"}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: MISSING
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
+[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+✅ MongoDB connected
+⏰ Background cron engine initialized successfully.
+[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/server.ts:212:18)\n    at new Promise (<anonymous>)\n    at startServer (/Users/srilekha/Desktop/BHIE/server/src/server.ts:211:10)\n    at init (/Users/srilekha/Desktop/BHIE/server/src/server.ts:310:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)","syscall":"listen","timestamp":"2026-04-08 17:20:16"}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: MISSING
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
+[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+✅ MongoDB connected
+⏰ Background cron engine initialized successfully.
+[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/server.ts:212:18)\n    at new Promise (<anonymous>)\n    at startServer (/Users/srilekha/Desktop/BHIE/server/src/server.ts:211:10)\n    at init (/Users/srilekha/Desktop/BHIE/server/src/server.ts:310:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)","syscall":"listen","timestamp":"2026-04-08 17:22:39"}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    [32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+❌ Invalid environment configuration:
+- JWT_SECRET: Required
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+❌ Invalid environment configuration:
+- GOOGLE_CLIENT_ID: String must contain at least 1 character(s)
+- GOOGLE_CLIENT_SECRET: String must contain at least 1 character(s)
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [TransformError]: Transform failed with 1 error:
+/Users/srilekha/Desktop/BHIE/server/src/models/Record.ts:41:7: ERROR: Expected "}" but found "?"
+    at failureErrorWithLog (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1748:15)
+    at /Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1017:50
+    at responseCallbacks.<computed> (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:884:9)
+    at handleIncomingPacket (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:939:12)
+    at
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [TransformError]: Transform failed with 1 error:
+/Users/srilekha/Desktop/BHIE/server/src/models/Record.ts:41:7: ERROR: Expected "}" but found "?"
+    at failureErrorWithLog (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1748:15)
+    at /Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1017:50
+  [31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [TransformError]: Transform failed with 1 error:
+/Users/srilekha/Desktop/BHIE/server/src/models/Record.ts:48:9: ERROR: Expected "}" but found "?"
+    at failureErrorWithLog (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1748:15)
+    at /Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:1017:50
+    at responseCallbacks.<computed> (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:884:9)
+    at handleIncomingPacket (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:939:12)
+    at Socket.readFromStdout (/Users/srilekha/Desktop/BHIE/server/node_modules/esbuild/lib/main.js:862:7)
+    at Socket.emit (node:events:508:20)
+    at addChunk (node:internal/streams/readable:564:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:515:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+
+Node.js v25.8.2
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: MISSING
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+/Users/srilekha/Desktop/BHIE/server/node_modules/razorpay/dist/razorpay.js:34
+      throw new Error('`key_id` or `oauthToken` is mandatory');
+            ^
+
+Error: `key_id` or `oauthToken` is mandatory
+    at new Razorpay (/Users/srilekha/Desktop/BHIE/server/node_modules/razorpay/dist/razorpay.js:34:13)
+    at new WhatsAppPaymentService (/Users/srilekha/Desktop/BHIE/server/src/services/whatsapp-payment-service.ts:24:21)
+    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/routes/whatsapp.ts:20:24)
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:639:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v25.8.2
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: MISSING
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
+[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+✅ MongoDB connected
+⏰ Background cron engine initialized successfully.
+[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 17:18:19"}
+[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/server.ts:212:18)\n    at new Promise (<anonymous>)\n    at startServer (/Users/srilekha/Desktop/BHIE/server/src/server.ts:211:10)\n    at init (/Users/srilekha/Desktop/BHIE/server/src/server.ts:310:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)","syscall":"listen","timestamp":"2026-04-08 17:18:19"}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: MISSING
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
+[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+✅ MongoDB connected
+⏰ Background cron engine initialized successfully.
+[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 17:20:16"}
+[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (node:net:2008:16)\n    at listenInCluster (node:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/server.ts:212:18)\n    at new Promise (<anonymous>)\n    at startServer (/Users/srilekha/Desktop/BHIE/server/src/server.ts:211:10)\n    at init (/Users/srilekha/Desktop/BHIE/server/src/server.ts:310:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)","syscall":"listen","timestamp":"2026-04-08 17:20:16"}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `tsx src/server.ts`[39m
+✅ ENV CONFIG LOADED:
+ -> PORT: 5001
+ -> NODE_ENV: development
+ -> MONGODB: MISSING
+ -> REDIS: CONFIGURED [HIDDEN]
+ -> OPENAI: CONFIGURED [HIDDEN]
+⚠️ Vector Service: PINECONE_API_KEY missing. Using local mock for pattern recognition.
+[32minfo[39m: 🏗️  Starting Finly Integration Engine... {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+[32minfo[39m: 🔌 Connecting to infrastructure... {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+✅ MongoDB connected
+⏰ Background cron engine initialized successfully.
+[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.setupListenHandle [as _listen2] (nod✅ MongoDB connected
+⏰ Background cron engine initialized successfully.
+[32minfo[39m: ⏰ Background cron engine initialized {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+[31merror[39m: ❌ Port 5001 is already in use. Please run 'bash kill-port.sh' to clear it. {"service":"finly-api","timestamp":"2026-04-08 17:22:39"}
+[31merror[39m: ❌ Fatal: Finly startup failed: listen EADDRINUSE: address already in use :::5001 {"address":"::","code":"EADDRINUSE","errno":-48,"port":5001,"service":"finly-api","stack":"Error: listen EADDRINUSE: address already in use :::5001\n    at Server.se[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+:net:2065:12)\n    at Server.listen (node:net:2170:7)\n    at app.listen (/Users/srilekha/Desktop/BHIE/server/node_modules/express/lib/application.js:635:24)\n    at <anonymous> (/Users/srilekha/Desktop/BHIE/server/src/server.ts:212:18)\n    at new Promise (<anonymous>)\n    at startServer (/Users/srilekha/Desktop/BHIE/server/src/server.ts:211:10)\n    at init (/Users/srilekha/Desktop/BHIE/server/src/server.ts:310:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)","syscall":"listen","timestamp":"2026-04-08 17:22:39"}
 [31m[nodemon] app crashed - waiting for file changes before starting...[39m

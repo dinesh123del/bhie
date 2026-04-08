@@ -25,7 +25,7 @@ export interface OrganizationMemberDocument extends mongoose.Document {
   title?: string;
   createdAt: Date;
   updatedAt: Date;
-  
+
   // Methods
   hasPermission(permission: keyof OrganizationMemberDocument['permissions']): boolean;
   updateLastActive(): Promise<void>;
@@ -85,8 +85,7 @@ const organizationMemberSchema = new mongoose.Schema<OrganizationMemberDocument>
   }
 );
 
-// Compound index to ensure unique membership
-organizationMemberSchema.index({ organizationId: 1, userId: 1 }, { unique: true });
+// Compound index to ensure unique membership (organizationId/userId have index: true)
 organizationMemberSchema.index({ userId: 1, status: 1 });
 organizationMemberSchema.index({ organizationId: 1, role: 1 });
 
@@ -160,7 +159,7 @@ const rolePermissions = {
 };
 
 // Pre-save middleware to set permissions based on role
-organizationMemberSchema.pre('save', function(next) {
+organizationMemberSchema.pre('save', function (next) {
   if (this.isModified('role') || this.isNew) {
     this.permissions = { ...rolePermissions[this.role] };
   }
@@ -168,14 +167,14 @@ organizationMemberSchema.pre('save', function(next) {
 });
 
 // Methods
-organizationMemberSchema.methods.hasPermission = function(
+organizationMemberSchema.methods.hasPermission = function (
   this: OrganizationMemberDocument,
   permission: keyof OrganizationMemberDocument['permissions']
 ): boolean {
   return this.permissions[permission] === true;
 };
 
-organizationMemberSchema.methods.updateLastActive = async function(
+organizationMemberSchema.methods.updateLastActive = async function (
   this: OrganizationMemberDocument
 ): Promise<void> {
   this.lastActiveAt = new Date();

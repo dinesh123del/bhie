@@ -3,7 +3,7 @@
 set -e
 
 PROJECT_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BACKEND_PORT=10000
+BACKEND_PORT=5001
 FRONTEND_PORT=5173
 
 GREEN='\033[0;32m'
