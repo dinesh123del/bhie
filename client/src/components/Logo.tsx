@@ -42,19 +42,25 @@ const sizeMap: Record<LogoSize, {
   },
 };
 
-const LogoGraphic = ({ size }: { size: LogoSize }) => {
+const LogoGraphic = ({ size, glow }: { size: LogoSize; glow?: boolean }) => {
   return (
     <div className={`relative ${sizeMap[size].mark} flex items-center justify-center shrink-0`}>
-      {/* Siri / Apple Intelligence External Aura */}
-      <motion.div
-        aria-hidden
-        className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#007AFF] via-[#AF52DE] to-[#FF2D55] opacity-20 blur-[10px]"
-        animate={{ rotate: [0, 360], scale: [0.95, 1.05, 0.95] }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-      />
+      {/* Subtle ambient glow */}
+      {glow && (
+        <motion.div
+          aria-hidden
+          className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#007AFF]/20 to-[#AF52DE]/20 blur-[8px]"
+          animate={{ scale: [0.9, 1, 0.9] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      )}
       
-      {/* Generated App Logo replacing SVG architecture */}
-      <img src="/icon.png" alt="AERA Icon" className="w-[85%] h-[85%] relative z-10 object-contain drop-shadow-[0_4px_6px_rgba(175,82,222,0.4)] hover:scale-105 transition-transform" />
+      {/* Clean geometric mark */}
+      <div className="w-[70%] h-[70%] relative z-10 flex items-center justify-center">
+        <div className="w-full h-full rounded-2xl bg-gradient-to-br from-[#007AFF] to-[#AF52DE] flex items-center justify-center">
+          <span className="text-white font-black text-[60%]">A</span>
+        </div>
+      </div>
     </div>
   );
 };

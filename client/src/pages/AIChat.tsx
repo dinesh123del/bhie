@@ -34,7 +34,7 @@ const SmartChat = () => {
     try {
       const insightsRes = await api.get('/ai/insights');
       setInsights(insightsRes.data);
-      
+
       const predRes = await api.get('/ai/prediction');
       setPrediction(predRes.data);
     } catch (error) {
@@ -95,11 +95,10 @@ const SmartChat = () => {
             <h2 className="text-2xl font-bold">Smart Insights</h2>
           </div>
           {insights?.insights?.map((insight: any, index: number) => (
-            <div key={index} className={`mb-4 p-4 rounded-2xl ${
-              insight.type === 'success' ? 'bg-green-500/20 border-green-400' :
-              insight.type === 'warning' ? 'bg-yellow-500/20 border-yellow-400' :
-              'bg-red-500/20 border-red-400'
-            } border-2`}>
+            <div key={index} className={`mb-4 p-4 rounded-2xl ${insight.type === 'success' ? 'bg-green-500/20 border-green-400' :
+                insight.type === 'warning' ? 'bg-yellow-500/20 border-yellow-400' :
+                  'bg-red-500/20 border-red-400'
+              } border-2`}>
               <h3 className="font-semibold text-lg">{insight.title}</h3>
               <p className="text-blue-100">{insight.message}</p>
             </div>
@@ -124,9 +123,8 @@ const SmartChat = () => {
               <div className="text-3xl font-bold text-white">
                 {prediction.nextMonthGrowth}
               </div>
-              <div className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                prediction.trend === 'Upward' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-              }`}>
+              <div className={`px-3 py-1 rounded-full text-sm font-semibold ${prediction.trend === 'Upward' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                }`}>
                 {prediction.trend} Trend
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -156,7 +154,7 @@ const SmartChat = () => {
                 }
                 const content = messages.map(m => `${m.role.toUpperCase()} (${m.timestamp}):\n${m.content}\n`).join('\n---\n\n');
                 void generateBrandedPDF({
-                  title: 'Finly AI Strategic Chat Export',
+                  title: 'AERA Strategic Chat Export',
                   content: content,
                   filename: `Chat_Export_${Date.now()}`,
                   type: 'ai_chat_transcript'
@@ -169,25 +167,25 @@ const SmartChat = () => {
             </button>
           </div>
 
-          
+
           {/* Quick Suggestions */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-            <QuickSuggestion 
+            <QuickSuggestion
               icon={TrendingUp}
               text="How's growth?"
               onClick={() => setInput('How is my business growth?')}
             />
-            <QuickSuggestion 
+            <QuickSuggestion
               icon={AlertTriangle}
               text="Show risks"
               onClick={() => setInput('What are my business risks?')}
             />
-            <QuickSuggestion 
+            <QuickSuggestion
               icon={Activity}
               text="Performance"
               onClick={() => setInput('How is performance?')}
             />
-            <QuickSuggestion 
+            <QuickSuggestion
               icon={TrendingUp}
               text="Suggestions"
               onClick={() => setInput('Business suggestions?')}
@@ -203,24 +201,22 @@ const SmartChat = () => {
               <p>Ask me anything about your business data</p>
             </div>
           )}
-          
+
           {messages.map((msg, index) => (
             <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-md p-4 rounded-2xl shadow-lg ${
-                msg.role === 'user'
+              <div className={`max-w-md p-4 rounded-2xl shadow-lg ${msg.role === 'user'
                   ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
                   : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700'
-              }`}>
-                <p>{msg.content}</p>
-                <p className={`text-xs mt-2 opacity-75 ${
-                  msg.role === 'user' ? 'text-blue-100' : 'text-gray-500'
                 }`}>
+                <p>{msg.content}</p>
+                <p className={`text-xs mt-2 opacity-75 ${msg.role === 'user' ? 'text-blue-100' : 'text-gray-500'
+                  }`}>
                   {msg.timestamp}
                 </p>
               </div>
             </div>
           ))}
-          
+
           {loading && (
             <div className="flex justify-start">
               <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 rounded-2xl shadow-lg max-w-md">
@@ -229,7 +225,7 @@ const SmartChat = () => {
               </div>
             </div>
           )}
-          
+
           <div ref={messagesEndRef} />
         </div>
 

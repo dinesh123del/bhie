@@ -32,16 +32,16 @@ export const generateBrandedPDF = async ({ title, content, filename, type, metad
     // Top exact border
     pdf.setFillColor(colors.indigo[0], colors.indigo[1], colors.indigo[2]);
     pdf.rect(0, 0, pw, 6, 'F');
-    
+
     // Header background
     pdf.setFillColor(colors.dark[0], colors.dark[1], colors.dark[2]);
     pdf.rect(0, 6, pw, 32, 'F');
 
-    // Logo & Finly brand
+    // Logo & AERA brand
     try {
       const img = new Image();
       img.src = '/icon.png';
-      
+
       // Attempt load (will often be synchronous or cached if drawn multiple pages, but async on standard execution)
       await new Promise<void>((resolve) => {
         if (img.complete) resolve();
@@ -54,12 +54,12 @@ export const generateBrandedPDF = async ({ title, content, filename, type, metad
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(22);
         pdf.setTextColor(255, 255, 255);
-        pdf.text('Finly', margin + 22, 24);
+        pdf.text('AERA', margin + 22, 24);
       } else {
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(22);
         pdf.setTextColor(255, 255, 255);
-        pdf.text('Finly', margin, 24);
+        pdf.text('AERA', margin, 24);
       }
     } catch {
       pdf.setFont('helvetica', 'bold');
@@ -85,20 +85,20 @@ export const generateBrandedPDF = async ({ title, content, filename, type, metad
     pdf.setGState(gState);
     pdf.setFontSize(80);
     pdf.setTextColor(0, 0, 0);
-    pdf.text('FINLY AUTONOMY', pw / 2, ph / 2 + 20, { align: 'center', angle: 45 });
+    pdf.text('AERA', pw / 2, ph / 2 + 20, { align: 'center', angle: 45 });
     pdf.restoreGraphicsState();
   };
 
   // Build first page header
   await drawPremiumHeader(doc);
-  
+
   let currentY = 56;
 
   // Render the Title cleanly
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(28);
   doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
-  
+
   const splitTitle = doc.splitTextToSize(title, pw - (margin * 2));
   doc.text(splitTitle, margin, currentY);
   currentY += (splitTitle.length * 10) + 4;
@@ -108,11 +108,11 @@ export const generateBrandedPDF = async ({ title, content, filename, type, metad
   doc.setFontSize(9);
   doc.setTextColor(colors.indigo[0], colors.indigo[1], colors.indigo[2]);
   doc.text(`REPORT TYPE: ${type ? type.toUpperCase() : 'GENERAL INTELLIGENCE'}`, margin, currentY);
-  
+
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(colors.gray[0], colors.gray[1], colors.gray[2]);
   doc.text(`GENERATED: ${new Date().toLocaleString('en-IN').toUpperCase()}`, pw - margin, currentY, { align: 'right' });
-  
+
   currentY += 8;
 
   // Stylish divider
@@ -126,7 +126,7 @@ export const generateBrandedPDF = async ({ title, content, filename, type, metad
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(11);
   doc.setLineHeightFactor(1.6);
-  
+
   const paragraphs = content.split('\n');
 
   for (let p of paragraphs) {
@@ -173,7 +173,7 @@ export const generateBrandedPDF = async ({ title, content, filename, type, metad
   const pageCount = (doc.internal as any).getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
-    
+
     // Bottom border
     doc.setFillColor(colors.indigo[0], colors.indigo[1], colors.indigo[2]);
     doc.rect(0, ph - 2, pw, 2, 'F');
@@ -182,11 +182,11 @@ export const generateBrandedPDF = async ({ title, content, filename, type, metad
     doc.setFontSize(8);
     doc.setTextColor(180, 180, 185);
     doc.text(
-      `© ${new Date().getFullYear()} FINLY ECOSYSTEM. STRICTLY CONFIDENTIAL.`,
+      `© ${new Date().getFullYear()} AERA ECOSYSTEM. STRICTLY CONFIDENTIAL.`,
       margin,
       ph - 8
     );
-    
+
     doc.text(
       `${i} // ${pageCount}`,
       pw - margin,

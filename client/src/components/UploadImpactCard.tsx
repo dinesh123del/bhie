@@ -32,7 +32,7 @@ export default function UploadImpactCard({
           <div>
             <h3 className="text-2xl font-semibold tracking-[-0.05em] text-white md:text-3xl">Upload impact</h3>
             <p className="mt-2 text-sm leading-7 text-ink-300">
-              Every upload should feel useful immediately. Finly shows what was extracted and how it changes your business picture.
+              Every upload should feel useful immediately. AERA shows what was extracted and how it changes your business picture.
             </p>
           </div>
         </div>
@@ -81,7 +81,7 @@ export default function UploadImpactCard({
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-400">Recommended next step</p>
                   <p className="mt-2 text-sm leading-6 text-white">
-                    Confirm the extracted category and keep daily uploads flowing so Finly can detect cost and profit patterns faster.
+                    Confirm the extracted category and keep daily uploads flowing so AERA can detect cost and profit patterns faster.
                   </p>
                 </div>
                 <ArrowUpRight className="h-5 w-5 text-white" />
@@ -92,7 +92,7 @@ export default function UploadImpactCard({
           <div className="mt-auto rounded-[1.5rem] border border-dashed border-white/12 bg-white/[0.03] px-5 py-6">
             <p className="text-sm font-semibold text-white">No recent upload yet</p>
             <p className="mt-2 text-sm leading-6 text-ink-300">
-              Upload a bill, invoice, or statement and Finly will instantly show extracted data and business impact here.
+              Upload a bill, invoice, or statement and AERA will instantly show extracted data and business impact here.
             </p>
           </div>
         )}

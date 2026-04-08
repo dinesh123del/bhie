@@ -1,15 +1,15 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  CheckCircle2, 
-  Circle, 
-  Trophy, 
-  Star, 
-  Zap, 
-  Target, 
-  Cpu, 
-  Settings, 
-  Activity, 
+import {
+  CheckCircle2,
+  Circle,
+  Trophy,
+  Star,
+  Zap,
+  Target,
+  Cpu,
+  Settings,
+  Activity,
   ShieldCheck,
   TrendingUp,
   Search,
@@ -20,7 +20,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useGamification } from './GamificationEngine';
 
 /* ──────────────────────────────────────────────────────────────
-   Finly QUEST ENGINE v2
+   AERA QUEST ENGINE v2
    ─ Enhanced with Micro-Engine Animations
    ─ Advanced Task Tracking
    ─ Premium Celebration Effects
@@ -37,7 +37,7 @@ export interface Quest {
   category?: 'AI' | 'SECURITY' | 'FINANCE' | 'SYSTEM';
 }
 
-const QUEST_STORAGE_KEY = 'finly_quests_v2';
+const QUEST_STORAGE_KEY = 'aera_quests_v2';
 
 export default function QuestEngine() {
   const { user } = useAuth();
@@ -139,7 +139,7 @@ export default function QuestEngine() {
   // Check conditions automatically
   useEffect(() => {
     const path = window.location.pathname;
-    
+
     // 1. Dashboard Welcome
     if (path.includes('/dashboard')) {
       completeQuest('WELCOME');
@@ -176,7 +176,7 @@ export default function QuestEngine() {
         {showCelebration && (
           <>
             {/* Particle Fountain */}
-            <motion.div 
+            <motion.div
               className="fixed bottom-24 right-24 z-[9998] pointer-events-none"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -186,9 +186,9 @@ export default function QuestEngine() {
                 <motion.div
                   key={i}
                   initial={{ x: 0, y: 0, scale: 0 }}
-                  animate={{ 
-                    x: (Math.random() - 0.5) * 400, 
-                    y: (Math.random() - 0.8) * 400, 
+                  animate={{
+                    x: (Math.random() - 0.5) * 400,
+                    y: (Math.random() - 0.8) * 400,
                     scale: [0, 1, 0.5, 0],
                     rotate: Math.random() * 360
                   }}
@@ -207,12 +207,12 @@ export default function QuestEngine() {
             >
               <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white px-8 py-6 rounded-[2rem] shadow-[0_20px_80px_rgba(79,70,229,0.6)] border border-white/30 backdrop-blur-xl relative overflow-hidden">
                 {/* Particle backgrounds */}
-                <motion.div 
+                <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
                   className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"
                 />
-                
+
                 <div className="relative z-10 flex items-center gap-5">
                   <div className="bg-white/20 p-4 rounded-3xl backdrop-blur-md shadow-inner border border-white/10">
                     <Trophy className="h-10 w-10 text-amber-300 drop-shadow-[0_0_10px_rgba(252,211,77,0.8)]" />
@@ -240,7 +240,7 @@ export default function QuestEngine() {
             <div className="flex items-center gap-4">
               <div className="relative">
                 <motion.div
-                  animate={{ 
+                  animate={{
                     rotate: isRotating ? 360 : 0,
                     boxShadow: isRotating ? "0 0 20px rgba(99, 102, 241, 0.4)" : "none"
                   }}
@@ -249,8 +249,8 @@ export default function QuestEngine() {
                 >
                   <Settings className="h-6 w-6 text-indigo-400" />
                 </motion.div>
-                <motion.div 
-                  animate={{ 
+                <motion.div
+                  animate={{
                     scale: [1, 1.2, 1],
                     opacity: [0.3, 0.6, 0.3]
                   }}
@@ -267,7 +267,7 @@ export default function QuestEngine() {
                 </div>
                 <h3 className="text-2xl font-black text-white tracking-tight flex items-center gap-2">
                   Quest Engine
-                  <motion.span 
+                  <motion.span
                     animate={{ opacity: [0.4, 1, 0.4] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
                     className="w-2 h-2 rounded-full bg-emerald-400"
@@ -275,10 +275,10 @@ export default function QuestEngine() {
                 </h3>
               </div>
             </div>
-            
+
             <div className="text-right">
               <div className="flex items-baseline gap-1 justify-end">
-                <motion.span 
+                <motion.span
                   key={completedCount}
                   initial={{ scale: 1.5, y: -10, color: '#818cf8' }}
                   animate={{ scale: 1, y: 0, color: '#ffffff' }}
@@ -293,7 +293,7 @@ export default function QuestEngine() {
           </div>
 
           <div className="relative h-2 w-full bg-white/5 rounded-full overflow-hidden mb-8 border border-white/5">
-            <motion.div 
+            <motion.div
               className="absolute inset-y-0 left-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
@@ -306,25 +306,23 @@ export default function QuestEngine() {
           <div className="space-y-3">
             <AnimatePresence mode="popLayout">
               {sortedQuests.map((quest, idx) => (
-                <motion.div 
+                <motion.div
                   key={quest.id}
                   layout
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.1 }}
                   whileHover={{ scale: 1.02, x: 5 }}
-                  className={`relative group p-4 rounded-2xl border transition-all duration-500 ${
-                    quest.completed 
-                    ? 'bg-emerald-500/5 border-emerald-500/20' 
-                    : 'bg-white/[0.03] border-white/10 hover:bg-white/[0.08] hover:border-indigo-500/30'
-                  }`}
+                  className={`relative group p-4 rounded-2xl border transition-all duration-500 ${quest.completed
+                      ? 'bg-emerald-500/5 border-emerald-500/20'
+                      : 'bg-white/[0.03] border-white/10 hover:bg-white/[0.08] hover:border-indigo-500/30'
+                    }`}
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`relative p-3 rounded-xl transition-all duration-500 ${
-                      quest.completed 
-                      ? 'bg-emerald-500/20 text-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.3)]' 
-                      : 'bg-indigo-500/10 text-indigo-400 group-hover:bg-indigo-500/20'
-                    }`}>
+                    <div className={`relative p-3 rounded-xl transition-all duration-500 ${quest.completed
+                        ? 'bg-emerald-500/20 text-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.3)]'
+                        : 'bg-indigo-500/10 text-indigo-400 group-hover:bg-indigo-500/20'
+                      }`}>
                       {quest.completed ? (
                         <motion.div
                           initial={{ scale: 0, rotate: -45 }}
@@ -335,26 +333,25 @@ export default function QuestEngine() {
                       ) : (
                         quest.icon
                       )}
-                      
+
                       {!quest.completed && (
-                        <motion.div 
+                        <motion.div
                           animate={{ opacity: [0, 1, 0] }}
                           transition={{ duration: 2, repeat: Infinity }}
                           className="absolute inset-0 bg-indigo-400/20 rounded-xl blur-md"
                         />
                       )}
                     </div>
-                    
+
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2 mb-0.5">
                         <p className={`font-bold text-sm truncate ${quest.completed ? 'text-emerald-200/60 line-through' : 'text-white group-hover:text-indigo-200'}`}>
                           {quest.title}
                         </p>
-                        <div className={`px-2 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase border ${
-                          quest.completed 
-                          ? 'border-emerald-500/30 text-emerald-400/80 bg-emerald-500/10' 
-                          : 'border-indigo-500/30 text-indigo-400 bg-indigo-500/10'
-                        }`}>
+                        <div className={`px-2 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase border ${quest.completed
+                            ? 'border-emerald-500/30 text-emerald-400/80 bg-emerald-500/10'
+                            : 'border-indigo-500/30 text-indigo-400 bg-indigo-500/10'
+                          }`}>
                           {quest.xp} XP
                         </div>
                       </div>
@@ -373,7 +370,7 @@ export default function QuestEngine() {
 
                   {/* Shimmer on hover for uncompleted */}
                   {!quest.completed && (
-                    <motion.div 
+                    <motion.div
                       className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none"
                       initial={{ x: '-100%' }}
                       whileHover={{ x: '100%' }}
@@ -385,7 +382,7 @@ export default function QuestEngine() {
             </AnimatePresence>
           </div>
         </div>
-        
+
         {/* Footer Stats Line */}
         <div className="p-4 bg-white/[0.02] border-t border-white/5 flex items-center justify-between">
           <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-white/20">
@@ -405,7 +402,8 @@ export default function QuestEngine() {
         </div>
       </PremiumCard>
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @keyframes shimmer {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }

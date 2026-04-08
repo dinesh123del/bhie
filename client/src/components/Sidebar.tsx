@@ -105,7 +105,7 @@ const Sidebar = () => {
             transition={{ duration: 0.2 }}
             className="font-bold text-lg bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent"
           >
-            {isOpen && 'Finly'}
+            {isOpen && 'AERA'}
           </motion.div>
           <motion.button
             onClick={() => setIsOpen(!isOpen)}
@@ -122,16 +122,15 @@ const Sidebar = () => {
             <motion.button
               key={item.path}
               onClick={() => handleNavClick(item.path)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all relative group ${
-                isActive(item.path)
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all relative group ${isActive(item.path)
                   ? 'bg-blue-600 text-white'
                   : 'text-slate-300 hover:bg-slate-700'
-              }`}
+                }`}
               whileHover={{ x: 4 }}
               whileTap={{ scale: 0.98 }}
             >
               <div className="flex-shrink-0 text-lg">{item.icon}</div>
-              
+
               <motion.span
                 animate={{ opacity: isOpen ? 1 : 0 }}
                 transition={{ duration: 0.2 }}

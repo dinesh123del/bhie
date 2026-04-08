@@ -51,7 +51,7 @@ const mgmtItems: NavItem[] = [
 const PremiumSidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMuted, setIsMuted] = useState(() => {
-    try { return localStorage.getItem('finly_sound_muted') === 'true'; } catch { return false; }
+    try { return localStorage.getItem('aera_sound_muted') === 'true'; } catch { return false; }
   });
   const location = useLocation();
   const navigate = useNavigate();
@@ -65,7 +65,7 @@ const PremiumSidebar = () => {
   const toggleMute = () => {
     const next = !isMuted;
     setIsMuted(next);
-    try { localStorage.setItem('finly_sound_muted', String(next)); } catch { /* ignore */ }
+    try { localStorage.setItem('aera_sound_muted', String(next)); } catch { /* ignore */ }
     premiumFeedback.click();
   };
 
@@ -85,7 +85,7 @@ const PremiumSidebar = () => {
           onClick={() => handleNav('/')}
         >
           {isCollapsed ? (
-             <Logo size="sm" showSubtitle={false} />
+            <Logo size="sm" showSubtitle={false} />
           ) : (
             <AnimatePresence mode="wait">
               <motion.div
@@ -94,9 +94,9 @@ const PremiumSidebar = () => {
                 exit={{ opacity: 0, x: -10 }}
                 className="flex items-center w-full"
               >
-                 <Logo size="sm" showSubtitle={false} />
+                <Logo size="sm" showSubtitle={false} />
               </motion.div>
-             </AnimatePresence>
+            </AnimatePresence>
           )}
         </div>
       </div>
@@ -116,11 +116,10 @@ const PremiumSidebar = () => {
                 <button
                   key={item.id}
                   onClick={() => handleNav(item.path)}
-                  className={`w-full group relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-300 ${
-                    active
+                  className={`w-full group relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-300 ${active
                       ? 'text-[#FFFFFF] bg-[#1C1C1E]'
                       : 'text-[#A1A1A6] hover:text-[#FFFFFF] hover:bg-[#1C1C1E]/50'
-                  }`}
+                    }`}
                 >
                   <item.icon
                     className={`w-[18px] h-[18px] transition-colors duration-300 ${active ? 'text-[#007AFF]' : ''}`}
@@ -152,11 +151,10 @@ const PremiumSidebar = () => {
                 <button
                   key={item.id}
                   onClick={() => handleNav(item.path)}
-                  className={`w-full group relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-300 ${
-                    active 
-                      ? 'text-[#FFFFFF] bg-[#1C1C1E]' 
+                  className={`w-full group relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-300 ${active
+                      ? 'text-[#FFFFFF] bg-[#1C1C1E]'
                       : 'text-[#A1A1A6] hover:text-[#FFFFFF] hover:bg-[#1C1C1E]/50'
-                  }`}
+                    }`}
                 >
                   <item.icon className="w-[18px] h-[18px]" />
                   {!isCollapsed && (

@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 /* ──────────────────────────────────────────────────────────────
-   Finly APPLE-INTELLIGENCE SPLASH SCREEN
-   Pure black · minimalist logo · intelligence mesh · signature sound
+   AERA SPLASH SCREEN
+   Pure black · minimalist logo · signature sound
    ─────────────────────────────────────────────────────────────── */
 
 interface CinematicSplashProps {
@@ -64,14 +64,14 @@ function playMacStartup(muted: boolean) {
   }
 }
 
-function FinlyLogoSVG({ phase }: { phase: 'awaiting' | 'revealing' | 'exiting' }) {
+function AERALogoMark({ phase }: { phase: 'awaiting' | 'revealing' | 'exiting' }) {
   return (
     <motion.svg
       viewBox="0 0 100 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className="w-20 md:w-28 relative z-10"
-      aria-label="Finly"
+      aria-label="AERA"
       initial={{ opacity: 0, filter: 'blur(10px)', scale: 0.9 }}
       animate={
         phase === 'revealing'
@@ -82,37 +82,22 @@ function FinlyLogoSVG({ phase }: { phase: 'awaiting' | 'revealing' | 'exiting' }
       }
       transition={{ duration: 1.5, ease: [0.2, 0.8, 0.2, 1] }}
     >
-      <path
-        d="M50 10 C 20 10 10 20 10 50 C 10 80 20 90 50 90 C 80 90 90 80 90 50 C 90 20 80 10 50 10 Z"
-        fill="white"
-        opacity="0.05"
-      />
-      <path 
-        d="M32 40 L45 40 Q55 40 55 50 Q55 60 45 60 L32 60 Z"
-        stroke="white" 
-        strokeWidth="6" 
-        strokeLinecap="round" 
-        strokeLinejoin="round" 
-      />
-      <path 
-        d="M32 40 L32 60"
-        stroke="white" 
-        strokeWidth="6" 
-        strokeLinecap="round" 
-      />
-      <path 
-        d="M32 50 L48 50"
-        stroke="white" 
-        strokeWidth="6" 
-        strokeLinecap="round" 
-      />
-      <circle cx="68" cy="50" r="4" fill="url(#aiGrad)" />
+      {/* AERA Mark - Clean Geometric A */}
+      <rect x="15" y="15" width="70" height="70" rx="18" fill="url(#aeraGrad)" />
+      <text 
+        x="50" 
+        y="68" 
+        textAnchor="middle" 
+        fill="white" 
+        fontSize="42" 
+        fontWeight="800"
+        fontFamily="system-ui, -apple-system, sans-serif"
+      >A</text>
       
       <defs>
-        <linearGradient id="aiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id="aeraGrad" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#007AFF" />
-          <stop offset="50%" stopColor="#AF52DE" />
-          <stop offset="100%" stopColor="#FF2D55" />
+          <stop offset="100%" stopColor="#AF52DE" />
         </linearGradient>
       </defs>
     </motion.svg>
@@ -140,10 +125,10 @@ export default function CinematicSplash({
         } else {
           // Default fallbacks
           setAds([
-            "AI-powered receipt scanning.",
-            "Visualizing your financial pulse.",
-            "Smart cash flow predictions.",
-            "Zero manual data entry."
+            "Instant receipt scanning.",
+            "Visualizing your financial health.",
+            "Cash flow predictions.",
+            "Automatic data extraction."
           ]);
         }
       } catch {
@@ -219,7 +204,7 @@ export default function CinematicSplash({
         </AnimatePresence>
 
         {/* Clean Logo Morph */}
-        <FinlyLogoSVG phase={phase} />
+        <AERALogoMark phase={phase} />
         
         {/* Bottom Section: Loader + Ad/Tip */}
         <div className="absolute bottom-24 flex flex-col items-center gap-6 w-full max-w-[280px]">

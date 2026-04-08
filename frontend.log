@@ -3,13 +3,7 @@
 > vite --host 0.0.0.0 --port 5173 --strictPort
 
 
-  VITE v5.4.21  ready in 112 ms
+  VITE v5.4.21  ready in 121 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: http://192.168.0.4:5173/
-6:44:15 PM [vite] hmr update /src/components/LoadingScreen.tsx, /src/index.css
-7:02:53 PM [vite] hmr update /src/index.css, /src/hooks/useAuth.tsx
-7:03:49 PM [vite] hmr update /src/App.tsx, /src/index.css
-7:04:11 PM [vite] hmr update /src/App.tsx, /src/index.css
-7:05:55 PM [vite] hmr update /src/components/PremiumTopbar.tsx, /src/index.css
-7:06:05 PM [vite] hmr update /src/components/PremiumTopbar.tsx, /src/index.css

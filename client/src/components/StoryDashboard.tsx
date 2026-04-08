@@ -19,7 +19,7 @@ export default function StoryDashboard({ bullets, dailySummary }: StoryDashboard
           <div>
             <h3 className="text-2xl font-semibold tracking-[-0.05em] text-white md:text-3xl">Your numbers, written clearly</h3>
             <p className="mt-2 text-sm leading-7 text-ink-300">
-              Finly translates raw metrics into readable business updates for faster decisions.
+              AERA translates raw metrics into readable business updates for faster decisions.
             </p>
           </div>
         </div>

@@ -35,7 +35,7 @@ const planCards: PlanCard[] = [
     name: 'Free',
     price: PLAN_DETAILS.free.price,
     billingText: PLAN_DETAILS.free.billingText,
-    description: 'Best for getting started with Finly and managing a small number of uploads.',
+    description: 'Best for getting started with AERA and managing a small number of uploads.',
     features: PLAN_DETAILS.free.features,
   },
   {
@@ -95,10 +95,10 @@ const Payments = () => {
   const remainingUploads = getRemainingUploads(user);
   const expiryLabel = subscription?.expiryDate
     ? new Date(subscription.expiryDate).toLocaleDateString('en-IN', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-      })
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    })
     : null;
 
   const currentSelection = useMemo(
@@ -127,7 +127,7 @@ const Payments = () => {
     try {
       // 1. Create order on backend
       const orderData = await paymentService.createOrder(selectedPlan as PaidPlan);
-      
+
       // 2. Ensure Razorpay is loaded
       await paymentService.ensureRazorpayLoaded();
 
@@ -140,7 +140,7 @@ const Payments = () => {
         key: orderData.key || import.meta.env.VITE_RAZORPAY_KEY || 'rzp_live_SYwkStp5U2NhjF',
         amount: orderData.amount,
         currency: orderData.currency,
-        name: 'Finly Platform',
+        name: 'AERA Platform',
         description: `Upgrade to ${selectedPlan.toUpperCase()} Plan`,
         order_id: orderData.orderId,
         handler: async (response: any) => {
@@ -151,7 +151,7 @@ const Payments = () => {
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
             });
-            
+
             toast.success(`${currentSelection.name} plan activated!`, { id: loadingToast });
             premiumFeedback.success();
             await refetchUser();
@@ -229,7 +229,7 @@ const Payments = () => {
         <div className="mb-12 max-w-3xl">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-ink-300">Pricing</p>
           <h1 className="text-4xl font-black tracking-[-0.06em] text-white md:text-5xl">
-            Upgrade Finly when your business is ready
+            Upgrade AERA when your business is ready
           </h1>
           <p className="mt-4 text-base leading-7 text-ink-300 md:text-lg">
             Free gets you started. Pro and Enterprise unlock unlimited uploads, smart insights, and premium workflows.
@@ -279,9 +279,8 @@ const Payments = () => {
               <PremiumCard
                 key={plan.code}
                 gradient
-                className={`relative min-h-[460px] border ${
-                  isSelected ? 'border-indigo-400/40 shadow-brand-glow' : 'border-white/10'
-                }`}
+                className={`relative min-h-[460px] border ${isSelected ? 'border-indigo-400/40 shadow-brand-glow' : 'border-white/10'
+                  }`}
               >
                 <div className="mb-6 flex items-start justify-between gap-4">
                   <div>
@@ -345,7 +344,7 @@ const Payments = () => {
           </PremiumButton>
 
           {!premiumActive && (
-            <button 
+            <button
               onClick={handleDirectUpgrade}
               className="text-xs text-white/20 hover:text-white/40 transition-colors uppercase tracking-widest font-black"
             >

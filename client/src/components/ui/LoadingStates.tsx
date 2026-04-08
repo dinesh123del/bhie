@@ -18,7 +18,7 @@ export const LoadingSpinner: React.FC<{ size?: 'sm' | 'md' | 'lg' }> = ({ size =
   );
 };
 
-export const PageLoader: React.FC = () => <FullscreenLogoLoader label="Loading Finly" />;
+export const PageLoader: React.FC = () => <FullscreenLogoLoader label="Loading AERA" />;
 
 export const SuccessAnimation: React.FC<{ message?: string }> = ({ message = 'Success!' }) => (
   <motion.div

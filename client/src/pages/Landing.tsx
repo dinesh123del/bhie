@@ -162,8 +162,8 @@ export default function LandingPagePremium() {
                 </h1>
                 
                 <p className="text-[20px] md:text-[26px] text-white/40 max-w-3xl mx-auto font-medium leading-relaxed tracking-tight">
-                  The world's first Autonomous Economic Resilience Agent. <br className="hidden md:block" />
-                  Institutional-grade financial intelligence for every entrepreneur on Earth.
+                  The world's first economic resilience platform. <br className="hidden md:block" />
+                  Professional-grade financial intelligence for every entrepreneur.
                 </p>
               </div>
 
@@ -259,7 +259,7 @@ export default function LandingPagePremium() {
             <div className="space-y-10">
                 <Logo size="sm" showSubtitle={false} />
                 <p className="text-[18px] text-white/30 font-medium leading-relaxed tracking-tight">
-                    The world's first Autonomous Economic Resilience Agent. Built to eliminate business failure.
+                    Built to help businesses thrive through economic uncertainty.
                 </p>
             </div>
             <div>

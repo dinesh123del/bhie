@@ -37,8 +37,8 @@ const Onboarding = () => {
       target: 'body', // Centers on screen
       content: (
         <div className="text-left space-y-2">
-          <h3 className="text-lg font-bold text-slate-800">Welcome to your dashboard 🚀</h3>
-          <p className="text-slate-600 text-sm">Let us take you on a quick tour of your new intelligence core.</p>
+          <h3 className="text-lg font-bold text-slate-800">Welcome to your dashboard</h3>
+          <p className="text-slate-600 text-sm">Let us show you around your new workspace.</p>
         </div>
       ),
       placement: 'center',
@@ -60,7 +60,7 @@ const Onboarding = () => {
       content: (
         <div className="text-left space-y-2">
           <h3 className="text-lg font-bold text-slate-800">Quick Actions</h3>
-          <p className="text-slate-600 text-sm">Add your first transaction here. Upload invoices and let our AI categorize them.</p>
+          <p className="text-slate-600 text-sm">Add your first transaction here. Upload invoices and we will organize them automatically.</p>
         </div>
       ),
       placement: 'top',
@@ -69,8 +69,8 @@ const Onboarding = () => {
       target: '.tour-step-insights',
       content: (
         <div className="text-left space-y-2">
-          <h3 className="text-lg font-bold text-slate-800">Smart Insights</h3>
-          <p className="text-slate-600 text-sm">The platform will automatically generate priority recommendations here once data flows in.</p>
+          <h3 className="text-lg font-bold text-slate-800">Insights</h3>
+          <p className="text-slate-600 text-sm">Get personalized recommendations based on your business data.</p>
         </div>
       ),
       placement: 'top',

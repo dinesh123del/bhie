@@ -58,10 +58,10 @@ export default function Contact() {
 
               <div className="grid gap-6 sm:grid-cols-2">
                 {[
-                  { icon: Mail, label: 'Email', value: 'hello@finly.ai', sub: '24/7 Support' },
+                  { icon: Mail, label: 'Email', value: 'hello@aera.cloud', sub: '24/7 Support' },
                   { icon: MessageSquare, label: 'Chat', value: 'WhatsApp Ready', sub: 'Real-time help' },
-                  { icon: Phone, label: 'Call', value: '+1 (555) 000-Finly', sub: 'Mon-Fri, 9am-6pm' },
-                  { icon: MapPin, label: 'Office', value: 'Silicon Valley', sub: 'California, USA' }
+                  { icon: Phone, label: 'Call', value: '+91 80 4567 2200', sub: 'Mon-Fri, 9am-6pm' },
+                  { icon: MapPin, label: 'Office', value: 'Bengaluru', sub: 'Karnataka, India' }
                 ].map((item, idx) => (
                   <motion.div
                     key={idx}
@@ -92,16 +92,16 @@ export default function Contact() {
             >
               <PremiumCard extreme className="p-8 md:p-10 backdrop-blur-3xl bg-white/[0.01] shadow-2xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-                   <Send size={120} className="text-sky-500 rotate-12" />
+                  <Send size={120} className="text-sky-500 rotate-12" />
                 </div>
-                
+
                 <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                   <div className="grid gap-6 sm:grid-cols-2">
                     <PremiumInput
                       label="Full Name"
                       placeholder="Jane Cooper"
                       value={formData.name}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })}
                       required
                     />
                     <PremiumInput
@@ -109,7 +109,7 @@ export default function Contact() {
                       type="email"
                       placeholder="jane@company.com"
                       value={formData.email}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, email: e.target.value})}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value })}
                       required
                     />
                   </div>
@@ -117,7 +117,7 @@ export default function Contact() {
                     label="Subject"
                     placeholder="How can we help?"
                     value={formData.subject}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, subject: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, subject: e.target.value })}
                     required
                   />
                   <div className="space-y-2">
@@ -126,7 +126,7 @@ export default function Contact() {
                       className="w-full min-h-[150px] bg-white/[0.03] border border-white/10 rounded-2xl p-4 text-white text-sm focus:outline-none focus:ring-1 focus:ring-sky-500/50 transition-all font-sans"
                       placeholder="Tell us about your needs..."
                       value={formData.message}
-                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, message: e.target.value})}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, message: e.target.value })}
                       required
                     />
                   </div>

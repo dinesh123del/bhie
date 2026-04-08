@@ -50,58 +50,58 @@ const features = [
 ];
 
 const playDolbyDemoSound = () => {
-    try {
-      const AudioCtx = (window.AudioContext || (window as any).webkitAudioContext);
-      if (!AudioCtx) return;
-      const ctx = new AudioCtx();
-      
-      const sub = ctx.createOscillator();
-      sub.type = 'sine';
-      sub.frequency.setValueAtTime(40, ctx.currentTime);
-      sub.frequency.exponentialRampToValueAtTime(20, ctx.currentTime + 3);
-      
-      const subGain = ctx.createGain();
-      subGain.gain.setValueAtTime(0.5, ctx.currentTime);
-      subGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 3);
-      
-      sub.connect(subGain);
-      subGain.connect(ctx.destination);
-      sub.start();
-      sub.stop(ctx.currentTime + 3);
+  try {
+    const AudioCtx = (window.AudioContext || (window as any).webkitAudioContext);
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
 
-      const sweep = ctx.createOscillator();
-      sweep.type = 'sawtooth';
-      sweep.frequency.setValueAtTime(120, ctx.currentTime);
-      sweep.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 2);
+    const sub = ctx.createOscillator();
+    sub.type = 'sine';
+    sub.frequency.setValueAtTime(40, ctx.currentTime);
+    sub.frequency.exponentialRampToValueAtTime(20, ctx.currentTime + 3);
 
-      const sweepGain = ctx.createGain();
-      sweepGain.gain.setValueAtTime(0, ctx.currentTime);
-      sweepGain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.5);
-      sweepGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 2.5);
+    const subGain = ctx.createGain();
+    subGain.gain.setValueAtTime(0.5, ctx.currentTime);
+    subGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 3);
 
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(200, ctx.currentTime);
-      filter.frequency.exponentialRampToValueAtTime(4000, ctx.currentTime + 2);
+    sub.connect(subGain);
+    subGain.connect(ctx.destination);
+    sub.start();
+    sub.stop(ctx.currentTime + 3);
 
-      const panner = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
-      if (panner) {
-        panner.pan.setValueAtTime(-1, ctx.currentTime);
-        panner.pan.linearRampToValueAtTime(1, ctx.currentTime + 2);
-        sweep.connect(filter);
-        filter.connect(panner);
-        panner.connect(sweepGain);
-      } else {
-        sweep.connect(filter);
-        filter.connect(sweepGain);
-      }
-      
-      sweepGain.connect(ctx.destination);
-      sweep.start();
-      sweep.stop(ctx.currentTime + 2.5);
-    } catch(e) {
-      console.error('Failed to parse watch demo features', e);
+    const sweep = ctx.createOscillator();
+    sweep.type = 'sawtooth';
+    sweep.frequency.setValueAtTime(120, ctx.currentTime);
+    sweep.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 2);
+
+    const sweepGain = ctx.createGain();
+    sweepGain.gain.setValueAtTime(0, ctx.currentTime);
+    sweepGain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.5);
+    sweepGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 2.5);
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(200, ctx.currentTime);
+    filter.frequency.exponentialRampToValueAtTime(4000, ctx.currentTime + 2);
+
+    const panner = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
+    if (panner) {
+      panner.pan.setValueAtTime(-1, ctx.currentTime);
+      panner.pan.linearRampToValueAtTime(1, ctx.currentTime + 2);
+      sweep.connect(filter);
+      filter.connect(panner);
+      panner.connect(sweepGain);
+    } else {
+      sweep.connect(filter);
+      filter.connect(sweepGain);
     }
+
+    sweepGain.connect(ctx.destination);
+    sweep.start();
+    sweep.stop(ctx.currentTime + 2.5);
+  } catch (e) {
+    console.error('Failed to parse watch demo features', e);
+  }
 };
 
 const WatchDemoModal: React.FC<WatchDemoModalProps> = ({ isOpen, onClose }) => {
@@ -176,7 +176,7 @@ const WatchDemoModal: React.FC<WatchDemoModalProps> = ({ isOpen, onClose }) => {
                     <Play className="w-3 h-3 fill-current" /> Product Walkthrough
                   </div>
                   <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter mb-3">
-                    How Finly Works
+                    How AERA Works
                   </h2>
                   <p className="text-white/50 text-lg max-w-lg mx-auto">
                     From receipt to insight in under 30 seconds. Here's the complete workflow.
@@ -194,17 +194,17 @@ const WatchDemoModal: React.FC<WatchDemoModalProps> = ({ isOpen, onClose }) => {
                 >
                   {/* Subtle glass reflection */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none z-10 mix-blend-overlay" />
-                  
-                  <img 
-                    src="/demo.png" 
-                    alt="Finly Working App Demo" 
+
+                  <img
+                    src="/demo.png"
+                    alt="AERA Working App Demo"
                     className="w-full h-auto object-cover opacity-90 shadow-2xl"
                   />
-                  
+
                   {/* Playing Indicator */}
                   <div className="absolute bottom-4 left-4 z-20 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10">
-                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                     <span className="text-[10px] font-bold text-white uppercase tracking-widest">Live Demo</span>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[10px] font-bold text-white uppercase tracking-widest">Live Demo</span>
                   </div>
                 </motion.div>
               </div>

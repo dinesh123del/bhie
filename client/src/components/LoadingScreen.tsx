@@ -9,9 +9,9 @@ const LoadingScreen = ({ onComplete }: { onComplete?: () => void }) => {
   const [statusIdx, setStatusIdx] = useState(0);
 
   const statuses = [
-    "Welcome to Finly.",
+    "Welcome to AERA.",
+    "Preparing your workspace.",
     "Loading your data.",
-    "Setting things up.",
     "Almost ready."
   ];
 
@@ -78,18 +78,10 @@ const LoadingScreen = ({ onComplete }: { onComplete?: () => void }) => {
            >
               <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/20 via-transparent to-purple-500/20 mix-blend-overlay" />
               
-              {/* Premium 8k Level Animated App Logo */}
-              <motion.img 
-                 src="/icon.png" 
-                 alt="Finly Ecosystem" 
-                 className="w-16 h-16 object-contain relative z-10"
-                 animate={{ scale: [1, 1.05, 1] }}
-                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                 onError={(e) => {
-                     // Fallback to logo-mark if icon.png fails
-                     (e.target as HTMLImageElement).src = '/logo-mark.png';
-                 }}
-              />
+                      {/* Clean AERA Mark */}
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#007AFF] to-[#AF52DE] flex items-center justify-center relative z-10">
+                <span className="text-white font-black text-2xl">A</span>
+              </div>
            </motion.div>
         </div>
 
@@ -115,9 +107,9 @@ const LoadingScreen = ({ onComplete }: { onComplete?: () => void }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8, duration: 1.5 }}
-                className="text-indigo-400/80 text-xs font-black uppercase tracking-[0.4em] text-center"
+                className="text-[#007AFF]/80 text-xs font-black uppercase tracking-[0.4em] text-center"
               >
-                LOADING FINLY
+                AERA
               </motion.p>
             </motion.div>
           </AnimatePresence>
@@ -149,7 +141,7 @@ const LoadingScreen = ({ onComplete }: { onComplete?: () => void }) => {
       </div>
 
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[10vw] font-black text-white/[0.02] select-none pointer-events-none tracking-tighter mix-blend-overlay">
-        FINLY
+        AERA
       </div>
     </div>
   );

@@ -77,7 +77,7 @@ const FullscreenLogoLoader = ({
           animate={{ y: [0, -8, 0] }}
           transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <Logo size="lg" glow showSubtitle subtitle="Business Intelligence Engine" />
+          <Logo size="lg" glow showSubtitle subtitle="Economic Resilience" />
         </motion.div>
 
         <div className="flex flex-col items-center gap-3">

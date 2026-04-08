@@ -13,11 +13,11 @@ import { HiChevronDoubleLeft, HiChevronDoubleRight, HiSparkles } from 'react-ico
 import { useTheme } from '../../contexts/ThemeContext';
 import Logo from '../Logo';
 import { premiumFeedback } from '../../utils/premiumFeedback';
-import { 
-  RealityEngine, 
-  ThermalEngine, 
-  SecurityEngine, 
-  MagneticWrapper, 
+import {
+  RealityEngine,
+  ThermalEngine,
+  SecurityEngine,
+  MagneticWrapper,
   Scanlines,
   MouseGlow
 } from '../ui/MicroEngines';
@@ -132,7 +132,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         <div className="hidden min-w-[320px] max-w-xl flex-1 items-center lg:flex">
-          <form 
+          <form
             onSubmit={(e) => {
               e.preventDefault();
               if (searchQuery.trim()) {
@@ -200,20 +200,20 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <span className="text-xs text-sky-400 bg-sky-400/10 px-2 py-1 rounded-md font-black uppercase tracking-widest">2 New</span>
                   </div>
                   <div className="space-y-2 mt-4">
-                     <div className="flex gap-3 items-center p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all cursor-pointer">
-                        <TrendingUp className="w-5 h-5 text-emerald-400" />
-                        <div>
-                          <p className="text-sm font-semibold text-white">Profit increased</p>
-                          <p className="text-xs text-emerald-100/60 mt-0.5">You're up 8% this week! 🔥</p>
-                        </div>
-                     </div>
-                     <div className="flex gap-3 items-center p-3 rounded-2xl bg-orange-500/10 border border-orange-500/20 hover:bg-orange-500/20 transition-all cursor-pointer">
-                        <span role="img" aria-label="warning" className="text-lg">📉</span>
-                        <div>
-                          <p className="text-sm font-semibold text-white">Expense warning</p>
-                          <p className="text-xs text-orange-200/60 mt-0.5">Software costs rose by 12%.</p>
-                        </div>
-                     </div>
+                    <div className="flex gap-3 items-center p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all cursor-pointer">
+                      <TrendingUp className="w-5 h-5 text-emerald-400" />
+                      <div>
+                        <p className="text-sm font-semibold text-white">Profit increased</p>
+                        <p className="text-xs text-emerald-100/60 mt-0.5">You're up 8% this week! 🔥</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-3 items-center p-3 rounded-2xl bg-orange-500/10 border border-orange-500/20 hover:bg-orange-500/20 transition-all cursor-pointer">
+                      <span role="img" aria-label="warning" className="text-lg">📉</span>
+                      <div>
+                        <p className="text-sm font-semibold text-white">Expense warning</p>
+                        <p className="text-xs text-orange-200/60 mt-0.5">Software costs rose by 12%.</p>
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               ) : null}
@@ -361,11 +361,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   premiumFeedback.click();
                 }}
                 onMouseEnter={() => premiumFeedback.haptic(5)}
-                className={`group relative flex w-full items-center rounded-2xl border px-4 py-3 text-left transition-all duration-300 ease-premium ${
-                  selected
+                className={`group relative flex w-full items-center rounded-2xl border px-4 py-3 text-left transition-all duration-300 ease-premium ${selected
                     ? 'border-sky-300/18 bg-white/[0.07] text-white shadow-brand-glow'
                     : 'border-transparent text-ink-300 hover:border-white/10 hover:bg-white/[0.05] hover:text-white'
-                } ${collapsed ? 'justify-center' : 'gap-3'}`}
+                  } ${collapsed ? 'justify-center' : 'gap-3'}`}
               >
                 {selected ? (
                   <div className="absolute inset-y-3 left-2 hidden w-1 rounded-full bg-gradient-to-b from-sky-300 to-indigo-300 lg:block" />
@@ -392,7 +391,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {!collapsed ? (
               <div className="flex flex-col gap-4">
                 <div className="space-y-1">
-                  <p className="text-xs uppercase tracking-[0.2em] text-ink-400">Finly OS</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-ink-400">AERA</p>
                   <p className="mt-2 text-sm font-semibold text-white">Simple business workspace</p>
                   <p className="mt-1 text-sm text-ink-300">Use this menu to check records, analytics, and actions without extra noise.</p>
                 </div>
@@ -447,32 +446,32 @@ export const MainLayout: React.FC<{
 
       {/* Mobile Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 z-40 px-4 pb-4 lg:hidden">
-        <motion.nav 
+        <motion.nav
           initial={{ y: 80 }}
           animate={{ y: 0 }}
           className="mx-auto flex h-16 max-w-md items-center justify-around gap-1 rounded-2xl border border-white/10 bg-white/[0.03] p-2 shadow-2xl backdrop-blur-3xl"
         >
           {sidebarItems.slice(0, 4).map((item) => {
-             const selected = activePage === item.href;
-              return (
-                <motion.button
-                  key={item.href}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => onNavigate(item.href)}
-                  className={`flex flex-col items-center justify-center gap-1 rounded-xl px-4 py-1 transition-colors ${selected ? 'text-sky-400' : 'text-white/70'}`}
-                >
-                  <span className={selected ? 'scale-110' : ''}>{item.icon}</span>
-                  <span className={`text-[10px] font-black uppercase tracking-tight ${selected ? 'text-sky-400' : 'text-white/60'}`}>{item.label.slice(0, 5)}</span>
-                </motion.button>
-              );
+            const selected = activePage === item.href;
+            return (
+              <motion.button
+                key={item.href}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => onNavigate(item.href)}
+                className={`flex flex-col items-center justify-center gap-1 rounded-xl px-4 py-1 transition-colors ${selected ? 'text-sky-400' : 'text-white/70'}`}
+              >
+                <span className={selected ? 'scale-110' : ''}>{item.icon}</span>
+                <span className={`text-[10px] font-black uppercase tracking-tight ${selected ? 'text-sky-400' : 'text-white/60'}`}>{item.label.slice(0, 5)}</span>
+              </motion.button>
+            );
           })}
           <motion.button
-             whileTap={{ scale: 0.9 }}
-             onClick={() => setMobileOpen(true)}
-             className="flex flex-col items-center justify-center gap-1 rounded-xl px-4 py-1 text-white/70"
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setMobileOpen(true)}
+            className="flex flex-col items-center justify-center gap-1 rounded-xl px-4 py-1 text-white/70"
           >
-             <Menu className="h-5 w-5" />
-             <span className="text-[10px] font-black uppercase tracking-tight tertiary-text">More</span>
+            <Menu className="h-5 w-5" />
+            <span className="text-[10px] font-black uppercase tracking-tight tertiary-text">More</span>
           </motion.button>
         </motion.nav>
       </div>

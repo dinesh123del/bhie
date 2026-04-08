@@ -126,8 +126,8 @@ const PremiumLogin = () => {
                   <ShieldCheck className="w-3 h-3 text-indigo-400" />
                   <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400">Secure Login</span>
                 </div>
-                <h2 className="text-3xl md:text-5xl font-black text-white mb-2 tracking-tight">Welcome <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400 italic">back.</span></h2>
-                <p className="text-white/40 text-sm font-medium tracking-wide">Sign in to your Finly account.</p>
+                <h2 className="text-3xl md:text-5xl font-black text-white mb-2 tracking-tight">Welcome <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#007AFF] to-[#AF52DE] italic">back.</span></h2>
+                <p className="text-white/40 text-sm font-medium tracking-wide">Sign in to your AERA account.</p>
               </div>
 
               {error && (

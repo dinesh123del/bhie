@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
+import {
   IndianRupee, ArrowRight, CheckCircle2,
   Briefcase, LineChart, ShieldCheck
 } from 'lucide-react';
@@ -26,7 +26,7 @@ export default function ResellerPartner() {
   if (showSuccess) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[80vh] px-4 space-y-6">
-        <motion.div 
+        <motion.div
           initial={{ scale: 0 }} animate={{ scale: 1 }}
           className="w-24 h-24 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center"
         >
@@ -36,7 +36,7 @@ export default function ResellerPartner() {
         <p className="text-slate-400 max-w-md text-center">
           Our team will review your CA/Firm details and contact you within 24 hours to activate your Reseller Portal.
         </p>
-        <button 
+        <button
           onClick={() => navigate('/dashboard')}
           className="mt-4 px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all"
         >
@@ -56,20 +56,20 @@ export default function ResellerPartner() {
             CA & ACCOUNTING FIRMS
           </span>
           <h1 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">
-            Partner with Finly
+            Partner with AERA
           </h1>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Manage dozens of client businesses from a single dashboard. 
-            Resell Finly's deep intelligence, provide <strong>Official Audit Certifications</strong>, and earn 20% recurring commission.
+            Manage dozens of client businesses from a single dashboard.
+            Resell AERA's deep intelligence, provide <strong>Official Audit Certifications</strong>, and earn 20% recurring commission.
           </p>
           <div className="mt-8 flex justify-center gap-4">
-            <button 
+            <button
               onClick={() => navigate('/ca-portal')}
               className="px-6 py-3 bg-brand-500 hover:bg-brand-600 text-white font-black rounded-2xl flex items-center gap-2 shadow-xl shadow-brand-500/20 transition-all hover:scale-105"
             >
               <ShieldCheck className="w-5 h-5" /> Launch Auditor Workspace
             </button>
-            <button 
+            <button
               onClick={() => {
                 const el = document.getElementById('partnership-form');
                 el?.scrollIntoView({ behavior: 'smooth' });
@@ -84,8 +84,8 @@ export default function ResellerPartner() {
 
       <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
         {/* Left Side: Info */}
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }} 
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
           className="space-y-10"
@@ -96,7 +96,7 @@ export default function ResellerPartner() {
             </div>
             <h3 className="text-2xl font-bold text-white mb-2">Revenue Potential</h3>
             <p className="text-slate-400 mb-8">Special pricing block for CA Partners</p>
-            
+
             <div className="flex items-baseline gap-2 mb-2">
               <span className="text-4xl font-black text-white">₹4,999</span>
               <span className="text-slate-500">/ month</span>
@@ -139,9 +139,9 @@ export default function ResellerPartner() {
         </motion.div>
 
         {/* Right Side: Form */}
-        <motion.div 
+        <motion.div
           id="partnership-form"
-          initial={{ opacity: 0, x: 20 }} 
+          initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
         >
@@ -159,9 +159,9 @@ export default function ResellerPartner() {
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-300">Firm Name</label>
-                <input 
+                <input
                   required
-                  type="text" 
+                  type="text"
                   placeholder="e.g. Sharma & Associates CA"
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
                 />
@@ -170,18 +170,18 @@ export default function ResellerPartner() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-300">Your Name</label>
-                  <input 
+                  <input
                     required
-                    type="text" 
+                    type="text"
                     defaultValue={user?.name}
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-300">Phone</label>
-                  <input 
+                  <input
                     required
-                    type="tel" 
+                    type="tel"
                     placeholder="+91..."
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500"
                   />
@@ -190,9 +190,9 @@ export default function ResellerPartner() {
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-300">Email Address</label>
-                <input 
+                <input
                   required
-                  type="email" 
+                  type="email"
                   defaultValue={user?.email}
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500"
                 />
@@ -208,7 +208,7 @@ export default function ResellerPartner() {
                 </select>
               </div>
 
-              <button 
+              <button
                 type="submit"
                 disabled={isSubmitting}
                 className="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3.5 rounded-xl transition-all disabled:opacity-70 flex justify-center items-center gap-2"

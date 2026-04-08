@@ -27,7 +27,7 @@ export default function PricingPage() {
         }
 
         const response = await api.get('/pricing');
-        
+
         if (response.data.success) {
           setPricingData(response.data.data);
           localStorage.setItem('userPricing', JSON.stringify(response.data.data));
@@ -50,7 +50,7 @@ export default function PricingPage() {
       GB: { currency: "GBP", price: 4, premiumPrice: 12 },
       DEFAULT: { currency: "USD", price: 5, premiumPrice: 15 }
     };
-    
+
     const newPricing = mockConfig[country] || mockConfig['DEFAULT'];
     const updatedData = { country, ...newPricing };
     setPricingData(updatedData);
@@ -58,7 +58,7 @@ export default function PricingPage() {
   };
 
   const getCurrencySymbol = (currency: string) => {
-    switch(currency) {
+    switch (currency) {
       case 'INR': return '₹';
       case 'GBP': return '£';
       case 'USD': default: return '$';
@@ -82,7 +82,7 @@ export default function PricingPage() {
     },
     {
       name: 'Premium',
-      price: loading ? '...' : `${getCurrencySymbol(pricingData.currency)}${pricingData.premiumPrice}`, 
+      price: loading ? '...' : `${getCurrencySymbol(pricingData.currency)}${pricingData.premiumPrice}`,
       period: '/month',
       description: 'For organizations with advanced governance, integrations, and executive workflows.',
       features: ['Everything in Pro', 'Custom integrations', 'Advanced reporting', 'Dedicated support', 'API access'],
@@ -93,10 +93,10 @@ export default function PricingPage() {
     <MarketingLayout>
       <section className="px-4 pb-8 pt-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl text-center relative">
-          
+
           <div className="absolute right-0 top-0 hidden md:flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2 backdrop-blur-md">
             <Globe className="w-4 h-4 text-emerald-400" />
-            <select 
+            <select
               value={pricingData.country}
               onChange={handleCountryChange}
               className="bg-transparent text-white text-sm outline-none cursor-pointer appearance-none pr-4"
@@ -145,11 +145,10 @@ export default function PricingPage() {
               initial={{ opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.08 * index }}
-              className={`rounded-[36px] p-[1px] ${
-                plan.featured
+              className={`rounded-[36px] p-[1px] ${plan.featured
                   ? 'bg-[linear-gradient(135deg,rgba(255,255,255,0.55),rgba(251,191,36,0.45),rgba(34,211,238,0.55))]'
                   : 'bg-white/10'
-              }`}
+                }`}
             >
               <div className="brand-panel h-full rounded-[35px] p-8">
                 <div className="flex items-start justify-between gap-4">
@@ -182,11 +181,10 @@ export default function PricingPage() {
 
                 <Link
                   to={plan.price === 'Free' ? '/login' : '/payments'}
-                  className={`mt-10 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition hover:scale-[1.02] ${
-                    plan.featured
+                  className={`mt-10 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition hover:scale-[1.02] ${plan.featured
                       ? 'bg-white text-slate-950'
                       : 'border border-white/15 bg-white/5 text-white'
-                  }`}
+                    }`}
                 >
                   {plan.price === 'Free' ? 'Get started' : `Get ${plan.name}`}
                   <ArrowRight className="h-4 w-4" />
@@ -196,20 +194,20 @@ export default function PricingPage() {
           ))}
         </div>
       </section>
-      
+
       <div className="md:hidden flex justify-center mt-4">
-          <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2 backdrop-blur-md">
-            <Globe className="w-4 h-4 text-emerald-400" />
-            <select 
-              value={pricingData.country}
-              onChange={handleCountryChange}
-              className="bg-transparent text-white text-sm outline-none cursor-pointer pr-4"
-            >
-              <option value="US" className="text-black">US (USD)</option>
-              <option value="IN" className="text-black">IN (INR)</option>
-              <option value="GB" className="text-black">UK (GBP)</option>
-            </select>
-          </div>
+        <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2 backdrop-blur-md">
+          <Globe className="w-4 h-4 text-emerald-400" />
+          <select
+            value={pricingData.country}
+            onChange={handleCountryChange}
+            className="bg-transparent text-white text-sm outline-none cursor-pointer pr-4"
+          >
+            <option value="US" className="text-black">US (USD)</option>
+            <option value="IN" className="text-black">IN (INR)</option>
+            <option value="GB" className="text-black">UK (GBP)</option>
+          </select>
+        </div>
       </div>
 
       <section className="px-4 py-16 sm:px-6 lg:px-8">
@@ -217,7 +215,7 @@ export default function PricingPage() {
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <div>
               <span className="section-kicker">What’s Included</span>
-              <h2 className="mt-6 text-4xl font-black text-white">Every plan carries the Finly design standard.</h2>
+              <h2 className="mt-6 text-4xl font-black text-white">Every plan carries the AERA design standard.</h2>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               {[

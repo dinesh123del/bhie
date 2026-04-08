@@ -52,6 +52,12 @@ const Workflows = lazy(() => import('./pages/Workflows'));
 // ── Mute preference key ──────────────────────────────────────
 const MUTE_KEY = 'aera_sound_muted';
 
+// Legacy key migration
+if (localStorage.getItem('finly_sound_muted')) {
+  localStorage.setItem('aera_sound_muted', localStorage.getItem('finly_sound_muted')!);
+  localStorage.removeItem('finly_sound_muted');
+}
+
 function getMutePreference(): boolean {
   try { return localStorage.getItem(MUTE_KEY) === 'true'; } catch { return false; }
 }
@@ -90,15 +96,15 @@ function MainApp() {
   const onboardingSteps = [
     {
       title: 'Welcome to AERA',
-      description: "The world's first Autonomous Economic Resilience Agent. Let's fortify your business in real-time.",
+      description: "Your economic resilience platform. Built to help your business thrive through any market condition.",
     },
     {
       title: 'Snap & Save',
-      description: 'Just take a photo of any bill. Our AI finds the shop name, date, and price instantly — you do nothing.',
+      description: 'Take a photo of any receipt or invoice. We automatically extract the details and organize them for you.',
     },
     {
       title: 'See Your Progress',
-      description: 'Watch your profit grow as you scan. We make your business clear and simple.',
+      description: 'Watch your profit grow as you add transactions. Clear insights to help you make better decisions.',
     },
   ];
 

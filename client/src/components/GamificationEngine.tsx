@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Flame } from 'lucide-react';
 
 /* ──────────────────────────────────────────────────────────────
-   Finly GAMIFICATION ENGINE v2.1 (Context Enabled)
+   AERA GAMIFICATION ENGINE v2.1 (Context Enabled)
    ─ Daily Streak tracker
    ─ Level / Badge system (XP Based)
    ─ Rank names: Recruit → Guardian → Sentinel → Overlord
@@ -20,15 +20,15 @@ export interface UserLevel {
 }
 
 const LEVELS: UserLevel[] = [
-  { name: 'Recruit',     minXP: 0,      emoji: '🌱', color: 'text-emerald-400', glow: 'rgba(52,211,153,0.3)' },
-  { name: 'Strategist',  minXP: 500,    emoji: '⚡', color: 'text-sky-400',     glow: 'rgba(56,189,248,0.3)' },
-  { name: 'Sentinel',    minXP: 1500,   emoji: '🛡️', color: 'text-indigo-400',  glow: 'rgba(99,102,241,0.4)' },
-  { name: 'Analyst Pro', minXP: 3000,   emoji: '💎', color: 'text-violet-400',  glow: 'rgba(167,139,250,0.4)' },
-  { name: 'Overlord',    minXP: 6000,   emoji: '👑', color: 'text-amber-400',   glow: 'rgba(251,191,36,0.4)' },
+  { name: 'Recruit', minXP: 0, emoji: '🌱', color: 'text-emerald-400', glow: 'rgba(52,211,153,0.3)' },
+  { name: 'Strategist', minXP: 500, emoji: '⚡', color: 'text-sky-400', glow: 'rgba(56,189,248,0.3)' },
+  { name: 'Sentinel', minXP: 1500, emoji: '🛡️', color: 'text-indigo-400', glow: 'rgba(99,102,241,0.4)' },
+  { name: 'Analyst Pro', minXP: 3000, emoji: '💎', color: 'text-violet-400', glow: 'rgba(167,139,250,0.4)' },
+  { name: 'Overlord', minXP: 6000, emoji: '👑', color: 'text-amber-400', glow: 'rgba(251,191,36,0.4)' },
 ];
 
 // ── Local storage helpers ─────────────────────────────────────
-const STREAK_KEY = 'finly_streak_data_v2';
+const STREAK_KEY = 'aera_streak_data_v2';
 
 interface ProgressData {
   currentStreak: number;
@@ -110,7 +110,7 @@ export const GamificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         totalDays: prev.totalDays + 1,
         xp: totalXP
       };
-      
+
       saveProgress(updated);
       return updated;
     });
@@ -252,7 +252,7 @@ export function StreakBadge({ compact = false }: { compact?: boolean }) {
 // ── Achievement Badge Component ─────────────────────────────────────
 export function BadgeRow({ totalRecords, healthScore, revenue }: { totalRecords: number, healthScore: number, revenue: number }) {
   const badges = [
-    { name: 'Founder', icon: '💎', active: true, desc: 'Early Finly Adopter' },
+    { name: 'Founder', icon: '💎', active: true, desc: 'Early AERA Adopter' },
     { name: 'Data King', icon: '👑', active: totalRecords >= 100, desc: '100+ Records' },
     { name: 'Efficiency', icon: '⚡', active: healthScore >= 90, desc: '90+ Health Score' },
     { name: 'Capitalist', icon: '💰', active: revenue >= 50000, desc: '50k+ Revenue' },
@@ -264,11 +264,10 @@ export function BadgeRow({ totalRecords, healthScore, revenue }: { totalRecords:
         <motion.div
           key={badge.name}
           whileHover={{ y: -5, scale: 1.05 }}
-          className={`p-3 rounded-2xl border flex items-center gap-3 transition-all duration-500 ${
-            badge.active 
-              ? 'bg-indigo-500/10 border-indigo-500/20 shadow-[0_10px_20px_rgba(99,102,241,0.1)]' 
+          className={`p-3 rounded-2xl border flex items-center gap-3 transition-all duration-500 ${badge.active
+              ? 'bg-indigo-500/10 border-indigo-500/20 shadow-[0_10px_20px_rgba(99,102,241,0.1)]'
               : 'bg-white/[0.02] border-white/5 opacity-30 grayscale'
-          }`}
+            }`}
         >
           <span className="text-2xl">{badge.icon}</span>
           <div className="hidden sm:block">
@@ -290,8 +289,8 @@ export function SmartInsight({ streak }: { streak: number }) {
       className="p-4 rounded-2xl bg-indigo-500/5 border border-indigo-500/10"
     >
       <p className="text-sm font-semibold text-white/80 leading-relaxed">
-        {streak >= 5 
-          ? `🔥 You're on a roll with a ${streak}-day streak! Your data engine is optimizing at 98% efficiency.` 
+        {streak >= 5
+          ? `🔥 You're on a roll with a ${streak}-day streak! Your data engine is optimizing at 98% efficiency.`
           : "💡 Keep up the daily check-ins to boost your business health score and earn more XP."}
       </p>
     </motion.div>
