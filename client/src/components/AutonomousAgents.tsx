@@ -220,7 +220,7 @@ export function AutonomousAgents({ businessId, className }: AutonomousAgentsProp
       case 'optimization': return <TrendingUp className="h-4 w-4" />;
       case 'analytics': return <Lightbulb className="h-4 w-4" />;
       case 'automation': return <Settings className="h-4 w-4" />;
-      default: return <Cpu className="h-4 w-4" />;
+      default: return <Activity className="h-4 w-4" />;
     }
   };
 

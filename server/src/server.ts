@@ -20,6 +20,7 @@ import { startCronJobs } from './jobs/cron.js';
 import logger from './utils/logger.js';
 import RealTimeIntelligence from './services/realTimeIntelligence.js';
 import AutonomousAgents from './services/autonomousAgents.js';
+import NeuralPredictionEngine from './services/neuralPredictionEngine.js';
 
 const app = express();
 
@@ -192,6 +193,7 @@ app.use(errorHandler);
 let server: any = null;
 let realTimeIntelligence: RealTimeIntelligence | null = null;
 let autonomousAgents: AutonomousAgents | null = null;
+let neuralPredictionEngine: NeuralPredictionEngine | null = null;
 
 async function startServer(): Promise<void> {
   const PORT = env.PORT || 5000; 
@@ -234,16 +236,29 @@ async function initializeIntelligenceSystems(): Promise<void> {
     autonomousAgents = new AutonomousAgents(openai, realTimeIntelligence);
     logger.info('🔍 Business analysis tools initialized');
 
+    // Initialize Neural Prediction Engine
+    neuralPredictionEngine = new NeuralPredictionEngine();
+    logger.info('🧠 Neural prediction engine initialized');
+
     // Make systems available to routes via app.locals
     app.locals.realTimeIntelligence = realTimeIntelligence;
     app.locals.autonomousAgents = autonomousAgents;
+    app.locals.neuralPredictionEngine = neuralPredictionEngine;
 
     // Start monitoring business metrics
-    logger.info('� Business insights engine started');
+    logger.info('📈 Business insights engine started');
+    
+    // Start neural network training in background
+    setTimeout(async () => {
+      if (neuralPredictionEngine) {
+        await neuralPredictionEngine.trainGlobalModel();
+        logger.info('🎯 Global neural network training completed');
+      }
+    }, 30000); // Start after 30 seconds
     
     // Emit system ready event
     setTimeout(() => {
-      logger.info('✨ Advanced business analytics fully operational');
+      logger.info('✨ Advanced business analytics with neural prediction fully operational');
     }, 2000);
 
   } catch (error) {
