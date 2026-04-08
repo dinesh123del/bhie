@@ -17,6 +17,7 @@ import subscriptionRoutes from './subscription.js';
 import eventRoutes from './events.js';
 import analyticsIntelRoutes from './analyticsIntelligence.js';
 import notificationRoutes from './notifications.js';
+import organizationRoutes from './organizations.js';
 import dataScienceRoutes from './dataScience.js';
 import pricingRoutes from './pricing.js';
 import workflowRoutes from './workflow.js';
@@ -63,6 +64,7 @@ router.use('/insights', insightsRoutes);
 router.use('/transactions', transactionsRoutes);
 router.use('/subscription', subscriptionRoutes);
 router.use('/notifications', notificationRoutes);
+router.use('/organizations', organizationRoutes);
 router.use('/pricing', pricingRoutes);
 router.use('/workflow', workflowRoutes);
 

@@ -179,12 +179,12 @@ router.post('/translate', authenticateToken, aiLimiter, asyncHandler(async (req,
         const parsed = JSON.parse(aiResponse.content);
         res.json({ translation: parsed.translation || aiResponse.content });
     }
-    catch (e) {
+    catch {
         res.json({ translation: aiResponse.content });
     }
 }));
 // ──────────────────────────────────────────
-// 10-YEAR ENGINE: Monte Carlo Simulation
+// Predictive Analytics: Monte Carlo Simulation
 // ──────────────────────────────────────────
 router.post('/simulate', authenticateToken, asyncHandler(async (req, res) => {
     const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
@@ -200,14 +200,14 @@ router.post('/simulate', authenticateToken, asyncHandler(async (req, res) => {
         const data = await response.json();
         res.json(data);
     }
-    catch (err) {
-        if (err instanceof AppError)
-            throw err;
+    catch (_err) {
+        if (_err instanceof AppError)
+            throw _err;
         throw new AppError(503, 'ML Simulation Service is unavailable. Please ensure it is running on port 8000.');
     }
 }));
 // ──────────────────────────────────────────
-// 10-YEAR ENGINE: Business Health Score
+// Business Performance: Health Score
 // ──────────────────────────────────────────
 router.post('/health-score', authenticateToken, asyncHandler(async (req, res) => {
     const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
@@ -223,14 +223,14 @@ router.post('/health-score', authenticateToken, asyncHandler(async (req, res) =>
         const data = await response.json();
         res.json(data);
     }
-    catch (err) {
-        if (err instanceof AppError)
-            throw err;
+    catch (_err) {
+        if (_err instanceof AppError)
+            throw _err;
         throw new AppError(503, 'ML Health Score Service is unavailable.');
     }
 }));
 // ──────────────────────────────────────────
-// 30-YEAR VISION: Semantic Memory Core
+// Strategic Context: Historical Reference Core
 // ──────────────────────────────────────────
 router.post('/memory/store', authenticateToken, asyncHandler(async (req, res) => {
     const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
@@ -243,8 +243,8 @@ router.post('/memory/store', authenticateToken, asyncHandler(async (req, res) =>
         const data = await response.json();
         res.json(data);
     }
-    catch (err) {
-        throw new AppError(503, 'Semantic Memory Service is unavailable.');
+    catch {
+        throw new AppError(503, 'Historical Context Service is unavailable.');
     }
 }));
 router.post('/memory/query', authenticateToken, asyncHandler(async (req, res) => {
@@ -258,12 +258,12 @@ router.post('/memory/query', authenticateToken, asyncHandler(async (req, res) =>
         const data = await response.json();
         res.json(data);
     }
-    catch (err) {
-        throw new AppError(503, 'Semantic Memory Service is unavailable.');
+    catch {
+        throw new AppError(503, 'Historical Context Service is unavailable.');
     }
 }));
 // ──────────────────────────────────────────
-// 30-YEAR VISION: Autonomous Auditor Agent
+// Strategic Insights: Automated Audit Tool
 // ──────────────────────────────────────────
 router.post('/agent/audit', authenticateToken, asyncHandler(async (req, res) => {
     const authUser = requireUser(req);
@@ -275,11 +275,11 @@ router.post('/agent/audit', authenticateToken, asyncHandler(async (req, res) => 
         body: JSON.stringify(req.body),
     });
     const healthData = await healthResponse.json();
-    // 2. Perform Autonomous Audit Strategy
+    // 2. Perform Automated Audit Analysis
     const auditInsights = healthData.healthScore < 70
-        ? "SYSTEM ALERT: High financial entropy detected. Suggesting transition to resilience mode."
-        : "ECOSYSTEM STABLE: Identifying growth acceleration path.";
-    // 3. Commit finding to Long-Term Memory (Vision 2050)
+        ? "SYSTEM ALERT: Financial irregularities detected. Suggesting focus on resilience and efficiency."
+        : "FINANCIAL STATE STABLE: Identifying growth acceleration path.";
+    // 3. Commit finding to historical records
     await fetch(`${mlServiceUrl}/memory/store`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -292,9 +292,32 @@ router.post('/agent/audit', authenticateToken, asyncHandler(async (req, res) => 
     });
     res.json({
         success: true,
-        agentAction: "Audit Complete",
+        analysisAction: "Audit Complete",
         insights: auditInsights,
-        persistedToLTM: true
+        persistedToHistory: true
     });
+}));
+// ──────────────────────────────────────────
+// AERA Sentinel (Billion Dollar Vision)
+// ──────────────────────────────────────────
+router.post('/sentinel', authenticateToken, asyncHandler(async (req, res) => {
+    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    try {
+        const response = await fetch(`${mlServiceUrl}/aera/sentinel`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(req.body),
+        });
+        if (!response.ok) {
+            throw new AppError(response.status, 'AERA Sentinel service error');
+        }
+        const data = await response.json();
+        res.json(data);
+    }
+    catch (_err) {
+        if (_err instanceof AppError)
+            throw _err;
+        throw new AppError(503, 'AERA Sentinel Service is unavailable.');
+    }
 }));
 export default router;

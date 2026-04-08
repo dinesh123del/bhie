@@ -13,3 +13,6 @@ export {
   ShimmerLoading,
   FloatingInput,
 } from './AnimatedComponents';
+
+// Animation System Exports
+export * from './animations';

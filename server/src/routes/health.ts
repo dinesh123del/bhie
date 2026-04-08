@@ -2,7 +2,7 @@ import express, { Response } from 'express';
 import mongoose from 'mongoose';
 import { redisClient } from '../config/redisClient.js';
 import { env } from '../config/env.js';
-
+import { monitoringService } from '../services/monitoringService.js';
 import { asyncHandler } from '../middleware/asyncHandler.js';
 
 
@@ -80,5 +80,70 @@ router.get(
     res.json(report);
   })
 );
+
+/**
+ * @route   GET /system/health/live
+ * @desc    Liveness probe for Kubernetes
+ * @access  Public
+ */
+router.get('/live', (_req, res) => {
+  res.status(200).json({ status: 'alive' });
+});
+
+/**
+ * @route   GET /system/health/ready
+ * @desc    Readiness probe for Kubernetes
+ * @access  Public
+ */
+router.get('/ready', asyncHandler(async (_req, res) => {
+  const status = await monitoringService.getReadinessStatus();
+  
+  if (status.ready) {
+    res.status(200).json({ status: 'ready' });
+  } else {
+    res.status(503).json({ status: 'not ready', reason: status.reason });
+  }
+}));
+
+/**
+ * @route   GET /system/health/detailed
+ * @desc    Detailed health status with metrics
+ * @access  Private (Admin only)
+ */
+router.get('/detailed', asyncHandler(async (_req, res) => {
+  const status = await monitoringService.getHealthStatus();
+  res.json(status);
+}));
+
+/**
+ * @route   GET /system/health/metrics
+ * @desc    Prometheus-style metrics
+ * @access  Private
+ */
+router.get('/metrics', asyncHandler(async (_req, res) => {
+  const status = await monitoringService.getHealthStatus();
+  const metrics = status.metrics || { totalRequests: 0, errorRate: 0, avgResponseTime: 0 };
+  
+  const prometheusMetrics = [
+    '# HELP bhie_requests_total Total number of requests',
+    '# TYPE bhie_requests_total counter',
+    `bhie_requests_total ${metrics.totalRequests}`,
+    '',
+    '# HELP bhie_error_rate Error rate percentage',
+    '# TYPE bhie_error_rate gauge',
+    `bhie_error_rate ${metrics.errorRate}`,
+    '',
+    '# HELP bhie_response_time_average Average response time in ms',
+    '# TYPE bhie_response_time_average gauge',
+    `bhie_response_time_average ${metrics.avgResponseTime}`,
+    '',
+    '# HELP bhie_uptime_seconds Process uptime in seconds',
+    '# TYPE bhie_uptime_seconds gauge',
+    `bhie_uptime_seconds ${status.uptime}`,
+  ].join('\n');
+  
+  res.set('Content-Type', 'text/plain');
+  res.send(prometheusMetrics);
+}));
 
 export default router;

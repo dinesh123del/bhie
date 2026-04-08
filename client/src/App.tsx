@@ -15,25 +15,25 @@ import { OnboardingStep } from './components/ui/EliteUI';
 import { PremiumBackground } from './components/ui/PremiumBackground';
 
 // Dynamic Page Imports
-const LoginPage    = lazy(() => import('./pages/Login'));
+const LoginPage = lazy(() => import('./pages/Login'));
 const RegisterPage = lazy(() => import('./pages/Register'));
-const LandingPage  = lazy(() => import('./pages/Landing'));
-const Dashboard    = lazy(() => import('./pages/Dashboard'));
-const Analytics    = lazy(() => import('./pages/Analytics'));
-const Records      = lazy(() => import('./pages/Records'));
+const LandingPage = lazy(() => import('./pages/Landing'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Analytics = lazy(() => import('./pages/Analytics'));
+const Records = lazy(() => import('./pages/Records'));
 
-const AnalysisReport  = lazy(() => import('./pages/BusinessInsightsPage'));
-const AdminPanel      = lazy(() => import('./pages/Admin'));
-const SystemHealth    = lazy(() => import('./pages/SystemHealth'));
-const Payments        = lazy(() => import('./pages/Payments'));
-const ScanBill        = lazy(() => import('./pages/ScanBill'));
-const DataScienceHub  = lazy(() => import('./pages/DataScienceHub'));
+const AnalysisReport = lazy(() => import('./pages/BusinessInsightsPage'));
+const AdminPanel = lazy(() => import('./pages/Admin'));
+const SystemHealth = lazy(() => import('./pages/SystemHealth'));
+const Payments = lazy(() => import('./pages/Payments'));
+const ScanBill = lazy(() => import('./pages/ScanBill'));
+const DataScienceHub = lazy(() => import('./pages/DataScienceHub'));
 
 
 const Pricing = lazy(() => import('./pages/Pricing'));
 const Profile = lazy(() => import('./pages/Home'));
-const About   = lazy(() => import('./pages/About'));
-const Terms   = lazy(() => import('./pages/Terms'));
+const About = lazy(() => import('./pages/About'));
+const Terms = lazy(() => import('./pages/Terms'));
 const Privacy = lazy(() => import('./pages/Privacy'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Reports = lazy(() => import('./pages/Reports'));
@@ -50,7 +50,7 @@ const ResellerPartner = lazy(() => import('./pages/ResellerPartner'));
 const Workflows = lazy(() => import('./pages/Workflows'));
 
 // ── Mute preference key ──────────────────────────────────────
-const MUTE_KEY = 'finly_sound_muted';
+const MUTE_KEY = 'aera_sound_muted';
 
 function getMutePreference(): boolean {
   try { return localStorage.getItem(MUTE_KEY) === 'true'; } catch { return false; }
@@ -89,8 +89,8 @@ function MainApp() {
 
   const onboardingSteps = [
     {
-      title: 'Welcome to Finly',
-      description: "We help you track your business money and grow. Let's get you set up in one minute.",
+      title: 'Welcome to AERA',
+      description: "The world's first Autonomous Economic Resilience Agent. Let's fortify your business in real-time.",
     },
     {
       title: 'Snap & Save',
@@ -121,35 +121,35 @@ function MainApp() {
           <PageTransition key={location.pathname}>
             <Routes location={location}>
               {/* Public Routes */}
-              <Route path="/"        element={<LandingPage />} />
-              <Route path="/login"   element={<LoginPage />} />
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/pricing" element={<Pricing />} />
-              <Route path="/about"   element={<About />} />
-              <Route path="/terms"   element={<Terms />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/terms" element={<Terms />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/contact" element={<Contact />} />
 
               {/* Core Dashboard Experience */}
-              <Route path="/dashboard"       element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-              <Route path="/analytics"       element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
               <Route path="/analysis-report" element={<ProtectedRoute><AnalysisReport /></ProtectedRoute>} />
-              <Route path="/system-health"   element={<ProtectedRoute><SystemHealth /></ProtectedRoute>} />
-              <Route path="/scan-bill"       element={<ProtectedRoute><ScanBill /></ProtectedRoute>} />
-              <Route path="/ds-hub"          element={<ProtectedRoute><DataScienceHub /></ProtectedRoute>} />
-              <Route path="/settings"        element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
-              <Route path="/admin"           element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+              <Route path="/system-health" element={<ProtectedRoute><SystemHealth /></ProtectedRoute>} />
+              <Route path="/scan-bill" element={<ProtectedRoute><ScanBill /></ProtectedRoute>} />
+              <Route path="/ds-hub" element={<ProtectedRoute><DataScienceHub /></ProtectedRoute>} />
+              <Route path="/settings" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+              <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
 
               {/* Support Modules */}
-              <Route path="/records"  element={<ProtectedRoute><Records /></ProtectedRoute>} />
+              <Route path="/records" element={<ProtectedRoute><Records /></ProtectedRoute>} />
               <Route path="/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
-              <Route path="/profile"  element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-              <Route path="/reports"  element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
               <Route path="/insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
               <Route path="/business-brain" element={<ProtectedRoute><BusinessBrain /></ProtectedRoute>} />
               <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
               <Route path="/reseller-partner" element={<ProtectedRoute><ResellerPartner /></ProtectedRoute>} />
-              
+
               {/* Extra Valid Routes */}
               <Route path="/assistant" element={<ProtectedRoute><AIChat /></ProtectedRoute>} />
               <Route path="/predictions" element={<ProtectedRoute><Prediction /></ProtectedRoute>} />
@@ -172,7 +172,7 @@ function MainApp() {
 
 function App() {
   const [splashDone, setSplashDone] = useState(false);
-  const [dataReady, setDataReady]   = useState(false);
+  const [dataReady, setDataReady] = useState(false);
 
 
   // Preload backend during splash (non-blocking)
@@ -180,11 +180,11 @@ function App() {
     const preload = async () => {
       try {
         // BANK-GRADE SECURITY: Initialize CSRF session
-        await fetch(`${API}/api/auth/csrf-token`, { 
+        await fetch(`${API}/api/auth/csrf-token`, {
           credentials: 'include',
-          signal: AbortSignal.timeout(3000) 
+          signal: AbortSignal.timeout(3000)
         });
-        
+
         await fetch(`${API}/api/health`, { signal: AbortSignal.timeout(2500) });
       } catch (err) {
         console.error('Security handshake failed:', err);
@@ -210,7 +210,7 @@ function App() {
           <AnimatePresence mode="wait">
             {!showApp ? (
               <motion.div
-                key="finly-loading"
+                key="aera-loading"
                 className="fixed inset-0 z-[10000]"
                 exit={{ opacity: 0, scale: 1.1, filter: 'blur(20px)' }}
                 transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
@@ -219,7 +219,7 @@ function App() {
               </motion.div>
             ) : (
               <motion.div
-                key="finly-app"
+                key="aera-app"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, ease: 'easeInOut' }}

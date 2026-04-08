@@ -137,7 +137,7 @@ export default function LandingPagePremium() {
                      <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 via-transparent to-purple-500/10 rounded-[3rem] opacity-50" />
                      <motion.img 
                         src="/icon.png" 
-                        alt="Finly 8k Logo" 
+                        alt="AERA 8k Logo" 
                         className="w-full h-full object-contain relative z-10 drop-shadow-2xl"
                         animate={{ y: [0, -10, 0] }}
                         transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
@@ -151,19 +151,19 @@ export default function LandingPagePremium() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8 }}
-                  className="px-6 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.6em] text-white/30 tracking-widest block max-w-max mx-auto shadow-[0_0_30px_rgba(255,255,255,0.05)]"
+                  className="px-6 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.6em] text-white/30 block max-w-max mx-auto shadow-[0_0_30px_rgba(255,255,255,0.05)]"
                 >
-                  FINLY / BUSINESS FINANCE
+                  AERA / GLOBAL ECONOMIC MISSION
                 </motion.span>
                 
                 <h1 className="text-[64px] md:text-[130px] font-black leading-[0.82] tracking-[-0.06em] text-white">
-                  Your money, <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-indigo-200 to-indigo-800 animate-gradient-slow drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">made clear.</span>
+                  Eliminating failure. <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-indigo-200 to-indigo-800 animate-gradient-slow drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">Globally.</span>
                 </h1>
                 
                 <p className="text-[20px] md:text-[26px] text-white/40 max-w-3xl mx-auto font-medium leading-relaxed tracking-tight">
-                  Track your income, expenses, and profit — all in one place. <br className="hidden md:block" />
-                  Simple tools that help your business grow.
+                  The world's first Autonomous Economic Resilience Agent. <br className="hidden md:block" />
+                  Institutional-grade financial intelligence for every entrepreneur on Earth.
                 </p>
               </div>
 
@@ -208,20 +208,20 @@ export default function LandingPagePremium() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <FeatureCard 
                     icon={Target}
-                    title="Clear Action Steps."
-                    description="No confusing charts. See exactly what to do next to save money and grow your business."
+                    title="Economic Autonomy."
+                    description="Autonomous systems that identify risk and opportunity before they hit your bottom line."
                     delay={0.1}
                 />
                 <FeatureCard 
                     icon={Globe}
-                    title="Know Your Market."
-                    description="See how your business compares to similar ones in your area and industry."
+                    title="Global Collective."
+                    description="Contextualize your performance against a world-wide mesh of anonymized business intelligence."
                     delay={0.2}
                 />
                 <FeatureCard 
                     icon={Zap}
-                    title="Grow Smarter."
-                    description="Track your profit, cut waste, and invest wisely — with tools that guide you every step."
+                    title="Resilience First."
+                    description="Our engine prioritizes longevity and stability over short-term growth, ensuring you survive any market."
                     delay={0.3}
                 />
             </div>
@@ -259,7 +259,7 @@ export default function LandingPagePremium() {
             <div className="space-y-10">
                 <Logo size="sm" showSubtitle={false} />
                 <p className="text-[18px] text-white/30 font-medium leading-relaxed tracking-tight">
-                    A beautiful system built to help you understand your money clearly.
+                    The world's first Autonomous Economic Resilience Agent. Built to eliminate business failure.
                 </p>
             </div>
             <div>
@@ -288,7 +288,7 @@ export default function LandingPagePremium() {
             </div>
         </div>
         <div className="max-w-[1400px] mx-auto pt-24 mt-24 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-12">
-            <p className="text-[11px] font-black text-white/10 uppercase tracking-[0.4em]">© 2026 FINLY. ALL RIGHTS RESERVED.</p>
+            <p className="text-[11px] font-black text-white/10 uppercase tracking-[0.4em]">© 2026 AERA ECOSYSTEM. ALL RIGHTS RESERVED.</p>
         </div>
       </footer>
     </div>

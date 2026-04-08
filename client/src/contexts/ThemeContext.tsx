@@ -41,7 +41,13 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   if (!mounted) {
-    return <div className="min-h-screen bg-slate-950" />;
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20 animate-pulse">
+          INITIALIZING_EXPERIENCE...
+        </div>
+      </div>
+    );
   }
 
   return (

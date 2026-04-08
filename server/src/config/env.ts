@@ -23,6 +23,9 @@ const envSchema = z
     GOOGLE_CLIENT_SECRET: z.string().trim().min(1).optional(),
     RAZORPAY_KEY_ID: z.string().trim().min(1).optional(),
     RAZORPAY_KEY_SECRET: z.string().trim().min(1).optional(),
+    WHATSAPP_PHONE_NUMBER_ID: z.string().trim().min(1).optional(),
+    WHATSAPP_ACCESS_TOKEN: z.string().trim().min(1).optional(),
+    WHATSAPP_VERIFY_TOKEN: z.string().trim().min(1).optional(),
     REQUEST_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(15 * 60 * 1000),
     REQUEST_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(100),
     AUTH_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(15 * 60 * 1000),
@@ -142,6 +145,9 @@ export const env = {
   IS_PRODUCTION: envValues.NODE_ENV === 'production',
   MAX_UPLOAD_FILE_SIZE_BYTES: Math.floor(envValues.MAX_UPLOAD_FILE_SIZE_MB * 1024 * 1024),
   SHOULD_SEED_DEFAULT_ADMIN: envValues.SEED_DEFAULT_ADMIN === 'true',
+  WHATSAPP_PHONE_NUMBER_ID: envValues.WHATSAPP_PHONE_NUMBER_ID,
+  WHATSAPP_ACCESS_TOKEN: envValues.WHATSAPP_ACCESS_TOKEN,
+  WHATSAPP_VERIFY_TOKEN: envValues.WHATSAPP_VERIFY_TOKEN,
 } as const;
 
 export type AppEnv = typeof env;

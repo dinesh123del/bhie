@@ -383,4 +383,33 @@ router.post(
   })
 );
 
+// ──────────────────────────────────────────
+// AERA Sentinel (Billion Dollar Vision)
+// ──────────────────────────────────────────
+router.post(
+  '/sentinel',
+  authenticateToken,
+  asyncHandler(async (req: AuthRequest, res: Response) => {
+    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+
+    try {
+      const response = await fetch(`${mlServiceUrl}/aera/sentinel`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(req.body),
+      });
+
+      if (!response.ok) {
+        throw new AppError(response.status, 'AERA Sentinel service error');
+      }
+
+      const data = await response.json();
+      res.json(data);
+    } catch (_err: any) {
+      if (_err instanceof AppError) throw _err;
+      throw new AppError(503, 'AERA Sentinel Service is unavailable.');
+    }
+  })
+);
+
 export default router;

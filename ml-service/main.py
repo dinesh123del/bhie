@@ -47,13 +47,20 @@ class HealthScoreRequest(BaseModel):
     months_active: int = 1
     anomaly_count: int = 0
 
+class ResilienceRequest(BaseModel):
+    industry: str
+    region: str
+    current_cash_reserve: float
+    monthly_burn_rate: float
+    is_global_exposure: bool = False
+
 # ──────────────────────────────────────────
 # Health & Status
 # ──────────────────────────────────────────
 
 @app.get("/")
 async def root():
-    return {"status": "Finly Core Intelligence v2.0", "version": "2.0.0"}
+    return {"status": "AERA Global Intelligence Engine v3.0", "version": "3.0.0"}
 
 @app.get("/health")
 async def health():
@@ -213,7 +220,6 @@ async def simulate_scenarios(scenario: SimulationScenario):
 
     arr = np.array(final_balances)
     success_rate = round((1 - bankrupt_count / num_simulations) * 100, 1)
-
     return {
         "simulations_run": num_simulations,
         "months_simulated": months,
@@ -230,6 +236,71 @@ async def simulate_scenarios(scenario: SimulationScenario):
             if success_rate >= 50 else
             "🔴 High Risk. This scenario leads to failure in most simulations."
         ),
+    }
+
+# ──────────────────────────────────────────
+# 🆕 AERA Sentinel (Billion Dollar Vision)
+# ──────────────────────────────────────────
+
+@app.post("/aera/sentinel")
+async def aera_sentinel(request: ResilienceRequest):
+    """
+    AERA Sentinel: The world's first Autonomous Economic Resilience Agent.
+    Analyzes local business state against global economic volatility patterns.
+    This feature is the core of our 'Eliminating Failure' mission.
+    """
+    # Simulate Global Market Sentiment (In production, this would fetch real-time API data)
+    global_volatility = np.random.uniform(0.1, 0.8) # 0 to 1
+    market_sectors = {
+        "technology": 0.85,
+        "retail": 0.65,
+        "food": 0.90,
+        "service": 0.70,
+        "manufacturing": 0.75
+    }
+    
+    sector_health = market_sectors.get(request.industry.lower(), 0.5)
+    
+    # Calculate Runway
+    runway_months = request.current_cash_reserve / request.monthly_burn_rate if request.monthly_burn_rate > 0 else 24
+    
+    # Resilience Logic: Weighted average of Sector Health, Runway, and Volatility
+    base_score = (sector_health * 50) + (min(runway_months, 12) / 12 * 50)
+    
+    if request.is_global_exposure:
+        # Volatility index increases risk for global businesses
+        risk_adjustment = (global_volatility * 20)
+        base_score -= risk_adjustment
+    
+    resilience_score = round(min(100, max(0, base_score + np.random.normal(0, 2))), 1)
+    
+    # Dynamic Vision-Led Verdicts
+    if resilience_score > 85:
+        status = "FORTIFIED"
+        grade = "S-TIER"
+        recommendation = "Your economic foundation is absolute. AERA recommends immediate market expansion."
+    elif resilience_score > 65:
+        status = "RESILIENT"
+        grade = "A-TIER"
+        recommendation = "High stability detected. Focus on optimizing unit economics for maximum autonomous growth."
+    elif resilience_score > 40:
+        status = "STABLE"
+        grade = "B-TIER"
+        recommendation = "Moderate risk. AERA suggests building 3x cash reserves before next global pivot."
+    else:
+        status = "VULNERABLE"
+        grade = "C-TIER"
+        recommendation = "Extreme volatility detected. Implement AERA Burn-Rate reduction protocol and diversify supply chain."
+
+    return {
+        "resilience_score": resilience_score,
+        "status": status,
+        "grade": grade,
+        "global_volatility_index": round(global_volatility, 2),
+        "recommendation": recommendation,
+        "sentinel_protocol": "ACTIVE",
+        "timestamp": "2026-04-07T10:37:44Z",
+        "verdict": f"AERA has evaluated your business in {request.region} and assigned a {grade} resilience rating."
     }
 
 

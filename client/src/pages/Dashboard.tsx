@@ -20,6 +20,9 @@ import { AnimatedNumber } from '../components/AnimatedNumber';
 import RevenueLineChart from '../components/charts/RevenueLineChart';
 import StoryDashboard from '../components/StoryDashboard';
 import GrowthForecast from '../components/GrowthForecast';
+import AERASentinel from '../components/AERASentinel';
+import AERASavings from '../components/AERASavings';
+import { recordsAPI } from '../services/api';
 
 import { InsightItem } from '../components/InsightsPanel';
 import { useAuth } from '../hooks/useAuth';
@@ -177,6 +180,7 @@ const Dashboard = () => {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [latestUpload, setLatestUpload] = useState<UploadedImageRecord | null>(null);
+  const [records, setRecords] = useState<any[]>([]);
   const [apiData, setApiData] = useState<DashboardResponse | null>(null);
   const hasLoadedRef = useRef(false);
   const mountedRef = useRef(true);
@@ -214,6 +218,10 @@ const Dashboard = () => {
         setLatestUpload((current) => normalizeLatestUpload(payload.latestUpload) ?? current);
         setLastUpdated(payload.refreshedAt ? new Date(payload.refreshedAt) : new Date());
       });
+
+      // Fetch full records for Intelligence Features (Autonomous Savings)
+      const recordsData = await recordsAPI.getAll();
+      setRecords(recordsData);
 
       setLoadError(null);
       hasLoadedRef.current = true;
@@ -383,7 +391,10 @@ const Dashboard = () => {
         </div>
 
         {/* MAIN INTELLIGENCE SECTION */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12">
+        <div className="space-y-12">
+            <AERASavings records={records} />
+
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12">
             <div className="space-y-12">
                 <div className="grid gap-8 xl:grid-cols-2">
                    <StoryDashboard 
@@ -413,13 +424,24 @@ const Dashboard = () => {
                    </div>
                 </div>
                 
-                <div className="apple-card p-12 bg-[#0A0A0B] border-white/5">
-                   <BusinessHealthEngine
-                       score={healthScore}
-                       status={scoreData?.status ?? (healthScore >= 80 ? 'Elite' : healthScore >= 60 ? 'Optimal' : 'Standard')}
-                       healthIndex={scoreData?.resonanceIndex ?? 50}
-                       breakdown={healthBreakdown}
+                <div className="space-y-8">
+                   <AERASentinel 
+                        industry={company?.industry || 'Technology'} 
+                        region="India" 
+                        cashReserve={revenue - expenses}
+                        burnRate={expenses / (metrics?.kpis?.activeRecords || 1) * 10} 
+                        revenue={revenue}
+                        expenses={expenses}
                    />
+                   
+                   <div className="apple-card p-12 bg-[#0A0A0B] border-white/5">
+                      <BusinessHealthEngine
+                          score={healthScore}
+                          status={scoreData?.status ?? (healthScore >= 80 ? 'Elite' : healthScore >= 60 ? 'Optimal' : 'Standard')}
+                          healthIndex={scoreData?.resonanceIndex ?? 50}
+                          breakdown={healthBreakdown}
+                      />
+                   </div>
                 </div>
 
                 <div className="apple-card p-12 bg-[#0A0A0B] border-white/5">
@@ -507,6 +529,7 @@ const Dashboard = () => {
         </PremiumSection>
 
       </div>
+    </div>
   );
 };
 

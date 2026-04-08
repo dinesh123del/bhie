@@ -54,7 +54,7 @@ const LogoGraphic = ({ size }: { size: LogoSize }) => {
       />
       
       {/* Generated App Logo replacing SVG architecture */}
-      <img src="/icon.png" alt="Finly Icon" className="w-[85%] h-[85%] relative z-10 object-contain drop-shadow-[0_4px_6px_rgba(175,82,222,0.4)] hover:scale-105 transition-transform" />
+      <img src="/icon.png" alt="AERA Icon" className="w-[85%] h-[85%] relative z-10 object-contain drop-shadow-[0_4px_6px_rgba(175,82,222,0.4)] hover:scale-105 transition-transform" />
     </div>
   );
 };
@@ -79,7 +79,7 @@ const LogoInner = ({
         className={`${sizeMap[size].wordmark} font-bold tracking-tight leading-none text-white`}
         style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
       >
-        Finly<span className="text-[#007AFF]">.</span>
+        AERA<span className="text-[#007AFF]">.</span>
       </span>
       {showSubtitle && (
         <span
@@ -97,7 +97,7 @@ export const Logo = ({
   size = 'md',
   className,
   to,
-  subtitle = 'Financial Pulse',
+  subtitle = 'Economic Resilience',
   showSubtitle = true,
 }: LogoProps) => {
   const content = (
@@ -114,7 +114,7 @@ export const Logo = ({
   }
 
   return (
-    <Link to={to} aria-label="Finly logo" className="inline-flex outline-none">
+    <Link to={to} aria-label="AERA logo" className="inline-flex outline-none">
       {content}
     </Link>
   );

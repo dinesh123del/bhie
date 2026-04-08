@@ -81,6 +81,17 @@ export const dashboardAPI = {
   get: () => extractData<any>(api.get('/dashboard')),
 };
 
+// ================= AERA (Billion Dollar Vision) =================
+export const aeraAPI = {
+  getSentinel: (data: { 
+    industry: string; 
+    region: string; 
+    current_cash_reserve: number; 
+    monthly_burn_rate: number; 
+    is_global_exposure?: boolean 
+  }) => extractData<any>(api.post('/ai/sentinel', data)),
+};
+
 // ================= SYSTEM =================
 export const systemAPI = {
   getHealthReport: () => extractData<any>(api.get('/system/report')),

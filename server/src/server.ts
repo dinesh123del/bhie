@@ -112,6 +112,14 @@ app.use(express.json({
 }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// NEW: WhatsApp Business Bot Webhooks (mount before security middleware for query params)
+import whatsappRoutes from './routes/whatsapp.js';
+app.use('/webhook/whatsapp', whatsappRoutes);
+
+// NEW: WhatsApp Payment Webhook for Razorpay
+import whatsappPaymentWebhook from './routes/whatsapp-payment-webhook.js';
+app.use('/webhook/whatsapp-payment', whatsappPaymentWebhook);
+
 // TOP-LEVEL SECURITY: NoSQL Injection & Parameter Pollution Protection
 app.use(mongoSanitize()); // Prevent NoSQL injection
 app.use(hpp()); // Prevent HTTP Parameter Pollution
@@ -152,6 +160,22 @@ app.get("/api/debug-ping", (req, res) => {
 
 // Original routes
 app.use('/api', apiLimiter, apiRouter);
+
+// NEW: Admin WhatsApp Analytics APIs
+import adminWhatsAppAnalytics from './routes/admin-whatsapp-analytics.js';
+app.use('/api/admin/whatsapp', adminWhatsAppAnalytics);
+
+// NEW: Partner API v2 for Banks, Accountants, Fintechs
+import partnerApiRoutes from './routes/partner-api.js';
+app.use('/api/partner/v2', partnerApiRoutes);
+
+// NEW: Language Detection and Translation API
+import languageRoutes from './routes/language.js';
+app.use('/api/language', languageRoutes);
+
+// NEW: Voice Input Testing API
+import voiceTestRoutes from './routes/voice-test.js';
+app.use('/api/voice-test', voiceTestRoutes);
 
 // Serve Static Frontend (SPA Catch-all)
 const __filename = fileURLToPath(import.meta.url);

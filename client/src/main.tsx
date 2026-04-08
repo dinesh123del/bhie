@@ -75,7 +75,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <GlobalErrorBoundary>
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
         <BrowserRouter>
-          <App />
+          <React.Suspense fallback={<div className="bg-black min-h-screen" />}>
+            <App />
+          </React.Suspense>
         </BrowserRouter>
       </GoogleOAuthProvider>
     </GlobalErrorBoundary>
