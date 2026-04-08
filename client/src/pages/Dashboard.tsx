@@ -8,7 +8,9 @@ import {
   Camera,
   Database,
   Zap,
-  ArrowRight
+  ArrowRight,
+  Brain,
+  Activity
 } from 'lucide-react';
 import {
   RiHistoryLine
@@ -32,6 +34,8 @@ import { UploadedImageRecord } from '../services/uploadService';
 import { dashboardAPI } from '../services/api';
 import BusinessHealthEngine from '../components/BusinessHealthEngine';
 import ActionCenter from '../components/ActionCenter';
+import RealTimeIntelligence from '../components/RealTimeIntelligence';
+import AutonomousAgents from '../components/AutonomousAgents';
 import {
   buildDailyStatus,
   buildHealthBreakdown,
@@ -466,6 +470,45 @@ const Dashboard = () => {
                         onAskWhatShouldIDo={() => navigate('/analysis-report')}
                         onExport={exportReport}
                     />
+                </div>
+
+                {/* NEXT-LEVEL INTELLIGENCE SECTION */}
+                <div className="space-y-12">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.6 }}
+                        className="text-center space-y-4"
+                    >
+                        <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-500/10 to-green-500/10 border border-blue-500/20 text-blue-400">
+                            <Activity className="w-4 h-4" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.4em]">BUSINESS INSIGHTS</span>
+                        </div>
+                        <h2 className="text-[42px] md:text-[52px] font-black tracking-[-0.06em] leading-[0.88]">
+                            Smart <br />Business Analytics.
+                        </h2>
+                        <p className="text-[19px] text-white/40 max-w-2xl mx-auto leading-relaxed font-medium">
+                            Advanced monitoring, expert analysis, and actionable insights to grow your business faster.
+                        </p>
+                    </motion.div>
+
+                    <div className="grid gap-8 lg:grid-cols-2">
+                        <motion.div
+                            initial={{ opacity: 0, x: -30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8, delay: 0.7 }}
+                        >
+                            <RealTimeIntelligence className="apple-card p-8 bg-[#0A0A0B] border-white/5" />
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, x: 30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8, delay: 0.8 }}
+                        >
+                            <AutonomousAgents className="apple-card p-8 bg-[#0A0A0B] border-white/5" />
+                        </motion.div>
+                    </div>
                 </div>
             </div>
 

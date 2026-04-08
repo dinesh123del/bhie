@@ -21,6 +21,8 @@ import organizationRoutes from './organizations.js';
 import dataScienceRoutes from './dataScience.js';
 import pricingRoutes from './pricing.js';
 import workflowRoutes from './workflow.js';
+import realtimeRoutes from './realtime.js';
+import agentsRoutes from './agents.js';
 
 import healthRoutes from './health.js';
 
@@ -67,5 +69,9 @@ router.use('/notifications', notificationRoutes);
 router.use('/organizations', organizationRoutes);
 router.use('/pricing', pricingRoutes);
 router.use('/workflow', workflowRoutes);
+
+// Next-Level Intelligence Routes
+router.use('/realtime', realtimeRoutes);
+router.use('/agents', agentsRoutes);
 
 export default router;

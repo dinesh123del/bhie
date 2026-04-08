@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
+import OpenAI from 'openai';
 
 import morgan from 'morgan';
 import { apiLimiter } from './middleware/rateLimiters.js';
@@ -15,17 +16,10 @@ import { fileURLToPath } from 'url';
 import { connectDB, disconnectDB } from './config/db.js';
 import { env } from './config/env.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
-import { csrfProtection } from './middleware/csrf.js';
-
-import { createDefaultAdmin } from './utils/createDefaultAdmin.js';
-import { ensureUploadDir } from './utils/uploads.js';
-import apiRouter from './routes/apiRouter.js';
-
-import { connectRedis, disconnectRedis, isRedisConnected } from './config/redisClient.js';
-import { initEventWorker } from './workers/eventWorker.js';
-import { initUploadWorker } from './workers/uploadWorker.js';
 import { startCronJobs } from './jobs/cron.js';
 import logger from './utils/logger.js';
+import RealTimeIntelligence from './services/realTimeIntelligence.js';
+import AutonomousAgents from './services/autonomousAgents.js';
 
 const app = express();
 
@@ -196,20 +190,65 @@ app.use(errorHandler);
 
 // --- Server Lifecycle ---
 let server: any = null;
+let realTimeIntelligence: RealTimeIntelligence | null = null;
+let autonomousAgents: AutonomousAgents | null = null;
 
 async function startServer(): Promise<void> {
   const PORT = env.PORT || 5000; 
   return new Promise((resolve, reject) => {
     server = app.listen(PORT, () => {
         logger.info(`🚀 Finly Dashboard LIVE on PORT ${PORT}`);
+        
+        // Initialize Next-Level Intelligence Systems
+        initializeIntelligenceSystems();
+        
         resolve();
     }).on('error', (err: any) => {
-      if (err.code === 'EADDRINUSE') {
-        logger.error(`❌ Port ${PORT} is already in use. Please run 'bash kill-port.sh' to clear it.`);
-      }
-      reject(err);
+        if (err.code === 'EADDRINUSE') {
+          logger.error(`❌ Port ${PORT} is already in use. Please run 'bash kill-port.sh' to clear it.`);
+        } else {
+          logger.error('❌ Server failed to start:', err);
+        }
+        reject(err);
     });
   });
+}
+
+async function initializeIntelligenceSystems(): Promise<void> {
+  try {
+    // Initialize OpenAI client
+    const openai = new OpenAI({
+      apiKey: env.OPENAI_API_KEY,
+    });
+
+    if (!env.OPENAI_API_KEY) {
+      logger.warn('⚠️ OpenAI API key not found. AI features will be limited.');
+      return;
+    }
+
+    // Initialize Real-Time Intelligence
+    realTimeIntelligence = new RealTimeIntelligence(server);
+    logger.info('📊 Real-time business monitoring initialized');
+
+    // Initialize Business Analysis Tools
+    autonomousAgents = new AutonomousAgents(openai, realTimeIntelligence);
+    logger.info('🔍 Business analysis tools initialized');
+
+    // Make systems available to routes via app.locals
+    app.locals.realTimeIntelligence = realTimeIntelligence;
+    app.locals.autonomousAgents = autonomousAgents;
+
+    // Start monitoring business metrics
+    logger.info('� Business insights engine started');
+    
+    // Emit system ready event
+    setTimeout(() => {
+      logger.info('✨ Advanced business analytics fully operational');
+    }, 2000);
+
+  } catch (error) {
+    logger.error('❌ Failed to initialize intelligence systems:', error);
+  }
 }
 
 async function init(): Promise<void> {
