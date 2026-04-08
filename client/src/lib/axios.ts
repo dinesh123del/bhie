@@ -53,7 +53,7 @@ api.interceptors.request.use(
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
+
     return config;
   },
   (error) => Promise.reject(error)
@@ -73,7 +73,7 @@ api.interceptors.response.use(
     if (response?.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      
+
       // Prevent infinite redirect loops
       if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
         window.location.href = `/login?from=${encodeURIComponent(window.location.pathname)}`;
@@ -82,12 +82,12 @@ api.interceptors.response.use(
 
     // 2. Extract standardized error message
     let errorMessage = 'An unexpected error occurred';
-    
+
     if (response) {
       if (response.data && typeof response.data === 'object') {
         const data = response.data as any;
         errorMessage = data.message || data.error || errorMessage;
-        
+
         if (data.details) {
           (error as any).details = data.details;
           if (response.status === 403 && data.details.limitReached && typeof window !== 'undefined') {
@@ -104,7 +104,7 @@ api.interceptors.response.use(
         errorMessage = 'Our server encountered an issue. Please try again soon.';
       }
     } else if (error.request) {
-      errorMessage = 'Unable to connect to Finly servers. Please check your internet connection.';
+      errorMessage = 'Unable to connect to AERA servers. Please check your internet connection.';
     }
 
     // Attach human-readable message for easy UI consumption

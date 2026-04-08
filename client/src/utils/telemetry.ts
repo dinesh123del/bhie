@@ -1,5 +1,5 @@
 /**
- * Finly Telemetry & Monitoring System
+ * AERA Telemetry & Monitoring System
  * Unified integration for Sentry (Errors) and Google Analytics (Insights).
  */
 

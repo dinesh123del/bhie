@@ -22,6 +22,10 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Analytics = lazy(() => import('./pages/Analytics'));
 const Records = lazy(() => import('./pages/Records'));
 
+// User Growth Features
+const PublicDemo = lazy(() => import('./components/PublicDemo'));
+const ViralWaitlist = lazy(() => import('./components/ViralWaitlist'));
+
 const AnalysisReport = lazy(() => import('./pages/BusinessInsightsPage'));
 const AdminPanel = lazy(() => import('./pages/Admin'));
 const SystemHealth = lazy(() => import('./pages/SystemHealth'));
@@ -135,6 +139,10 @@ function MainApp() {
               <Route path="/terms" element={<Terms />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/contact" element={<Contact />} />
+
+              {/* User Growth - Public Demo & Waitlist */}
+              <Route path="/demo" element={<PublicDemo />} />
+              <Route path="/waitlist" element={<ViralWaitlist />} />
 
               {/* Core Dashboard Experience */}
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

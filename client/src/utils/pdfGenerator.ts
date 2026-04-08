@@ -65,7 +65,7 @@ export const generateBrandedPDF = async ({ title, content, filename, type, metad
       pdf.setFont('helvetica', 'bold');
       pdf.setFontSize(22);
       pdf.setTextColor(255, 255, 255);
-      pdf.text('Finly', margin, 24);
+      pdf.text('AERA', margin, 24);
     }
 
     // Right-aligned header texts

@@ -26,7 +26,7 @@ import QuantumArchitecture from './services/quantumArchitecture.js';
 const app = express();
 
 // --- Configuration & Global Security ---
-app.disable('x-powered-by'); 
+app.disable('x-powered-by');
 app.set('trust proxy', env.IS_PRODUCTION ? 1 : 0);
 
 // Global Middlewares
@@ -175,6 +175,14 @@ app.use('/api/language', languageRoutes);
 import voiceTestRoutes from './routes/voice-test.js';
 app.use('/api/voice-test', voiceTestRoutes);
 
+// NEW: Referral System API
+import referralRoutes from './routes/referralRoutes.js';
+app.use('/api/referrals', referralRoutes);
+
+// NEW: Usage-Based Billing API
+import usageRoutes from './routes/usageRoutes.js';
+app.use('/api/usage', usageRoutes);
+
 // Serve Static Frontend (SPA Catch-all)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -182,7 +190,7 @@ const __dirname = path.dirname(__filename);
 if (env.IS_PRODUCTION) {
   const clientBuildPath = path.join(__dirname, '../../client/dist');
   app.use(express.static(clientBuildPath));
-  
+
   app.get('*', (req, res) => {
     res.sendFile(path.join(clientBuildPath, 'index.html'));
   });
@@ -200,22 +208,22 @@ let neuralPredictionEngine: NeuralPredictionEngine | null = null;
 let quantumArchitecture: QuantumArchitecture | null = null;
 
 async function startServer(): Promise<void> {
-  const PORT = env.PORT || 5000; 
+  const PORT = env.PORT || 5000;
   return new Promise((resolve, reject) => {
     server = app.listen(PORT, () => {
-        logger.info(`🚀 Finly Dashboard LIVE on PORT ${PORT}`);
-        
-        // Initialize Next-Level Intelligence Systems
-        initializeIntelligenceSystems();
-        
-        resolve();
+      logger.info(`🚀 Finly Dashboard LIVE on PORT ${PORT}`);
+
+      // Initialize Next-Level Intelligence Systems
+      initializeIntelligenceSystems();
+
+      resolve();
     }).on('error', (err: any) => {
-        if (err.code === 'EADDRINUSE') {
-          logger.error(`❌ Port ${PORT} is already in use. Please run 'bash kill-port.sh' to clear it.`);
-        } else {
-          logger.error('❌ Server failed to start:', err);
-        }
-        reject(err);
+      if (err.code === 'EADDRINUSE') {
+        logger.error(`❌ Port ${PORT} is already in use. Please run 'bash kill-port.sh' to clear it.`);
+      } else {
+        logger.error('❌ Server failed to start:', err);
+      }
+      reject(err);
     });
   });
 }
@@ -256,7 +264,7 @@ async function initializeIntelligenceSystems(): Promise<void> {
 
     // Start monitoring business metrics
     logger.info('📈 Business insights engine started');
-    
+
     // Start neural network training in background
     setTimeout(async () => {
       if (neuralPredictionEngine) {
@@ -264,7 +272,7 @@ async function initializeIntelligenceSystems(): Promise<void> {
         logger.info('🎯 Global neural network training completed');
       }
     }, 30000); // Start after 30 seconds
-    
+
     // Emit system ready event
     setTimeout(() => {
       logger.info('✨ Advanced business analytics with neural prediction fully operational');
@@ -278,30 +286,30 @@ async function initializeIntelligenceSystems(): Promise<void> {
 async function init(): Promise<void> {
   try {
     logger.info('🏗️  Starting Finly Integration Engine...');
-    
-// await ensureUploadDir(); // Temporarily stubbed to fix startup - uploads dir will be created on first upload
-    
+
+    // await ensureUploadDir(); // Temporarily stubbed to fix startup - uploads dir will be created on first upload
+
     logger.info('🔌 Connecting to infrastructure...');
-    
+
     // Connect to MongoDB
     try {
       await connectDB();
     } catch {
       logger.warn('⚠️ MongoDB connection failed, but starting app anyway');
     }
-    
+
     // Redis connection is required for workers
-// await connectRedis(); // Redis optional - stubbed for startup
+    // await connectRedis(); // Redis optional - stubbed for startup
 
     // Start background workers and cron jobs
-// if (isRedisConnected()) { ... } // Workers stubbed - core app starts without Redis
-    
+    // if (isRedisConnected()) { ... } // Workers stubbed - core app starts without Redis
+
     startCronJobs();
     logger.info('⏰ Background cron engine initialized');
 
-// await createDefaultAdmin(); // Run manually if needed: utils/createDefaultAdmin.ts
+    // await createDefaultAdmin(); // Run manually if needed: utils/createDefaultAdmin.ts
     await startServer();
-    
+
     logger.info('🚀 Finly Engine initialised successfully');
   } catch (error) {
     logger.error('❌ Fatal: Finly startup failed:', error);

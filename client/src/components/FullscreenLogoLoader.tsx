@@ -10,46 +10,107 @@ const FullscreenLogoLoader = ({
   label = 'Preparing your workspace',
 }: FullscreenLogoLoaderProps) => {
   useEffect(() => {
-    // Premium startup sound (Rich Harmonic Layer)
-    const playStartupSound = () => {
+    // AERA Signature Sound - Unique 3-note harmony
+    const playAERASound = () => {
       try {
-        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-        
-        const playTone = (freq: number, start: number, duration: number, volume: number) => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + start);
-          
-          // Soft attack and long release for "premium" feel
-          gain.gain.setValueAtTime(0, audioCtx.currentTime + start);
-          gain.gain.linearRampToValueAtTime(volume, audioCtx.currentTime + start + 0.8);
-          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + start + duration);
-          
+        const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+
+        const masterGain = ctx.createGain();
+        masterGain.gain.setValueAtTime(0, ctx.currentTime);
+        masterGain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 0.25);
+        masterGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.2);
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(600, ctx.currentTime);
+        filter.frequency.linearRampToValueAtTime(1200, ctx.currentTime + 0.4);
+        filter.Q.value = 0.8;
+
+        const reverb = ctx.createConvolver();
+        const reverbGain = ctx.createGain();
+        reverbGain.gain.value = 0.25;
+
+        const rate = ctx.sampleRate;
+        const length = rate * 1.5;
+        const impulse = ctx.createBuffer(2, length, rate);
+        for (let channel = 0; channel < 2; channel++) {
+          const channelData = impulse.getChannelData(channel);
+          for (let i = 0; i < length; i++) {
+            channelData[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 3) * 0.5;
+          }
+        }
+        reverb.buffer = impulse;
+
+        filter.connect(masterGain);
+        masterGain.connect(ctx.destination);
+        filter.connect(reverb);
+        reverb.connect(reverbGain);
+        reverbGain.connect(ctx.destination);
+
+        const playNote = (freq: number, start: number, duration: number, vol: number, type: OscillatorType = 'sine') => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + start);
+
+          gain.gain.setValueAtTime(0, ctx.currentTime + start);
+          gain.gain.linearRampToValueAtTime(vol, ctx.currentTime + start + 0.08);
+          gain.gain.setValueAtTime(vol, ctx.currentTime + start + duration * 0.6);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + duration);
+
           osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          
-          osc.start(audioCtx.currentTime + start);
-          osc.stop(audioCtx.currentTime + start + duration + 0.1);
+          gain.connect(filter);
+          osc.start(ctx.currentTime + start);
+          osc.stop(ctx.currentTime + start + duration + 0.3);
         };
 
-        // A Major 9th (Peaceful & Sophisticated)
-        // A2, E3, A3, C#4, G#4, B4 (Spaced out for richness)
-        playTone(110.00, 0.0, 3.5, 0.08); // A2 (Deep Foundation)
-        playTone(164.81, 0.2, 3.2, 0.06); // E3 (Fifth)
-        playTone(220.00, 0.4, 2.9, 0.05); // A3 (Octave)
-        playTone(277.18, 0.6, 2.6, 0.04); // C#4 (Major Third)
-        playTone(415.30, 0.8, 2.3, 0.03); // G#4 (Major Seventh)
-        playTone(493.88, 1.0, 2.0, 0.02); // B4 (Ninth)
-        
-      } catch (e) {
-        console.warn('Audio feedback not supported or blocked by browser');
+        const baseFreq = 130.81; // C3
+
+        // Note 1: Foundation
+        playNote(baseFreq, 0.0, 1.4, 0.45, 'sine');
+        playNote(baseFreq, 0.0, 1.4, 0.2, 'triangle');
+
+        // Note 2: Growth - 0.18s delay
+        playNote(baseFreq * 1.26, 0.18, 1.2, 0.4, 'sine');
+
+        // Note 3: Achievement - 0.38s delay
+        playNote(baseFreq * 1.5, 0.38, 1.0, 0.35, 'sine');
+
+        // High shimmer - 0.5s delay
+        const shimmer = ctx.createOscillator();
+        const shimmerGain = ctx.createGain();
+        shimmer.type = 'sine';
+        shimmer.frequency.setValueAtTime(baseFreq * 2, ctx.currentTime + 0.5);
+        shimmerGain.gain.setValueAtTime(0, ctx.currentTime + 0.5);
+        shimmerGain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.65);
+        shimmerGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.8);
+        shimmer.connect(shimmerGain);
+        shimmerGain.connect(filter);
+        shimmer.start(ctx.currentTime + 0.5);
+        shimmer.stop(ctx.currentTime + 2.0);
+
+        // Subtle bass anchor
+        const bass = ctx.createOscillator();
+        const bassGain = ctx.createGain();
+        bass.type = 'sine';
+        bass.frequency.setValueAtTime(baseFreq * 0.5, ctx.currentTime);
+        bassGain.gain.setValueAtTime(0, ctx.currentTime);
+        bassGain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.2);
+        bassGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.8);
+        bass.connect(bassGain);
+        bassGain.connect(masterGain);
+        bass.start(ctx.currentTime);
+        bass.stop(ctx.currentTime + 2.2);
+
+        if (ctx.state === 'suspended') {
+          ctx.resume();
+        }
+      } catch {
+        // Silently continue
       }
     };
 
-    // Attempt to play sound (browsers might block without interaction, but worth a try)
-    playStartupSound();
+    playAERASound();
   }, []);
 
   return (

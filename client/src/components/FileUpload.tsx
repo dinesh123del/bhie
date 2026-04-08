@@ -19,6 +19,8 @@ import { premiumFeedback } from '../utils/premiumFeedback';
 import { PremiumCard, PremiumBadge } from './ui/PremiumComponents';
 import { GlassShine, Scanlines } from './ui/MicroEngines';
 import { useGamification } from './GamificationEngine';
+import FirstScanCelebration, { useScanCelebration } from './FirstScanCelebration';
+import SocialShare from './SocialShare';
 
 import { CameraCapture } from './image-intelligence/CameraCapture';
 
@@ -31,8 +33,17 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
   const [previewFiles, setPreviewFiles] = useState<File[]>([]);
   const [latestResults, setLatestResults] = useState<UploadedImageRecord[]>([]);
   const [showCamera, setShowCamera] = useState(false);
+  const [showSocialShare, setShowSocialShare] = useState(false);
+  const [shareData, setShareData] = useState({
+    type: 'milestone' as const,
+    title: 'Receipt Scanned',
+    value: '',
+    subtitle: '',
+    date: new Date().toLocaleDateString('en-IN'),
+  });
   const { user } = useAuth();
   const { addXP } = useGamification();
+  const { showCelebration, scanCount, triggerCelebration, closeCelebration } = useScanCelebration();
   const premiumAccess = hasPremiumAccess(user);
   const remainingUploads = getRemainingUploads(user);
   const uploadsLocked = !canUploadMore(user);
@@ -70,6 +81,29 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
       addXP(response.items.length * 100);
       premiumFeedback.success();
       toast.success(`${response.items.length} records processed`);
+
+      // Trigger celebration for milestones (1, 10, 50, 100)
+      const totalScans = (parseInt(localStorage.getItem('aera_scan_count') || '0') || 0) + response.items.length;
+      localStorage.setItem('aera_scan_count', String(totalScans));
+
+      if ([1, 10, 50, 100].includes(totalScans)) {
+        triggerCelebration(totalScans);
+      }
+
+      // Prepare social share data
+      const totalAmount = response.items.reduce((sum, item) => sum + (item.record?.amount || item.extracted?.amount || 0), 0);
+      setShareData({
+        type: 'milestone',
+        title: totalScans === 1 ? 'First Receipt Scanned!' : `${totalScans} Receipts Scanned`,
+        value: totalAmount > 0 ? `₹${totalAmount.toLocaleString()}` : `${response.items.length} items`,
+        subtitle: 'Tracked with AERA',
+        date: new Date().toLocaleDateString('en-IN'),
+      });
+
+      // Show social share for first scan or every 25 scans
+      if (totalScans === 1 || totalScans % 25 === 0) {
+        setTimeout(() => setShowSocialShare(true), 2000);
+      }
 
       window.dispatchEvent(
         new CustomEvent('aera:records-updated', {
@@ -493,6 +527,20 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
           </div>
         ) : null}
       </div>
+
+      {/* First Scan Celebration */}
+      <FirstScanCelebration
+        isOpen={showCelebration}
+        onClose={closeCelebration}
+        scanCount={scanCount}
+      />
+
+      {/* Social Share Modal */}
+      <SocialShare
+        isOpen={showSocialShare}
+        onClose={() => setShowSocialShare(false)}
+        data={shareData}
+      />
     </motion.section>
   );
 };

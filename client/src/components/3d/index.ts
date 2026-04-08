@@ -6,6 +6,7 @@
 export {
          HeroScene3D,
          HeroScene3DLight,
+         DashboardScene3D,
 } from './scenes';
 
 // 3D Objects & Components
@@ -16,6 +17,12 @@ export {
          GrowthTree3D,
          LoadingCube3D,
 } from './objects';
+
+// Transitions
+export {
+         PageTransition3D,
+         usePageTransition,
+} from './PageTransition3D';
 
 // Materials
 export {

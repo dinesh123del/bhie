@@ -10,7 +10,8 @@ import {
   Zap,
   ArrowRight,
   Brain,
-  Activity
+  Activity,
+  Trophy
 } from 'lucide-react';
 import {
   RiHistoryLine
@@ -38,6 +39,9 @@ import RealTimeIntelligence from '../components/RealTimeIntelligence';
 import AutonomousAgents from '../components/AutonomousAgents';
 import AdvancedOptimization from '../components/AdvancedOptimization';
 import { Dashboard3DSection } from '../components/3d/Dashboard3D';
+import { AICompanion } from '../components/AICompanion';
+import { AchievementSystem } from '../components/AchievementSystem';
+import { SmartAlerts } from '../components/SmartAlerts';
 import {
   buildDailyStatus,
   buildHealthBreakdown,
@@ -48,6 +52,11 @@ import {
   exportReport,
 } from '../utils/dashboardIntelligence';
 import { premiumFeedback } from '../utils/premiumFeedback';
+import ReferralWidget from '../components/ReferralWidget';
+import ReferralProgram from '../components/ReferralProgram';
+import UsageDashboard from '../components/UsageDashboard';
+import WhatsAppIntegration from '../components/WhatsAppIntegration';
+import { Gift, MessageCircle } from 'lucide-react';
 
 interface MetricsSummary {
   kpis?: {
@@ -177,6 +186,10 @@ const PremiumSection = ({ children, delay = 0, className = "" }: { children: Rea
 const Dashboard = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [showReferralModal, setShowReferralModal] = useState(false);
+  const [showUsageDashboard, setShowUsageDashboard] = useState(false);
+  const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
+  const [activeGrowthTab, setActiveGrowthTab] = useState<'referral' | 'whatsapp'>('referral');
   const [metrics, setMetrics] = useState<MetricsSummary | null>(null);
   const [scoreData, setScoreData] = useState<ScoreData | null>(null);
   const [company, setCompany] = useState<CompanyProfile | null>(null);
@@ -358,6 +371,34 @@ const Dashboard = () => {
         </div>
 
         <div className="flex items-center gap-6">
+          {/* Referral Button */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowReferralModal(true)}
+            className="apple-card p-4 min-w-[140px] bg-gradient-to-br from-amber-500/20 to-orange-500/20 backdrop-blur-3xl border-amber-500/30 hover:border-amber-500/50 transition-colors group"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <Gift className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
+              <span className="text-[10px] font-black text-amber-300 uppercase tracking-[0.15em]">Refer</span>
+            </div>
+            <span className="text-[13px] font-bold text-white">Get 1 Month Free</span>
+          </motion.button>
+
+          {/* Usage Button */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowUsageDashboard(true)}
+            className="apple-card p-4 min-w-[140px] bg-gradient-to-br from-cyan-500/20 to-blue-500/20 backdrop-blur-3xl border-cyan-500/30 hover:border-cyan-500/50 transition-colors group"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <TrendingUp className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+              <span className="text-[10px] font-black text-cyan-300 uppercase tracking-[0.15em]">Usage</span>
+            </div>
+            <span className="text-[13px] font-bold text-white">View Quotas</span>
+          </motion.button>
+
           <div className="apple-card p-6 min-w-[180px] bg-white/[0.03] backdrop-blur-3xl border-white/5">
             <span className="text-[11px] font-black text-white/30 uppercase tracking-[0.2em] mb-3 block">
               Monthly Goal
@@ -597,6 +638,98 @@ const Dashboard = () => {
         </PremiumSection>
 
       </div>
+
+      {/* Achievement & Rewards Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 1.0 }}
+        className="mt-12"
+      >
+        <div className="apple-card p-8 bg-[#0A0A0B] border-white/5">
+          <div className="flex items-center gap-3 mb-6">
+            <Trophy className="w-5 h-5 text-amber-400" />
+            <h3 className="text-xl font-bold text-white">Achievements & Rewards</h3>
+          </div>
+          <AchievementSystem />
+        </div>
+      </motion.div>
+
+      {/* Smart Predictive Alerts */}
+      <SmartAlerts />
+
+      {/* AI Companion */}
+      <AICompanion />
+
+      {/* Growth Features Modal */}
+      {showReferralModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-slate-900 rounded-3xl p-6 w-full max-w-2xl border border-white/10 max-h-[90vh] overflow-y-auto"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-white font-bold text-xl">Grow with AERA</h3>
+              <button
+                onClick={() => setShowReferralModal(false)}
+                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+              >
+                <span className="text-white/50 text-xl">×</span>
+              </button>
+            </div>
+
+            {/* Tabs */}
+            <div className="flex gap-2 mb-6">
+              <button
+                onClick={() => setActiveGrowthTab('referral')}
+                className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all ${activeGrowthTab === 'referral'
+                  ? 'bg-white text-black'
+                  : 'bg-white/5 text-white/50 hover:bg-white/10'
+                  }`}
+              >
+                <span className="mr-2">🎁</span> Refer & Earn
+              </button>
+              <button
+                onClick={() => setShowWhatsAppModal(true)}
+                className="flex-1 py-3 rounded-xl text-sm font-bold bg-green-500/20 text-green-400 hover:bg-green-500/30 transition-all"
+              >
+                <MessageCircle className="w-4 h-4 inline mr-2" /> WhatsApp
+              </button>
+            </div>
+
+            {activeGrowthTab === 'referral' && <ReferralProgram />}
+          </motion.div>
+        </div>
+      )}
+
+      {/* WhatsApp Integration Modal */}
+      {showWhatsAppModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-slate-900 rounded-3xl p-6 w-full max-w-lg border border-white/10"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-white font-bold text-xl flex items-center gap-2">
+                <MessageCircle className="w-5 h-5 text-green-400" />
+                WhatsApp Reports
+              </h3>
+              <button
+                onClick={() => setShowWhatsAppModal(false)}
+                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+              >
+                <span className="text-white/50 text-xl">×</span>
+              </button>
+            </div>
+            <WhatsAppIntegration />
+          </motion.div>
+        </div>
+      )}
+
+      {/* Usage Dashboard Modal */}
+      <UsageDashboard isOpen={showUsageDashboard} onClose={() => setShowUsageDashboard(false)} />
     </div>
   );
 };

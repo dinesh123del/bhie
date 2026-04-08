@@ -229,7 +229,7 @@ export function buildPlainReport(input: {
   lastUpdated: Date;
 }): string {
   const lines = [
-    `Finly BUSINESS INTELLIGENCE REPORT`,
+    `AERA BUSINESS INTELLIGENCE REPORT`,
     `=============================`,
     `Organization: ${input.companyName || 'Main Account'}`,
     `Report Date: ${input.lastUpdated.toLocaleString('en-IN')}`,
@@ -266,7 +266,7 @@ export function buildQuantumForesight(input: {
   const burnRate = input.expenses / 12 || input.expenses; // Proxy for monthly burn
   const runwayMonths = input.profit > 0 ? (input.revenue / Math.max(burnRate, 1)) * 2 : 3; // Estimated based on cycles
   const efficiencyScore = clamp((input.revenue / Math.max(input.expenses, 1)) * 40);
-  
+
   let riskLevel: 'low' | 'medium' | 'high' = 'low';
   if (runwayMonths < 3) riskLevel = 'high';
   else if (runwayMonths < 6) riskLevel = 'medium';
@@ -295,7 +295,7 @@ export function buildSurgicalDirectives(input: {
   profitMargin: number;
 }): SurgicalDirective[] {
   const directives: SurgicalDirective[] = [];
-  
+
   // Growth Logic
   if (input.profitMargin > 20 && input.growthRate < 10) {
     directives.push({
@@ -306,7 +306,7 @@ export function buildSurgicalDirectives(input: {
       confidence: 88
     });
   }
-  
+
   // Efficiency Logic
   if (input.expenses > (input.revenue * 0.7)) {
     directives.push({
@@ -317,14 +317,14 @@ export function buildSurgicalDirectives(input: {
       confidence: 94
     });
   }
-  
+
   // Equity Logic
   directives.push({
-     id: 'equity-1',
-     type: 'equity',
-     directive: 'Cash Preservation Protocol: Extend Runway to 18mo',
-     expectedImpact: 'Institutional Stability confirmed',
-     confidence: 99
+    id: 'equity-1',
+    type: 'equity',
+    directive: 'Cash Preservation Protocol: Extend Runway to 18mo',
+    expectedImpact: 'Institutional Stability confirmed',
+    confidence: 99
   });
 
   return directives.slice(0, 3);
@@ -335,7 +335,7 @@ export function exportReport(content: string = "Business Intelligence Report"): 
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `Finly-Report-${new Date().toISOString().split('T')[0]}.txt`;
+  link.download = `AERA-Report-${new Date().toISOString().split('T')[0]}.txt`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
