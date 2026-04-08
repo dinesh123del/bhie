@@ -36,6 +36,7 @@ import BusinessHealthEngine from '../components/BusinessHealthEngine';
 import ActionCenter from '../components/ActionCenter';
 import RealTimeIntelligence from '../components/RealTimeIntelligence';
 import AutonomousAgents from '../components/AutonomousAgents';
+import AdvancedOptimization from '../components/AdvancedOptimization';
 import {
   buildDailyStatus,
   buildHealthBreakdown,
@@ -509,6 +510,15 @@ const Dashboard = () => {
                             <AutonomousAgents className="apple-card p-8 bg-[#0A0A0B] border-white/5" />
                         </motion.div>
                     </div>
+
+                    {/* Advanced Optimization Section */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.9 }}
+                    >
+                        <AdvancedOptimization className="apple-card p-8 bg-[#0A0A0B] border-white/5" />
+                    </motion.div>
                 </div>
             </div>
 

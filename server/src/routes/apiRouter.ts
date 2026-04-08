@@ -24,6 +24,7 @@ import workflowRoutes from './workflow.js';
 import realtimeRoutes from './realtime.js';
 import agentsRoutes from './agents.js';
 import predictionsRoutes from './predictions.js';
+import quantumRoutes from './quantum.js';
 
 import healthRoutes from './health.js';
 
@@ -75,5 +76,6 @@ router.use('/workflow', workflowRoutes);
 router.use('/realtime', realtimeRoutes);
 router.use('/agents', agentsRoutes);
 router.use('/predictions', predictionsRoutes);
+router.use('/quantum', quantumRoutes);
 
 export default router;

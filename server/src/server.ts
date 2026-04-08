@@ -21,6 +21,7 @@ import logger from './utils/logger.js';
 import RealTimeIntelligence from './services/realTimeIntelligence.js';
 import AutonomousAgents from './services/autonomousAgents.js';
 import NeuralPredictionEngine from './services/neuralPredictionEngine.js';
+import QuantumArchitecture from './services/quantumArchitecture.js';
 
 const app = express();
 
@@ -194,6 +195,7 @@ let server: any = null;
 let realTimeIntelligence: RealTimeIntelligence | null = null;
 let autonomousAgents: AutonomousAgents | null = null;
 let neuralPredictionEngine: NeuralPredictionEngine | null = null;
+let quantumArchitecture: QuantumArchitecture | null = null;
 
 async function startServer(): Promise<void> {
   const PORT = env.PORT || 5000; 
@@ -240,10 +242,15 @@ async function initializeIntelligenceSystems(): Promise<void> {
     neuralPredictionEngine = new NeuralPredictionEngine();
     logger.info('🧠 Neural prediction engine initialized');
 
+    // Initialize Quantum Architecture
+    quantumArchitecture = new QuantumArchitecture();
+    logger.info('⚛️ Quantum computing architecture initialized');
+
     // Make systems available to routes via app.locals
     app.locals.realTimeIntelligence = realTimeIntelligence;
     app.locals.autonomousAgents = autonomousAgents;
     app.locals.neuralPredictionEngine = neuralPredictionEngine;
+    app.locals.quantumArchitecture = quantumArchitecture;
 
     // Start monitoring business metrics
     logger.info('📈 Business insights engine started');
