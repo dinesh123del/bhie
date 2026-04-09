@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Trophy, Star, PartyPopper, ArrowRight, Gift } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import SocialShare, { useMilestoneShare } from './SocialShare';
 
 interface CelebrationProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ export default function FirstScanCelebration({ isOpen, onClose, scanCount }: Cel
   const navigate = useNavigate();
   const [confetti, setConfetti] = useState<Array<{ id: number; x: number; color: string; delay: number }>>([]);
   const [showReward, setShowReward] = useState(false);
+  const { shareMilestone, closeShare, isOpen: isShareOpen, shareData } = useMilestoneShare();
   
   const milestone = MILESTONES.find(m => m.count === scanCount) || MILESTONES[0];
 
@@ -228,7 +230,30 @@ export default function FirstScanCelebration({ isOpen, onClose, scanCount }: Cel
                   <ArrowRight className="w-4 h-4" />
                 </button>
               )}
+
+              <button
+                onClick={() => shareMilestone({
+                  type: scanCount === 1 ? 'milestone' : 'achievement',
+                  title: milestone.title,
+                  value: milestone.reward,
+                  subtitle: `I just unlocked ${milestone.title} on BIZ PLUS!`,
+                  date: new Date().toLocaleDateString()
+                })}
+                className="w-full flex items-center justify-center gap-2 bg-blue-600/20 text-blue-400 py-3 rounded-xl border border-blue-500/30 hover:bg-blue-600/30 transition-all font-bold group"
+              >
+                <Share2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                Share My Momentum
+              </button>
             </motion.div>
+
+            {/* Social Share Modal */}
+            {shareData && (
+              <SocialShare 
+                isOpen={isShareOpen}
+                onClose={closeShare}
+                data={shareData}
+              />
+            )}
 
             {/* Close Button */}
             <button

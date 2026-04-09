@@ -12,9 +12,9 @@ interface SEOProps {
 
 const SEO: React.FC<SEOProps> = ({
   title = 'Biz Plus — Official Global Launch 2026',
-  description = 'Biz Plus: Autonomous business analytics live worldwide. Track profit, loss, and drive smart decisions with our automated bill scanner.',
-  keywords = 'Biz Plus, Business Health, Global Launch, AI Scanner, Small Business Accounting, Financial Intelligence',
-  image = 'https://bizplus.ai/logo-mark.png',
+  description = 'Biz Plus: Autonomous business analytics live worldwide. Track profit, loss, and eliminate failure with our AI-powered economic resilience agent.',
+  keywords = 'Biz Plus, Business Health, Global Launch, AI Scanner, Small Business Finance, Economic Intelligence, Entrepreneurship',
+  image = 'https://bizplus.ai/launch-hero.png',
   url = 'https://bizplus.ai',
   type = 'website'
 }) => {

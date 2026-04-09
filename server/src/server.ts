@@ -162,4 +162,3 @@ process.on('unhandledRejection', (reason) => {
 void init();
 
 export default app;
-// Global Launch 2026: Heartbeat Restored

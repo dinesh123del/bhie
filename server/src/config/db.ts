@@ -12,7 +12,7 @@ const registerConnectionListeners = (): void => {
   listenersRegistered = true;
 
   mongoose.connection.on('connected', () => {
-    if (!env.IS_PRODUCTION) console.log('✅ MongoDB connected');
+    console.log('✅ MongoDB connected successfully');
   });
 
   mongoose.connection.on('error', (error) => {
@@ -25,8 +25,78 @@ const registerConnectionListeners = (): void => {
   });
 };
 
+/**
+ * Converts mongodb+srv:// to direct mongodb:// connection string
+ * using the resolved shard nodes. This bypasses Node.js SRV lookup
+ * failures that occur on some networks/DNS configurations.
+ */
+function buildDirectUri(user: string, pass: string, dbName: string): string {
+  const shards = [
+    'ac-imxdfzd-shard-00-00.2vi2cbd.mongodb.net:27017',
+    'ac-imxdfzd-shard-00-01.2vi2cbd.mongodb.net:27017',
+    'ac-imxdfzd-shard-00-02.2vi2cbd.mongodb.net:27017',
+  ];
+  return `mongodb://${user}:${pass}@${shards.join(',')
+    }/${dbName}?ssl=true&replicaSet=atlas-txsl1d-shard-0&authSource=admin&retryWrites=true&w=majority`;
+}
+
+export const connectDB = async (retries = 3): Promise<typeof mongoose.connection> => {
+  registerConnectionListeners();
+  mongoose.set('strictQuery', true);
+
+  if (isConnected && mongoose.connection.readyState === 1) {
+    return mongoose.connection;
+  }
+
+  // Primary: use environment URI
+  let mongoUri = env.MONGO_URI || env.MONGODB_URI;
+
+  // If using +srv protocol, try it first but fall back to direct connection
+  const useSrv = mongoUri && mongoUri.startsWith('mongodb+srv://');
+
+  if (useSrv) {
+    try {
+      console.log('🔌 Attempting MongoDB connection via SRV...');
+      await mongoose.connect(mongoUri, {
+        serverSelectionTimeoutMS: 8000,
+        socketTimeoutMS: 45000,
+        retryWrites: true,
+        w: 'majority',
+        maxPoolSize: env.IS_PRODUCTION ? 20 : 10,
+        minPoolSize: env.IS_PRODUCTION ? 2 : 1,
+        autoIndex: !env.IS_PRODUCTION,
+      });
+      isConnected = true;
+      return mongoose.connection;
+    } catch (srvError) {
+      const msg = srvError instanceof Error ? srvError.message : String(srvError);
+      console.warn(`⚠️ SRV connection failed (${msg}). Falling back to direct connection...`);
+
+      // Extract credentials from the SRV URI and build direct connection
+      try {
+        const url = new URL(mongoUri);
+        const user = decodeURIComponent(url.username);
+        const pass = decodeURIComponent(url.password);
+        const dbName = url.pathname.replace('/', '') || 'biz-plus';
+        mongoUri = buildDirectUri(user, pass, dbName);
+      } catch {
+        console.error('❌ Could not parse SRV URI for fallback. Using hardcoded direct URI.');
+        mongoUri = buildDirectUri(
+          'dineshbolla9_db_user',
+          'FA0Y3IeGHRrfMi6C',
+          'biz-plus'
+        );
+      }
+    }
+  }
+
+  // Direct connection (non-SRV or fallback)
+  return connectWithRetry(mongoUri, retries);
+};
+
 async function connectWithRetry(uri: string, retries: number): Promise<typeof mongoose.connection> {
   try {
+    console.log(`🔌 Connecting to MongoDB (direct)... [${retries} retries left]`);
     await mongoose.connect(uri, {
       serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
@@ -43,33 +113,14 @@ async function connectWithRetry(uri: string, retries: number): Promise<typeof mo
     console.error('❌ MongoDB connection failed:', message);
 
     if (retries > 0) {
-      console.log(`⏳ Retrying MongoDB connection (${retries} attempts left)`);
+      console.log(`⏳ Retrying MongoDB connection (${retries - 1} attempts left)`);
       await new Promise((resolve) => setTimeout(resolve, 2000));
       return connectWithRetry(uri, retries - 1);
     }
+
     throw error;
   }
 }
-
-export const connectDB = async (retries = 3): Promise<typeof mongoose.connection> => {
-  registerConnectionListeners();
-  mongoose.set('strictQuery', true);
-  
-  // FALLBACK SAFETY: Ensure we use a valid URI even if environment is stale
-  let mongoUri = env.MONGO_URI || env.MONGODB_URI;
-  const productionFallback = 'mongodb+srv://dineshbolla9_db_user:FA0Y3IeGHRrfMi6C@cluster0.2vi2cbd.mongodb.net/biz-plus?retryWrites=true&w=majority';
-
-  if (!mongoUri || mongoUri.includes('cluster.mongodb.net')) {
-    console.warn('⚠️ Invalid or Placeholder MONGO_URI detected. Forcing verified production fallback.');
-    mongoUri = productionFallback;
-  }
-
-  if (isConnected && mongoose.connection.readyState === 1) {
-    return mongoose.connection;
-  }
-
-  return connectWithRetry(mongoUri, retries);
-};
 
 export const disconnectDB = async (): Promise<void> => {
   if (!isConnected && mongoose.connection.readyState === 0) {
