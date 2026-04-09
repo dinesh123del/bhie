@@ -31,7 +31,7 @@ let quantumArchitecture: QuantumArchitecture | null = null;
 async function startServer(): Promise<void> {
   const PORT = env.PORT || 5000;
   return new Promise((resolve, reject) => {
-    server = app.listen(PORT, () => {
+    server = app.listen(PORT as number, '0.0.0.0', () => {
       logger.info(`🚀 Biz Plus Dashboard LIVE on PORT ${PORT}`);
       initializeIntelligenceSystems();
       resolve();
