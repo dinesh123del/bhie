@@ -27,7 +27,7 @@ let quantumArchitecture = null;
 async function startServer() {
     const PORT = env.PORT || 5000;
     return new Promise((resolve, reject) => {
-        server = app.listen(PORT, () => {
+        server = app.listen(PORT, '0.0.0.0', () => {
             logger.info(`🚀 Biz Plus Dashboard LIVE on PORT ${PORT}`);
             initializeIntelligenceSystems();
             resolve();
@@ -135,7 +135,8 @@ process.on('uncaughtException', (error) => {
 });
 process.on('unhandledRejection', (reason) => {
     console.error('💥 Unhandled Rejection:', reason);
-    process.exit(1);
+    // Don't exit — most unhandled rejections are non-fatal.
+    // Crashing here causes Render to restart constantly.
 });
 // Launch
 void init();

@@ -1,11 +1,11 @@
 import { Router, Request, Response } from 'express';
-import { requireAuth } from '../middleware/requireAuth.js';
+import { authenticateToken } from '../middleware/auth.js';
 import logger from '../utils/logger.js';
 
 const router = Router();
 
 // Sentinel Authentication (ensure only authorized users/admins can access)
-router.use(requireAuth);
+router.use(authenticateToken);
 
 /**
  * @desc Get Sentinel Engine Status

@@ -63,14 +63,6 @@ const Workflows = () => <div className="p-8 text-white">Workflows - Coming Soon<
 const MUTE_KEY = 'bizplus_sound_muted';
 
 // Legacy key migration
-if (localStorage.getItem('bizplus_sound_muted')) {
-  localStorage.setItem('bizplus_sound_muted', localStorage.getItem('bizplus_sound_muted')!);
-  localStorage.removeItem('bizplus_sound_muted');
-}
-if (localStorage.getItem('bizplus_sound_muted')) {
-  localStorage.setItem('bizplus_sound_muted', localStorage.getItem('bizplus_sound_muted')!);
-  localStorage.removeItem('bizplus_sound_muted');
-}
 if (localStorage.getItem('bizpulse_sound_muted')) {
   localStorage.setItem('bizplus_sound_muted', localStorage.getItem('bizpulse_sound_muted')!);
   localStorage.removeItem('bizpulse_sound_muted');
@@ -258,7 +250,8 @@ function App() {
     };
     void preload();
     return () => clearTimeout(safetyTimeout);
-  }, [dataReady]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSplashComplete = useCallback(() => {
     setSplashDone(true);

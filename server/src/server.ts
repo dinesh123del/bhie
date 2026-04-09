@@ -155,7 +155,8 @@ process.on('uncaughtException', (error) => {
 
 process.on('unhandledRejection', (reason) => {
   console.error('💥 Unhandled Rejection:', reason);
-  process.exit(1);
+  // Don't exit — most unhandled rejections are non-fatal.
+  // Crashing here causes Render to restart constantly.
 });
 
 // Launch

@@ -79,6 +79,7 @@ const allowedOrigins = [
   "https://app.bizplus.ai",
   "https://www.bizplus.ai",
   "https://bhie-frontend.vercel.app",
+  "https://bhie-zeta.vercel.app",
   "https://client-phi-woad.vercel.app",
   "https://dinesh123del-bhie.vercel.app",
 ].filter(Boolean);

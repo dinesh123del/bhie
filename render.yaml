@@ -10,23 +10,39 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: 4000
       - key: MONGO_URI
         sync: false
       - key: JWT_SECRET
         sync: false
-      - key: CLIENT_URL
-        sync: false
       - key: JWT_EXPIRES_IN
         value: 24h
+      - key: CLIENT_URL
+        sync: false
       - key: BODY_LIMIT
         value: 2mb
       - key: MAX_UPLOAD_FILE_SIZE_MB
+        value: 10
+      - key: UPLOAD_DIR
+        value: uploads
+      - key: IMAGE_PROCESSING_CONCURRENCY
+        value: 2
+      - key: SEED_DEFAULT_ADMIN
+        value: false
+      - key: REQUEST_RATE_LIMIT_MAX
+        value: 100
+      - key: AUTH_RATE_LIMIT_MAX
         value: 10
       - key: RAZORPAY_KEY_ID
         sync: false
       - key: RAZORPAY_KEY_SECRET
         sync: false
       - key: OPENAI_API_KEY
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
         sync: false
     healthCheckPath: /api/health
 
