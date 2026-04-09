@@ -15,10 +15,10 @@ const normalizeError = (error: unknown): AppError => {
 
   // Multer errors (file uploads)
   if (error instanceof multer.MulterError) {
-    if (error.code === 'LIMIT_FILE_SIZE') {
+    if ((error as any).code === 'LIMIT_FILE_SIZE') {
       return new AppError(413, `File size exceeds ${env.MAX_UPLOAD_FILE_SIZE_MB}MB limit`);
     }
-    return new AppError(400, `Upload error: ${error.message}`);
+    return new AppError(400, `Upload error: ${(error as any).message}`);
   }
 
   // Zod validation errors

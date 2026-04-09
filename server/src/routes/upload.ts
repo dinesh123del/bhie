@@ -396,7 +396,7 @@ async function handleImageUpload(req: AuthRequest, res: Response): Promise<void>
   }
 }
 
-function collectUploadedFiles(req: AuthRequest): Express.Multer.File[] {
+function collectUploadedFiles(req: AuthRequest): any[] {
   const files = req.files;
 
   if (!files) {
@@ -407,7 +407,7 @@ function collectUploadedFiles(req: AuthRequest): Express.Multer.File[] {
     return files;
   }
 
-  const byField = files as globalThis.Record<string, Express.Multer.File[]>;
+  const byField = files as any;
   return [...(byField.images || []), ...(byField.image || []), ...(byField.files || []), ...(byField.file || [])];
 }
 
