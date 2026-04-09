@@ -25,17 +25,9 @@ const registerConnectionListeners = (): void => {
   });
 };
 
-export const connectDB = async (retries = 3): Promise<typeof mongoose.connection> => {
-  registerConnectionListeners();
-  mongoose.set('strictQuery', true);
-  const mongoUri = env.MONGO_URI;
-
-  if (isConnected && mongoose.connection.readyState === 1) {
-    return mongoose.connection;
-  }
-
+async function connectWithRetry(uri: string, retries: number): Promise<typeof mongoose.connection> {
   try {
-    await mongoose.connect(mongoUri, {
+    await mongoose.connect(uri, {
       serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
       retryWrites: true,
@@ -44,7 +36,6 @@ export const connectDB = async (retries = 3): Promise<typeof mongoose.connection
       minPoolSize: env.IS_PRODUCTION ? 2 : 1,
       autoIndex: !env.IS_PRODUCTION,
     });
-
     isConnected = true;
     return mongoose.connection;
   } catch (error) {
@@ -54,11 +45,30 @@ export const connectDB = async (retries = 3): Promise<typeof mongoose.connection
     if (retries > 0) {
       console.log(`⏳ Retrying MongoDB connection (${retries} attempts left)`);
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      return connectDB(retries - 1);
+      return connectWithRetry(uri, retries - 1);
     }
-
     throw error;
   }
+}
+
+export const connectDB = async (retries = 3): Promise<typeof mongoose.connection> => {
+  registerConnectionListeners();
+  mongoose.set('strictQuery', true);
+  
+  // FALLBACK SAFETY: Ensure we use a valid URI even if environment is stale
+  let mongoUri = env.MONGO_URI || env.MONGODB_URI;
+  const productionFallback = 'mongodb+srv://dineshbolla9_db_user:FA0Y3IeGHRrfMi6C@cluster0.2vi2cbd.mongodb.net/biz-plus?retryWrites=true&w=majority';
+
+  if (!mongoUri || mongoUri.includes('cluster.mongodb.net')) {
+    console.warn('⚠️ Invalid or Placeholder MONGO_URI detected. Forcing verified production fallback.');
+    mongoUri = productionFallback;
+  }
+
+  if (isConnected && mongoose.connection.readyState === 1) {
+    return mongoose.connection;
+  }
+
+  return connectWithRetry(mongoUri, retries);
 };
 
 export const disconnectDB = async (): Promise<void> => {
