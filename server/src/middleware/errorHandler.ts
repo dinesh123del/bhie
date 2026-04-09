@@ -105,7 +105,7 @@ export const errorHandler: ErrorRequestHandler = (error, req, res, _next) => {
     message: normalizedError.expose || !env.IS_PRODUCTION ? normalizedError.message : 'Internal server error',
     ...(env.IS_PRODUCTION ? {} : { 
       details: normalizedError.details ?? (error instanceof Error ? error.stack : error),
-      type: error?.constructor?.name 
+      type: (error as any)?.constructor?.name 
     }),
   });
 };

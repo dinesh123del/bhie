@@ -24,7 +24,7 @@ router.post('/capture', upload.fields([
   { name: 'audio', maxCount: 1 }
 ]), async (req: any, res) => {
   try {
-    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+    const files = req.files as any;
     const frameFile = files?.frame?.[0];
     const audioFile = files?.audio?.[0];
     const { context, businessId, userId } = req.body;

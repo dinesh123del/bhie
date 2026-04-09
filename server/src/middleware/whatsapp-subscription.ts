@@ -13,7 +13,7 @@ export async function checkWhatsAppSubscription(
   next: NextFunction
 ) {
   try {
-    const phoneNumber = req.headers['x-whatsapp-phone'] as string;
+    const phoneNumber = (req as any).headers['x-whatsapp-phone'] as string;
     
     if (!phoneNumber) {
       return res.status(400).json({ error: 'WhatsApp phone number required' });
@@ -53,7 +53,7 @@ export async function checkWhatsAppPlanAccess(
   next: NextFunction
 ) {
   try {
-    const phoneNumber = req.headers['x-whatsapp-phone'] as string;
+    const phoneNumber = (req as any).headers['x-whatsapp-phone'] as string;
     
     if (!phoneNumber) {
       return res.status(400).json({ error: 'WhatsApp phone number required' });
@@ -97,7 +97,7 @@ export async function checkUsageLimits(
   next: NextFunction
 ) {
   try {
-    const phoneNumber = req.headers['x-whatsapp-phone'] as string;
+    const phoneNumber = (req as any).headers['x-whatsapp-phone'] as string;
     
     if (!phoneNumber) {
       return res.status(400).json({ error: 'WhatsApp phone number required' });
@@ -156,7 +156,7 @@ export async function optionalWhatsAppSubscription(
   next: NextFunction
 ) {
   try {
-    const phoneNumber = req.headers['x-whatsapp-phone'] as string;
+    const phoneNumber = (req as any).headers['x-whatsapp-phone'] as string;
     
     if (phoneNumber) {
       const subscription = await WhatsAppSubscription.findByPhone(phoneNumber);
