@@ -74,11 +74,8 @@ const envSchema = z
       }
 
       if (!data.OPENAI_API_KEY) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['OPENAI_API_KEY'],
-          message: 'OPENAI_API_KEY is missing and strictly required for production',
-        });
+        // AI features will be gracefully disabled.
+        console.warn('⚠️ OPENAI_API_KEY is missing. AI features will be disabled.');
       }
     }
 
