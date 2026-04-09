@@ -33,3 +33,15 @@ export const apiLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
+
+// Authentication Rate Limiter (Brute-force protection)
+export const authRateLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: env.IS_PRODUCTION ? 10 : 100, // Limit each IP to 10 login/register attempts per hour in prod
+  message: { 
+    success: false, 
+    message: 'Too many authentication attempts. Please try again after an hour.' 
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});

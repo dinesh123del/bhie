@@ -176,9 +176,9 @@ app.use('/api/referrals', referralRoutes);
 import usageRoutes from './routes/usageRoutes.js';
 app.use('/api/usage', usageRoutes);
 
-// Sentinel Anomaly API
-import sentinelRoutes from './routes/sentinel.js';
-app.use('/api/sentinel', sentinelRoutes);
+// Sentinel Anomaly API (Placeholder/To be implemented)
+// import sentinelRoutes from './routes/sentinel.js';
+// app.use('/api/sentinel', sentinelRoutes);
 
 // ── Static Serve & SPA Catch-All ────────────────────────────────────
 if (env.IS_PRODUCTION) {
