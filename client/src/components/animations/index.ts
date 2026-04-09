@@ -1,5 +1,5 @@
 // ============================================
-// BHIE Animation System Exports
+// BIZ PLUS Animation System Exports
 // ============================================
 
 // Animation Components

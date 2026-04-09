@@ -2,9 +2,9 @@ import PDFDocument from 'pdfkit';
 import { createWriteStream } from 'fs';
 import { mkdir } from 'fs/promises';
 import path from 'path';
-import { BusinessSummary } from './business-summary';
-import { AIInsights } from './ai-insights';
-import { Business } from '../models/Business';
+import { BusinessSummary } from './business-summary.js';
+import { AIInsights } from './ai-insights.js';
+import { Business } from '../models/Business.js';
 
 interface ReportOptions {
   includeCharts?: boolean;
@@ -29,7 +29,7 @@ export class ReportGenerator {
     const insights = await AIInsights.getQuickSummary(businessId);
     const analysis = await AIInsights.getDetailedAnalysis(businessId);
 
-    const filename = `BHIE_Report_${business.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+    const filename = `Biz Plus_Report_${business.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
     const filepath = path.join(this.REPORTS_DIR, filename);
 
     const doc = new PDFDocument();
@@ -37,7 +37,7 @@ export class ReportGenerator {
     doc.pipe(stream);
 
     // Header
-    doc.fontSize(24).text('BHIE Business Report', 50, 50);
+    doc.fontSize(24).text('Biz Plus Business Report', 50, 50);
     doc.fontSize(14).text(business.name, 50, 80);
     doc.fontSize(10).text(`Generated: ${new Date().toLocaleDateString('en-IN')}`, 50, 100);
 
@@ -75,7 +75,7 @@ export class ReportGenerator {
     });
 
     // Footer
-    doc.fontSize(10).text('Powered by BHIE - Business Health Implementation Ecosystem', 50, 750, { align: 'center' });
+    doc.fontSize(10).text('Powered by Biz Plus - Business Health Implementation Ecosystem', 50, 750, { align: 'center' });
 
     doc.end();
 

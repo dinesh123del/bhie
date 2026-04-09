@@ -35,7 +35,7 @@ export default function About() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <span className="section-kicker">About AERA</span>
+              <span className="section-kicker">About BIZ PLUS</span>
             </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 32 }}
@@ -52,7 +52,7 @@ export default function About() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="max-w-xl text-lg leading-relaxed text-slate-400"
             >
-              AERA turns messy lists of bills and numbers into a clear plan for you to grow.
+              BIZ PLUS turns messy lists of bills and numbers into a clear plan for you to grow.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 24 }}
@@ -162,7 +162,7 @@ export default function About() {
               <div className="space-y-6">
                 <span className="section-kicker">Our Vision</span>
                 <h2 className="text-4xl font-black text-white sm:text-5xl">Built to help you succeed.</h2>
-                <p className="text-lg text-slate-400">AERA is here to make business simple for everyone.</p>
+                <p className="text-lg text-slate-400">BIZ PLUS is here to make business simple for everyone.</p>
               </div>
               <div className="grid gap-4">
                 {milestones.map((milestone, idx) => (
@@ -184,7 +184,7 @@ export default function About() {
                     to="/contact"
                     className="inline-flex items-center gap-4 rounded-2xl bg-white px-10 py-5 text-sm font-black uppercase tracking-widest text-black transition-transform hover:scale-[1.02]"
                   >
-                    Partner with AERA
+                    Partner with BIZ PLUS
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>

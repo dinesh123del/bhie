@@ -1,5 +1,9 @@
-// Partner API features disabled - required services not yet implemented
-// TODO: Implement HealthScoringEngine, PredictionEngine, PortfolioService, WebhookService
+// Partner API features disabled - requires implementation of:
+// - HealthScoringEngine
+// - PredictionEngine  
+// - PortfolioService
+// - WebhookService
+// This is a future feature for bank/fintech integrations
 
 import { Router } from 'express';
 
@@ -217,7 +221,7 @@ router.get('/widget/health',
 <body>
   <div class="widget ${theme}">
     <div class="score" id="score">--</div>
-    <div style="text-align: center; margin-top: 10px;">BHIE Health Score</div>
+    <div style="text-align: center; margin-top: 10px;">Biz Plus Health Score</div>
   </div>
   <script>
     // Widget will fetch data from parent or via API

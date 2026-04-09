@@ -21,14 +21,14 @@ const recordSchema = new mongoose.Schema({
         required: true,
         min: 0,
     },
-    title: string,
+    title: String,
     description: {
         type: String,
         required: true,
         trim: true,
     },
-    fileUrl: string,
-    gstNumber: string,
+    fileUrl: String,
+    gstNumber: String,
     category: String,
     vendor: String,
     date: {

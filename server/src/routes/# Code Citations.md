@@ -5,7 +5,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -39,7 +39,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -61,7 +61,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -95,7 +95,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -117,7 +117,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -151,7 +151,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -173,7 +173,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -207,7 +207,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -229,7 +229,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -263,7 +263,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -285,7 +285,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -319,7 +319,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -341,7 +341,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -375,7 +375,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -397,7 +397,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -431,7 +431,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -453,7 +453,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -487,7 +487,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -509,7 +509,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -543,7 +543,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -565,7 +565,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -599,7 +599,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -621,7 +621,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -655,7 +655,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -677,7 +677,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -711,7 +711,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -733,7 +733,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -767,7 +767,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -789,7 +789,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -823,7 +823,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -845,7 +845,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -879,7 +879,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -901,7 +901,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -935,7 +935,7 @@ https://github.com/evilvic/wordle/blob/eb3708c186488a5b54e08394f9e8613d477e47a5/
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -957,7 +957,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -991,7 +991,7 @@ https://github.com/ptaszek1/React-Portfolio/blob/1a4a77e7469ff6599481e1daff8e728
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -1013,7 +1013,7 @@ https://github.com/anyone-yuren/react-antd-admin-pnpm/blob/9dbce080e90a1d2196582
 
 ```
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/tsconfig.json
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
@@ -1047,7 +1047,7 @@ https://github.com/anyone-yuren/react-antd-admin-pnpm/blob/9dbce080e90a1d2196582
 ## ALL FIXES COMPLETE
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/vite.config.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -1074,7 +1074,7 @@ export default defineConfig({
 ````
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/server/tsconfig.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/server/tsconfig.json
 {
   "compilerOptions": {
     "target": "ES2020",
@@ -1098,7 +1098,7 @@ export default defineConfig({
 ````
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/server/src/server.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/server/src/server.ts
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -1144,7 +1144,7 @@ app.listen(PORT, () => {
 ````
 
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/package.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/package.json
 {
   "name": "bhie",
   "version": "1.0.0",
@@ -1163,7 +1163,7 @@ app.listen(PORT, () => {
 ````
 
 ````json
-// filepath: /Users/srilekha/Desktop/BHIE/client/package.json
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/package.json
 {
   "name": "bhie-client",
   "private": true,
@@ -1191,7 +1191,7 @@ app.listen(PORT, () => {
 ````
 
 ````typescript
-// filepath: /Users/srilekha/Desktop/BHIE/client/src/services/api.ts
+// filepath: /Users/srilekha/Desktop/Biz Plus/client/src/services/api.ts
 import axios from '
 ```
 

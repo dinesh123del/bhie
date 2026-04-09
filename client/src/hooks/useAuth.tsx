@@ -161,7 +161,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     localStorage.setItem('user', JSON.stringify(normalizedUser));
     setUser(normalizedUser);
     toast.success(`Welcome back, ${normalizedUser.name}`);
-    navigate('/dashboard', { replace: true });
   };
 
   // Logout

@@ -1,8 +1,8 @@
-# BHIE - Project Structure
+# Biz Plus - Project Structure
 
 ## Monorepo Layout
 ```
-BHIE/
+Biz Plus/
 ├── client/          # React + Vite frontend (TypeScript)
 ├── server/          # Express + MongoDB backend (TypeScript)
 ├── ml-service/      # Legacy Python FastAPI ML service (optional)

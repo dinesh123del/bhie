@@ -3,7 +3,7 @@
 </xai:function_call >
 
 <xai:function_call name="edit_file">
-<parameter name="path">/Users/srilekha/Desktop/BHIE/scripts/detect-creds.ts
+<parameter name="path">/Users/srilekha/Desktop/Biz Plus/scripts/detect-creds.ts
 import fs from 'fs';
 import path from 'path';
 import { Command } from 'commander';

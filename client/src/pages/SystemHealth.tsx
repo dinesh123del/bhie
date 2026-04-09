@@ -267,7 +267,7 @@ const SystemHealth = () => {
                         <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em]">System Info</span>
                       </div>
                       <p className="text-sm text-white/60 font-medium leading-relaxed">
-                        This check looks at the health of the entire AERA application. Any problems found here should be fixed to keep everything working correctly.
+                        This check looks at the health of the entire BIZ PLUS application. Any problems found here should be fixed to keep everything working correctly.
                       </p>
                     </div>
                   </div>

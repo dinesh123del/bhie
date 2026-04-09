@@ -244,7 +244,7 @@ const Admin = () => {
           <ShieldAlert className="w-24 h-24 text-rose-500 mb-8 opacity-20 mx-auto" />
           <h1 className="text-4xl font-black text-white mb-4 tracking-tighter uppercase">High Security Sector</h1>
           <p className="text-white/40 max-w-md mb-10 font-medium">
-            This sector of the AERA platform is strictly restricted to system administrators.
+            This sector of the BIZ PLUS platform is strictly restricted to system administrators.
           </p>
           <PremiumButton
             onClick={() => navigate('/dashboard')}
@@ -307,7 +307,7 @@ const Admin = () => {
               Admin <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-600">Forge.</span>
             </h1>
             <p className="text-white/30 text-base md:text-lg font-medium max-w-2xl leading-relaxed text-left">
-              Global command center for AERA operations. Monitor metrics, manage access protocols, and scaling parameters.
+              Global command center for BIZ PLUS operations. Monitor metrics, manage access protocols, and scaling parameters.
             </p>
           </div>
           <div className="flex gap-2 bg-white/[0.02] p-1.5 rounded-2xl border border-white/5 backdrop-blur-3xl">

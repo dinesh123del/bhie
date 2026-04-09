@@ -1,11 +1,13 @@
-import React, { Suspense, useRef } from 'react';
+import React, { Suspense, useRef, lazy } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
 import { Float, PerspectiveCamera, Stars } from '@react-three/drei';
 import * as THREE from 'three';
 import { usePerformanceCheck, useMouseInfluence } from '../hooks';
-import { RevenueFlow3D } from '../objects/RevenueFlow';
-import { GrowthTree3D } from '../objects/GrowthTree';
 import { GradientBackground } from '../materials';
+
+// Lazy load 3D components for code splitting
+const RevenueFlow3D = lazy(() => import('../objects/RevenueFlow').then(m => ({ default: m.RevenueFlow3D })));
+const GrowthTree3D = lazy(() => import('../objects/GrowthTree').then(m => ({ default: m.GrowthTree3D })));
 
 interface DashboardScene3DProps {
   revenue?: number;

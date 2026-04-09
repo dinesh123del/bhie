@@ -105,7 +105,7 @@ const Sidebar = () => {
             transition={{ duration: 0.2 }}
             className="font-bold text-lg bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent"
           >
-            {isOpen && 'AERA'}
+            {isOpen && 'BIZ PLUS'}
           </motion.div>
           <motion.button
             onClick={() => setIsOpen(!isOpen)}

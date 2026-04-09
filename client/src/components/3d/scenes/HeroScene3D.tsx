@@ -1,11 +1,4 @@
-import React, { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { Stars, PerspectiveCamera } from '@react-three/drei';
-import * as THREE from 'three';
-import { ParticleField3D } from '../objects/ParticleField';
-import { FloatingBusinessCards } from '../objects/FloatingBusinessCards';
-import { GradientBackground } from '../materials';
-import { usePerformanceCheck } from '../hooks';
+import React from 'react';
 
 interface HeroScene3DProps {
   showParticles?: boolean;
@@ -15,120 +8,76 @@ interface HeroScene3DProps {
   children?: React.ReactNode;
 }
 
-// Star field component
-function StarField() {
+// CSS-only background — no Three.js, no Canvas, no R3F
+export function HeroScene3D({ children }: HeroScene3DProps) {
   return (
-    <Stars
-      radius={100}
-      depth={50}
-      count={5000}
-      factor={4}
-      saturation={0}
-      fade
-      speed={0.5}
-    />
-  );
-}
+    <div className="relative min-h-screen overflow-hidden bg-[#050508]">
+      {/* ── Cinematic Background Asset (Dimmmed) ────────────────────── */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-40"
+        style={{ backgroundImage: 'url(/cinematic-bg.png)', filter: 'blur(2px) saturate(1.2)' }}
+      />
 
-// Lighting setup
-function SceneLighting() {
-  return (
-    <>
-      <ambientLight intensity={0.2} />
-      <directionalLight position={[10, 10, 5]} intensity={0.8} color="#ffffff" />
-      <pointLight position={[-10, -10, -5]} intensity={0.5} color="#007AFF" />
-      <pointLight position={[10, -10, -5]} intensity={0.3} color="#AF52DE" />
-    </>
-  );
-}
+      {/* Atmospheric Overlays */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#050508] via-transparent to-transparent opacity-90" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#050508] via-transparent to-transparent opacity-40" />
 
-// Camera controller
-function CameraController() {
-  // Camera will follow mouse slightly for parallax effect
-  // Implemented in individual components
-  return null;
-}
+      {/* Blue glow blob top-left */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          width: 900, height: 600, left: '-10%', top: '-5%',
+          borderRadius: '50%',
+          background: 'radial-gradient(ellipse, rgba(0,122,255,0.08) 0%, transparent 70%)',
+          filter: 'blur(80px)',
+          animation: 'pulse 8s ease-in-out infinite',
+        }}
+      />
 
-export function HeroScene3D({
-  showParticles = true,
-  showCards = true,
-  showStars = true,
-  intensity = 'medium',
-  children,
-}: HeroScene3DProps) {
-  const { shouldEnable3D, deviceTier } = usePerformanceCheck();
+      {/* Purple glow blob bottom-right */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          width: 700, height: 500, right: '-5%', bottom: '10%',
+          borderRadius: '50%',
+          background: 'radial-gradient(ellipse, rgba(88,86,214,0.07) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+          animation: 'pulse 11s ease-in-out infinite 2s',
+        }}
+      />
 
-  // Determine settings based on performance
-  const particleCount = deviceTier === 'high' ? 1500 : deviceTier === 'medium' ? 800 : 0;
-  const enableCards = deviceTier !== 'low';
+      {/* Subtle star dots */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `
+            radial-gradient(1px 1px at 15% 20%, rgba(255,255,255,0.35) 0%, transparent 100%),
+            radial-gradient(1px 1px at 45% 8%, rgba(255,255,255,0.25) 0%, transparent 100%),
+            radial-gradient(1px 1px at 72% 15%, rgba(255,255,255,0.3) 0%, transparent 100%),
+            radial-gradient(1px 1px at 88% 35%, rgba(255,255,255,0.2) 0%, transparent 100%),
+            radial-gradient(1px 1px at 30% 65%, rgba(255,255,255,0.25) 0%, transparent 100%),
+            radial-gradient(1px 1px at 55% 75%, rgba(255,255,255,0.2) 0%, transparent 100%),
+            radial-gradient(1px 1px at 80% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+            radial-gradient(1.5px 1.5px at 10% 85%, rgba(255,255,255,0.15) 0%, transparent 100%),
+            radial-gradient(1px 1px at 60% 45%, rgba(255,255,255,0.2) 0%, transparent 100%),
+            radial-gradient(1px 1px at 95% 55%, rgba(255,255,255,0.25) 0%, transparent 100%)
+          `,
+        }}
+      />
 
-  if (!shouldEnable3D) {
-    // Fallback to 2D gradient background
-    return (
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-black to-purple-900/20" />
-        {children}
-      </div>
-    );
-  }
+      {/* Grid overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.04]"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(0,122,255,0.5) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,122,255,0.5) 1px, transparent 1px)
+          `,
+          backgroundSize: '80px 80px',
+        }}
+      />
 
-  return (
-    <div className="absolute inset-0 overflow-hidden">
-      {/* 3D Canvas */}
-      <div className="absolute inset-0 w-full h-full">
-        <Canvas
-          camera={{
-            position: [0, 0, 10],
-            fov: 60,
-            near: 0.1,
-            far: 1000,
-          }}
-          dpr={[1, deviceTier === 'high' ? 2 : 1]}
-          performance={{ min: deviceTier === 'high' ? 0.5 : 0.3 }}
-          gl={{
-            antialias: deviceTier === 'high',
-            alpha: true,
-            powerPreference: 'high-performance',
-          }}
-        >
-          <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={60} />
-          
-          <Suspense fallback={null}>
-            {/* Gradient background sphere */}
-            <GradientBackground
-              color1="#007AFF"
-              color2="#5856D6"
-              color3="#000000"
-            />
-            
-            {/* Star field */}
-            {showStars && <StarField />}
-            
-            {/* Lighting */}
-            <SceneLighting />
-            
-            {/* Particles */}
-            {showParticles && particleCount > 0 && (
-              <ParticleField3D
-                count={particleCount}
-                color="#007AFF"
-                showIcons={deviceTier === 'high'}
-              />
-            )}
-            
-            {/* Business cards */}
-            {showCards && enableCards && <FloatingBusinessCards autoGenerate />}
-          </Suspense>
-          
-          {/* Fog for depth perception */}
-          <fog
-            attach="fog"
-            args={['#000000', 10, 30]}
-          />
-        </Canvas>
-      </div>
-
-      {/* Content overlay */}
+      {/* Content */}
       <div className="relative z-10 w-full h-full">
         {children}
       </div>
@@ -136,25 +85,14 @@ export function HeroScene3D({
   );
 }
 
-// Simplified version for mobile/lower performance
-export function HeroScene3DLight({
-  children,
-}: {
-  children?: React.ReactNode;
-}) {
+// Light variant — same but simpler
+export function HeroScene3DLight({ children }: { children?: React.ReactNode }) {
   return (
-    <div className="absolute inset-0 overflow-hidden">
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-black to-purple-900/30 animate-gradient" />
-      
-      {/* Floating orbs (CSS-based) */}
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
-      
-      {/* Content */}
-      <div className="relative z-10 w-full h-full">
-        {children}
-      </div>
+    <div className="relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-black to-purple-900/20" />
+      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      <div className="relative z-10 w-full h-full">{children}</div>
     </div>
   );
 }

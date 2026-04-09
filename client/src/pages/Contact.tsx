@@ -58,7 +58,7 @@ export default function Contact() {
 
               <div className="grid gap-6 sm:grid-cols-2">
                 {[
-                  { icon: Mail, label: 'Email', value: 'hello@aera.cloud', sub: '24/7 Support' },
+                  { icon: Mail, label: 'Email', value: 'hello@bizplus.io', sub: '24/7 Support' },
                   { icon: MessageSquare, label: 'Chat', value: 'WhatsApp Ready', sub: 'Real-time help' },
                   { icon: Phone, label: 'Call', value: '+91 80 4567 2200', sub: 'Mon-Fri, 9am-6pm' },
                   { icon: MapPin, label: 'Office', value: 'Bengaluru', sub: 'Karnataka, India' }

@@ -22,6 +22,8 @@ import InteractiveGlobe from '../components/ui/InteractiveGlobe';
 import TestimonialsWall from '../components/TestimonialsWall';
 import LiveActivityCounter from '../components/LiveActivityCounter';
 import { HeroScene3D, HeroScene3DLight } from '../components/3d/scenes';
+import DemoVideoHero from '../components/welcome/DemoVideoHero';
+import SEO from '../components/SEO';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -116,8 +118,13 @@ export default function LandingPagePremium() {
 
   return (
     <div className="min-h-screen bg-[#020203] text-white selection:bg-indigo-500/30 overflow-x-hidden">
+      <SEO 
+        title="Biz Plus — The Ultimate Business Intelligence Engine"
+        description="Eliminate business failure with Biz Plus. Autonomous financial intelligence, automated bill scanning, and global economic resilience for every entrepreneur."
+      />
       <Navbar />
       <HeroScene3D showParticles showCards showStars>
+        <DemoVideoHero />
         <main className="relative z-10 pt-32 px-6 md:px-12">
           {/* HERO SECTION: Extreme Apple Look with 8k Logo Reveal */}
           <section className="max-w-[1400px] mx-auto mb-40 text-center">
@@ -138,7 +145,7 @@ export default function LandingPagePremium() {
                   <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 via-transparent to-purple-500/10 rounded-[3rem] opacity-50" />
                   <motion.img
                     src="/icon.png"
-                    alt="AERA 8k Logo"
+                    alt="BIZ PLUS 8k Logo"
                     className="w-full h-full object-contain relative z-10 drop-shadow-2xl"
                     animate={{ y: [0, -10, 0] }}
                     transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
@@ -148,23 +155,23 @@ export default function LandingPagePremium() {
               </div>
 
               <div className="space-y-6">
-                <motion.span
+                 <motion.span
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8 }}
-                  className="px-6 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.6em] text-white/30 block max-w-max mx-auto shadow-[0_0_30px_rgba(255,255,255,0.05)]"
+                  className="px-6 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black uppercase tracking-[0.6em] text-indigo-400 block max-w-max mx-auto shadow-[0_0_30px_rgba(79,70,229,0.1)] mb-4 animate-pulse"
                 >
-                  AERA / GLOBAL ECONOMIC MISSION
+                  OFFICIAL GLOBAL LAUNCH 2026
                 </motion.span>
 
-                <h1 className="text-[64px] md:text-[130px] font-black leading-[0.82] tracking-[-0.06em] text-white">
-                  Eliminating failure. <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-indigo-200 to-indigo-800 animate-gradient-slow drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">Globally.</span>
+                <h1 className="text-[64px] md:text-[130px] font-black leading-[0.82] tracking-[-0.06em] text-white drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+                  Economic <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-indigo-200 to-indigo-800 animate-gradient-slow drop-shadow-[0_0_30px_rgba(79,70,229,0.5)]">Power.</span>
                 </h1>
 
                 <p className="text-[20px] md:text-[26px] text-white/40 max-w-3xl mx-auto font-medium leading-relaxed tracking-tight">
-                  The world's first economic resilience platform. <br className="hidden md:block" />
-                  Professional-grade financial intelligence for every entrepreneur.
+                  The world's most advanced business resilience platform is now live. <br className="hidden md:block" />
+                  Elite intelligence for every entrepreneur, everywhere.
                 </p>
               </div>
 
@@ -300,7 +307,7 @@ export default function LandingPagePremium() {
           </div>
         </div>
         <div className="max-w-[1400px] mx-auto pt-24 mt-24 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-12">
-          <p className="text-[11px] font-black text-white/10 uppercase tracking-[0.4em]">© 2026 AERA ECOSYSTEM. ALL RIGHTS RESERVED.</p>
+          <p className="text-[11px] font-black text-white/10 uppercase tracking-[0.4em]">© 2026 BIZ PLUS ECOSYSTEM. ALL RIGHTS RESERVED.</p>
         </div>
       </footer>
     </div>

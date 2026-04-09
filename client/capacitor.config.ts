@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.finly.app',
-  appName: 'Finly',
+  appId: 'com.bizplus.app',
+  appName: 'BIZ PLUS',
   webDir: 'dist'
 };
 

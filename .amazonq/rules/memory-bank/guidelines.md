@@ -1,4 +1,4 @@
-# BHIE - Development Guidelines
+# Biz Plus - Development Guidelines
 
 ## Code Quality Standards
 

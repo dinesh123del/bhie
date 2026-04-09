@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { MultiLanguageVoiceProcessor } from '../services/multi-language-voice-processor';
+import { MultiLanguageVoiceProcessor } from '../services/multi-language-voice-processor.js';
 
 const router = Router();
 const upload = multer({ 

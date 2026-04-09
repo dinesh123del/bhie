@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Finly</string>
-    <string name="title_activity_main">Finly</string>
-    <string name="package_name">com.finly.app</string>
-    <string name="custom_url_scheme">com.finly.app</string>
+    <string name="app_name">BIZ PLUS</string>
+    <string name="title_activity_main">BIZ PLUS</string>
+    <string name="package_name">com.bizplus.app</string>
+    <string name="custom_url_scheme">com.bizplus.app</string>
 </resources>

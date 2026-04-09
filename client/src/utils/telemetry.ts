@@ -1,5 +1,5 @@
 /**
- * AERA Telemetry & Monitoring System
+ * BIZ PLUS Telemetry & Monitoring System
  * Unified integration for Sentry (Errors) and Google Analytics (Insights).
  */
 

@@ -2,7 +2,7 @@
 
 set -e
 
-echo "BHIE quick start"
+echo "Biz Plus quick start"
 echo "================"
 echo ""
 

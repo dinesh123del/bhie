@@ -23,8 +23,8 @@ import { AnimatedNumber } from '../components/AnimatedNumber';
 import RevenueLineChart from '../components/charts/RevenueLineChart';
 import StoryDashboard from '../components/StoryDashboard';
 import GrowthForecast from '../components/GrowthForecast';
-import AERASentinel from '../components/AERASentinel';
-import AERASavings from '../components/AERASavings';
+import BizPlusSentinel from '../components/BizPlusSentinel';
+import BizPlusSavings from '../components/BizPlusSavings';
 import { recordsAPI } from '../services/api';
 
 import { InsightItem } from '../components/InsightsPanel';
@@ -439,7 +439,7 @@ const Dashboard = () => {
 
       {/* MAIN INTELLIGENCE SECTION */}
       <div className="space-y-12">
-        <AERASavings records={records} />
+        <BizPlusSavings records={records} />
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12">
           <div className="space-y-12">
@@ -472,7 +472,7 @@ const Dashboard = () => {
             </div>
 
             <div className="space-y-8">
-              <AERASentinel
+              <BizPlusSentinel
                 industry={company?.industry || 'Technology'}
                 region="India"
                 cashReserve={revenue - expenses}
@@ -670,7 +670,7 @@ const Dashboard = () => {
             className="bg-slate-900 rounded-3xl p-6 w-full max-w-2xl border border-white/10 max-h-[90vh] overflow-y-auto"
           >
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-white font-bold text-xl">Grow with AERA</h3>
+              <h3 className="text-white font-bold text-xl">Grow with BIZ PLUS</h3>
               <button
                 onClick={() => setShowReferralModal(false)}
                 className="p-2 hover:bg-white/10 rounded-full transition-colors"

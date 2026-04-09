@@ -7,6 +7,7 @@ import { requireUser } from '../utils/request.js';
 
 // Extend AuthRequest to include tenant info
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       organization?: {

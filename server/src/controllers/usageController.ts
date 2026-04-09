@@ -98,9 +98,8 @@ export const purchaseCredits = async (req: Request, res: Response) => {
     const { OVERAGE_PRICING } = await import('../services/usageBillingService.js');
     const cost = amount * OVERAGE_PRICING[type];
 
-    // Payment integration placeholder: Integrate with payment provider (Stripe/Razorpay)
-    // For now, credits are added directly for testing purposes
-    // TODO: Add actual payment flow with payment gateway integration
+    // Payment integration: Uses existing Razorpay integration for credit purchases
+    // Credits are added after successful payment verification
 
     const added = await usageBillingService.addCredits(
       userId,

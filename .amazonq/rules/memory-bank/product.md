@@ -1,7 +1,7 @@
-# BHIE - Product Overview
+# Biz Plus - Product Overview
 
 ## Purpose
-BHIE (Business Health Intelligence Engine) is a full-stack SaaS platform that helps small and medium businesses track financial health, analyze business data using AI, and make data-driven decisions. It combines financial record management, AI-powered insights, image intelligence (OCR), and predictive analytics in a single dashboard.
+Biz Plus (Business Health Intelligence Engine) is a full-stack SaaS platform that helps small and medium businesses track financial health, analyze business data using AI, and make data-driven decisions. It combines financial record management, AI-powered insights, image intelligence (OCR), and predictive analytics in a single dashboard.
 
 ## Value Proposition
 - Centralized financial record management with automated categorization

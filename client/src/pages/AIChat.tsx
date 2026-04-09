@@ -154,7 +154,7 @@ const SmartChat = () => {
                 }
                 const content = messages.map(m => `${m.role.toUpperCase()} (${m.timestamp}):\n${m.content}\n`).join('\n---\n\n');
                 void generateBrandedPDF({
-                  title: 'AERA Strategic Chat Export',
+                  title: 'BIZ PLUS Strategic Chat Export',
                   content: content,
                   filename: `Chat_Export_${Date.now()}`,
                   type: 'ai_chat_transcript'

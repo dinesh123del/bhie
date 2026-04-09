@@ -1,7 +1,7 @@
 import { Response } from 'express';
 
 import User from '../models/User.js';
-import BusinessRecord from '../models/Record.js';
+import Record from '../models/Record.js';
 import Settings from '../models/Settings.js';
 import { AuthRequest } from '../types/index.js';
 import { asyncHandler } from '../middleware/asyncHandler.js';
@@ -155,8 +155,8 @@ export const adminController = {
       User.countDocuments({ plan: 'free' }),
       User.countDocuments({ plan: 'pro' }),
       User.countDocuments({ plan: 'premium' }),
-      BusinessRecord.countDocuments(),
-      BusinessRecord.countDocuments({
+      Record.countDocuments(),
+      Record.countDocuments({
         createdAt: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }
       })
     ]);
@@ -234,9 +234,9 @@ export const adminController = {
       settings = new Settings();
     }
 
-    const { 
+    const {
       proPrice, premiumPrice, isFreeMode, currency, adminInstructions, splashAds,
-      aiAutonomousLevel, globalBenchmarkingEnabled, resilienceModeEnabled 
+      aiAutonomousLevel, globalBenchmarkingEnabled, resilienceModeEnabled
     } = req.body;
 
     if (proPrice !== undefined) settings.proPrice = proPrice;

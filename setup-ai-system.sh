@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# 🚀 BHIE Multi-Agent AI System - Setup & Testing Script
+# 🚀 Biz Plus Multi-Agent AI System - Setup & Testing Script
 # This script helps you set up and test the AI integration
 
 set -e
 
 echo "=========================================="
-echo "🚀 BHIE Multi-Agent AI System Setup"
+echo "🚀 Biz Plus Multi-Agent AI System Setup"
 echo "=========================================="
 echo ""
 

@@ -90,7 +90,7 @@ export default function PublicDemo() {
             <Scan className="w-8 h-8 text-white" />
           </motion.div>
           <h1 className="text-3xl font-black text-white mb-2">
-            Try AERA Free
+            Try BIZ PLUS Free
           </h1>
           <p className="text-white/50">
             No signup required. See how fast we extract data from receipts.

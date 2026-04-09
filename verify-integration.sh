@@ -3,7 +3,7 @@
 BACKEND_PORT=5001
 FRONTEND_PORT=5173
 
-echo "BHIE frontend-backend integration test"
+echo "Biz Plus frontend-backend integration test"
 echo "======================================"
 echo ""
 

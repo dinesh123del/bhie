@@ -69,7 +69,7 @@ router.post('/create-order', asyncHandler(async (req, res) => {
     const razorpay = await getRazorpayClient();
     const config = PLAN_CONFIG[plan];
     const amount = config.monthlyPrice;
-    const receipt = `finly_${plan}_${Date.now()}_${user.userId}`;
+    const receipt = `bhie_${plan}_${Date.now()}_${user.userId}`;
     const razorpayOrder = await razorpay.orders.create({
         amount: amount * 100, // Razorpay expects amount in paise
         currency: config.currency,

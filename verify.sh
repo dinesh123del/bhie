@@ -4,7 +4,7 @@ BACKEND_PORT=5001
 FRONTEND_PORT=5173
 
 echo "=================================="
-echo "BHIE local verification"
+echo "Biz Plus local verification"
 echo "=================================="
 echo ""
 

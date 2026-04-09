@@ -166,7 +166,7 @@ const PremiumAnalytics = () => {
                   const content = `Analytics Premium Export\n\n${kpis}\nMonthly Breakdown:\n${header}\n${rows.join('\n')}`;
 
                   void generateBrandedPDF({
-                    title: 'AERA Premium Analytics Report',
+                    title: 'BIZ PLUS Premium Analytics Report',
                     content: content,
                     filename: `aera-analytics-${new Date().toISOString().slice(0, 10)}`,
                     type: 'analytics_export'

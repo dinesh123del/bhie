@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { LocationLanguageService } from '../services/location-language-service';
-import { TranslationService } from '../services/translation-service';
+import { LocationLanguageService } from '../services/location-language-service.js';
+import { TranslationService } from '../services/translation-service.js';
 
 const router = Router();
 const locationService = new LocationLanguageService();

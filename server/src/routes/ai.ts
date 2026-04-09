@@ -134,13 +134,13 @@ router.post(
   authenticateToken,
   asyncHandler(async (req: AuthRequest, res: Response) => {
     const { records = [] } = req.body;
-    
+
     if (!Array.isArray(records)) {
       throw new AppError(400, 'Records must be an array');
     }
 
     const totalRecords = records.length;
-    
+
     if (totalRecords === 0) {
       return res.json({
         healthScore: 0,
@@ -161,9 +161,9 @@ router.post(
     const draftCount = records.filter(r => r.status === 'draft').length;
     const activeCount = records.filter(r => r.status === 'active' || !r.status).length;
     const archivedCount = records.filter(r => r.status === 'archived' || r.status === 'completed').length;
-    
+
     const completionRate = Math.round((activeCount / totalRecords) * 100);
-    
+
     // Calculate Health Score (Simple logic for now)
     let healthScore = completionRate;
     const riskFactors: string[] = [];
@@ -172,7 +172,7 @@ router.post(
       healthScore -= 15;
       riskFactors.push('High percentage of incomplete draft records');
     }
-    
+
     if (totalRecords < 5) {
       healthScore -= 10;
       riskFactors.push('Limited data points for accurate forecasting');
@@ -186,9 +186,9 @@ router.post(
       healthScore,
       riskLevel,
       suggestions: [
-        healthScore > 80 ? 'Your record health is excellent. Maintain this consistency.' : 
-        healthScore > 50 ? 'Address pending draft records to improve system accuracy.' :
-        'Urgent: Multiple incomplete records detected. System visibility is currently limited.'
+        healthScore > 80 ? 'Your record health is excellent. Maintain this consistency.' :
+          healthScore > 50 ? 'Address pending draft records to improve system accuracy.' :
+            'Urgent: Multiple incomplete records detected. System visibility is currently limited.'
       ],
       metrics: {
         totalRecords,
@@ -227,7 +227,7 @@ router.post(
     
     Text: "${sanitizedText}"`;
 
-    const aiResponse = await AIEngine.generateCompletion(prompt, { 
+    const aiResponse = await AIEngine.generateCompletion(prompt, {
       preferredProvider: 'openai' // OpenAI is better for short translations
     });
 
@@ -247,7 +247,7 @@ router.post(
   '/simulate',
   authenticateToken,
   asyncHandler(async (req: AuthRequest, res: Response) => {
-    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    const mlServiceUrl = env.ML_SERVICE_URL;
 
     try {
       const response = await fetch(`${mlServiceUrl}/simulate`, {
@@ -276,7 +276,7 @@ router.post(
   '/health-score',
   authenticateToken,
   asyncHandler(async (req: AuthRequest, res: Response) => {
-    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    const mlServiceUrl = env.ML_SERVICE_URL;
 
     try {
       const response = await fetch(`${mlServiceUrl}/health-score`, {
@@ -305,7 +305,7 @@ router.post(
   '/memory/store',
   authenticateToken,
   asyncHandler(async (req: AuthRequest, res: Response) => {
-    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    const mlServiceUrl = env.ML_SERVICE_URL;
     try {
       const response = await fetch(`${mlServiceUrl}/memory/store`, {
         method: 'POST',
@@ -324,7 +324,7 @@ router.post(
   '/memory/query',
   authenticateToken,
   asyncHandler(async (req: AuthRequest, res: Response) => {
-    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    const mlServiceUrl = env.ML_SERVICE_URL;
     try {
       const response = await fetch(`${mlServiceUrl}/memory/query`, {
         method: 'POST',
@@ -347,8 +347,8 @@ router.post(
   authenticateToken,
   asyncHandler(async (req: AuthRequest, res: Response) => {
     const authUser = requireUser(req);
-    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
-    
+    const mlServiceUrl = env.ML_SERVICE_URL;
+
     // 1. Get recent health score for context
     const healthResponse = await fetch(`${mlServiceUrl}/health-score`, {
       method: 'POST',
@@ -358,7 +358,7 @@ router.post(
     const healthData = await healthResponse.json();
 
     // 2. Perform Automated Audit Analysis
-    const auditInsights = healthData.healthScore < 70 
+    const auditInsights = healthData.healthScore < 70
       ? "SYSTEM ALERT: Financial irregularities detected. Suggesting focus on resilience and efficiency."
       : "FINANCIAL STATE STABLE: Identifying growth acceleration path.";
 
@@ -390,7 +390,7 @@ router.post(
   '/sentinel',
   authenticateToken,
   asyncHandler(async (req: AuthRequest, res: Response) => {
-    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    const mlServiceUrl = env.ML_SERVICE_URL;
 
     try {
       const response = await fetch(`${mlServiceUrl}/aera/sentinel`, {

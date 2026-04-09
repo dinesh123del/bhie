@@ -6,6 +6,13 @@ import pandas as pd
 import numpy as np
 from sklearn.ensemble import IsolationForest
 from sklearn.linear_model import LinearRegression
+import cv2
+import mediapipe as mp
+import librosa
+import base64
+import io
+from fastapi import File, UploadFile, Form
+import time
 
 app = FastAPI(title="Finly Core Intelligence Service", version="2.0.0")
 
@@ -53,6 +60,14 @@ class ResilienceRequest(BaseModel):
     current_cash_reserve: float
     monthly_burn_rate: float
     is_global_exposure: bool = False
+
+class MomentIntelligenceResponse(BaseModel):
+    emotional_state: str
+    presence_detected: bool
+    audio_sentiment: str
+    keywords: List[str]
+    resilience_impact: float
+    timestamp: float
 
 # ──────────────────────────────────────────
 # Health & Status
@@ -347,6 +362,101 @@ async def query_memory(request: MemoryQuery):
     # Sort by relevance
     results.sort(key=lambda x: x["relevance"], reverse=True)
     return {"results": results[:request.top_k]}
+
+# ──────────────────────────────────────────
+# 🆕 Deep Learning Intelligence (Vision & Audio)
+# ──────────────────────────────────────────
+
+class VisionIntelligence:
+    def __init__(self):
+        self.mp_face_detection = mp.solutions.face_detection
+        self.face_detection = self.mp_face_detection.FaceDetection(model_selection=1, min_detection_confidence=0.5)
+
+    def analyze_frame(self, frame_bytes: bytes):
+        try:
+            nparr = np.frombuffer(frame_bytes, np.uint8)
+            img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+            if img is None:
+                return {"detected": False, "emotion": "unknown"}
+            
+            img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            results = self.face_detection.process(img_rgb)
+            
+            if results.detections:
+                # Basic mock emotion based on detection bounding box aspect ratio or just simulation for now
+                # In a full deployment, we'd use a deep model like DeepFace
+                emotions = ["Focused", "Determined", "Neutral", "Optimistic", "Strategic"]
+                return {"detected": True, "emotion": np.random.choice(emotions), "confidence": results.detections[0].score[0]}
+            
+            return {"detected": False, "emotion": "none"}
+        except Exception as e:
+            print(f"Vision Error: {e}")
+            return {"detected": False, "emotion": "error"}
+
+class AudioIntelligence:
+    def analyze_snippet(self, audio_bytes: bytes):
+        try:
+            # Load audio using librosa from bytes
+            y, sr = librosa.load(io.BytesIO(audio_bytes), duration=5)
+            
+            # Simple feature extraction for simulation
+            rms = float(np.mean(librosa.feature.rms(y=y)))
+            spectral_centroid = float(np.mean(librosa.feature.spectral_centroid(y=y, sr=sr)))
+            
+            # Sentiment simulation based on acoustic features
+            if rms > 0.05:
+                sentiment = "High Energy / High Engagement"
+            elif spectral_centroid > 3000:
+                sentiment = "Intellectual / Strategic"
+            else:
+                sentiment = "Calm / Analytical"
+                
+            return {"sentiment": sentiment, "rms": rms}
+        except Exception as e:
+            print(f"Audio Error: {e}")
+            return {"sentiment": "unclear", "error": str(e)}
+
+vision_brain = VisionIntelligence()
+audio_brain = AudioIntelligence()
+
+@app.post("/analyze/moment", response_model=MomentIntelligenceResponse)
+async def analyze_moment(
+    frame: UploadFile = File(None),
+    audio: UploadFile = File(None),
+    context: Optional[str] = Form("")
+):
+    """
+    Unified Moment Intelligence Endpoint.
+    Analyzes visual presence and audio sentiment to 'grab' the business moment.
+    """
+    vision_results = {"detected": False, "emotion": "unknown"}
+    audio_results = {"sentiment": "quiet"}
+    
+    if frame:
+        frame_bytes = await frame.read()
+        vision_results = vision_brain.analyze_frame(frame_bytes)
+        
+    if audio:
+        audio_bytes = await audio.read()
+        audio_results = audio_brain.analyze_snippet(audio_bytes)
+        
+    # Extract keywords from context (simulated speech-to-text integration)
+    keywords = list(set([word.lower() for word in context.split() if len(word) > 4]))
+    
+    # Calculate Resilience Impact
+    # Positive emotions and high engagement drive resilience
+    base_impact = 1.0 if vision_results.get("detected") else 0.5
+    if "high" in audio_results.get("sentiment", "").lower():
+        base_impact += 0.5
+        
+    return MomentIntelligenceResponse(
+        emotional_state=vision_results.get("emotion", "unknown"),
+        presence_detected=vision_results.get("detected", False),
+        audio_sentiment=audio_results.get("sentiment", "unclear"),
+        keywords=keywords,
+        resilience_impact=round(base_impact, 2),
+        timestamp=time.time()
+    )
 
 if __name__ == "__main__":
     import uvicorn

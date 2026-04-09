@@ -57,11 +57,11 @@ export default function SocialShare({ isOpen, onClose, data }: SocialShareProps)
     ctx.fillStyle = 'rgba(139, 92, 246, 0.08)';
     ctx.fill();
 
-    // AERA Logo text
+    // BIZ PLUS Logo text
     ctx.font = 'bold 80px system-ui';
     ctx.fillStyle = '#3b82f6';
     ctx.textAlign = 'center';
-    ctx.fillText('AERA', 540, 200);
+    ctx.fillText('BIZ PLUS', 540, 200);
 
     ctx.font = '300 40px system-ui';
     ctx.fillStyle = 'rgba(255,255,255,0.5)';
@@ -114,11 +114,11 @@ export default function SocialShare({ isOpen, onClose, data }: SocialShareProps)
 
     ctx.font = 'bold 48px system-ui';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('Track your business with AERA', 540, 1660);
+    ctx.fillText('Track your business with BIZ PLUS', 540, 1660);
 
     ctx.font = '300 36px system-ui';
     ctx.fillStyle = 'rgba(255,255,255,0.6)';
-    ctx.fillText('aera.cloud', 540, 1720);
+    ctx.fillText('bizplus.io', 540, 1720);
 
     // Generate image
     const imageUrl = canvas.toDataURL('image/png');
@@ -127,11 +127,11 @@ export default function SocialShare({ isOpen, onClose, data }: SocialShareProps)
 
   const shareToLinkedIn = () => {
     const text = encodeURIComponent(
-      `Just hit a major milestone with AERA! ${data.title}: ${data.value}\n\n` +
+      `Just hit a major milestone with BIZ PLUS! ${data.title}: ${data.value}\n\n` +
       `Tracking my business finances has never been easier. 📊`
     );
     window.open(
-      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://aera.cloud')}&summary=${text}`,
+      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://bizplus.io')}&summary=${text}`,
       '_blank'
     );
     toast.success('Opening LinkedIn...');
@@ -139,11 +139,11 @@ export default function SocialShare({ isOpen, onClose, data }: SocialShareProps)
 
   const shareToTwitter = () => {
     const text = encodeURIComponent(
-      `${data.title}: ${data.value} with AERA! 🚀\n\n` +
+      `${data.title}: ${data.value} with BIZ PLUS! 🚀\n\n` +
       `The smartest way to track business finances.`
     );
     window.open(
-      `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent('https://aera.cloud')}`,
+      `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent('https://bizplus.io')}`,
       '_blank'
     );
     toast.success('Opening Twitter...');
@@ -151,7 +151,7 @@ export default function SocialShare({ isOpen, onClose, data }: SocialShareProps)
 
   const shareToWhatsApp = () => {
     const text = encodeURIComponent(
-      `Hey! Just wanted to share my ${data.title.toLowerCase()} with AERA: *${data.value}*\n\n` +
+      `Hey! Just wanted to share my ${data.title.toLowerCase()} with BIZ PLUS: *${data.value}*\n\n` +
       `You should try it for your business too! 📊`
     );
     window.open(`https://wa.me/?text=${text}`, '_blank');
@@ -161,14 +161,14 @@ export default function SocialShare({ isOpen, onClose, data }: SocialShareProps)
   const downloadImage = () => {
     if (!generatedImage) return;
     const link = document.createElement('a');
-    link.download = `aera-${data.type}-${Date.now()}.png`;
+    link.download = `bizplus-${data.type}-${Date.now()}.png`;
     link.href = generatedImage;
     link.click();
     toast.success('Image downloaded!');
   };
 
   const copyLink = () => {
-    navigator.clipboard.writeText('https://aera.cloud');
+    navigator.clipboard.writeText('https://bizplus.io');
     toast.success('Link copied to clipboard!');
   };
 

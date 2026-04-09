@@ -12,7 +12,7 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-echo "BHIE startup"
+echo "Biz Plus startup"
 echo "============"
 echo ""
 
@@ -72,7 +72,7 @@ else
 fi
 
 echo ""
-echo -e "${GREEN}BHIE is ready${NC}"
+echo -e "${GREEN}Biz Plus is ready${NC}"
 echo "Frontend: http://localhost:${FRONTEND_PORT}"
 echo "Backend:  http://localhost:${BACKEND_PORT}"
 echo "Health:   http://localhost:${BACKEND_PORT}/api/health"

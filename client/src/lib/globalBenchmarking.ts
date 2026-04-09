@@ -4,7 +4,7 @@
  * This module allows users to compare their business health against
  * thousands of anonymized data points from similar industries globally.
  * 
- * Part of the BHIE 2050 Vision (Top 1% Strategy).
+ * Part of the BIZ PLUS 2050 Vision (Top 1% Strategy).
  */
 
 export interface BenchmarkingResult {

@@ -154,8 +154,11 @@ export const useParallaxScroll = (
     direction === 'horizontal' ? [speed * 100, -speed * 100] : [0, 0]
   );
 
-  const y = spring ? useSpring(rawY, { stiffness: 100, damping: 30 }) : rawY;
-  const x = spring ? useSpring(rawX, { stiffness: 100, damping: 30 }) : rawX;
+  const springY = useSpring(rawY, { stiffness: 100, damping: 30 });
+  const springX = useSpring(rawX, { stiffness: 100, damping: 30 });
+
+  const y = spring ? springY : rawY;
+  const x = spring ? springX : rawX;
 
   return { ref, y, x, scrollYProgress };
 };

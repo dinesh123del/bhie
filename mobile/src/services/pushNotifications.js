@@ -20,7 +20,7 @@ export async function registerForPushNotificationsAsync() {
   // Android requires a notification channel
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync('default', {
-      name: 'BHIE Notifications',
+      name: 'Biz Plus Notifications',
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
       lightColor: '#38BDF8',
@@ -69,9 +69,9 @@ export async function registerForPushNotificationsAsync() {
   try {
     const result = await Notifications.getExpoPushTokenAsync({ projectId });
     token = result.data;
-    console.log('[BHIE] Push Token:', token);
+    console.log('[Biz Plus] Push Token:', token);
   } catch (error) {
-    console.error('[BHIE] Failed to get push token:', error);
+    console.error('[Biz Plus] Failed to get push token:', error);
     Alert.alert('Error', 'Failed to register for push notifications. Please try again.');
     return null;
   }
@@ -82,13 +82,13 @@ export async function registerForPushNotificationsAsync() {
 // ─── Notification Received Handler ───────────────────────────────────────────
 export function handleNotificationReceived(notification) {
   const { title, body, data } = notification.request.content;
-  console.log('[BHIE] Notification Received:', { title, body, data });
+  console.log('[Biz Plus] Notification Received:', { title, body, data });
 }
 
 // ─── Notification Response Handler ───────────────────────────────────────────
 export function handleNotificationResponse(response) {
   const data = response?.notification?.request?.content?.data;
-  console.log('[BHIE] Notification Tapped, data:', data);
+  console.log('[Biz Plus] Notification Tapped, data:', data);
 
   // Example: navigate to a specific screen based on data
   // if (data?.screen && navigationRef?.current) {

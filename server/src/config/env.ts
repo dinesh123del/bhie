@@ -18,6 +18,9 @@ const envSchema = z
     CLAUDE_API_KEY: z.string().trim().min(1).optional(),
     BLACKBOX_API_KEY: z.string().trim().min(1).optional(),
     OPENAI_VISION_MODEL: z.string().default('gpt-4o-mini'),
+    PINECONE_API_KEY: z.string().trim().min(1).optional(),
+    PINECONE_ENVIRONMENT: z.string().trim().min(1).optional(),
+    PINECONE_INDEX: z.string().trim().min(1).optional(),
 
     GOOGLE_CLIENT_ID: z.string().trim().min(1).optional(),
     GOOGLE_CLIENT_SECRET: z.string().trim().min(1).optional(),
@@ -34,6 +37,7 @@ const envSchema = z
     UPLOAD_DIR: z.string().trim().min(1).default('uploads'),
     MAX_UPLOAD_FILE_SIZE_MB: z.coerce.number().positive().default(10),
     IMAGE_PROCESSING_CONCURRENCY: z.coerce.number().int().positive().default(2),
+    ML_SERVICE_URL: z.string().url().default('http://localhost:8000'),
     SEED_DEFAULT_ADMIN: z.enum(['true', 'false']).default('false'),
     ADMIN_SEED_EMAIL: z.string().email().optional(),
     ADMIN_SEED_PASSWORD: z.string().min(12).optional(),
@@ -60,7 +64,7 @@ const envSchema = z
           message: 'CLIENT_URL or FRONTEND_URL is required in production',
         });
       }
-      
+
       if (!data.MONGO_URI && !data.MONGODB_URI) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -115,7 +119,7 @@ if (!parsedEnv.success) {
   const issues = parsedEnv.error.issues
     .map((issue) => `- ${issue.path.join('.') || 'env'}: ${issue.message}`)
     .join('\n');
-  
+
   console.error('❌ Invalid environment configuration:');
   console.error(issues);
   process.exit(1);
@@ -135,6 +139,7 @@ console.log(` -> NODE_ENV: ${envValues.NODE_ENV}`);
 console.log(` -> MONGODB: ${envValues.MONGO_URI ? 'CONNECTED [HIDDEN]' : 'MISSING'}`);
 console.log(` -> REDIS: ${envValues.REDIS_URL ? 'CONFIGURED [HIDDEN]' : 'MISSING'}`);
 console.log(` -> OPENAI: ${envValues.OPENAI_API_KEY ? 'CONFIGURED [HIDDEN]' : 'MISSING'}`);
+console.log(` -> PINECONE: ${envValues.PINECONE_API_KEY ? 'CONFIGURED [HIDDEN]' : 'MOCKED'}`);
 
 
 export const env = {
@@ -148,6 +153,9 @@ export const env = {
   WHATSAPP_PHONE_NUMBER_ID: envValues.WHATSAPP_PHONE_NUMBER_ID,
   WHATSAPP_ACCESS_TOKEN: envValues.WHATSAPP_ACCESS_TOKEN,
   WHATSAPP_VERIFY_TOKEN: envValues.WHATSAPP_VERIFY_TOKEN,
+  PINECONE_API_KEY: envValues.PINECONE_API_KEY,
+  PINECONE_ENVIRONMENT: envValues.PINECONE_ENVIRONMENT,
+  PINECONE_INDEX: envValues.PINECONE_INDEX,
 } as const;
 
 export type AppEnv = typeof env;

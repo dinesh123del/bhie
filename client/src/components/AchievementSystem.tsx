@@ -210,7 +210,7 @@ export function AchievementSystem() {
 
   // Load achievements from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('bhie_achievements');
+    const saved = localStorage.getItem('bizplus_achievements');
     if (saved) {
       const parsed = JSON.parse(saved);
       setAchievements(parsed.achievements || []);
@@ -229,7 +229,7 @@ export function AchievementSystem() {
   // Save achievements
   useEffect(() => {
     if (achievements.length > 0) {
-      localStorage.setItem('bhie_achievements', JSON.stringify({
+      localStorage.setItem('bizplus_achievements', JSON.stringify({
         achievements,
         totalXP
       }));

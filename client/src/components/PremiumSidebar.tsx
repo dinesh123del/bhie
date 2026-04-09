@@ -51,7 +51,7 @@ const mgmtItems: NavItem[] = [
 const PremiumSidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMuted, setIsMuted] = useState(() => {
-    try { return localStorage.getItem('aera_sound_muted') === 'true'; } catch { return false; }
+    try { return localStorage.getItem('bizplus_sound_muted') === 'true'; } catch { return false; }
   });
   const location = useLocation();
   const navigate = useNavigate();
@@ -65,7 +65,7 @@ const PremiumSidebar = () => {
   const toggleMute = () => {
     const next = !isMuted;
     setIsMuted(next);
-    try { localStorage.setItem('aera_sound_muted', String(next)); } catch { /* ignore */ }
+    try { localStorage.setItem('bizplus_sound_muted', String(next)); } catch { /* ignore */ }
     premiumFeedback.click();
   };
 

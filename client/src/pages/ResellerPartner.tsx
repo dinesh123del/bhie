@@ -56,11 +56,11 @@ export default function ResellerPartner() {
             CA & ACCOUNTING FIRMS
           </span>
           <h1 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">
-            Partner with AERA
+            Partner with BIZ PLUS
           </h1>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
             Manage dozens of client businesses from a single dashboard.
-            Resell AERA's deep intelligence, provide <strong>Official Audit Certifications</strong>, and earn 20% recurring commission.
+            Resell BIZ PLUS's deep intelligence, provide <strong>Official Audit Certifications</strong>, and earn 20% recurring commission.
           </p>
           <div className="mt-8 flex justify-center gap-4">
             <button

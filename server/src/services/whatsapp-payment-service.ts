@@ -18,13 +18,20 @@ export interface PaymentVerificationResult {
 }
 
 export class WhatsAppPaymentService {
-  private razorpay: Razorpay;
+  private razorpay: Razorpay | null;
 
   constructor() {
-    this.razorpay = new Razorpay({
-      key_id: env.RAZORPAY_KEY_ID,
-      key_secret: env.RAZORPAY_KEY_SECRET
-    });
+    if (env.RAZORPAY_KEY_ID && env.RAZORPAY_KEY_SECRET &&
+      env.RAZORPAY_KEY_ID !== 'rzp_test_placeholder' &&
+      env.RAZORPAY_KEY_SECRET !== 'placeholder_secret') {
+      this.razorpay = new Razorpay({
+        key_id: env.RAZORPAY_KEY_ID,
+        key_secret: env.RAZORPAY_KEY_SECRET
+      });
+    } else {
+      this.razorpay = null;
+      console.warn('⚠️ Razorpay not configured with valid credentials. Payment features will be disabled.');
+    }
   }
 
   async createPaymentLink(
@@ -101,6 +108,10 @@ export class WhatsAppPaymentService {
     cycle: 'monthly' | 'yearly' = 'monthly'
   ): Promise<PaymentLinkResult> {
     try {
+      if (!this.razorpay) {
+        return { success: false, error: 'Payment service not configured' };
+      }
+
       const plan = SubscriptionPlanService.getPlan(planCode);
       if (!plan) {
         return { success: false, error: 'Invalid plan' };
@@ -214,7 +225,7 @@ export class WhatsAppPaymentService {
       if (eventType === 'payment.failed') {
         const orderId = payload.payment.entity.order_id;
         const subscription = await WhatsAppSubscription.findOne({ razorpayOrderId: orderId });
-        
+
         if (subscription) {
           subscription.paymentStatus = 'failed';
           subscription.status = 'pending';
@@ -234,7 +245,7 @@ export class WhatsAppPaymentService {
 
   async checkSubscriptionStatus(phoneNumber: string): Promise<any> {
     const subscription = await WhatsAppSubscription.findByPhone(phoneNumber);
-    
+
     if (!subscription) {
       return {
         active: false,
@@ -254,7 +265,7 @@ export class WhatsAppPaymentService {
   async renewSubscription(phoneNumber: string): Promise<PaymentVerificationResult> {
     try {
       const subscription = await WhatsAppSubscription.findByPhone(phoneNumber);
-      
+
       if (!subscription) {
         return { success: false, error: 'Subscription not found' };
       }
@@ -273,7 +284,7 @@ export class WhatsAppPaymentService {
   async cancelSubscription(phoneNumber: string): Promise<PaymentVerificationResult> {
     try {
       const subscription = await WhatsAppSubscription.findByPhone(phoneNumber);
-      
+
       if (!subscription) {
         return { success: false, error: 'Subscription not found' };
       }

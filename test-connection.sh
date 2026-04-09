@@ -2,7 +2,7 @@
 
 BACKEND_PORT=5001
 
-echo "BHIE connection test"
+echo "Biz Plus connection test"
 echo "===================="
 echo ""
 

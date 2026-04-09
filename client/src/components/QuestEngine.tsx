@@ -20,7 +20,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useGamification } from './GamificationEngine';
 
 /* ──────────────────────────────────────────────────────────────
-   AERA QUEST ENGINE v2
+   BIZ PLUS QUEST ENGINE v2
    ─ Enhanced with Micro-Engine Animations
    ─ Advanced Task Tracking
    ─ Premium Celebration Effects

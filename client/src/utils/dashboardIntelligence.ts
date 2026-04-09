@@ -229,7 +229,7 @@ export function buildPlainReport(input: {
   lastUpdated: Date;
 }): string {
   const lines = [
-    `AERA BUSINESS INTELLIGENCE REPORT`,
+    `BIZ PLUS BUSINESS INTELLIGENCE REPORT`,
     `=============================`,
     `Organization: ${input.companyName || 'Main Account'}`,
     `Report Date: ${input.lastUpdated.toLocaleString('en-IN')}`,
@@ -335,7 +335,7 @@ export function exportReport(content: string = "Business Intelligence Report"): 
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `AERA-Report-${new Date().toISOString().split('T')[0]}.txt`;
+  link.download = `BIZ PLUS-Report-${new Date().toISOString().split('T')[0]}.txt`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

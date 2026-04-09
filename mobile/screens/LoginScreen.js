@@ -54,7 +54,7 @@ const LoginScreen = ({ navigation }) => {
         <View style={styles.form}>
           <View style={styles.titleBlock}>
             <Text style={styles.kicker}>Secure Sign In</Text>
-            <Text style={styles.title}>BHIE <Text style={styles.highlight}>Mobile</Text></Text>
+            <Text style={styles.title}>Biz Plus <Text style={styles.highlight}>Mobile</Text></Text>
             <Text style={styles.subtitle}>Sign in to access your business dashboard on the go.</Text>
           </View>
 

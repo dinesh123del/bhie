@@ -37,7 +37,7 @@ export const generateBrandedPDF = async ({ title, content, filename, type, metad
     pdf.setFillColor(colors.dark[0], colors.dark[1], colors.dark[2]);
     pdf.rect(0, 6, pw, 32, 'F');
 
-    // Logo & AERA brand
+    // Logo & BIZ PLUS brand
     try {
       const img = new Image();
       img.src = '/icon.png';
@@ -54,18 +54,18 @@ export const generateBrandedPDF = async ({ title, content, filename, type, metad
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(22);
         pdf.setTextColor(255, 255, 255);
-        pdf.text('AERA', margin + 22, 24);
+        pdf.text('BIZ PLUS', margin + 22, 24);
       } else {
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(22);
         pdf.setTextColor(255, 255, 255);
-        pdf.text('AERA', margin, 24);
+        pdf.text('BIZ PLUS', margin, 24);
       }
     } catch {
       pdf.setFont('helvetica', 'bold');
       pdf.setFontSize(22);
       pdf.setTextColor(255, 255, 255);
-      pdf.text('AERA', margin, 24);
+      pdf.text('BIZ PLUS', margin, 24);
     }
 
     // Right-aligned header texts
@@ -85,7 +85,7 @@ export const generateBrandedPDF = async ({ title, content, filename, type, metad
     pdf.setGState(gState);
     pdf.setFontSize(80);
     pdf.setTextColor(0, 0, 0);
-    pdf.text('AERA', pw / 2, ph / 2 + 20, { align: 'center', angle: 45 });
+    pdf.text('BIZ PLUS', pw / 2, ph / 2 + 20, { align: 'center', angle: 45 });
     pdf.restoreGraphicsState();
   };
 
@@ -182,7 +182,7 @@ export const generateBrandedPDF = async ({ title, content, filename, type, metad
     doc.setFontSize(8);
     doc.setTextColor(180, 180, 185);
     doc.text(
-      `© ${new Date().getFullYear()} AERA ECOSYSTEM. STRICTLY CONFIDENTIAL.`,
+      `© ${new Date().getFullYear()} BIZ PLUS ECOSYSTEM. STRICTLY CONFIDENTIAL.`,
       margin,
       ph - 8
     );

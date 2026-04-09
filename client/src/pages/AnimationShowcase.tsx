@@ -71,7 +71,7 @@ const AnimationShowcase: React.FC = () => {
             {/* Main Heading */}
             <HeroStaggerItem>
               <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-indigo-200 to-purple-200 bg-clip-text text-transparent">
-                BHIE Animation
+                BIZ PLUS Animation
                 <br />
                 <span className="text-indigo-400">Engine</span>
               </h1>
@@ -350,7 +350,7 @@ const AnimationShowcase: React.FC = () => {
               Ready to Elevate Your UI?
             </h2>
             <p className="text-xl text-slate-400 mb-10">
-              Start building premium, animated experiences today with the BHIE Animation System.
+              Start building premium, animated experiences today with the BIZ PLUS Animation System.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <HeroCTAButton variant="primary">
@@ -369,7 +369,7 @@ const AnimationShowcase: React.FC = () => {
       <footer className="py-12 px-6 border-t border-slate-800">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-slate-500">
-            © 2024 BHIE - Business Health Integration Engine
+            © 2024 BIZ PLUS - Business Health Integration Engine
           </p>
           <div className="flex gap-6">
             {['Documentation', 'Components', 'GitHub'].map((link) => (

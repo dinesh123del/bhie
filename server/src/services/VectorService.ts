@@ -19,8 +19,9 @@ class VectorService {
 
   private async initialize() {
     // Check for Pinecone/Milvus environment variables
-    const apiKey = process.env.PINECONE_API_KEY;
-    if (apiKey) {
+    const { env } = await import('../config/env.js');
+    const apiKey = env.PINECONE_API_KEY;
+    if (apiKey && apiKey !== 'your_pinecone_api_key_here') {
       console.log('🚀 Vector Service: Initializing Pinecone integration...');
       this.isReady = true;
     } else {

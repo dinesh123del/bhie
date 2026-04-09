@@ -25,6 +25,7 @@ import realtimeRoutes from './realtime.js';
 import agentsRoutes from './agents.js';
 import predictionsRoutes from './predictions.js';
 import quantumRoutes from './quantum.js';
+import momentIntelligenceRoutes from './momentIntelligence.js';
 
 import healthRoutes from './health.js';
 
@@ -42,7 +43,7 @@ router.use('/ds', dataScienceRoutes); // New Route for Data Science Analysis
 
 
 router.get('/health', (_req, res) => {
-  res.json({ status: 'OK', engine: 'Finly-v1.0' });
+  res.json({ status: 'OK', engine: 'Biz Plus-v1.0' });
 });
 
 
@@ -77,5 +78,6 @@ router.use('/realtime', realtimeRoutes);
 router.use('/agents', agentsRoutes);
 router.use('/predictions', predictionsRoutes);
 router.use('/quantum', quantumRoutes);
+router.use('/moment', momentIntelligenceRoutes);
 
 export default router;

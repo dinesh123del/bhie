@@ -35,7 +35,7 @@ const planCards: PlanCard[] = [
     name: 'Free',
     price: PLAN_DETAILS.free.price,
     billingText: PLAN_DETAILS.free.billingText,
-    description: 'Best for getting started with AERA and managing a small number of uploads.',
+    description: 'Best for getting started with BIZ PLUS and managing a small number of uploads.',
     features: PLAN_DETAILS.free.features,
   },
   {
@@ -140,7 +140,7 @@ const Payments = () => {
         key: orderData.key || import.meta.env.VITE_RAZORPAY_KEY || 'rzp_live_SYwkStp5U2NhjF',
         amount: orderData.amount,
         currency: orderData.currency,
-        name: 'AERA Platform',
+        name: 'BIZ PLUS Platform',
         description: `Upgrade to ${selectedPlan.toUpperCase()} Plan`,
         order_id: orderData.orderId,
         handler: async (response: any) => {
@@ -229,7 +229,7 @@ const Payments = () => {
         <div className="mb-12 max-w-3xl">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-ink-300">Pricing</p>
           <h1 className="text-4xl font-black tracking-[-0.06em] text-white md:text-5xl">
-            Upgrade AERA when your business is ready
+            Upgrade BIZ PLUS when your business is ready
           </h1>
           <p className="mt-4 text-base leading-7 text-ink-300 md:text-lg">
             Free gets you started. Pro and Enterprise unlock unlimited uploads, smart insights, and premium workflows.

@@ -82,19 +82,19 @@ function buildRuleBasedInsights(input: GenerateInsightsInput): DashboardInsight[
         type: 'info',
         metric: 'general',
         message: 'Upload records to unlock AI insights',
-        detail: 'Add bills, receipts, or transactions and Finly will start tracking patterns automatically.',
+        detail: 'Add bills, receipts, or transactions and Biz Plus will start tracking patterns automatically.',
         value: 'No data yet',
       },
     ];
   }
 
   const insights: DashboardInsight[] = [];
-  
+
   // ELITE INNOVATION: CAPITAL EXHAUST & RESONANCE ENGINE
   const activityDensity = totalRecords > 0 ? (expenses + revenue) / totalRecords : 0;
   const yieldEfficiency = totalRecords > 0 ? profit / totalRecords : 0;
   const resonanceIndex = activityDensity > 0 ? (yieldEfficiency / activityDensity) * 100 : 0;
-  
+
   if (totalRecords > 10) {
     if (resonanceIndex < 15) {
       insights.push({
@@ -181,7 +181,7 @@ function buildRuleBasedInsights(input: GenerateInsightsInput): DashboardInsight[
       type: 'info',
       metric: 'activity',
       message: 'Business activity tracking is consistent',
-      detail: `${activeRecords} of ${totalRecords} records are active, giving Finly stronger data for analysis.`,
+      detail: `${activeRecords} of ${totalRecords} records are active, giving Biz Plus stronger data for analysis.`,
       value: `${Math.round(activeRatio)}% active`,
     });
   } else if (totalRecords > 0 && totalRecords < 5) {
@@ -218,7 +218,7 @@ async function enhanceInsightsWithAI(
 ): Promise<DashboardInsight[]> {
   const { CacheService } = await import('../services/cacheService.js');
   const cacheKey = input.userId ? `cache:ai:insights:${input.userId}` : null;
-  
+
   if (cacheKey) {
     const cachedAI = await CacheService.get<DashboardInsight[]>(cacheKey);
     if (cachedAI && cachedAI.length > 0) {
@@ -227,7 +227,7 @@ async function enhanceInsightsWithAI(
   }
 
   const prompt = [
-    'You are a professional Business Analyst and Strategic Consultant for Finly.',
+    'You are a professional Business Analyst and Strategic Consultant for Biz Plus.',
     'Your goal is to provide clear, actionable business advice to small and medium business owners.',
     'Do not use technical AI jargon or complex financial engineering terms.',
     'Keep the same meaning as the provided rule-based insights.',
@@ -256,7 +256,7 @@ async function enhanceInsightsWithAI(
   const aiInsights = normalizeInsights(parsed?.insights);
 
   const finalInsights = aiInsights.length > 0 ? aiInsights : baseInsights;
-  
+
   if (cacheKey && finalInsights.length > 0) {
     // Cache AI Strategic insights for 12 hours since they shouldn't bounce constantly
     await CacheService.set(cacheKey, finalInsights, 60 * 60 * 12);

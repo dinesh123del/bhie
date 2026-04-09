@@ -1,5 +1,5 @@
 {
-  "name": "finly",
+  "name": "biz-plus",
   "version": "1.0.0",
   "scripts": {
     "predev": "./kill-port.sh || true",

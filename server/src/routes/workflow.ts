@@ -22,7 +22,7 @@ router.get(
   asyncHandler(async (req: AuthRequest, res: Response) => {
     const authUser = requireUser(req);
     const records = await Record.find({ userId: authUser.userId });
-    
+
     const optimization = await AnalysisService.optimizeExpenses(records);
     res.json(optimization);
   })
@@ -38,7 +38,7 @@ router.get(
   asyncHandler(async (req: AuthRequest, res: Response) => {
     const authUser = requireUser(req);
     const records = await Record.find({ userId: authUser.userId });
-    
+
     const readiness = await AnalysisService.getTaxReadiness(records);
     res.json(readiness);
   })
@@ -56,7 +56,7 @@ router.get(
     const records = await Record.find({ userId: authUser.userId });
 
     if (!records || records.length === 0) {
-        return res.status(404).json({ message: 'No records found to bundle.' });
+      return res.status(404).json({ message: 'No records found to bundle.' });
     }
 
     const zip = new AdmZip();
@@ -64,29 +64,29 @@ router.get(
     // 1. Create CSV Summary
     let csv = 'Date,Title,Category,Amount,Type,Description,GST\n';
     records.forEach(r => {
-        const dateStr = new Date(r.date).toLocaleDateString();
-        csv += `"${dateStr}","${r.title || ''}","${r.category || ''}",${r.amount},"${r.type || ''}","${r.description || ''}","${r.gstNumber || ''}"\n`;
+      const dateStr = new Date(r.date).toLocaleDateString();
+      csv += `"${dateStr}","${r.title || ''}","${r.category || ''}",${r.amount},"${r.type || ''}","${r.description || ''}","${r.gstNumber || ''}"\n`;
     });
     zip.addFile('audit_summary.csv', Buffer.from(csv, 'utf8'));
 
     // 2. Add Attachments
     const attachmentsFolder = 'attachments/';
     records.forEach(r => {
-        if (r.fileUrl) {
-            // fileUrl often contains the filename or a relative path
-            const fileName = path.basename(r.fileUrl);
-            const fullPath = path.isAbsolute(r.fileUrl) 
-                ? r.fileUrl 
-                : path.join(uploadDir, fileName);
+      if (r.fileUrl) {
+        // fileUrl often contains the filename or a relative path
+        const fileName = path.basename(r.fileUrl);
+        const fullPath = path.isAbsolute(r.fileUrl)
+          ? r.fileUrl
+          : path.join(uploadDir, fileName);
 
-            if (fs.existsSync(fullPath)) {
-                zip.addLocalFile(fullPath, attachmentsFolder);
-            }
+        if (fs.existsSync(fullPath)) {
+          zip.addLocalFile(fullPath, attachmentsFolder);
         }
+      }
     });
 
     const zipBuffer = zip.toBuffer();
-    const fileName = `Finly_Audit_Bundle_${new Date().toISOString().split('T')[0]}.zip`;
+    const fileName = `Biz Plus_Audit_Bundle_${new Date().toISOString().split('T')[0]}.zip`;
 
     res.setHeader('Content-Type', 'application/zip');
     res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);

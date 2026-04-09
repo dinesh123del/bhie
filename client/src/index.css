@@ -3,28 +3,28 @@
 @tailwind utilities;
 
 /* ─────────────────────────────────────────────
-   Finly DESIGN SYSTEM v4.0 — VISIBILITY & ACCESSIBILITY EDITION
+   BIZ PLUS DESIGN SYSTEM v4.0 — VISIBILITY & ACCESSIBILITY EDITION
    (Elite Dark UI Base)
    ───────────────────────────────────────────── */
 
 @layer base {
   :root {
-    /* FINLY PRO DESIGN SYSTEM (DARK) */
-    --finly-black:        #000000;
-    --finly-gray-900:     #1C1C1E;
-    --finly-gray-800:     #2C2C2E;
-    --finly-gray-700:     #3A3A3C;
-    --finly-gray-600:     #48484A;
-    --finly-gray-500:     #636366;
+    /* BIZ PLUS PRO DESIGN SYSTEM (DARK) */
+    --biz-black:        #000000;
+    --biz-gray-900:     #1C1C1E;
+    --biz-gray-800:     #2C2C2E;
+    --biz-gray-700:     #3A3A3C;
+    --biz-gray-600:     #48484A;
+    --biz-gray-500:     #636366;
     
-    --finly-blue:         #007AFF;
-    --finly-indigo:       #5856D6;
-    --finly-purple:       #AF52DE;
-    --finly-pink:         #FF2D55;
-    --finly-orange:       #FF9500;
-    --finly-teal:         #30B0C7;
+    --biz-blue:         #007AFF;
+    --biz-indigo:       #5856D6;
+    --biz-purple:       #AF52DE;
+    --biz-pink:         #FF2D55;
+    --biz-orange:       #FF9500;
+    --biz-teal:         #30B0C7;
     
-    /* Finly Intelligence Gradient (Apple-style) */
+    /* BIZ PLUS Intelligence Gradient (Apple-style) */
     --brand-gradient:    linear-gradient(135deg, #007AFF, #AF52DE, #FF2D55);
     --glass-background:  rgba(10, 10, 12, 0.4);
     --glass-border:      rgba(255, 255, 255, 0.06);
@@ -34,10 +34,10 @@
     --secondary-text:    rgba(255, 255, 255, 0.65);
     --tertiary-text:     rgba(255, 255, 255, 0.4);
     
-    --finly-border:      var(--glass-border);
-    --finly-surface:     rgba(255, 255, 255, 0.03);
-    --finly-primary:     var(--finly-blue);
-    --finly-glow:        rgba(0, 122, 255, 0.15);
+    --biz-border:      var(--glass-border);
+    --biz-surface:     rgba(255, 255, 255, 0.03);
+    --biz-primary:     var(--biz-blue);
+    --biz-glow:        rgba(0, 122, 255, 0.15);
     
     --sf-easing:         cubic-bezier(0.2, 0.8, 0.2, 1);
     --spring-easing:     cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -45,7 +45,7 @@
 
   html, body {
     @apply min-h-[100svh];
-    background-color: var(--finly-black);
+    background-color: var(--biz-black);
     color: var(--primary-text);
     font-family: "SF Pro Display", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -76,7 +76,7 @@
 }
 
 /* ─────────────────────────────────────────────
-   FINLY FLUID COMPONENT SYSTEM
+   BIZ PLUS FLUID COMPONENT SYSTEM
    ───────────────────────────────────────────── */
 @layer components {
   /* Ultra-refined Glassmorphism (Extreme Edition) */
@@ -201,8 +201,8 @@
    ───────────────────────────────────────────── */
 .bg-mesh {
   background-image:
-    radial-gradient(at 10% 10%, var(--finly-glow) 0px, transparent 40%),
-    radial-gradient(at 90% 10%, var(--finly-glow) 0px, transparent 40%);
+    radial-gradient(at 10% 10%, var(--biz-glow) 0px, transparent 40%),
+    radial-gradient(at 90% 10%, var(--biz-glow) 0px, transparent 40%);
 }
 
 .text-gradient-brand {

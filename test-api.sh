@@ -4,7 +4,7 @@ set -e
 
 BACKEND_PORT=5001
 
-echo "BHIE API smoke test"
+echo "Biz Plus API smoke test"
 echo "==================="
 echo ""
 

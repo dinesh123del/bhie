@@ -226,6 +226,7 @@ export class ApiGateway {
 
 // Extend Express Request to include API version
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       apiVersion?: string;

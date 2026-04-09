@@ -222,10 +222,10 @@ export const getSocialShares = async (req: Request, res: Response) => {
 
     const shares = {
       twitter: `I just found the ultimate AI business analytics tool. Get 50% off your first month with my link: ${referralLink} #BusinessIntelligence #AI`,
-      linkedin: `Managing business finances just got easier. I've been using BHIE for AI-powered business insights and receipt scanning. Get 50% off your first month: ${referralLink}`,
+      linkedin: `Managing business finances just got easier. I've been using Biz Plus for AI-powered business insights and receipt scanning. Get 50% off your first month: ${referralLink}`,
       email: {
-        subject: 'Get 50% off BHIE - AI Business Analytics',
-        body: `Hey!\n\nI've been using BHIE for business analytics and receipt scanning with AI. It's been a game-changer.\n\nGet 50% off your first month with my referral link: ${referralLink}\n\nCheers!`,
+        subject: 'Get 50% off Biz Plus - AI Business Analytics',
+        body: `Hey!\n\nI've been using Biz Plus for business analytics and receipt scanning with AI. It's been a game-changer.\n\nGet 50% off your first month with my referral link: ${referralLink}\n\nCheers!`,
       },
     };
 

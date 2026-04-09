@@ -40,7 +40,7 @@ export default function ReferralProgram() {
       setStats(JSON.parse(stored));
     } else if (user) {
       // Generate referral code
-      const code = `AERA${user.id.slice(0, 6).toUpperCase()}`;
+      const code = `BIZ PLUS${user.id.slice(0, 6).toUpperCase()}`;
       setStats(prev => ({ ...prev, referralCode: code }));
     }
   }, [user]);
@@ -63,7 +63,7 @@ export default function ReferralProgram() {
       name: 'WhatsApp', 
       color: 'bg-green-500', 
       icon: '💬',
-      url: `https://wa.me/?text=${encodeURIComponent(`Join me on AERA - the smartest way to track business finances! Use my link: ${referralLink}`)}`
+      url: `https://wa.me/?text=${encodeURIComponent(`Join me on BIZ PLUS - the smartest way to track business finances! Use my link: ${referralLink}`)}`
     },
     { 
       name: 'LinkedIn', 
@@ -75,7 +75,7 @@ export default function ReferralProgram() {
       name: 'Twitter', 
       color: 'bg-sky-500', 
       icon: '🐦',
-      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Just started using AERA to track my business finances. Game changer! 📊 Join with my link:`)}&url=${encodeURIComponent(referralLink)}`
+      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Just started using BIZ PLUS to track my business finances. Game changer! 📊 Join with my link:`)}&url=${encodeURIComponent(referralLink)}`
     },
   ];
 

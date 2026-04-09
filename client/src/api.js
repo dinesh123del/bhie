@@ -1,5 +1,5 @@
-/* global window */
-export const API = import.meta.env.VITE_API_URL || "";
+import { ENV } from './config/env';
+export const API = ENV.API_URL;
 
 export const registerUser = async (data) => {
   const res = await window.fetch(`${API}/api/auth/register`, {

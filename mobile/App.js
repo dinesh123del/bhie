@@ -81,13 +81,13 @@ function App() {
     // Push Notifications
     registerForPushNotificationsAsync().then(async (token) => {
       if (token) {
-        console.log('[BHIE] Registered push token:', token);
+        console.log('[Biz Plus] Registered push token:', token);
         try {
           const { default: api } = await import('./services/api');
           await api.post('/api/notifications/register', { token });
-          console.log('[BHIE] Push token synced with backend successfully');
+          console.log('[Biz Plus] Push token synced with backend successfully');
         } catch (err) {
-          console.error('[BHIE] Syncing push token failed:', err);
+          console.error('[Biz Plus] Syncing push token failed:', err);
         }
       }
     });

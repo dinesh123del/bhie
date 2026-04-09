@@ -3,7 +3,23 @@
 > vite --host 0.0.0.0 --port 5173 --strictPort
 
 
-  VITE v5.4.21  ready in 147 ms
+  VITE v5.4.21  ready in 107 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: http://192.168.0.4:5173/
+12:44:56 AM [vite] Pre-transform error: /Users/srilekha/Desktop/BHIE/client/src/components/LoadingScreen.tsx: Missing semicolon. (125:11)
+
+  123 |   useEffect(() => {
+  124 |     // Play signature sound on mount
+> 125 |     playBiz PlusSound();
+      |            ^
+  126 |
+  127 |     // SAFETY TIMEOUT: Force completion after 10 seconds max
+  128 |     const safetyTimeout = setTimeout(() => {
+12:45:41 AM [vite] hmr update /src/pages/Dashboard.tsx, /src/index.css
+12:47:37 AM [vite] page reload src/components/FullscreenLogoLoader.tsx
+12:47:37 AM [vite] page reload src/components/CinematicSplash.tsx
+12:47:38 AM [vite] page reload src/components/CinematicSplash.tsx
+12:48:14 AM [vite] hmr update /src/pages/Dashboard.tsx, /src/index.css
+6:25:39 AM [vite] .env changed, restarting server...
+6:25:39 AM [vite] server restarted.

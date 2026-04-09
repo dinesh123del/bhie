@@ -98,7 +98,7 @@ export default function FirstScanCelebration({ isOpen, onClose, scanCount }: Cel
   const handleContinue = () => {
     onClose();
     if (scanCount === 1) {
-      toast.success('Welcome to AERA! Check your rewards.');
+      toast.success('Welcome to BIZ PLUS! Check your rewards.');
       // Could trigger onboarding tour here
     }
   };
@@ -178,7 +178,7 @@ export default function FirstScanCelebration({ isOpen, onClose, scanCount }: Cel
             >
               {scanCount === 1 
                 ? "You've taken your first step to smarter business finances!"
-                : `You've scanned ${scanCount} receipts with AERA!`
+                : `You've scanned ${scanCount} receipts with BIZ PLUS!`
               }
             </motion.p>
 

@@ -1,4 +1,4 @@
-# BHIE - Technology Stack
+# Biz Plus - Technology Stack
 
 ## Languages & Runtimes
 - TypeScript 5.5+ (client and server)

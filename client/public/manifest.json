@@ -1,6 +1,6 @@
 {
-  "name": "Finly - Financial Intelligence. Reimagined.",
-  "short_name": "Finly",
+  "name": "BIZ PLUS - Business Intelligence Zone Plus",
+  "short_name": "BIZ PLUS",
   "description": "Premium AI-powered financial intelligence and pulse monitoring platform.",
   "start_url": "/",
   "display": "standalone",
@@ -26,7 +26,11 @@
       "type": "image/png"
     }
   ],
-  "categories": ["business", "productivity", "finance"],
+  "categories": [
+    "business",
+    "productivity",
+    "finance"
+  ],
   "lang": "en",
   "dir": "ltr"
 }

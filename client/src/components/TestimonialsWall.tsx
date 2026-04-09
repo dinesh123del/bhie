@@ -24,7 +24,7 @@ const TESTIMONIALS: Testimonial[] = [
     role: 'Founder',
     company: 'TechStart India',
     avatar: '👨‍💼',
-    quote: 'AERA transformed how we track expenses. What used to take 3 hours now takes 10 minutes. The receipt scanning is magic.',
+    quote: 'BIZ PLUS transformed how we track expenses. What used to take 3 hours now takes 10 minutes. The receipt scanning is magic.',
     metric: { value: '15hrs', label: 'Saved weekly' },
     rating: 5,
     industry: 'Technology',
@@ -46,7 +46,7 @@ const TESTIMONIALS: Testimonial[] = [
     role: 'Owner',
     company: 'Mumbai Retail',
     avatar: '👨‍💻',
-    quote: 'We process 200+ receipts daily. AERA handles them all automatically. My accountant loves the export feature.',
+    quote: 'We process 200+ receipts daily. BIZ PLUS handles them all automatically. My accountant loves the export feature.',
     metric: { value: '200+', label: 'Receipts/day' },
     rating: 5,
     industry: 'Retail',
@@ -79,7 +79,7 @@ const TESTIMONIALS: Testimonial[] = [
     role: 'Manager',
     company: 'Wellness Center',
     avatar: '💆‍♀️',
-    quote: 'AERA gamification keeps my team engaged. Everyone competes to maintain daily streaks. Expense tracking became fun!',
+    quote: 'BIZ PLUS gamification keeps my team engaged. Everyone competes to maintain daily streaks. Expense tracking became fun!',
     metric: { value: '45', label: 'Day streak' },
     rating: 5,
     industry: 'Wellness',
@@ -113,7 +113,7 @@ export default function TestimonialsWall() {
             Loved by 10,000+ Businesses
           </h2>
           <p className="text-white/50 text-lg max-w-2xl mx-auto">
-            See how entrepreneurs across India are transforming their finances with AERA
+            See how entrepreneurs across India are transforming their finances with BIZ PLUS
           </p>
         </motion.div>
       </div>

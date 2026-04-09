@@ -18,7 +18,7 @@ export default function MarketingFooter() {
         <div className="space-y-5">
           <Logo size="md" to="/" subtitle="Economic Resilience" />
           <p className="max-w-md text-sm leading-7 text-slate-300">
-            AERA helps modern businesses turn operational data into decisions, momentum, and measurable growth.
+            BIZ PLUS helps modern businesses turn operational data into decisions, momentum, and measurable growth.
           </p>
         </div>
 
@@ -42,7 +42,7 @@ export default function MarketingFooter() {
           <div className="mt-5 space-y-4 text-sm text-slate-300">
             <div className="flex items-center gap-3">
               <Mail className="h-4 w-4 text-cyan-300" />
-              <span>hello@aera.cloud</span>
+              <span>hello@bizplus.io</span>
             </div>
             <div className="flex items-center gap-3">
               <Phone className="h-4 w-4 text-cyan-300" />
@@ -57,7 +57,7 @@ export default function MarketingFooter() {
       </div>
 
       <div className="mx-auto mt-12 max-w-7xl border-t border-white/10 pt-6 text-sm text-slate-400">
-        Copyright © 2026 AERA. All rights reserved.
+        Copyright © 2026 BIZ PLUS. All rights reserved.
       </div>
     </footer>
   );

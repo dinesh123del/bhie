@@ -1,5 +1,5 @@
 /**
- * AERA Price Intelligence Engine
+ * BIZ PLUS Price Intelligence Engine
  * 
  * Uses global anonymized benchmarks to identify subscription and vendor overpayments.
  * Part of the 'Autonomous Savings' billion-dollar feature set.
@@ -9,7 +9,7 @@ export interface PricingBenchmark {
   vendor: string;
   category: string;
   standardPrice: number; // e.g. monthly for 1-5 users
-  optimizedPrice: number; // The price AERA can negotiate or find
+  optimizedPrice: number; // The price BIZ PLUS can negotiate or find
   currency: string;
 }
 
@@ -54,7 +54,7 @@ export const findSavingsOpportunities = (userRecords: { vendor: string; amount: 
           potentialSavings: potentialMonthlySavings,
           percentage: Math.round(percentage),
           action: percentage > 30 ? 'switch' : 'renegotiate',
-          message: `AERA detected that comparable companies pay ${Math.round(percentage)}% less for ${benchmark.vendor}.`
+          message: `BIZ PLUS detected that comparable companies pay ${Math.round(percentage)}% less for ${benchmark.vendor}.`
         });
       }
     }

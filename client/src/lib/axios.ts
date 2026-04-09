@@ -1,6 +1,23 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { ENV } from '../config/env';
 
-export const API = import.meta.env.VITE_API_URL || "";
+// Use validated environment config with fallback
+export const API = ENV.API_URL;
+
+// Network status tracking
+let isNetworkDown = false;
+let lastErrorTimestamp: number | null = null;
+
+export const getNetworkStatus = () => ({
+  isOnline: navigator.onLine,
+  isNetworkDown,
+  lastError: lastErrorTimestamp,
+});
+
+export const resetNetworkStatus = () => {
+  isNetworkDown = false;
+  lastErrorTimestamp = null;
+};
 
 type RetryableConfig = InternalAxiosRequestConfig & {
   __retryCount?: number;
@@ -13,7 +30,7 @@ const BASE_RETRY_DELAY_MS = 1000;
 const api: AxiosInstance = axios.create({
   baseURL: `${API}/api`,
   withCredentials: true,
-  timeout: 15000,
+  timeout: 10000,
 });
 
 const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
@@ -62,12 +79,30 @@ api.interceptors.request.use(
 // --- Response Interceptor ---
 api.interceptors.response.use(
   (response) => {
-    // Return only the data portion to simplify calling code
+    // Reset network status on successful response
+    if (isNetworkDown) {
+      isNetworkDown = false;
+      console.log('[API] Network connection restored');
+    }
     return response;
   },
   async (error: AxiosError) => {
     const originalRequest = error.config as RetryableConfig;
     const { response } = error;
+
+    // Track network errors
+    if (!response && error.request) {
+      isNetworkDown = true;
+      lastErrorTimestamp = Date.now();
+      console.warn('[API] Network error detected - server may be unreachable');
+
+      // Dispatch custom event for network failure
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('api:network-error', {
+          detail: { url: error.config?.url, timestamp: lastErrorTimestamp }
+        }));
+      }
+    }
 
     // 1. Handle Unauthenticated (401)
     if (response?.status === 401) {
@@ -104,7 +139,7 @@ api.interceptors.response.use(
         errorMessage = 'Our server encountered an issue. Please try again soon.';
       }
     } else if (error.request) {
-      errorMessage = 'Unable to connect to AERA servers. Please check your internet connection.';
+      errorMessage = 'Unable to connect to BIZ PLUS servers. Please check your internet connection.';
     }
 
     // Attach human-readable message for easy UI consumption
@@ -113,9 +148,18 @@ api.interceptors.response.use(
     // 3. Automated Retry Logic
     if (shouldRetryRequest(error) && originalRequest) {
       originalRequest.__retryCount = (originalRequest.__retryCount ?? 0) + 1;
+      console.log(`[API] Retrying request (${originalRequest.__retryCount}/${MAX_RETRIES}): ${originalRequest.url}`);
       await wait(BASE_RETRY_DELAY_MS * originalRequest.__retryCount);
       return api(originalRequest);
     }
+
+    // Log final error
+    console.error(`[API] Request failed after ${originalRequest?.__retryCount || 0} retries:`, {
+      url: originalRequest?.url,
+      method: originalRequest?.method,
+      status: response?.status,
+      message: errorMessage,
+    });
 
     return Promise.reject(error);
   }

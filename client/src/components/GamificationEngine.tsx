@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Flame } from 'lucide-react';
 
 /* ──────────────────────────────────────────────────────────────
-   AERA GAMIFICATION ENGINE v2.1 (Context Enabled)
+   BIZ PLUS GAMIFICATION ENGINE v2.1 (Context Enabled)
    ─ Daily Streak tracker
    ─ Level / Badge system (XP Based)
    ─ Rank names: Recruit → Guardian → Sentinel → Overlord
@@ -252,7 +252,7 @@ export function StreakBadge({ compact = false }: { compact?: boolean }) {
 // ── Achievement Badge Component ─────────────────────────────────────
 export function BadgeRow({ totalRecords, healthScore, revenue }: { totalRecords: number, healthScore: number, revenue: number }) {
   const badges = [
-    { name: 'Founder', icon: '💎', active: true, desc: 'Early AERA Adopter' },
+    { name: 'Founder', icon: '💎', active: true, desc: 'Early BIZ PLUS Adopter' },
     { name: 'Data King', icon: '👑', active: totalRecords >= 100, desc: '100+ Records' },
     { name: 'Efficiency', icon: '⚡', active: healthScore >= 90, desc: '90+ Health Score' },
     { name: 'Capitalist', icon: '💰', active: revenue >= 50000, desc: '50k+ Revenue' },

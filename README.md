@@ -1,70 +1,81 @@
-# BHIE — Business Health Implementation Ecosystem
+# BIZ PLUS — Business Intelligence Zone Plus
 
-![BHIE Logo](client/public/icon-192.png)
+A business analytics and health monitoring platform for entrepreneurs.
 
-**BHIE** is a premium, AI-powered business analytics and health monitoring platform. Designed with an Apple-inspired aesthetic, it provides pro-level financial insights, instant receipt scanning (OCR), and smart predictions to help entrepreneurs master their business growth.
+## Overview
 
-## ✨ Features
+BIZ PLUS helps small business owners track finances, scan receipts, and get insights into their business health. Built with React, Node.js, and MongoDB.
 
-- **🚀 Instant Receipt Scanning**: Upload images of bills and let our AI extract vendor, amount, and date automatically.
-- **📊 Real-time Analytics**: Beautiful, fluid charts showing your profit, revenue, and expense trends.
-- **🧠 AI Business Intelligence**: Get smart recommendations and insights based on your financial data.
-- **🛡️ Bank-Grade Security**: Built with industry-standard encryption, CSRF protection, and rate limiting.
-- **🌐 Global Multi-language Support**: AI-assisted translations for a global user base.
-- **📱 PWA Ready**: Install BHIE on your mobile device for a native app-like experience.
+## Tech Stack
 
-## 🛠️ Technology Stack
+- **Frontend**: React (Vite), Tailwind CSS, Framer Motion
+- **Backend**: Node.js (Express), TypeScript, MongoDB
+- **AI**: OpenAI, Anthropic Claude, Tesseract.js (OCR)
+- **Security**: Helmet, rate limiting, CSRF protection
 
-- **Frontend**: React (Vite), Tailwind CSS, Framer Motion, Lucid React.
-- **Backend**: Node.js (Express), TypeScript, MongoDB (Mongoose), Redis (BullMQ).
-- **AI/ML**: OpenAI, Anthropic (Claude), Tesseract.js (OCR).
-- **Security**: Helmet, CSURF, Express Rate Limit, NoSQL Injection protection.
-
-## 🚀 Quick Start (Local Development)
+## Development
 
 ### Prerequisites
-- Node.js (v18+)
+- Node.js 18+
 - MongoDB
-- Redis (required for background workers)
+- Redis
 
-### Installation
+### Setup
 
-1. **Clone the repository**
-   ```bash
-   git clone <repo-url>
-   cd BHIE
-   ```
+```bash
+# Clone and enter project
+git clone <repo-url>
+cd BIZ PLUS
 
-2. **Setup Environment Variables**
-   ```bash
-   cp .env.example .env
-   # Update .env with your MongoDB URI and API keys
-   ```
+# Environment setup
+cp .env.example .env
+# Edit .env with your credentials
 
-3. **Install Dependencies**
-   ```bash
-   npm install --prefix server --legacy-peer-deps
-   npm install --prefix client --legacy-peer-deps
-   ```
+# Install dependencies
+npm install --prefix server --legacy-peer-deps
+npm install --prefix client --legacy-peer-deps
 
-4. **Launch Dev Environment**
-   ```bash
-   npm run dev
-   ```
+# Start development
+npm run dev
+```
 
-## 🚢 Production Deployment
+### Available Scripts
 
-To build and run the application in production mode:
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start client and server in dev mode |
+| `npm run build` | Build for production |
+| `npm run server` | Start backend only |
+| `npm run client` | Start frontend only |
+
+## Project Structure
+
+```
+BIZ PLUS/
+├── client/          # React frontend
+│   ├── src/
+│   │   ├── components/  # Reusable UI components
+│   │   ├── pages/       # Route pages
+│   │   ├── hooks/       # Custom React hooks
+│   │   └── services/    # API calls
+│   └── public/
+├── server/          # Node.js backend
+│   ├── src/
+│   │   ├── controllers/ # Route handlers
+│   │   ├── models/      # Database models
+│   │   ├── services/    # Business logic
+│   │   └── middleware/  # Express middleware
+│   └── tests/
+├── mobile/          # React Native mobile app
+└── ml-service/      # Python ML microservice
+```
+
+## Production Build
 
 ```bash
 bash make-live.sh
 ```
 
-This will:
-1. Build the frontend (Vite).
-2. Transpile the backend (TypeScript).
-3. Start the unified server on the configured port.
+## License
 
-## 📄 License
-
-Copyright © 2026 BHIE Ecosystem. All rights reserved.
+Copyright © 2026 BIZ PLUS. All rights reserved.

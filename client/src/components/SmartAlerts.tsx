@@ -192,7 +192,7 @@ export function SmartAlerts() {
 
   // Load alerts on mount
   useEffect(() => {
-    const saved = localStorage.getItem('bhie_smart_alerts');
+    const saved = localStorage.getItem('bizplus_smart_alerts');
     if (saved) {
       const parsed = JSON.parse(saved);
       // Only load alerts from today
@@ -222,7 +222,7 @@ export function SmartAlerts() {
   // Save alerts when they change
   useEffect(() => {
     if (alerts.length > 0) {
-      localStorage.setItem('bhie_smart_alerts', JSON.stringify(alerts));
+      localStorage.setItem('bizplus_smart_alerts', JSON.stringify(alerts));
     }
   }, [alerts]);
 

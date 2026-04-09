@@ -30,8 +30,26 @@ const registerSchema = z.object({
   password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
-const googleOAuthEnabled = Boolean(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET);
+const googleOAuthEnabled = Boolean(
+  env.GOOGLE_CLIENT_ID && 
+  env.GOOGLE_CLIENT_SECRET && 
+  env.GOOGLE_CLIENT_ID !== 'your_google_client_id_here' &&
+  env.GOOGLE_CLIENT_SECRET !== 'your_google_client_secret_here'
+);
+
 const googleClient = new OAuth2Client(env.GOOGLE_CLIENT_ID);
+
+/**
+ * Public endpoint to check which authentication methods are available.
+ */
+router.get('/status', (_req, res) => {
+  res.json({
+    methods: {
+      password: true,
+      google: googleOAuthEnabled,
+    }
+  });
+});
 
 if (googleOAuthEnabled) {
   passport.use(
@@ -129,11 +147,11 @@ router.post(
 
     const token = generateToken(user._id.toString(), user.role as UserRole);
 
-    // BANK-GRADE SECURITY: Set httpOnly cookie
+    // Set httpOnly cookie for security
     setAuthCookie(res, token);
 
     res.json({
-      token, // Still returning token for mobile app compatibility
+      token, // Also return token for mobile app compatibility
       user: {
         id: user._id,
         name: user.name,
@@ -153,7 +171,7 @@ router.post(
   sensitiveLimiter,
   asyncHandler(async (req: Request, res: Response) => {
     const { name, email, password } = registerSchema.parse(req.body);
-    
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       throw new AppError(400, 'User already exists');
@@ -162,7 +180,7 @@ router.post(
     const user = await User.create({ name, email, password });
     const token = generateToken(user._id.toString(), user.role as UserRole);
 
-    // BANK-GRADE SECURITY: Set httpOnly cookie
+    // Set httpOnly cookie for security
     setAuthCookie(res, token);
 
     res.status(201).json({
@@ -207,10 +225,10 @@ router.get('/google/callback', (req, res, next) => {
     }
 
     const token = generateToken(user.userId, user.role);
-    
+
     // Set cookie for browser sessions
     setAuthCookie(res, token);
-    
+
     // REDACTED: No longer passing token in URL for security
     const redirectUrl = new URL('/dashboard', env.CLIENT_URL);
     redirectUrl.searchParams.set('from', 'google');
@@ -222,8 +240,12 @@ router.post(
   '/google',
   sensitiveLimiter,
   asyncHandler(async (req: Request, res: Response) => {
+    if (!googleOAuthEnabled) {
+      throw new AppError(503, 'Google OAuth is not configured');
+    }
+
     const { token: googleToken } = req.body;
-    
+
     if (!googleToken) {
       throw new AppError(400, 'Google token is required');
     }
@@ -248,7 +270,7 @@ router.post(
         user.profilePic = payload.picture;
       }
       await user.save();
-      
+
       if ('refreshSubscriptionStatus' in user && typeof user.refreshSubscriptionStatus === 'function') {
         await user.refreshSubscriptionStatus();
       }
@@ -323,7 +345,7 @@ router.patch(
   authenticateToken,
   asyncHandler(async (req: AuthRequest, res: Response) => {
     const authUser = requireUser(req);
-    
+
     const user = await User.findById(authUser.userId);
     if (!user) throw new AppError(404, 'User not found');
 
@@ -368,7 +390,7 @@ router.post('/logout', (_req: Request, res: Response) => {
 });
 
 /**
- * BANK-GRADE SECURITY: CSRF Protection Endpoint
+ * CSRF Protection Endpoint
  * Returns a CSRF token for the frontend to use in subsequent requests.
  */
 router.get('/csrf-token', (req, res) => {

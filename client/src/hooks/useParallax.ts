@@ -56,43 +56,7 @@ export const useParallax = (
 // Multi-Speed Parallax Hook (for layered effects)
 // ============================================
 
-interface UseMultiParallaxResult {
-  ref: RefObject<HTMLDivElement>;
-  layers: Array<{ y: MotionValue<number>; x: MotionValue<number> }>;
-}
-
-export const useMultiParallax = (
-  speeds: number[],
-  direction: 'vertical' | 'horizontal' = 'vertical'
-): UseMultiParallaxResult => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
-
-  const layers = speeds.map((speed) => {
-    const moveDistance = speed * 100;
-    const rawY = useTransform(
-      scrollYProgress,
-      [0, 1],
-      direction === 'vertical' ? [moveDistance, -moveDistance] : [0, 0]
-    );
-    const rawX = useTransform(
-      scrollYProgress,
-      [0, 1],
-      direction === 'horizontal' ? [moveDistance, -moveDistance] : [0, 0]
-    );
-
-    const y = useSpring(rawY, { stiffness: 100, damping: 30 });
-    const x = useSpring(rawX, { stiffness: 100, damping: 30 });
-
-    return { y, x };
-  });
-
-  return { ref, layers };
-};
+// Removed useMultiParallax as it violates React Hooks rules (hooks in loop) and was unused
 
 // ============================================
 // GSAP ScrollTrigger Parallax Hook

@@ -1,7 +1,7 @@
 {
-  "name": "bhie-server",
+  "name": "biz-plus-server",
   "version": "1.0.0",
-  "description": "BHIE Backend API - Express + MongoDB + TypeScript",
+  "description": "BIZ PLUS Backend API - Express + MongoDB + TypeScript",
   "main": "server.js",
   "type": "module",
   "scripts": {

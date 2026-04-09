@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 /* ──────────────────────────────────────────────────────────────
-   AERA SPLASH SCREEN
+   BIZ PLUS SPLASH SCREEN
    Pure black · minimalist logo · signature sound
    ─────────────────────────────────────────────────────────────── */
 
@@ -12,10 +12,10 @@ interface CinematicSplashProps {
   muted?: boolean;
 }
 
-// ── AERA Signature Sound ──────────────
+// ── BIZ PLUS Signature Sound ──────────────
 // Unique 3-note harmony: Stability → Growth → Achievement
 // Distinctly different from Netflix - cleaner, more professional
-function playAERASound(muted: boolean) {
+function playBizPlusSound(muted: boolean) {
   if (muted) return;
   try {
     const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
@@ -58,7 +58,7 @@ function playAERASound(muted: boolean) {
     reverb.connect(reverbGain);
     reverbGain.connect(ctx.destination);
 
-    // AERA 3-note signature: C → E → G (Major triad ascending)
+    // BIZ PLUS 3-note signature: C → E → G (Major triad ascending)
     // Represents: Foundation → Growth → Success
     const playNote = (freq: number, start: number, duration: number, vol: number, type: OscillatorType = 'sine') => {
       const osc = ctx.createOscillator();
@@ -124,14 +124,14 @@ function playAERASound(muted: boolean) {
   }
 }
 
-function AERALogoMark({ phase }: { phase: 'awaiting' | 'revealing' | 'exiting' }) {
+function BizPlusLogoMark({ phase }: { phase: 'awaiting' | 'revealing' | 'exiting' }) {
   return (
     <motion.svg
       viewBox="0 0 100 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className="w-20 md:w-28 relative z-10"
-      aria-label="AERA"
+      aria-label="BIZ PLUS"
       initial={{ opacity: 0, filter: 'blur(10px)', scale: 0.9 }}
       animate={
         phase === 'revealing'
@@ -142,8 +142,8 @@ function AERALogoMark({ phase }: { phase: 'awaiting' | 'revealing' | 'exiting' }
       }
       transition={{ duration: 1.5, ease: [0.2, 0.8, 0.2, 1] }}
     >
-      {/* AERA Mark - Clean Geometric A */}
-      <rect x="15" y="15" width="70" height="70" rx="18" fill="url(#aeraGrad)" />
+      {/* BIZ PLUS Mark - Clean Geometric A */}
+      <rect x="15" y="15" width="70" height="70" rx="18" fill="url(#bizPlusGrad)" />
       <text
         x="50"
         y="68"
@@ -152,10 +152,10 @@ function AERALogoMark({ phase }: { phase: 'awaiting' | 'revealing' | 'exiting' }
         fontSize="42"
         fontWeight="800"
         fontFamily="system-ui, -apple-system, sans-serif"
-      >A</text>
+      >+ </text>
 
       <defs>
-        <linearGradient id="aeraGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id="bizPlusGrad" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#007AFF" />
           <stop offset="100%" stopColor="#AF52DE" />
         </linearGradient>
@@ -202,7 +202,7 @@ export default function CinematicSplash({
   useEffect(() => {
     const timer = setTimeout(() => {
       if (phase !== 'awaiting') return;
-      playAERASound(muted);
+      playBizPlusSound(muted);
       setPhase('revealing');
 
       setTimeout(() => {
@@ -264,7 +264,7 @@ export default function CinematicSplash({
         </AnimatePresence>
 
         {/* Clean Logo Morph */}
-        <AERALogoMark phase={phase} />
+        <BizPlusLogoMark phase={phase} />
 
         {/* Bottom Section: Loader + Ad/Tip */}
         <div className="absolute bottom-24 flex flex-col items-center gap-6 w-full max-w-[280px]">

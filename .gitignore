@@ -55,12 +55,7 @@ coverage/
 # Optional (TypeScript cache)
 # -----------------------------
 *.tsbuildinfo
-node_modules
-node_modules
-node_modules
-node_modules
-node_modules
-node_modules
-node_modules
 *.vsix
-.github/workflows/
+
+# Local Netlify folder
+.netlify

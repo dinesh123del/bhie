@@ -81,7 +81,7 @@ export const dashboardAPI = {
   get: () => extractData<any>(api.get('/dashboard')),
 };
 
-// ================= AERA (Billion Dollar Vision) =================
+// ================= BIZ PLUS (Billion Dollar Vision) =================
 export const aeraAPI = {
   getSentinel: (data: { 
     industry: string; 
@@ -95,6 +95,17 @@ export const aeraAPI = {
 // ================= SYSTEM =================
 export const systemAPI = {
   getHealthReport: () => extractData<any>(api.get('/system/report')),
+};
+
+// ================= MOMENT INTELLIGENCE =================
+export const momentAPI = {
+  capture: (formData: FormData) => extractData<any>(api.post('/moment/capture', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })),
+  executeAction: (text: string, businessId?: string, userId?: string) => 
+    extractData<any>(api.post('/moment/execute-action', { text, businessId, userId })),
 };
 
 export default api;

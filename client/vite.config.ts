@@ -9,10 +9,13 @@ export default defineConfig(({ command }) => ({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        maximumFileSizeToCacheInBytes: 5000000
+      },
       includeAssets: ['favicon.png', 'icon.png', 'robots.txt'],
       manifest: {
-        name: 'BHIE - Business Health Implementation Ecosystem',
-        short_name: 'BHIE',
+        name: 'Biz Plus - Business Health Implementation Ecosystem',
+        short_name: 'Biz Plus',
         description: 'AI-powered business analytics and health monitoring platform.',
         theme_color: '#0A0A0A',
         background_color: '#0A0A0A',
@@ -59,10 +62,11 @@ export default defineConfig(({ command }) => ({
   },
   esbuild: command === 'build'
     ? {
-        drop: ['console', 'debugger'],
-      }
+      drop: ['console', 'debugger'],
+    }
     : undefined,
   build: {
+    chunkSizeWarningLimit: 2000,
     target: 'es2020',
     cssCodeSplit: true,
     sourcemap: false,

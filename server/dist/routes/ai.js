@@ -187,7 +187,7 @@ router.post('/translate', authenticateToken, aiLimiter, asyncHandler(async (req,
 // Predictive Analytics: Monte Carlo Simulation
 // ──────────────────────────────────────────
 router.post('/simulate', authenticateToken, asyncHandler(async (req, res) => {
-    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    const mlServiceUrl = env.ML_SERVICE_URL;
     try {
         const response = await fetch(`${mlServiceUrl}/simulate`, {
             method: 'POST',
@@ -210,7 +210,7 @@ router.post('/simulate', authenticateToken, asyncHandler(async (req, res) => {
 // Business Performance: Health Score
 // ──────────────────────────────────────────
 router.post('/health-score', authenticateToken, asyncHandler(async (req, res) => {
-    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    const mlServiceUrl = env.ML_SERVICE_URL;
     try {
         const response = await fetch(`${mlServiceUrl}/health-score`, {
             method: 'POST',
@@ -233,7 +233,7 @@ router.post('/health-score', authenticateToken, asyncHandler(async (req, res) =>
 // Strategic Context: Historical Reference Core
 // ──────────────────────────────────────────
 router.post('/memory/store', authenticateToken, asyncHandler(async (req, res) => {
-    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    const mlServiceUrl = env.ML_SERVICE_URL;
     try {
         const response = await fetch(`${mlServiceUrl}/memory/store`, {
             method: 'POST',
@@ -248,7 +248,7 @@ router.post('/memory/store', authenticateToken, asyncHandler(async (req, res) =>
     }
 }));
 router.post('/memory/query', authenticateToken, asyncHandler(async (req, res) => {
-    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    const mlServiceUrl = env.ML_SERVICE_URL;
     try {
         const response = await fetch(`${mlServiceUrl}/memory/query`, {
             method: 'POST',
@@ -267,7 +267,7 @@ router.post('/memory/query', authenticateToken, asyncHandler(async (req, res) =>
 // ──────────────────────────────────────────
 router.post('/agent/audit', authenticateToken, asyncHandler(async (req, res) => {
     const authUser = requireUser(req);
-    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    const mlServiceUrl = env.ML_SERVICE_URL;
     // 1. Get recent health score for context
     const healthResponse = await fetch(`${mlServiceUrl}/health-score`, {
         method: 'POST',
@@ -301,7 +301,7 @@ router.post('/agent/audit', authenticateToken, asyncHandler(async (req, res) => 
 // AERA Sentinel (Billion Dollar Vision)
 // ──────────────────────────────────────────
 router.post('/sentinel', authenticateToken, asyncHandler(async (req, res) => {
-    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    const mlServiceUrl = env.ML_SERVICE_URL;
     try {
         const response = await fetch(`${mlServiceUrl}/aera/sentinel`, {
             method: 'POST',

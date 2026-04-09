@@ -1,14 +1,14 @@
 version: "3.8"
 
 services:
-  bhie-app:
+  biz-plus-app:
     build: .
     ports:
       - "5001:5001"
     environment:
       - NODE_ENV=production
       - PORT=5001
-      - MONGO_URI=mongodb://mongodb:27017/bhie
+      - MONGO_URI=mongodb://mongodb:27017/biz-plus
       - REDIS_URL=redis://redis:6379
       - JWT_SECRET=change_me_super_secret_jwt_key
       # Add all other necessary .env file configurations here (OpenAI, Razorpay, etc.)

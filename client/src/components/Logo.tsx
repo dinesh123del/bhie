@@ -42,26 +42,12 @@ const sizeMap: Record<LogoSize, {
   },
 };
 
+import { BizPlusIcon } from './welcome/BizPlusLogo';
+
 const LogoGraphic = ({ size, glow }: { size: LogoSize; glow?: boolean }) => {
+  const pixelSize = size === 'sm' ? 32 : size === 'md' ? 40 : 52;
   return (
-    <div className={`relative ${sizeMap[size].mark} flex items-center justify-center shrink-0`}>
-      {/* Subtle ambient glow */}
-      {glow && (
-        <motion.div
-          aria-hidden
-          className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#007AFF]/20 to-[#AF52DE]/20 blur-[8px]"
-          animate={{ scale: [0.9, 1, 0.9] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      )}
-      
-      {/* Clean geometric mark */}
-      <div className="w-[70%] h-[70%] relative z-10 flex items-center justify-center">
-        <div className="w-full h-full rounded-2xl bg-gradient-to-br from-[#007AFF] to-[#AF52DE] flex items-center justify-center">
-          <span className="text-white font-black text-[60%]">A</span>
-        </div>
-      </div>
-    </div>
+    <BizPlusIcon size={pixelSize} animated glowing={glow} />
   );
 };
 
@@ -85,7 +71,7 @@ const LogoInner = ({
         className={`${sizeMap[size].wordmark} font-bold tracking-tight leading-none text-white`}
         style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif' }}
       >
-        AERA<span className="text-[#007AFF]">.</span>
+        BIZ PLUS<span className="text-[#007AFF]">.</span>
       </span>
       {showSubtitle && (
         <span
@@ -103,7 +89,7 @@ export const Logo = ({
   size = 'md',
   className,
   to,
-  subtitle = 'Economic Resilience',
+  subtitle = 'Business Intelligence',
   showSubtitle = true,
 }: LogoProps) => {
   const content = (
@@ -120,7 +106,7 @@ export const Logo = ({
   }
 
   return (
-    <Link to={to} aria-label="AERA logo" className="inline-flex outline-none">
+    <Link to={to} aria-label="BIZ PLUS logo" className="inline-flex outline-none">
       {content}
     </Link>
   );

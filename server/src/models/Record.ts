@@ -7,13 +7,13 @@ export interface RecordDocument extends mongoose.Document {
   amount: number;
   title?: string;
   description: string;
-  fileUrl?: string;
-  gstNumber?: string;
   category?: string;
   vendor?: string;
   date: Date;
   tags?: string[];
   status: 'pending' | 'confirmed' | 'rejected';
+  fileUrl?: string;
+  gstNumber?: string;
   metadata: mongoose.Schema.Types.Mixed;
   createdAt: Date;
   updatedAt: Date;

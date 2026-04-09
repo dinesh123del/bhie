@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# BHIE AI System - Setup Script
+# Biz Plus AI System - Setup Script
 # Run this to automatically configure the AI system
 
 set -e
 
-echo "🤖 BHIE Multi-Agent AI System - Setup"
+echo "🤖 Biz Plus Multi-Agent AI System - Setup"
 echo "====================================="
 echo ""
 
 # Check if we're in the right directory
 if [ ! -f "server/package.json" ]; then
-  echo "❌ Please run this script from the BHIE root directory"
+  echo "❌ Please run this script from the Biz Plus root directory"
   exit 1
 fi
 
@@ -68,7 +68,7 @@ echo "📝 Creating test script..."
 cat > test-ai-system.sh << 'EOF'
 #!/bin/bash
 
-echo "🧪 Testing BHIE AI System..."
+echo "🧪 Testing Biz Plus AI System..."
 echo ""
 
 # Test 1: Health check

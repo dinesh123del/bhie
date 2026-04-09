@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# BHIE Full-Stack Setup Script
+# Biz Plus Full-Stack Setup Script
 
-echo "🚀 Starting BHIE Full-Stack Setup..."
+echo "🚀 Starting Biz Plus Full-Stack Setup..."
 
 # Colors
 RED='\033[0;31m'

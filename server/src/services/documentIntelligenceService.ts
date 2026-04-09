@@ -6,13 +6,13 @@ import { env } from '../config/env.js';
 import { AppError } from '../utils/appError.js';
 import type { DocumentIntelligenceResult } from '../types/document.js';
 
-const openai = env.OPENAI_API_KEY && env.OPENAI_API_KEY !== 'your_openai_api_key_here' 
-  ? new OpenAI({ apiKey: env.OPENAI_API_KEY }) 
+const openai = env.OPENAI_API_KEY && env.OPENAI_API_KEY !== 'your_openai_api_key_here'
+  ? new OpenAI({ apiKey: env.OPENAI_API_KEY })
   : null;
 
 /**
- * ELITE CURRENCY RECOGNITION PATTERNS
- * Designed for precision across Indian (₹) and Global standards.
+ * Currency recognition patterns
+ * Supports Indian (₹) and global currency formats.
  */
 const CURRENCY_PATTERNS = [
   // Explicit Grand Total with Currency Symbols (₹, $, ₹, etc)
@@ -28,7 +28,7 @@ const CURRENCY_PATTERNS = [
 ];
 
 const INCOME_KEYWORDS = [
-  'income', 'sale', 'credit', 'received', 'payment received', 'revenue', 
+  'income', 'sale', 'credit', 'received', 'payment received', 'revenue',
   'profit', 'payout', 'interest', 'dividend', 'refund', 'settlement'
 ];
 
@@ -38,8 +38,8 @@ const EXPENSE_KEYWORDS = [
 ];
 
 /**
- * MULTI-STAGE CLASSIFICATION RULES
- * Maps intelligence signals to enterprise categories.
+ * Document classification rules
+ * Maps keywords to expense/income categories.
  */
 const CATEGORY_RULES = [
   { category: 'materials', keywords: ['material', 'raw', 'stock', 'inventory', 'hardware', 'iron', 'steel', 'scrap', 'cement', 'bricks', 'tools'], type: 'expense' as const },
@@ -54,18 +54,18 @@ const CATEGORY_RULES = [
   { category: 'misc', keywords: ['other', 'others', 'miscellaneous', 'cash', 'transfer'], type: 'expense' as const },
 ];
 
-/** 
- * ELITE PRE-PROCESSING PIPELINE
- * Enhances document contrast and sharpness for superior OCR extraction.
+/**
+ * Image preprocessing for OCR
+ * Enhances document contrast and sharpness.
  */
 async function preprocessImage(buffer: Buffer | string): Promise<Buffer> {
   const imgBuffer = Buffer.isBuffer(buffer) ? buffer : await fs.readFile(buffer as string);
   const img = sharp(imgBuffer);
-  
+
   const metadata = await img.metadata();
   const width = metadata.width || 1000;
-  
-  // ULTRA-HIGH RESOLUTION ENHANCEMENT for Worst Case Scans
+
+  // High-resolution enhancement for low-quality scans
   return img
     .greyscale()
     .normalize() // Equalize histogram for better distribution
@@ -81,14 +81,14 @@ async function runTesseract(buffer: Buffer): Promise<{ text: string; confidence:
     const { data } = await Tesseract.recognize(buffer, 'eng+hin', { // Dual language support
       logger: m => {
         if (process.env.NODE_ENV !== 'production' && m.status === 'recognizing text') {
-             // Silently track progress if needed
+          // Silently track progress if needed
         }
       },
     });
-    
-    return { 
-      text: (data.text || '').trim(), 
-      confidence: (data.confidence || 0) / 100 
+
+    return {
+      text: (data.text || '').trim(),
+      confidence: (data.confidence || 0) / 100
     };
   } catch (error) {
     console.error('Tesseract Engine failure:', error);
@@ -98,7 +98,7 @@ async function runTesseract(buffer: Buffer): Promise<{ text: string; confidence:
 
 async function openaiVisionFallback(buffer: Buffer, ocrText: string): Promise<string> {
   if (!openai) return '';
-  
+
   try {
     const base64 = buffer.toString('base64');
     const response = await openai.chat.completions.create({
@@ -108,10 +108,9 @@ async function openaiVisionFallback(buffer: Buffer, ocrText: string): Promise<st
         content: [
           {
             type: 'text',
-            text: `You are an Elite Forensic Business Accountant for Finly. Parse this document with 100% accuracy.
-                   Target: [Merchant Name, Date, Currency, Final Amount, Type (Income/Expense), Category].
-                   Context: Digital OCR scan results were low confidence: "${ocrText.substring(0, 300)}".
-                   Return ONLY the primary detected text block content. Be meticulous.`
+            text: `You are a business document parser. Extract: merchant name, date, currency, final amount, type (income/expense), category.
+                   OCR results (low confidence): "${ocrText.substring(0, 300)}".
+                   Return only the extracted information.`
           },
           {
             type: 'image_url',
@@ -133,7 +132,7 @@ function cleanText(text: string): string {
   return text
     .replace(/\s+/g, ' ')
     .replace(/[^a-zA-Z0-9₹.,:\-/%()$#@+*!&|'\"[\]{}\s]/g, '') // Expanded allowed set
-    .replace(/([0-9])o([0-9])/g, '$10$2') 
+    .replace(/([0-9])o([0-9])/g, '$10$2')
     .replace(/\|/g, '1')
     .trim();
 }
@@ -155,7 +154,7 @@ function extractAmount(text: string): { amount: number; confidence: number } {
     for (const match of matches) {
       const rawVal = match[1] || match[0];
       const val = parseFloat(rawVal.replace(/,/g, '').replace(/[^0-9.]/g, ''));
-      
+
       if (!isNaN(val) && val > 0) {
         const weight = /total|grand|due|paid/i.test(match[0]) ? 1.0 : 0.6;
         if (val > bestAmount) {
@@ -166,9 +165,9 @@ function extractAmount(text: string): { amount: number; confidence: number } {
     }
   }
 
-  return { 
-    amount: parseFloat(bestAmount.toFixed(2)), 
-    confidence: bestAmount > 0 ? maxMatchConf : 0 
+  return {
+    amount: parseFloat(bestAmount.toFixed(2)),
+    confidence: bestAmount > 0 ? maxMatchConf : 0
   };
 }
 
@@ -185,10 +184,10 @@ function calibrateEngineOutput(amount: number): number {
 function detectType(text: string): 'income' | 'expense' {
   const norm = text.toLowerCase();
   let score = { income: 0, expense: 0 };
-  
+
   INCOME_KEYWORDS.forEach(kw => norm.includes(kw) && (score.income += 2));
   EXPENSE_KEYWORDS.forEach(kw => norm.includes(kw) && (score.expense += 1.5));
-  
+
   // Tie-breaker: Invoices without "Income" keywords are usually expenses
   if (score.income === 0 && (norm.includes('invoice') || norm.includes('tax'))) score.expense += 5;
 
@@ -233,13 +232,13 @@ function extractItems(text: string): string[] {
   for (const line of lines) {
     const clean = line.trim();
     if (clean.length < 5 || clean.toLowerCase().includes('total')) continue;
-    
+
     // Check if line looks like a line item (Text + Price)
     if (ITEM_PATTERN.test(clean) || (clean.split(/\s+/).length >= 2 && /[0-9]+\.[0-9]{2}/.test(clean))) {
       items.push(clean);
     }
   }
-  
+
   return items.slice(0, 15); // Cap at 15 items for brevity
 }
 
@@ -251,7 +250,7 @@ function extractBusinessName(text: string): string {
   const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 2);
   const addressKeywords = ['street', 'road', 'floor', 'building', 'city', 'pin', 'tel:', 'phone:', 'email', 'www'];
   const datePatterns = [/\d{2}[\/-]\d{2}[\/-]\d{2,4}/, /\d{4}[\/-]\d{2}[\/-]\d{2}/];
-  
+
   for (let i = 0; i < Math.min(lines.length, 8); i++) {
     const line = lines[i];
     const lowLine = line.toLowerCase();
@@ -260,7 +259,7 @@ function extractBusinessName(text: string): string {
     const isGst = /gst|tin|vat|reg:|fssai/i.test(lowLine);
     const isNumeric = /^[0-9\s.,:#-]+$/.test(line);
     const isTotal = /total|subtotal|tax|invoice/i.test(lowLine);
-    
+
     if (!isAddress && !isDate && !isGst && !isNumeric && !isTotal && line.length > 3) {
       return line;
     }
@@ -275,15 +274,15 @@ function extractGSTIN(text: string): string | undefined {
 }
 
 async function searchGSTDetails(gstin: string): Promise<any> {
-    if (!gstin || !openai) return undefined;
-    
-    try {
-        const { AIEngine } = await import('../utils/aiEngine.js');
-        const response = await AIEngine.generateCompletion(`Provide registration details for GSTIN: ${gstin}. Return as JSON with keys: legalName, tradeName, status, address, taxpayerType, registrationDate.`);
-        return JSON.parse(response.content || '{}');
-    } catch {
-        return undefined;
-    }
+  if (!gstin || !openai) return undefined;
+
+  try {
+    const { AIEngine } = await import('../utils/aiEngine.js');
+    const response = await AIEngine.generateCompletion(`Provide registration details for GSTIN: ${gstin}. Return as JSON with keys: legalName, tradeName, status, address, taxpayerType, registrationDate.`);
+    return JSON.parse(response.content || '{}');
+  } catch {
+    return undefined;
+  }
 }
 
 /** 
@@ -293,15 +292,15 @@ async function searchGSTDetails(gstin: string): Promise<any> {
 export async function processDocument(input: Buffer | string): Promise<DocumentIntelligenceResult> {
   try {
     const buffer = Buffer.isBuffer(input) ? input : await fs.readFile(input as string);
-    
+
     // 1. Digital Enhancement
     const processedBuffer = await preprocessImage(buffer);
-    
+
     // 2. Tesseract Foundation
     const tesseract = await runTesseract(processedBuffer);
     let rawText = tesseract.text;
     let ocrConfidence = tesseract.confidence;
-    
+
     // 3. AI Augmentation (Elite Layer)
     let aiUsed = false;
     if (ocrConfidence < 0.75 || rawText.length < 50) {
@@ -312,7 +311,7 @@ export async function processDocument(input: Buffer | string): Promise<DocumentI
         aiUsed = true;
       }
     }
-    
+
     // 4. Synthesis
     const exactText = rawText; // Preserve the actual OCR output
     const cleanedText = cleanText(rawText);
@@ -320,16 +319,16 @@ export async function processDocument(input: Buffer | string): Promise<DocumentI
     const type = detectType(cleanedText);
     const category = detectCategory(cleanedText, type);
     const date = extractDate(cleanedText);
-    const items = extractItems(rawText); 
+    const items = extractItems(rawText);
     const businessName = extractBusinessName(rawText);
     const gstNumber = extractGSTIN(cleanedText);
-    
+
     // 5. Advanced GST Lookup
     let gstDetails = undefined;
     if (gstNumber) {
-        gstDetails = await searchGSTDetails(gstNumber);
+      gstDetails = await searchGSTDetails(gstNumber);
     }
-    
+
     // 6. MISSING DETAILS GUIDANCE (Engine Feedback)
     const missingFields: string[] = [];
     if (amountData.amount <= 0) missingFields.push('amount');
@@ -341,7 +340,7 @@ export async function processDocument(input: Buffer | string): Promise<DocumentI
     // 7. Final Confidence Calculation & Professional Calibration
     let finalConfidence = (ocrConfidence * 0.4) + (amountData.confidence * 0.6);
     if (aiUsed) finalConfidence = Math.max(finalConfidence, 0.85);
-    
+
     const calibratedAmount = calibrateEngineOutput(amountData.amount);
     const integrityScore = Math.max(0, 100 - (missingFields.length * 20));
 

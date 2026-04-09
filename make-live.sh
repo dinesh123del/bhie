@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# BHIE Production "Make Live" script
+# Biz Plus Production "Make Live" script
 # This script builds the entire application and starts it in production mode.
 
 set -e
@@ -14,7 +14,7 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-echo -e "${BLUE}🚀 Starting BHIE Production Launch Sequence...${NC}"
+echo -e "${BLUE}🚀 Starting Biz Plus Production Launch Sequence...${NC}"
 echo "==========================================="
 
 # 1. Check for .env file
@@ -45,7 +45,7 @@ cd ..
 echo -e "${GREEN}✅ Backend build complete.${NC}"
 
 # 5. Launch Production Server
-echo -e "${BLUE}🚀 Launching BHIE in PRODUCTION mode...${NC}"
+echo -e "${BLUE}🚀 Launching Biz Plus in PRODUCTION mode...${NC}"
 echo -e "${YELLOW}Note: The server will serve the frontend from client/dist.${NC}"
 echo "-------------------------------------------"
 

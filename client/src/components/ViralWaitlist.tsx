@@ -54,7 +54,7 @@ export default function ViralWaitlist() {
 
     // Generate position and referral code
     const newPosition = totalWaitlist + 1;
-    const code = `AERA${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    const code = `BIZ PLUS${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     
     const data = {
       email,
@@ -81,7 +81,7 @@ export default function ViralWaitlist() {
 
   const shareWhatsApp = () => {
     const text = encodeURIComponent(
-      `I just joined the AERA waitlist! 📊 Smart business finance tracking. ` +
+      `I just joined the BIZ PLUS waitlist! 📊 Smart business finance tracking. ` +
       `Use my link to skip ahead: ${referralLink}`
     );
     window.open(`https://wa.me/?text=${text}`, '_blank');
@@ -109,7 +109,7 @@ export default function ViralWaitlist() {
             Early Access
           </h1>
           <p className="text-white/50">
-            Join {totalWaitlist.toLocaleString()}+ businesses waiting for AERA
+            Join {totalWaitlist.toLocaleString()}+ businesses waiting for BIZ PLUS
           </p>
         </div>
 

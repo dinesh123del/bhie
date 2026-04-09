@@ -10,7 +10,7 @@ test('client core files exist', () => {
     'src/App.tsx',
     'src/main.tsx',
     'src/pages/Dashboard.tsx',
-    'src/pages/Analytics.jsx',
+    'src/pages/Analytics.tsx',
   ];
 
   for (const file of files) {

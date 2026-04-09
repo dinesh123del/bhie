@@ -10,6 +10,7 @@ import axios from 'axios';
 import Logo from '../components/Logo';
 import { GoogleButton } from '../components/auth/GoogleButton';
 import { premiumFeedback } from '../utils/premiumFeedback';
+import SEO from '../components/SEO';
 
 
 const PremiumLogin = () => {
@@ -59,12 +60,19 @@ const PremiumLogin = () => {
       login(response.token, response.user);
       premiumFeedback.success();
 
-      // Redirect admins to the admin panel
-      if (response.user.role === 'admin') {
+      // Check for redirect path
+      const params = new URLSearchParams(location.search);
+      const from = params.get('from');
+
+      if (from) {
+        toast.success(`Welcome back, ${response.user.name}`);
+        navigate(from, { replace: true });
+      } else if (response.user.role === 'admin') {
         toast.success('Welcome back, admin.');
         navigate('/admin', { replace: true });
       } else {
         toast.success('Signed in successfully.');
+        navigate('/dashboard', { replace: true });
       }
     } catch (error: any) {
       let message = 'Login failed';
@@ -95,7 +103,10 @@ const PremiumLogin = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-black selection:bg-indigo-500/30">
-      
+      <SEO 
+        title="Sign In | Biz Plus Intelligence"
+        description="Access your Biz Plus dashboard to manage your business health, scan bills, and view real-time intelligence reports."
+      />
       {/* Ambient Background */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-slate-950 to-indigo-950/30" />
@@ -127,7 +138,7 @@ const PremiumLogin = () => {
                   <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400">Secure Login</span>
                 </div>
                 <h2 className="text-3xl md:text-5xl font-black text-white mb-2 tracking-tight">Welcome <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#007AFF] to-[#AF52DE] italic">back.</span></h2>
-                <p className="text-white/40 text-sm font-medium tracking-wide">Sign in to your AERA account.</p>
+                <p className="text-white/40 text-sm font-medium tracking-wide">Sign in to your BIZ PLUS account.</p>
               </div>
 
               {error && (
@@ -150,7 +161,7 @@ const PremiumLogin = () => {
                     value={email}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                     icon={<Mail className="w-5 h-5 text-sky-400" />}
-                    placeholder="admin@bhie.cloud"
+                    placeholder="admin@bizplus.io"
                     className="bg-white/[0.01] border-white/10 focus:border-sky-500/40"
                   />
 

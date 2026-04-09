@@ -1,7 +1,7 @@
 # Premium Micro Interactions Reference
 
 ## Overview
-This documentation covers all premium Apple-level micro interactions implemented in the Finly app.
+This documentation covers all premium Apple-level micro interactions implemented in the BIZ PLUS app.
 
 ---
 

@@ -18,7 +18,7 @@ interface TranslationResponse {
   fallback?: any;
 }
 
-export const useBHIETranslation = () => {
+export const useBizPlusTranslation = () => {
   const [language, setLanguage] = useState<string>('en');
   const [isRTL, setIsRTL] = useState<boolean>(false);
   const [currencySymbol, setCurrencySymbol] = useState<string>('₹');
@@ -40,14 +40,14 @@ export const useBHIETranslation = () => {
         setLanguage(data.language.code);
         setIsRTL(data.isRTL || false);
         setCurrencySymbol(data.currencySymbol || '₹');
-        localStorage.setItem('bhie-language', data.language.code);
-        localStorage.setItem('bhie-rtl', String(data.isRTL || false));
-        localStorage.setItem('bhie-currency', data.currencySymbol || '₹');
+        localStorage.setItem('bizplus-language', data.language.code);
+        localStorage.setItem('bizplus-rtl', String(data.isRTL || false));
+        localStorage.setItem('bizplus-currency', data.currencySymbol || '₹');
       }
     } catch (error) {
       console.error('Language detection failed:', error);
       // Fallback to stored preference or English
-      const storedLang = localStorage.getItem('bhie-language') || 'en';
+      const storedLang = localStorage.getItem('bizplus-language') || 'en';
       setLanguage(storedLang);
     } finally {
       setLoading(false);
@@ -90,13 +90,13 @@ export const useBHIETranslation = () => {
 
   const changeLanguage = (langCode: string) => {
     setLanguage(langCode);
-    localStorage.setItem('bhie-language', langCode);
+    localStorage.setItem('bizplus-language', langCode);
     
     // Update RTL and currency
     const rtlLanguages = ['ar', 'he', 'fa', 'ur'];
     const newIsRTL = rtlLanguages.includes(langCode);
     setIsRTL(newIsRTL);
-    localStorage.setItem('bhie-rtl', String(newIsRTL));
+    localStorage.setItem('bizplus-rtl', String(newIsRTL));
 
     const currencyMap: Record<string, string> = {
       'en': '$',
@@ -121,7 +121,7 @@ export const useBHIETranslation = () => {
       'tr': '₺',
     };
     setCurrencySymbol(currencyMap[langCode] || '$');
-    localStorage.setItem('bhie-currency', currencyMap[langCode] || '$');
+    localStorage.setItem('bizplus-currency', currencyMap[langCode] || '$');
 
     // Update document direction
     document.documentElement.dir = newIsRTL ? 'rtl' : 'ltr';

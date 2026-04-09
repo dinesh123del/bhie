@@ -18,7 +18,7 @@ interface HealthData {
   lastUpdated: string;
 }
 
-export const BHIEPartnerWidget: React.FC<PartnerWidgetProps> = ({
+export const BizPlusPartnerWidget: React.FC<PartnerWidgetProps> = ({
   partnerId,
   apiKey,
   theme = 'auto',
@@ -179,7 +179,7 @@ export const BHIEPartnerWidget: React.FC<PartnerWidgetProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-2xl">🏥</span>
-            <span className="text-white font-semibold">BHIE Health Score</span>
+            <span className="text-white font-semibold">BIZ PLUS Health Score</span>
           </div>
           <span className="text-xs text-blue-100">
             Powered by AI
@@ -263,12 +263,12 @@ export const BHIEPartnerWidget: React.FC<PartnerWidgetProps> = ({
             Last updated: {new Date(health.lastUpdated).toLocaleTimeString()}
           </p>
           <a 
-            href="https://bhie.com" 
+            href="https://bizplus.io" 
             target="_blank" 
             rel="noopener noreferrer"
             className="text-xs text-blue-600 hover:underline mt-1 inline-block"
           >
-            Learn more about BHIE →
+            Learn more about BIZ PLUS →
           </a>
         </div>
       </div>
@@ -277,7 +277,7 @@ export const BHIEPartnerWidget: React.FC<PartnerWidgetProps> = ({
 };
 
 // Compact inline badge version
-export const BHIEHealthBadge: React.FC<{
+export const BizPlusHealthBadge: React.FC<{
   score: number;
   size?: 'sm' | 'md' | 'lg';
 }> = ({ score, size = 'md' }) => {

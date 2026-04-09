@@ -15,12 +15,12 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-const CACHE_KEY = 'bhie_ai_translations';
+const CACHE_KEY = 'bizplus_ai_translations';
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { t: i18nT } = useI18nTranslation();
   const [language, setLanguageState] = useState<Language>(
-    (localStorage.getItem('bhie_language') as Language) || 'en'
+    (localStorage.getItem('bizplus_language') as Language) || 'en'
   );
   const [aiTranslations, setAiTranslations] = useState<Record<string, Record<string, string>>>(
     JSON.parse(localStorage.getItem(CACHE_KEY) || '{}')
@@ -28,7 +28,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [isTranslating, setIsTranslating] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('bhie_language', language);
+    localStorage.setItem('bizplus_language', language);
     i18n.changeLanguage(language);
   }, [language]);
 

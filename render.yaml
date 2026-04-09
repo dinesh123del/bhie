@@ -1,19 +1,17 @@
 services:
   - type: web
-    name: bhie-api
+    name: biz-plus-api
     runtime: node
     rootDir: server
     branch: main
     autoDeployTrigger: commit
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --legacy-peer-deps && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: MONGO_URI
-        fromDatabase:
-          name: bhie-db
-          property: connectionString
+        sync: false
       - key: JWT_SECRET
         sync: false
       - key: CLIENT_URL
@@ -25,17 +23,12 @@ services:
       - key: MAX_UPLOAD_FILE_SIZE_MB
         value: 10
       - key: RAZORPAY_KEY_ID
-        value: rzp_live_SYwkStp5U2NhjF
+        sync: false
       - key: RAZORPAY_KEY_SECRET
         sync: false
       - key: OPENAI_API_KEY
         sync: false
     healthCheckPath: /api/health
-
-databases:
-  - name: bhie-db
-    plan: free
-    ipAllowList: []
 
 envVarGroups:
   - name: production

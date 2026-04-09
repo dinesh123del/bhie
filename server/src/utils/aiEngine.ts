@@ -39,13 +39,20 @@ export class AIEngine {
     }
 
     const errors: string[] = [];
+    console.log(`🤖 AIEngine: Attempting completion with providers: ${providers.join(', ')}`);
 
     for (const provider of providers) {
       try {
+        console.log(`📡 AIEngine: Calling ${provider}...`);
         const result = await this.callProvider(provider, prompt);
-        if (result.success) return result;
+        if (result.success) {
+          console.log(`✅ AIEngine: ${provider} success!`);
+          return result;
+        }
+        console.warn(`⚠️ AIEngine: ${provider} failed: ${result.error}`);
         errors.push(`${provider}: ${result.error}`);
       } catch (err: any) {
+        console.error(`❌ AIEngine: ${provider} exception:`, err.message);
         errors.push(`${provider}: ${err.message}`);
       }
     }

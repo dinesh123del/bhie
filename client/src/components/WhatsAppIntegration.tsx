@@ -16,7 +16,7 @@ interface WhatsAppSettings {
 const PREVIEW_MESSAGES = [
   {
     time: '8:00 AM',
-    content: `📊 AERA Daily Summary - Apr 8, 2026
+    content: `📊 BIZ PLUS Daily Summary - Apr 8, 2026
 
 💰 Revenue: ₹45,000
 💸 Expenses: ₹23,400
@@ -28,7 +28,7 @@ Top expenses:
 • Operations: ₹4,400
 
 You're on a 🔥 12-day streak!
-View full report: aera.cloud/dashboard`,
+View full report: bizplus.io/dashboard`,
   },
   {
     time: '2:30 PM',
@@ -87,7 +87,7 @@ export default function WhatsAppIntegration() {
     // Simulate WhatsApp connection
     toast.success('Opening WhatsApp...');
     const message = encodeURIComponent(
-      'Hi AERA! I want to connect my business account to get daily summaries. My email: ' + 
+      'Hi BIZ PLUS! I want to connect my business account to get daily summaries. My email: ' + 
       (user?.email || '')
     );
     window.open(`https://wa.me/918045672200?text=${message}`, '_blank');
@@ -136,7 +136,7 @@ export default function WhatsAppIntegration() {
                   <span className="text-lg">🤖</span>
                 </div>
                 <div>
-                  <p className="text-white font-bold text-sm">AERA Bot</p>
+                  <p className="text-white font-bold text-sm">BIZ PLUS Bot</p>
                   <p className="text-green-200 text-xs">online</p>
                 </div>
               </div>

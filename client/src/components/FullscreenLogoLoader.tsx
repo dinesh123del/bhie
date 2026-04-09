@@ -10,8 +10,8 @@ const FullscreenLogoLoader = ({
   label = 'Preparing your workspace',
 }: FullscreenLogoLoaderProps) => {
   useEffect(() => {
-    // AERA Signature Sound - Unique 3-note harmony
-    const playAERASound = () => {
+    // BIZ PLUS Signature Sound - Unique 3-note harmony
+    const playBizPlusSound = () => {
       try {
         const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
 
@@ -110,7 +110,7 @@ const FullscreenLogoLoader = ({
       }
     };
 
-    playAERASound();
+    playBizPlusSound();
   }, []);
 
   return (

@@ -14,7 +14,7 @@ import { authService } from '@/services/authService';
 const loginExample = async () => {
   try {
     const response = await authService.login({
-      email: 'admin@bhie.com',
+      email: 'admin@bizplus.io',
       password: 'admin123'
     });
     

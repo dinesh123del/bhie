@@ -99,7 +99,7 @@ router.post(
     const razorpay = await getRazorpayClient();
     const config = PLAN_CONFIG[plan];
     const amount = (config as any).monthlyPrice;
-    const receipt = `finly_${plan}_${Date.now()}_${user.userId}`;
+    const receipt = `bhie_${plan}_${Date.now()}_${user.userId}`;
 
     const razorpayOrder = await razorpay.orders.create({
       amount: amount * 100, // Razorpay expects amount in paise
@@ -143,7 +143,7 @@ router.post(
     const planId = (RAZORPAY_PLAN_IDS as any)[plan];
 
     if (!planId || planId.startsWith('plan_placeholder')) {
-       throw new AppError(400, `Razorpay Recurring Plan for ${plan} is not configured.`);
+      throw new AppError(400, `Razorpay Recurring Plan for ${plan} is not configured.`);
     }
 
     // Create Razorpay Subscription
@@ -203,9 +203,9 @@ router.post(
       throw new AppError(400, 'Invalid payment signature');
     }
 
-    const payment = await Payment.findOne({ 
+    const payment = await Payment.findOne({
       razorpayOrderId: verificationId,
-      verifiedAt: { $exists: false } 
+      verifiedAt: { $exists: false }
     });
 
     if (!payment) {
@@ -272,7 +272,7 @@ router.post(
     if (event.event === 'subscription.charged') {
       const subscriptionId = event.payload.subscription.entity.id;
       const user = await User.findOne({ subscriptionId });
-      
+
       if (user) {
         // Extend plan by 30 days
         const newExpiry = new Date(user.planExpiry || Date.now());
@@ -280,28 +280,28 @@ router.post(
         user.planExpiry = newExpiry;
         user.isActive = true;
         await user.save();
-        
+
         // Record payment
         await Payment.create({
-           userId: user.id,
-           amount: event.payload.payment.entity.amount,
-           currency: 'INR',
-           razorpayOrderId: subscriptionId,
-           razorpayPaymentId: event.payload.payment.entity.id,
-           plan: user.plan,
-           status: 'paid',
-           verifiedAt: new Date()
+          userId: user.id,
+          amount: event.payload.payment.entity.amount,
+          currency: 'INR',
+          razorpayOrderId: subscriptionId,
+          razorpayPaymentId: event.payload.payment.entity.id,
+          plan: user.plan,
+          status: 'paid',
+          verifiedAt: new Date()
         });
       }
     }
 
     if (event.event === 'subscription.cancelled' || event.event === 'subscription.expired') {
-       const subscriptionId = event.payload.subscription.entity.id;
-       const user = await User.findOne({ subscriptionId });
-       if (user) {
-         user.subscriptionStatus = 'cancelled';
-         await user.save();
-       }
+      const subscriptionId = event.payload.subscription.entity.id;
+      const user = await User.findOne({ subscriptionId });
+      if (user) {
+        user.subscriptionStatus = 'cancelled';
+        await user.save();
+      }
     }
 
     res.json({ received: true });

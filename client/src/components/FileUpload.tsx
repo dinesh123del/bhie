@@ -96,7 +96,7 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
         type: 'milestone',
         title: totalScans === 1 ? 'First Receipt Scanned!' : `${totalScans} Receipts Scanned`,
         value: totalAmount > 0 ? `₹${totalAmount.toLocaleString()}` : `${response.items.length} items`,
-        subtitle: 'Tracked with AERA',
+        subtitle: 'Tracked with BIZ PLUS',
         date: new Date().toLocaleDateString('en-IN'),
       });
 
@@ -235,7 +235,7 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
             <div>
               <h3 className="text-3xl font-black tracking-tighter text-white md:text-4xl lg:text-5xl">Direct Intelligence Capture.</h3>
               <p className="max-w-xl text-base md:text-lg font-medium leading-relaxed text-ink-300">
-                Snap any document for instant processing. AERA extracts identity, fiscal data, and taxonomy automatically.
+                Snap any document for instant processing. BIZ PLUS extracts identity, fiscal data, and taxonomy automatically.
               </p>
             </div>
           </div>

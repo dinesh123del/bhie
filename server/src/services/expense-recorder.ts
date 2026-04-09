@@ -1,4 +1,4 @@
-import Record from '../models/Record';
+import Record from '../models/Record.js';
 
 interface ExpenseInput {
   text?: string;

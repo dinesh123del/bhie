@@ -1,4 +1,4 @@
-import Record from '../models/Record';
+import Record from '../models/Record.js';
 import Business from '../models/Business.js';
 
 interface SummaryResult {

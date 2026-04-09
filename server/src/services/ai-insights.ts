@@ -1,6 +1,6 @@
-import Record from '../models/Record';
+import Record from '../models/Record.js';
 import Business from '../models/Business.js';
-import { BusinessSummary } from './business-summary';
+import { BusinessSummary } from './business-summary.js';
 
 interface InsightResult {
   summary: string;

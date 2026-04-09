@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "BHIE",
-    "slug": "bhie-mobile",
+    "name": "Biz Plus",
+    "slug": "biz-plus-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,10 +14,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.bhie.mobile",
+      "bundleIdentifier": "com.biz-plus.mobile",
       "infoPlist": {
-        "NSCameraUsageDescription": "BHIE needs camera access to scan receipts.",
-        "NSUserNotificationsUsageDescription": "BHIE sends you business alerts and payment reminders."
+        "NSCameraUsageDescription": "Biz Plus needs camera access to scan receipts.",
+        "NSUserNotificationsUsageDescription": "Biz Plus sends you business alerts and payment reminders."
       },
       "entitlements": {
         "aps-environment": "production"
@@ -27,7 +27,7 @@
       }
     },
     "android": {
-      "package": "com.bhie.mobile",
+      "package": "com.biz-plus.mobile",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"

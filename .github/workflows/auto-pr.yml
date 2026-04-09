@@ -1,0 +1,44 @@
+name: Auto PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_branch:
+        description: Base branch for the pull request
+        required: true
+        default: dev
+      pr_title:
+        description: Pull request title
+        required: true
+        default: "chore: automated Biz Plus improvements"
+      pr_body:
+        description: Pull request description
+        required: true
+        default: |
+          ## Summary
+          - automated Biz Plus improvements
+          - code quality checks updated
+          - ready for review
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/ci-updates
+          base: ${{ inputs.base_branch }}
+          title: ${{ inputs.pr_title }}
+          body: ${{ inputs.pr_body }}
+          commit-message: "chore: automate Biz Plus updates"
+          delete-branch: true

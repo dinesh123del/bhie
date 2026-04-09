@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
-# BHIE startup helper
+# Biz Plus startup helper
 # Usage: ./start-services.sh [frontend|backend|ml|all]
 
 set -e
@@ -13,7 +13,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-declare -A PIDS
+typeset -A PIDS
 
 print_status() {
   echo -e "${GREEN}✓${NC} $1"
@@ -33,13 +33,13 @@ start_service() {
   local cmd=$3
 
   print_info "Starting $service on port $port..."
-  eval "$cmd" > "/tmp/bhie_${service}.log" 2>&1 &
+  eval "$cmd" > "/tmp/bizplus_${service}.log" 2>&1 &
   PIDS[$service]=$!
   sleep 2
 
   if kill -0 "${PIDS[$service]}" 2>/dev/null; then
     print_status "$service started (PID: ${PIDS[$service]})"
-    print_info "Logs: tail -f /tmp/bhie_${service}.log"
+    print_info "Logs: tail -f /tmp/bizplus_${service}.log"
   else
     print_error "$service failed to start"
     cat "/tmp/bhie_${service}.log"

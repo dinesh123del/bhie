@@ -42,7 +42,7 @@ export const workflowService = {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `AERA_Audit_${new Date().toISOString().split('T')[0]}.zip`);
+    link.setAttribute('download', `BIZ PLUS_Audit_${new Date().toISOString().split('T')[0]}.zip`);
     document.body.appendChild(link);
     link.click();
     link.parentNode?.removeChild(link);

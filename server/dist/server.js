@@ -12,6 +12,8 @@ import hpp from 'hpp';
 import mongoSanitize from 'express-mongo-sanitize';
 import path from 'path';
 import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import { connectDB, disconnectDB } from './config/db.js';
 import { env } from './config/env.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
@@ -26,7 +28,7 @@ const app = express();
 app.disable('x-powered-by');
 app.set('trust proxy', env.IS_PRODUCTION ? 1 : 0);
 // Global Middlewares
-// BANK-GRADE SECURITY: Strict Helmet Policy
+// Security headers via Helmet
 app.use(helmet({
     contentSecurityPolicy: env.IS_PRODUCTION ? {
         directives: {
@@ -64,6 +66,9 @@ const allowedOrigins = [
     "http://127.0.0.1:5001",
     "http://localhost:5173",
     "http://localhost:5174",
+    "https://bizplus.ai",
+    "https://app.bizplus.ai",
+    "https://www.bizplus.ai",
     "https://bhie-frontend.vercel.app",
     "https://client-phi-woad.vercel.app",
     "https://dinesh123del-bhie.vercel.app",
@@ -77,16 +82,16 @@ app.use(cors({
         if (allowedOrigins.includes(origin))
             return callback(null, true);
         // Allow any Vercel preview URL for this project
-        // Only allow known Vercel deployment patterns (tightened from wildcard)
-        if (origin.match(/^https:\/\/finly[\w-]*\.vercel\.app$/))
-            return callback(null, true);
         if (origin.match(/^https:\/\/bhie[\w-]*\.vercel\.app$/))
+            return callback(null, true);
+        if (origin.match(/^https:\/\/biz-plus[\w-]*\.vercel\.app$/))
             return callback(null, true);
         if (origin.match(/^https:\/\/client[\w-]*\.vercel\.app$/))
             return callback(null, true);
-        if (origin.match(/^https:\/\/dinesh123del-finly[\w-]*\.vercel\.app$/))
-            return callback(null, true);
         if (origin.match(/^https:\/\/dinesh123del-bhie[\w-]*\.vercel\.app$/))
+            return callback(null, true);
+        // Allow bizplus.ai subdomains
+        if (origin.match(/^https:\/\/[\w-]+\.bizplus\.ai$/))
             return callback(null, true);
         // Allow localtunnel URLs only in development
         if (!env.IS_PRODUCTION && origin.endsWith('.loca.lt'))
@@ -113,17 +118,17 @@ app.use('/webhook/whatsapp', whatsappRoutes);
 // NEW: WhatsApp Payment Webhook for Razorpay
 import whatsappPaymentWebhook from './routes/whatsapp-payment-webhook.js';
 app.use('/webhook/whatsapp-payment', whatsappPaymentWebhook);
-// TOP-LEVEL SECURITY: NoSQL Injection & Parameter Pollution Protection
+// Security middleware
 app.use(mongoSanitize()); // Prevent NoSQL injection
 app.use(hpp()); // Prevent HTTP Parameter Pollution
-// BANK-GRADE SECURITY: Anti-CSRF
-// app.use(csrfProtection); // Temporarily disabled to fix startup - custom XSRF-TOKEN cookie protection active
+// CSRF protection (temporarily disabled - custom XSRF-TOKEN cookie protection active)
+// app.use(csrfProtection);
 // CSRF Token Initializer for the Frontend (Cookie-based sync)
 app.use((req, res, next) => {
     // If the XSRF-TOKEN cookie is missing, set it (e.g. from a random source or session-bound)
     // Our custom middleware will check this cookie matches the X-XSRF-TOKEN header
     if (!req.cookies?.['XSRF-TOKEN']) {
-        // SECURITY: Use cryptographically secure random bytes (NOT Math.random)
+        // Use cryptographically secure random bytes
         const token = crypto.randomBytes(32).toString('hex');
         res.cookie('XSRF-TOKEN', token, {
             httpOnly: false, // Must be readable by the client to send back in header
@@ -136,7 +141,17 @@ app.use((req, res, next) => {
 });
 // --- Structured Routes ---
 // Handled by apiRouter under /api
-// Removed root text response so frontend serves on /
+// Root route - redirect to frontend in development, serve SPA in production
+app.get("/", (req, res) => {
+    if (env.IS_PRODUCTION) {
+        // In production, the frontend static files are served, so this won't be reached
+        res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+    }
+    else {
+        // In development, redirect to the frontend dev server
+        res.redirect(env.CLIENT_URL || 'http://localhost:5173');
+    }
+});
 app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
 });
@@ -166,8 +181,6 @@ app.use('/api/referrals', referralRoutes);
 import usageRoutes from './routes/usageRoutes.js';
 app.use('/api/usage', usageRoutes);
 // Serve Static Frontend (SPA Catch-all)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 if (env.IS_PRODUCTION) {
     const clientBuildPath = path.join(__dirname, '../../client/dist');
     app.use(express.static(clientBuildPath));
@@ -188,7 +201,7 @@ async function startServer() {
     const PORT = env.PORT || 5000;
     return new Promise((resolve, reject) => {
         server = app.listen(PORT, () => {
-            logger.info(`🚀 Finly Dashboard LIVE on PORT ${PORT}`);
+            logger.info(`🚀 Biz Plus Dashboard LIVE on PORT ${PORT}`);
             // Initialize Next-Level Intelligence Systems
             initializeIntelligenceSystems();
             resolve();
@@ -250,7 +263,7 @@ async function initializeIntelligenceSystems() {
 }
 async function init() {
     try {
-        logger.info('🏗️  Starting Finly Integration Engine...');
+        logger.info('🏗️  Starting Biz Plus Integration Engine...');
         // await ensureUploadDir(); // Temporarily stubbed to fix startup - uploads dir will be created on first upload
         logger.info('🔌 Connecting to infrastructure...');
         // Connect to MongoDB
@@ -268,10 +281,10 @@ async function init() {
         logger.info('⏰ Background cron engine initialized');
         // await createDefaultAdmin(); // Run manually if needed: utils/createDefaultAdmin.ts
         await startServer();
-        logger.info('🚀 Finly Engine initialised successfully');
+        logger.info('🚀 Biz Plus Engine initialised successfully');
     }
     catch (error) {
-        logger.error('❌ Fatal: Finly startup failed:', error);
+        logger.error('❌ Fatal: Biz Plus startup failed:', error);
         process.exit(1);
     }
 }
