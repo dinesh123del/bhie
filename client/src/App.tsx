@@ -9,6 +9,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { API } from './lib/axios';
 
 import AppleCinematicWelcome from './components/welcome/AppleCinematicWelcome';
+import GlobalVoiceAssistant from './components/voice/GlobalVoiceAssistant';
 
 // Layout Components
 import PremiumLayout from './components/PremiumLayout';
@@ -217,6 +218,9 @@ function MainApp() {
           </Routes>
         </PageTransition>
       </AnimatePresence>
+
+      {/* Global Voice Command Assistant */}
+      <GlobalVoiceAssistant />
     </PremiumBackground>
   );
 }

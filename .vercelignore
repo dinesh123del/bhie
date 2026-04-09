@@ -1,0 +1,11 @@
+server/
+mobile/
+antigravity/
+ml-service/
+db_data/
+.venv/
+node_modules/
+client/node_modules/
+client/android/
+client/ios/
+scripts/

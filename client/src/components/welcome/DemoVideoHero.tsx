@@ -75,7 +75,7 @@ const VideoScene = () => {
       <Environment preset="city" />
 
       {/* Post-Processing for 8k Film Look */}
-      <EffectComposer disableNormalPass>
+      <EffectComposer>
         <Bloom 
           intensity={1.5} 
           luminanceThreshold={0.9} 

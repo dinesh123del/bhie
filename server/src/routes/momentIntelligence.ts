@@ -110,7 +110,7 @@ router.post('/execute-action', async (req: any, res) => {
         }
         break;
 
-      case 'QUERY_BALANCE':
+      case 'QUERY_BALANCE': {
         const records = await Record.find({ businessId: effectiveBusinessId });
         const income = records.filter(r => r.type === 'income').reduce((acc, r) => acc + r.amount, 0);
         const expenses = records.filter(r => r.type === 'expense').reduce((acc, r) => acc + r.amount, 0);
@@ -121,6 +121,7 @@ router.post('/execute-action', async (req: any, res) => {
           message: `Current balance is ${income - expenses}`
         };
         break;
+      }
 
       case 'QUERY_INSIGHTS':
         actionResult = { 

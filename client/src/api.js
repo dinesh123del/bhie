@@ -1,3 +1,4 @@
+/* global window */
 import { ENV } from './config/env';
 export const API = ENV.API_URL;
 

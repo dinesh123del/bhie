@@ -30,11 +30,11 @@ export const BizPlusMomentum: React.FC = () => {
   const isActiveRef = useRef(false);
 
   const startSpeechRecognition = useCallback(() => {
-    // @ts-ignore
+    // @ts-expect-error: SpeechRecognition is not standard in all browsers
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
       if (recognitionRef.current) {
-        try { recognitionRef.current.stop(); } catch (e) {}
+        try { recognitionRef.current.stop(); } catch (e) { /* ignore */ }
       }
 
       const recognition = new SpeechRecognition();
@@ -130,7 +130,7 @@ export const BizPlusMomentum: React.FC = () => {
     if (recognitionRef.current) {
       try {
         recognitionRef.current.stop();
-      } catch (e) {}
+      } catch (e) { /* ignore */ }
     }
     
     setIsCapturing(false);
