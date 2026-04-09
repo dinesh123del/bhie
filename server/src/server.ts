@@ -143,7 +143,17 @@ app.use((req, res, next) => {
 // --- Structured Routes ---
 // Handled by apiRouter under /api
 
-// Removed root text response so frontend serves on /
+// Root route - redirect to frontend in development, serve SPA in production
+app.get("/", (req, res) => {
+  if (env.IS_PRODUCTION) {
+    // In production, the frontend static files are served, so this won't be reached
+    res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+  } else {
+    // In development, redirect to the frontend dev server
+    res.redirect(env.CLIENT_URL || 'http://localhost:5173');
+  }
+});
+
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });

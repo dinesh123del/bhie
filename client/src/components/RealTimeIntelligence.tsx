@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Activity, 
-  AlertTriangle, 
-  TrendingUp, 
-  BarChart3, 
+import {
+  Activity,
+  AlertTriangle,
+  TrendingUp,
+  BarChart3,
   Zap,
   Bell,
   Eye,
@@ -62,7 +62,7 @@ interface RealTimeIntelligenceProps {
 export function RealTimeIntelligence({ businessId, className }: RealTimeIntelligenceProps) {
   const { user } = useAuth();
   const { toast } = useToast();
-  
+
   const [metrics, setMetrics] = useState<BusinessMetrics | null>(null);
   const [alerts, setAlerts] = useState<RealTimeAlert[]>([]);
   const [events, setEvents] = useState<RealTimeEvent[]>([]);
@@ -76,7 +76,7 @@ export function RealTimeIntelligence({ businessId, className }: RealTimeIntellig
 
     try {
       setIsLoading(true);
-      
+
       const [metricsRes, alertsRes, eventsRes] = await Promise.all([
         fetch(`/api/realtime/metrics${businessId ? `/${businessId}` : ''}`, {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -121,7 +121,7 @@ export function RealTimeIntelligence({ businessId, className }: RealTimeIntellig
   useEffect(() => {
     if (!user) return;
 
-    const wsUrl = process.env.NODE_ENV === 'production' 
+    const wsUrl = import.meta.env.PROD
       ? `wss://${window.location.host}/socket.io/`
       : `ws://localhost:5000/socket.io/`;
 
@@ -261,7 +261,7 @@ export function RealTimeIntelligence({ businessId, className }: RealTimeIntellig
                   </p>
                 </div>
               </div>
-              
+
               <div className="mt-4 pt-4 border-t">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   <div className="text-center">
@@ -321,7 +321,7 @@ export function RealTimeIntelligence({ businessId, className }: RealTimeIntellig
                           <div>
                             <p className="font-medium">{alert.data.message}</p>
                             <p className="text-sm text-gray-600 mt-1">
-                              {alert.data.metric}: {formatCurrency(alert.data.value)} 
+                              {alert.data.metric}: {formatCurrency(alert.data.value)}
                               (Threshold: {formatCurrency(alert.data.threshold)})
                             </p>
                           </div>
@@ -373,7 +373,7 @@ export function RealTimeIntelligence({ businessId, className }: RealTimeIntellig
                       <div>
                         <p className="text-sm font-medium capitalize">{event.type}</p>
                         <p className="text-xs text-gray-600">
-                          {typeof event.data === 'object' 
+                          {typeof event.data === 'object'
                             ? JSON.stringify(event.data).substring(0, 50) + '...'
                             : String(event.data).substring(0, 50)
                           }

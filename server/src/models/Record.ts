@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { string } from 'zod';
 
 export interface RecordDocument extends mongoose.Document {
   userId: mongoose.Types.ObjectId;

@@ -1,5 +1,5 @@
 // Partner API features disabled - Partner model not yet implemented
-// TODO: Implement Partner model and enable these features
+// Future: Implement Partner model and enable these features for third-party integrations
 
 /*
 import { Request, Response, NextFunction } from 'express';

@@ -8,7 +8,7 @@ export const getUsageStats = async (req: Request, res: Response) => {
     const { organizationId } = req.query;
 
     const stats = await usageBillingService.getUsageStats(
-      userId, 
+      userId,
       organizationId as string | undefined
     );
 
@@ -34,7 +34,7 @@ export const getUsageHistory = async (req: Request, res: Response) => {
     // This would require a more detailed query to UsageCredit model
     // For now, return basic stats
     const stats = await usageBillingService.getUsageStats(userId);
-    
+
     res.json({
       success: true,
       data: {
@@ -56,7 +56,7 @@ export const getUsageHistory = async (req: Request, res: Response) => {
 export const getBillingSummary = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.userId;
-    
+
     // Get current month
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -98,8 +98,9 @@ export const purchaseCredits = async (req: Request, res: Response) => {
     const { OVERAGE_PRICING } = await import('../services/usageBillingService.js');
     const cost = amount * OVERAGE_PRICING[type];
 
-    // TODO: Integrate with payment provider (Stripe/Razorpay)
-    // For now, just add the credits
+    // Payment integration placeholder: Integrate with payment provider (Stripe/Razorpay)
+    // For now, credits are added directly for testing purposes
+    // TODO: Add actual payment flow with payment gateway integration
 
     const added = await usageBillingService.addCredits(
       userId,
