@@ -1,3 +1,4 @@
+"use client"
 import { motion } from 'framer-motion';
 import { Shield, Lock, FileText, Scale } from 'lucide-react';
 import MarketingLayout from '../components/marketing/MarketingLayout';

@@ -1,65 +1,40 @@
-# BHIE Production Deployment - FREE Global Platforms
-Status: 🚀 Ready to Deploy | Plan Approved (Vercel Frontend + Render Backend + MongoDB Atlas)
+# BHIE Production Readiness - Error Fix & Optimization
+Status: 🔄 In Progress
 
-## ✅ Phase 0: Repo Prep (Current git status: ahead 1, changes pending)
-- [x] Plan confirmed
-- [ ] `git add . && git commit -m "Pre-production fixes" && git push origin main`
+## Phase 1: Fix TypeScript Errors (18 found)
+- [ ] Update client/package.json @types/axios to ^1.7.0
+- [ ] Fix capacitor.config.ts types
+- [ ] Fix recharts formatter types in ActivityChart.tsx, ExpensePieChart.tsx
+- [ ] Update lib/axios.ts typing & interceptors
+- [ ] Replace axios.isAxiosError in auth pages (Login, OtpLogin, etc.)
+- [ ] Fix AxiosProgressEvent, errorUtils.ts
+- [ ] npm install client, npm run typecheck (confirm 0 errors)
 
-## 🔧 Phase 1: Secrets Setup (User Required)
-1. **MongoDB Atlas M0 Free Cluster**:
-   - Create at mongodb.com/atlas (free tier)
-   - Network Access: 0.0.0.0/0
-   - DB User: appuser | Password: generate strong
-   - MONGO_URI: `mongodb+srv://appuser:[pass]@cluster0.xxxxx.mongodb.net/bhie?retryWrites=true&w=majority`
+## Phase 2: Backend Fixes
+- [ ] Remove duplicate /api/subscriptions in server/src/app.ts
+- [ ] Check/fix .js imports to .ts
+- [ ] server/tsconfig.json strict: true
+- [ ] npm run typecheck server
 
-2. **Generate Secrets**:
-   ```
-   JWT_SECRET=$(openssl rand -base64 48)
-   OPENAI_API_KEY= (if have)
-   STRIPE_SECRET_KEY= (if payments)
-   ```
+## Phase 3: Frontend Hybrid Cleanup
+- [ ] Remove Vite files (vite-env.d.ts, src/main.tsx?, vite.config.ts if exists)
+- [ ] Migrate remaining src/pages to app/ router
+- [ ] Update layout.tsx imports if needed
 
-3. **Redis (Optional for queues)**: Upstash.com free - REDIS_URL
+## Phase 4: Test & Build
+- [ ] npm run ci (full lint/test/build)
+- [ ] cd client && npm run build
+- [ ] cd server && npm run build
 
-## 🛠️ Phase 2: Config Fixes (Automated)
-- [ ] Fix vercel.json for Next.js
-- [ ] Test local build: `cd client && npm run build`
+## Phase 5: Runtime Validation
+- [ ] npm run dev (both servers)
+- [ ] Test /api/health, frontend loads
+- [ ] E2E smoke tests
 
-## 🌐 Phase 3: Deploy Frontend (Vercel - Free CDN/Global)
-1. vercel.com > New Project > Import GitHub repo
-2. Framework: Next.js
-3. Root: `/client`
-4. Env: `VITE_API_URL=https://[render-url-to-be-added]`
-5. Deploy
+## Phase 6: Productionize
+- [ ] Remove console.logs
+- [ ] Global error handling
+- [ ] Optimize imports/performance
 
-## ⚙️ Phase 4: Deploy Backend (Render - Free Persistent)
-1. render.com > New Web Service > GitHub repo
-2. Use render.yaml (auto-detects)
-3. Env Vars (Dashboard):
-   | Key | Value |
-   |-----|-------|
-   | NODE_ENV | production |
-   | MONGO_URI | [atlas-uri] |
-   | JWT_SECRET | [jwt] |
-   | CLIENT_URL | [vercel-frontend-url] |
-   | SEED_DEFAULT_ADMIN | false |
-4. Disk: uploads (persistent)
-5. Deploy → Get API_URL
+Next Step: Phase 1 TypeScript fixes
 
-## 🔗 Phase 5: Connect & Test
-1. Update Vercel VITE_API_URL = Render API_URL
-2. Redeploy Vercel
-3. Test:
-   - Frontend: Visit URL, no console errors
-   - Register/Login
-   - Upload file → API works
-   - `/api/health` → 200 OK
-
-## 🎉 Phase 6: Bonus (Optional)
-- [ ] Custom domain
-- [ ] HTTPS auto
-- [ ] Redis Upstash
-
-**Next Manual Step**: Create MongoDB Atlas → paste MONGO_URI here → run `git push` → share GitHub URL for deploys.
-
-**Auto Progress**: Will fix vercel.json, commit, test local.

@@ -1,3 +1,4 @@
+"use client"
 import { motion } from 'framer-motion';
 import { Shield, Eye, Lock, Database, UserCheck, Bell } from 'lucide-react';
 import MarketingLayout from '../components/marketing/MarketingLayout';
