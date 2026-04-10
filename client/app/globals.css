@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --glass: 0 0% 98%;
+    --glass-foreground: 240 5.3% 6%;
+    /* Add more CSS vars for design system */
+  }
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+  }
+}
+
+/* Premium glassmorphism */
+.glass {
+  background: hsl(var(--glass));
+  backdrop-filter: blur(20px);
+  border: 1px solid hsl(var(--border));
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

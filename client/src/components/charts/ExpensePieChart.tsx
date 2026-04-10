@@ -39,14 +39,14 @@ const ExpensePieChart: React.FC<ExpensePieChartProps> = ({ data, loading = false
             outerRadius={90}
             dataKey="value"
             stroke="rgba(0,0,0,0)"
-            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+            label={({ name, percent }: { name: string; percent: number }) => `${name} ${(percent * 100).toFixed(0)}%`}
             labelLine={false}
           >
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
             ))}
           </Pie>
-          <Tooltip 
+          <Tooltip
             contentStyle={{
               background: 'rgba(28, 28, 30, 0.95)',
               border: '1px solid rgba(255, 255, 255, 0.1)',

@@ -56,7 +56,7 @@ export const imageIntelligenceService = {
     const formData = new FormData();
     optimizedFiles.forEach((file) => formData.append('images', file, file.name));
 
-    const response = await api.post<UploadResponse>('/upload/images', formData, {
+    const response = await api.post('/upload/images', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
 
@@ -64,7 +64,7 @@ export const imageIntelligenceService = {
   },
 
   async listImages(params: ListParams = {}): Promise<ListResponse> {
-    const response = await api.get<ListResponse>('/upload/images', {
+    const response = await api.get('/upload/images', {
       params,
     });
 
@@ -72,7 +72,7 @@ export const imageIntelligenceService = {
   },
 
   async getImage(id: string): Promise<ImageIntelligenceRecord> {
-    const response = await api.get<ImageIntelligenceRecord>(`/upload/images/${id}`);
+    const response = await api.get(`/upload/images/${id}`);
     return response.data;
   },
 
@@ -82,7 +82,7 @@ export const imageIntelligenceService = {
   },
 
   async search(params: SearchParams): Promise<SearchResponse> {
-    const response = await api.get<SearchResponse>('/search', {
+    const response = await api.get('/search', {
       params,
     });
     return response.data;
@@ -94,7 +94,7 @@ export const imageIntelligenceService = {
     formData.append('image', optimized, optimized.name);
     formData.append('limit', String(limit));
 
-    const response = await api.post<SimilarityResponse>('/upload/images/similar', formData, {
+    const response = await api.post('/upload/images/similar', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
 

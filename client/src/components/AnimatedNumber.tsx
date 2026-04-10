@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState } from 'react';
 import { useMotionValue, useSpring } from 'framer-motion';
 import { formatCurrency } from '../utils/dashboardIntelligence';

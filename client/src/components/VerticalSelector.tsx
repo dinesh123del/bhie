@@ -1,3 +1,4 @@
+"use client"
 import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Building2, Utensils, Laptop, ShoppingCart, Store, ArrowRight, type LucideIcon } from 'lucide-react';

@@ -46,7 +46,7 @@ export const useAIAnalysis = (): UseAIAnalysisReturn => {
     setState({ data: null, loading: true, error: null });
 
     try {
-      const response = await api.post<AnalysisResult>('/ai/analyze', {
+      const response = await api.post('/ai/analyze', {
         businessData,
       });
 

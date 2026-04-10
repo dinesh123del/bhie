@@ -1,6 +1,7 @@
 import { Request } from 'express';
 
 export type UserRole = 'admin' | 'user' | 'ca';
+export type SubscriptionTier = 'free' | 'pro' | 'business';
 
 export interface AuthenticatedUser {
   userId: string;

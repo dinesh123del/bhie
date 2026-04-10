@@ -17,8 +17,8 @@ const GOOGLE_CLIENT_ID = ENV.GOOGLE_CLIENT_ID;
 import * as Sentry from '@sentry/react';
 
 // Initialize Sentry for global error/exception tracking
-const isSentryEnabled = ENV.SENTRY_DSN && 
-  !ENV.SENTRY_DSN.includes('your-sentry-dsn') && 
+const isSentryEnabled = ENV.SENTRY_DSN &&
+  !ENV.SENTRY_DSN.includes('your-sentry-dsn') &&
   ENV.SENTRY_DSN.startsWith('https://');
 
 if (isSentryEnabled) {
@@ -229,7 +229,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <GlobalErrorBoundary>
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <BrowserRouter>
           <React.Suspense fallback={<div className="bg-black min-h-screen" />}>
             <App />
           </React.Suspense>

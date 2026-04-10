@@ -42,12 +42,20 @@ const sizeMap: Record<LogoSize, {
   },
 };
 
-import { BizPlusIcon } from './welcome/BizPlusLogo';
-
-const LogoGraphic = ({ size, glow }: { size: LogoSize; glow?: boolean }) => {
-  const pixelSize = size === 'sm' ? 32 : size === 'md' ? 40 : 52;
+const LogoGraphic = ({ size }: { size: LogoSize; glow?: boolean }) => {
+  const pxSize = size === 'sm' ? 32 : size === 'md' ? 40 : 52;
   return (
-    <BizPlusIcon size={pixelSize} animated glowing={glow} />
+    <img
+      src="/logo-mark.png"
+      alt="Biz Plus"
+      width={pxSize}
+      height={pxSize}
+      style={{
+        objectFit: 'contain',
+        filter: 'drop-shadow(0 0 10px rgba(129,140,248,0.55))',
+        flexShrink: 0,
+      }}
+    />
   );
 };
 

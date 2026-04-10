@@ -12,20 +12,23 @@ import AppleCinematicWelcome from './components/welcome/AppleCinematicWelcome';
 import GlobalVoiceAssistant from './components/voice/GlobalVoiceAssistant';
 
 // Layout Components
-import PremiumLayout from './components/PremiumLayout';
+import PremiumLayout from './components/ui/PremiumLayout';
 import LoadingScreen from './components/LoadingScreen';
 import { UpgradeModal } from './components/UpgradeModal';
 import NetworkStatus from './components/NetworkStatus';
 import { PageTransition } from './components/ui/MicroInteractions';
 import { OnboardingStep } from './components/ui/BizPlusEliteUI';
 import { PremiumBackground } from './components/ui/PremiumBackground';
-import { BizPlusMomentum } from './components/BizPlusMomentum';
 
-// Direct Page Imports (no lazy loading)
-import LoginPage from './pages/Login';
-import BizPlusRegisterPage from './pages/BizPlusRegister';
+// Auth Pages - Redesigned
+import { LoginPage, RegisterPage as BizPlusRegisterPage } from './pages/Auth';
+
+// Core Pages - Redesigned
+import Dashboard from './pages/DashboardNew';
+import { AnalyticsPage, RecordsPage } from './pages/AnalyticsAndRecords';
+
+// Original Pages (kept for compatibility)
 import LandingPage from './pages/Landing';
-import Dashboard from './pages/Dashboard';
 import Analytics from './pages/Analytics';
 import BizPlusRecords from './pages/BizPlusRecords';
 
@@ -59,44 +62,7 @@ const BusinessBrain = () => <div className="p-8 text-white">Business Brain - Com
 const BizPlusResellerPartner = () => <div className="p-8 text-white">BizPlusReseller Partner - Coming Soon</div>;
 const Workflows = () => <div className="p-8 text-white">Workflows - Coming Soon</div>;
 
-// ── Mute preference key ──────────────────────────────────────
-const MUTE_KEY = 'bizplus_sound_muted';
 
-// Legacy key migration
-if (localStorage.getItem('bizpulse_sound_muted')) {
-  localStorage.setItem('bizplus_sound_muted', localStorage.getItem('bizpulse_sound_muted')!);
-  localStorage.removeItem('bizpulse_sound_muted');
-}
-
-function getMutePreference(): boolean {
-  try { return localStorage.getItem(MUTE_KEY) === 'true'; } catch { return false; }
-}
-
-// Error boundary for auth-related errors
-class AuthErrorBoundary extends React.Component<
-  { children: React.ReactNode; fallback: React.ReactNode },
-  { hasError: boolean }
-> {
-  constructor(props: { children: React.ReactNode; fallback: React.ReactNode }) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error: Error) {
-    console.error('[AuthErrorBoundary] Auth context error:', error);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return this.props.fallback;
-    }
-    return this.props.children;
-  }
-}
 
 const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
   const { user, loading } = useAuth();
@@ -156,7 +122,6 @@ function MainApp() {
           />
         )}
       </AnimatePresence>
-      <BizPlusMomentum />
 
       <AnimatePresence mode="wait">
         <PageTransition key={location.pathname}>
@@ -177,7 +142,7 @@ function MainApp() {
 
             {/* Core Dashboard Experience */}
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+            <Route path="/analytics" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
             <Route path="/analysis-report" element={<ProtectedRoute><AnalysisBizPlusReport /></ProtectedRoute>} />
             <Route path="/system-health" element={<ProtectedRoute><SystemHealth /></ProtectedRoute>} />
             <Route path="/scan-bill" element={<ProtectedRoute><ScanBill /></ProtectedRoute>} />
@@ -186,7 +151,7 @@ function MainApp() {
             <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
 
             {/* Support Modules */}
-            <Route path="/records" element={<ProtectedRoute><BizPlusRecords /></ProtectedRoute>} />
+            <Route path="/records" element={<ProtectedRoute><RecordsPage /></ProtectedRoute>} />
             <Route path="/payments" element={<ProtectedRoute><Payments /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/reports" element={<ProtectedRoute><BizPlusReports /></ProtectedRoute>} />

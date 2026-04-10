@@ -32,27 +32,27 @@ export interface RecordsFilter {
 
 export const recordsService = {
   getRecords: async (filters?: RecordsFilter) => {
-    const response = await api.get<Record[]>('/records', { params: filters });
+    const response = await api.get('/records', { params: filters });
     return response.data;
   },
 
   getRecord: async (id: string) => {
-    const response = await api.get<Record>(`/records/${id}`);
+    const response = await api.get(`/records/${id}`);
     return response.data;
   },
 
   getDashboard: async () => {
-    const response = await api.get<DashboardData>('/dashboard');
+    const response = await api.get('/dashboard');
     return response.data;
   },
 
   createRecord: async (data: Omit<Record, 'id' | 'userId' | 'createdAt' | 'updatedAt'>) => {
-    const response = await api.post<Record>('/records', data);
+    const response = await api.post('/records', data);
     return response.data;
   },
 
   updateRecord: async (id: string, data: Partial<Record>) => {
-    const response = await api.put<Record>(`/records/${id}`, data);
+    const response = await api.put(`/records/${id}`, data);
     return response.data;
   },
 

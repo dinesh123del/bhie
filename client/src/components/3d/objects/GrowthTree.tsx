@@ -1,3 +1,4 @@
+"use client"
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Line, Text } from '@react-three/drei';

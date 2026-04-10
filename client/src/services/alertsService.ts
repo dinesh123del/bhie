@@ -17,7 +17,7 @@ export interface AlertsResponse {
 }
 
 export const alertsAPI = {
-  getAlerts: () => api.get<AlertsResponse>('/alerts'),
+  getAlerts: () => api.get('/alerts'),
 
   markRead: (id: string) => api.post(`/alerts/mark-read/${id}`),
 

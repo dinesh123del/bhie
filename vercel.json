@@ -1,11 +1,4 @@
 {
-  "buildCommand": "npm run build:client",
-  "outputDirectory": "client/dist",
-  "framework": "vite",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+  "framework": "nextjs",
+  "rootDirectory": "client"
 }

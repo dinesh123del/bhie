@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -57,6 +58,10 @@ export function AICompanion() {
   });
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const addMessage = useCallback((message: Message) => {
+    setMessages(prev => [...prev, message]);
+  }, []);
+
   // Welcome message on first open
   useEffect(() => {
     if (isOpen && messages.length === 0) {
@@ -93,16 +98,14 @@ export function AICompanion() {
         }, index * 800);
       });
     }
-  }, [isOpen]);
+  }, [isOpen, messages.length, addMessage]);
 
   // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const addMessage = (message: Message) => {
-    setMessages(prev => [...prev, message]);
-  };
+
 
   const generateResponse = useCallback((userMessage: string): { content: string; mood: 'excited' | 'concerned' | 'encouraging' | 'celebratory' | 'calm'; actions?: string[] } => {
     const lowerMsg = userMessage.toLowerCase();

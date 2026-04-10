@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Play, BarChart2, BrainCircuit, FileText, Zap, CheckCircle } from 'lucide-react';

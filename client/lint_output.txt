@@ -1,0 +1,473 @@
+
+> biz-plus-client@0.0.0 lint
+> eslint src --ext ts,tsx --report-unused-disable-directives
+
+
+/Users/srilekha/Desktop/BHIE/client/src/App.tsx
+  71:10  warning  'getMutePreference' is defined but never used  @typescript-eslint/no-unused-vars
+  76:7   warning  'AuthErrorBoundary' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/3d/Dashboard3D.tsx
+  129:69  warning  'expenses' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  129:88  warning  'profit' is assigned a value but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/3d/PageTransition3D.tsx
+  207:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/srilekha/Desktop/BHIE/client/src/components/3d/hooks/usePerformanceCheck.ts
+  63:10  warning  'lastTime' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  63:20  warning  'setLastTime' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/3d/materials/GlassMaterial.tsx
+  5:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/srilekha/Desktop/BHIE/client/src/components/3d/materials/GlowMaterial.tsx
+   5:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+   7:3   warning  'intensity' is assigned a value but never used. Allowed unused args must match /^_/u                                            @typescript-eslint/no-unused-vars
+  75:3   warning  'intensity' is assigned a value but never used. Allowed unused args must match /^_/u                                            @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/3d/materials/GradientMaterial.tsx
+  42:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/srilekha/Desktop/BHIE/client/src/components/3d/objects/FloatingBusinessCards.tsx
+  3:16  warning  'Html' is defined but never used       @typescript-eslint/no-unused-vars
+  6:10  warning  'GlassCard' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/3d/objects/GrowthTree.tsx
+  78:3  warning  'index' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  86:9  warning  'points' is assigned a value but never used                              @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/3d/objects/LoadingCube.tsx
+   48:9   warning  'particles' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  148:15  warning  'direction' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  149:15  warning  'distance' is assigned a value but never used   @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/3d/objects/ParticleField.tsx
+  125:50  warning  'i' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/3d/objects/RevenueFlow.tsx
+   3:22  warning  'Trail' is defined but never used                    @typescript-eslint/no-unused-vars
+  23:9   warning  'scrollProgress' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/3d/scenes/DashboardScene3D.tsx
+   2:28  warning  'extend' is defined but never used                                       @typescript-eslint/no-unused-vars
+   3:36  warning  'Stars' is defined but never used                                        @typescript-eslint/no-unused-vars
+  24:3   warning  'value' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  25:3   warning  'label' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/AICompanion.tsx
+   9:3   warning  'AlertTriangle' is defined but never used                                                                           @typescript-eslint/no-unused-vars
+  16:3   warning  'Target' is defined but never used                                                                                  @typescript-eslint/no-unused-vars
+  17:3   warning  'Crown' is defined but never used                                                                                   @typescript-eslint/no-unused-vars
+  43:11  warning  'user' is assigned a value but never used                                                                           @typescript-eslint/no-unused-vars
+  48:24  warning  'setShowGreeting' is assigned a value but never used                                                                @typescript-eslint/no-unused-vars
+  49:10  warning  'companionState' is assigned a value but never used                                                                 @typescript-eslint/no-unused-vars
+  75:9   warning  'icon' is assigned a value but never used                                                                           @typescript-eslint/no-unused-vars
+  96:6   warning  React Hook useEffect has a missing dependency: 'messages.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/srilekha/Desktop/BHIE/client/src/components/AchievementSystem.tsx
+   5:3   warning  'Target' is defined but never used            @typescript-eslint/no-unused-vars
+  17:3   warning  'Medal' is defined but never used             @typescript-eslint/no-unused-vars
+  18:3   warning  'Award' is defined but never used             @typescript-eslint/no-unused-vars
+  37:11  warning  'AchievementState' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/AdvancedOptimization.tsx
+  10:3   warning  'Shield' is defined but never used                                            @typescript-eslint/no-unused-vars
+  14:3   warning  'AlertCircle' is defined but never used                                       @typescript-eslint/no-unused-vars
+  49:40  warning  'businessId' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/AutonomousAgents.tsx
+   2:18  warning  'AnimatePresence' is defined but never used   @typescript-eslint/no-unused-vars
+   7:3   warning  'AlertTriangle' is defined but never used     @typescript-eslint/no-unused-vars
+   8:3   warning  'Zap' is defined but never used               @typescript-eslint/no-unused-vars
+  10:3   warning  'Pause' is defined but never used             @typescript-eslint/no-unused-vars
+  23:10  warning  'Alert' is defined but never used             @typescript-eslint/no-unused-vars
+  23:17  warning  'AlertDescription' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/BizPlusMomentum.tsx
+    3:18  warning  'Eye' is defined but never used            @typescript-eslint/no-unused-vars
+    3:43  warning  'Info' is defined but never used           @typescript-eslint/no-unused-vars
+    3:49  warning  'Settings' is defined but never used       @typescript-eslint/no-unused-vars
+    3:71  warning  'Play' is defined but never used           @typescript-eslint/no-unused-vars
+    6:10  warning  'PremiumButton' is defined but never used  @typescript-eslint/no-unused-vars
+   37:55  warning  'e' is defined but never used              @typescript-eslint/no-unused-vars
+  133:16  warning  'e' is defined but never used              @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/BizPlusSavings.tsx
+  3:37  warning  'TrendingUp' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/BusinessInsights.tsx
+   5:3  warning  'TrendingDown' is defined but never used  @typescript-eslint/no-unused-vars
+  10:3  warning  'BrainCircuit' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/ErrorBoundary.tsx
+  2:10  warning  'toast' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/FileUpload.tsx
+  123:6  warning  React Hook useCallback has a missing dependency: 'triggerCelebration'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/srilekha/Desktop/BHIE/client/src/components/FirstScanCelebration.tsx
+    1:31  warning  'useCallback' is defined but never used                                                                                         @typescript-eslint/no-unused-vars
+    3:20  warning  'Trophy' is defined but never used                                                                                              @typescript-eslint/no-unused-vars
+  295:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/srilekha/Desktop/BHIE/client/src/components/GamificationEngine.tsx
+  139:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/srilekha/Desktop/BHIE/client/src/components/InsightStory.tsx
+  360:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/srilekha/Desktop/BHIE/client/src/components/LanguageSwitcher.tsx
+  1:27  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+  4:41  warning  'Globe' is defined but never used      @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/Layout/MainLayout.tsx
+  5:3  warning  'LogOut' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/MarketPulse.tsx
+  2:10  warning  'motion' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/PartnerWidget.tsx
+  35:11  warning  'actualTheme' is assigned a value but never used                                                                                  @typescript-eslint/no-unused-vars
+  69:6   warning  React Hook useEffect has missing dependencies: 'fetchHealthData' and 'theme'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/srilekha/Desktop/BHIE/client/src/components/PremiumLayout.tsx
+  12:9  warning  'location' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/PublicDemo.tsx
+  3:26  warning  'X' is defined but never used           @typescript-eslint/no-unused-vars
+  3:52  warning  'ArrowRight' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/QuestEngine.tsx
+    5:3   warning  'Circle' is defined but never used        @typescript-eslint/no-unused-vars
+   18:23  warning  'PremiumBadge' is defined but never used  @typescript-eslint/no-unused-vars
+  113:16  warning  'e' is defined but never used             @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/QuickActionsBar.tsx
+  3:10  warning  'Scan' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/QuickAdd.tsx
+  3:19  warning  'IndianRupee' is defined but never used  @typescript-eslint/no-unused-vars
+  3:32  warning  'Calendar' is defined but never used     @typescript-eslint/no-unused-vars
+  3:42  warning  'Tag' is defined but never used          @typescript-eslint/no-unused-vars
+  3:47  warning  'FileText' is defined but never used     @typescript-eslint/no-unused-vars
+  6:25  warning  'PremiumCard' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/RealTimeIntelligence.tsx
+    6:3   warning  'TrendingUp' is defined but never used      @typescript-eslint/no-unused-vars
+    7:3   warning  'BarChart3' is defined but never used       @typescript-eslint/no-unused-vars
+    9:3   warning  'Bell' is defined but never used            @typescript-eslint/no-unused-vars
+   10:3   warning  'Eye' is defined but never used             @typescript-eslint/no-unused-vars
+  124:11  warning  'wsUrl' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/ReferralProgram.tsx
+  3:16  warning  'Share2' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/ReferralWidget.tsx
+  33:11  warning  'addXP' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/SafeRender.tsx
+  223:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                             react-refresh/only-export-components
+  258:6   warning  React Hook useEffect was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies                                                                       react-hooks/exhaustive-deps
+  258:6   warning  React Hook useEffect has a missing dependency: 'asyncFunction'. Either include it or remove the dependency array. If 'asyncFunction' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps
+
+/Users/srilekha/Desktop/BHIE/client/src/components/SimpleModeUI.tsx
+   3:26  warning  'EyeOff' is defined but never used                                                                                              @typescript-eslint/no-unused-vars
+   7:11  warning  'SimpleModeContextType' is defined but never used                                                                               @typescript-eslint/no-unused-vars
+  12:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/srilekha/Desktop/BHIE/client/src/components/SmartAlerts.tsx
+    6:3  warning  'TrendingUp' is defined but never used            @typescript-eslint/no-unused-vars
+  243:9  warning  'getTypeIcon' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/SocialShare.tsx
+    3:50  warning  'TrendingUp' is defined but never used                                                                                          @typescript-eslint/no-unused-vars
+    3:62  warning  'Target' is defined but never used                                                                                              @typescript-eslint/no-unused-vars
+    3:70  warning  'Award' is defined but never used                                                                                               @typescript-eslint/no-unused-vars
+   28:6   warning  React Hook useEffect has a missing dependency: 'generateBrandedImage'. Either include it or remove the dependency array         react-hooks/exhaustive-deps
+  261:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/srilekha/Desktop/BHIE/client/src/components/StrategicTopology.tsx
+  3:27  warning  'GitBranch' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/SummaryCard.tsx
+  4:10  warning  'PremiumCard' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/TestimonialsWall.tsx
+  3:62  warning  'Building2' is defined but never used  @typescript-eslint/no-unused-vars
+  3:73  warning  'User' is defined but never used       @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/ThemeToggle.tsx
+  1:8   warning  'React' is defined but never used            @typescript-eslint/no-unused-vars
+  2:10  warning  'motion' is defined but never used           @typescript-eslint/no-unused-vars
+  2:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+  3:10  warning  'Sun' is defined but never used              @typescript-eslint/no-unused-vars
+  3:15  warning  'Moon' is defined but never used             @typescript-eslint/no-unused-vars
+  4:10  warning  'useTheme' is defined but never used         @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/UpgradeModal.tsx
+   5:8   warning  'toast' is defined but never used                                       @typescript-eslint/no-unused-vars
+   6:8   warning  'api' is defined but never used                                         @typescript-eslint/no-unused-vars
+   8:8   warning  'paymentService' is defined but never used                              @typescript-eslint/no-unused-vars
+  38:24  warning  'setIsProcessing' is assigned a value but never used                    @typescript-eslint/no-unused-vars
+  40:11  warning  'user' is assigned a value but never used                               @typescript-eslint/no-unused-vars
+  40:17  warning  'refetchUser' is assigned a value but never used                        @typescript-eslint/no-unused-vars
+  52:26  warning  'plan' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/UsageDashboard.tsx
+  15:3  warning  'DollarSign' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/ViralWaitlist.tsx
+  2:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+  3:34  warning  'Clock' is defined but never used            @typescript-eslint/no-unused-vars
+  6:11  warning  'WaitlistUser' is defined but never used     @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/WatchDemoModal.tsx
+   3:59  warning  'CheckCircle' is defined but never used        @typescript-eslint/no-unused-vars
+  12:7   warning  'steps' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  43:7   warning  'features' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/WhatsAppIntegration.tsx
+   3:32  warning  'X' is defined but never used                   @typescript-eslint/no-unused-vars
+   3:58  warning  'TrendingUp' is defined but never used          @typescript-eslint/no-unused-vars
+   3:70  warning  'Smartphone' is defined but never used          @typescript-eslint/no-unused-vars
+  69:10  warning  'showSetup' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/analytics/InsightCard.tsx
+   4:3   warning  'ArrowUpRight' is defined but never used                                    @typescript-eslint/no-unused-vars
+   5:3   warning  'ArrowDownRight' is defined but never used                                  @typescript-eslint/no-unused-vars
+   7:3   warning  'Info' is defined but never used                                            @typescript-eslint/no-unused-vars
+  19:53  warning  'category' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/animations/DataVisualizationMotion.tsx
+   92:3  warning  'duration' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  325:3  warning  'duration' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  343:9  warning  'start' is assigned a value but never used                                           @typescript-eslint/no-unused-vars
+  344:9  warning  'end' is assigned a value but never used                                             @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/animations/HeroAnimation.tsx
+    1:25  warning  'useLayoutEffect' is defined but never used                                               @typescript-eslint/no-unused-vars
+    2:43  warning  'Variants' is defined but never used                                                      @typescript-eslint/no-unused-vars
+    3:10  warning  'gsap' is defined but never used                                                          @typescript-eslint/no-unused-vars
+    4:34  warning  'staggerContainer' is defined but never used                                              @typescript-eslint/no-unused-vars
+    4:52  warning  'staggerItem' is defined but never used                                                   @typescript-eslint/no-unused-vars
+  145:35  warning  'parallaxSpeed' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/animations/ParallaxSection.tsx
+    3:16  warning  'ScrollTrigger' is defined but never used                                                 @typescript-eslint/no-unused-vars
+  239:35  warning  'parallaxSpeed' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/animations/ScrollReveal.tsx
+  5:34  warning  'scrollRevealScale' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/auth/ProtectedComponents.tsx
+  152:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  174:16  warning  '_setData' is assigned a value but never used                                                                                   @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/image-intelligence/CameraCapture.tsx
+   3:10  warning  'Camera' is defined but never used                                                                                                 @typescript-eslint/no-unused-vars
+   3:39  warning  'Zap' is defined but never used                                                                                                    @typescript-eslint/no-unused-vars
+   3:44  warning  'Sparkles' is defined but never used                                                                                               @typescript-eslint/no-unused-vars
+  69:6   warning  React Hook useEffect has missing dependencies: 'startCamera' and 'stopCamera'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/srilekha/Desktop/BHIE/client/src/components/ui/AdminAnnouncement.tsx
+  17:16  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/ui/BizPlusEliteUI.tsx
+  2:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/ui/MicroEngines.tsx
+  2:45  warning  'useTransform' is defined but never used  @typescript-eslint/no-unused-vars
+  3:10  warning  'Activity' is defined but never used      @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/ui/Performance.tsx
+   77:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+   95:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  101:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/srilekha/Desktop/BHIE/client/src/components/ui/PremiumComponents.tsx
+  18:7  warning  'inertiaConfig' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/voice/GlobalVoiceAssistant.tsx
+  66:6  warning  React Hook useEffect has missing dependencies: 'processCommand' and 'transcript'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/srilekha/Desktop/BHIE/client/src/components/welcome/AppleCinematicWelcome.tsx
+  8:10  warning  'simPhase' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  8:20  warning  'setSimPhase' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/welcome/CinematicHero3D.tsx
+  16:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  51:13  warning  'e' is defined but never used                                                                                                   @typescript-eslint/no-unused-vars
+  96:13  warning  'e' is defined but never used                                                                                                   @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/components/welcome/CinematicShaderEngine.tsx
+  8:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/srilekha/Desktop/BHIE/client/src/contexts/LanguageContext.tsx
+   64:9   warning  'translateWithAI' is assigned a value but never used                                                                            @typescript-eslint/no-unused-vars
+  111:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/srilekha/Desktop/BHIE/client/src/contexts/ThemeContext.tsx
+   2:10  warning  'motion' is defined but never used                                                                                              @typescript-eslint/no-unused-vars
+   3:10  warning  'Sun' is defined but never used                                                                                                 @typescript-eslint/no-unused-vars
+   3:15  warning  'Moon' is defined but never used                                                                                                @typescript-eslint/no-unused-vars
+  48:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/srilekha/Desktop/BHIE/client/src/hooks/useAuth.tsx
+   30:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  152:6   warning  React Hook useEffect has a missing dependency: 'refetchUser'. Either include it or remove the dependency array                  react-hooks/exhaustive-deps
+
+/Users/srilekha/Desktop/BHIE/client/src/hooks/useParallax.ts
+  3:16  warning  'ScrollTrigger' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/hooks/useRecords.ts
+  26:6  warning  React Hook useEffect has a missing dependency: 'filters'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/srilekha/Desktop/BHIE/client/src/hooks/useReveal.ts
+  220:5  warning  'totalItems' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/hooks/useScrollAnimation.ts
+  187:11  warning  'childCount' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/lib/audioGenerator.ts
+  33:12  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/lib/autoCategorize.ts
+   76:7  warning  'contentIndicators' is assigned a value but never used                               @typescript-eslint/no-unused-vars
+  182:3  warning  'fileSize' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/lib/globalBenchmarking.ts
+  21:3  warning  'metricName' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/AIChat.tsx
+  40:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  66:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/About.tsx
+  2:22  warning  'Building2' is defined but never used    @typescript-eslint/no-unused-vars
+  2:33  warning  'Orbit' is defined but never used        @typescript-eslint/no-unused-vars
+  2:40  warning  'ShieldCheck' is defined but never used  @typescript-eslint/no-unused-vars
+  2:53  warning  'Sparkles' is defined but never used     @typescript-eslint/no-unused-vars
+  2:68  warning  'ZapOff' is defined but never used       @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/Admin.tsx
+   11:3   warning  'Filter' is defined but never used                                                                           @typescript-eslint/no-unused-vars
+   13:3   warning  'CheckCircle' is defined but never used                                                                      @typescript-eslint/no-unused-vars
+   14:3   warning  'XCircle' is defined but never used                                                                          @typescript-eslint/no-unused-vars
+   16:15  warning  'SettingsIcon' is defined but never used                                                                     @typescript-eslint/no-unused-vars
+   25:3   warning  'Mail' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+   57:24  warning  'setStatusFilter' is assigned a value but never used                                                         @typescript-eslint/no-unused-vars
+   58:23  warning  'setCurrentPage' is assigned a value but never used                                                          @typescript-eslint/no-unused-vars
+   59:10  warning  'totalPages' is assigned a value but never used                                                              @typescript-eslint/no-unused-vars
+   81:6   warning  React Hook useEffect has a missing dependency: 'loadData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  162:14  warning  'error' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+  184:14  warning  'error' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+  224:14  warning  'error' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+  235:14  warning  'error' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/Analytics.tsx
+   5:157  warning  'Legend' is defined but never used                                                                              @typescript-eslint/no-unused-vars
+   8:72   warning  'Activity' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+  10:10   warning  'PremiumCard' is defined but never used                                                                         @typescript-eslint/no-unused-vars
+  10:23   warning  'PremiumButton' is defined but never used                                                                       @typescript-eslint/no-unused-vars
+  10:38   warning  'KPICard' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+  34:6    warning  React Hook useEffect has a missing dependency: 'loadCompany'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/AnimationShowcase.tsx
+  12:3  warning  'ParallaxSection' is defined but never used   @typescript-eslint/no-unused-vars
+  13:3  warning  'ParallaxImage' is defined but never used     @typescript-eslint/no-unused-vars
+  19:3  warning  'tokens' is defined but never used            @typescript-eslint/no-unused-vars
+  20:3  warning  'staggerContainer' is defined but never used  @typescript-eslint/no-unused-vars
+  21:3  warning  'staggerItem' is defined but never used       @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/BizPlusRecords.tsx
+   6:3   warning  'Filter' is defined but never used         @typescript-eslint/no-unused-vars
+  11:3   warning  'Edit2' is defined but never used          @typescript-eslint/no-unused-vars
+  12:3   warning  'Trash2' is defined but never used         @typescript-eslint/no-unused-vars
+  13:3   warning  'Save' is defined but never used           @typescript-eslint/no-unused-vars
+  14:3   warning  'X' is defined but never used              @typescript-eslint/no-unused-vars
+  69:11  warning  'user' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/BusinessBrain.tsx
+   4:3   warning  'BrainCircuit' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+   5:3   warning  'ChevronRight' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+   5:22  warning  'Filter' is defined but never used                                                                                  @typescript-eslint/no-unused-vars
+   6:23  warning  'AlertCircle' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+  52:6   warning  React Hook useEffect has a missing dependency: 'initialMemories'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  62:14  warning  'err' is defined but never used                                                                                     @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/BusinessInsightsPage.tsx
+   9:3   warning  'ArrowRight' is defined but never used    @typescript-eslint/no-unused-vars
+  18:15  warning  'BusinessData' is defined but never used  @typescript-eslint/no-unused-vars
+  45:14  warning  'err' is defined but never used           @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/CAPortal.tsx
+   2:10  warning  'motion' is defined but never used            @typescript-eslint/no-unused-vars
+   7:3   warning  'MessageSquare' is defined but never used     @typescript-eslint/no-unused-vars
+  16:10  warning  'loading' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  45:14  warning  'err' is defined but never used               @typescript-eslint/no-unused-vars
+  57:14  warning  'err' is defined but never used               @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/Dashboard.tsx
+    2:18  warning  'useScroll' is defined but never used              @typescript-eslint/no-unused-vars
+    2:29  warning  'useSpring' is defined but never used              @typescript-eslint/no-unused-vars
+    9:3   warning  'Database' is defined but never used               @typescript-eslint/no-unused-vars
+   12:3   warning  'Brain' is defined but never used                  @typescript-eslint/no-unused-vars
+   17:3   warning  'RiHistoryLine' is defined but never used          @typescript-eslint/no-unused-vars
+   21:10  warning  'PremiumCard' is defined but never used            @typescript-eslint/no-unused-vars
+   33:8   warning  'QuickAdd' is defined but never used               @typescript-eslint/no-unused-vars
+   46:3   warning  'buildDailyStatus' is defined but never used       @typescript-eslint/no-unused-vars
+   55:8   warning  'ReferralWidget' is defined but never used         @typescript-eslint/no-unused-vars
+  198:10  warning  'isRefreshing' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/Home.tsx
+   4:3   warning  'User' is defined but never used   @typescript-eslint/no-unused-vars
+   8:3   warning  'Clock' is defined but never used  @typescript-eslint/no-unused-vars
+  37:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/ImageIntelligence.tsx
+  32:16  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/Landing.tsx
+   5:3   warning  'ArrowRight' is defined but never used        @typescript-eslint/no-unused-vars
+   7:3   warning  'Shield' is defined but never used            @typescript-eslint/no-unused-vars
+   8:3   warning  'TrendingUp' is defined but never used        @typescript-eslint/no-unused-vars
+   9:3   warning  'Play' is defined but never used              @typescript-eslint/no-unused-vars
+  12:11  warning  'StarIcon' is defined but never used          @typescript-eslint/no-unused-vars
+  13:3   warning  'Sparkles' is defined but never used          @typescript-eslint/no-unused-vars
+  14:3   warning  'Camera' is defined but never used            @typescript-eslint/no-unused-vars
+  20:8   warning  'SparkBackground' is defined but never used   @typescript-eslint/no-unused-vars
+  24:23  warning  'HeroScene3DLight' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/Login.tsx
+  4:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/Payments.tsx
+    2:10  warning  'motion' is defined but never used       @typescript-eslint/no-unused-vars
+   11:3   warning  'Sparkles' is defined but never used     @typescript-eslint/no-unused-vars
+   12:3   warning  'UploadCloud' is defined but never used  @typescript-eslint/no-unused-vars
+  204:14  warning  'error' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/Prediction.tsx
+  2:10  warning  'Activity' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/pages/Workflows.tsx
+   2:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+  36:14  warning  'err' is defined but never used              @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/verticals/restaurant/RestaurantDashboard.tsx
+  103:6   warning  React Hook useEffect has a missing dependency: 'fetchRestaurantData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  115:14  warning  'error' is defined but never used                                                                                       @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/verticals/restaurant/components/InventoryPredictor.tsx
+  58:9  warning  'warningItems' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/verticals/restaurant/components/MenuEngineeringMatrix.tsx
+  8:3  warning  'TrendingUp' is defined but never used    @typescript-eslint/no-unused-vars
+  9:3  warning  'TrendingDown' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/srilekha/Desktop/BHIE/client/src/verticals/restaurant/components/StaffingOptimizer.tsx
+  7:3  warning  'Calendar' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 272 problems (0 errors, 272 warnings)
+

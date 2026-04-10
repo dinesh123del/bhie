@@ -1,3 +1,4 @@
+"use client"
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Flame } from 'lucide-react';

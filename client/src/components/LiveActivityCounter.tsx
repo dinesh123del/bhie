@@ -1,3 +1,4 @@
+"use client"
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, TrendingUp, Receipt, Clock, Zap, Activity, Globe, Wallet, type LucideIcon } from 'lucide-react';

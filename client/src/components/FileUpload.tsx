@@ -1,3 +1,4 @@
+"use client"
 import { ChangeEvent, DragEvent, useCallback, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
@@ -120,7 +121,7 @@ export const FileUpload = ({ onUploadComplete }: { onUploadComplete?: (data: Upl
       setProcessingStep('');
       setPreviewFiles([]);
     }
-  }, [onUploadComplete, uploadsLocked, addXP]);
+  }, [onUploadComplete, uploadsLocked, addXP, triggerCelebration]);
 
   const handleDrag = useCallback((event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();

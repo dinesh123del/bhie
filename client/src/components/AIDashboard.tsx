@@ -1,3 +1,4 @@
+"use client"
 /**
  * AI Dashboard Component
  * Displays comprehensive AI business analysis

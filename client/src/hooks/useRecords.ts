@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Record, RecordsFilter, recordsService } from '../services/recordsService';
-import { AxiosError } from 'axios';
+type AxiosError = any;
 
 export const useRecords = (filters?: RecordsFilter) => {
   const [records, setRecords] = useState<Record[]>([]);

@@ -69,10 +69,10 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.get("/api/debug-ping", (_req, res) => {
-  res.json({ 
-    status: "ok", 
-    timestamp: new Date().toISOString(), 
-    isProduction: env.IS_PRODUCTION 
+  res.json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    isProduction: env.IS_PRODUCTION
   });
 });
 
@@ -89,6 +89,14 @@ const allowedOrigins = [
   "http://127.0.0.1:5001",
   "http://localhost:5173",
   "http://localhost:5174",
+  "http://localhost:5175",
+  "http://localhost:5176",
+  "http://localhost:5177",
+  "http://localhost:5178",
+  "http://localhost:5179",
+  "http://localhost:5180",
+  "http://127.0.0.1:5173",
+  "http://127.0.0.1:5174",
   "https://bizplus.ai",
   "https://app.bizplus.ai",
   "https://www.bizplus.ai",
@@ -100,14 +108,22 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
+    // Allow all origins in development
+    if (!env.IS_PRODUCTION) return callback(null, true);
+
+    // Allow requests with no origin (like mobile apps or curl)
     if (!origin) return callback(null, true);
+
+    // Check exact matches
     if (allowedOrigins.includes(origin)) return callback(null, true);
+
+    // Allow Vercel preview deployments
     if (origin.match(/^https:\/\/bhie[\w-]*\.vercel\.app$/)) return callback(null, true);
     if (origin.match(/^https:\/\/biz-plus[\w-]*\.vercel\.app$/)) return callback(null, true);
     if (origin.match(/^https:\/\/client[\w-]*\.vercel\.app$/)) return callback(null, true);
     if (origin.match(/^https:\/\/dinesh123del-bhie[\w-]*\.vercel\.app$/)) return callback(null, true);
     if (origin.match(/^https:\/\/[\w-]+\.bizplus\.ai$/)) return callback(null, true);
-    if (!env.IS_PRODUCTION && origin.endsWith('.loca.lt')) return callback(null, true);
+
     callback(null, false);
   },
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
@@ -165,6 +181,9 @@ app.get("/", (_req, res) => {
 // ── API Routes (Standard) ───────────────────────────────────────────
 import apiRouter from './routes/apiRouter.js';
 app.use('/api', apiLimiter, apiRouter);
+import subscriptionsRouter from './routes/subscriptions.js';
+import { authenticateToken } from './middleware/auth.js';
+app.use('/api/subscriptions', authenticateToken, subscriptionsRouter);
 
 import adminWhatsAppAnalytics from './routes/admin-whatsapp-analytics.js';
 app.use('/api/admin/whatsapp', adminWhatsAppAnalytics);
@@ -191,7 +210,7 @@ app.use('/api/sentinel', sentinelRoutes);
 if (env.IS_PRODUCTION) {
   const clientBuildPath = path.join(__dirname, '../../client/dist');
   app.use(express.static(clientBuildPath));
-  
+
   // SPA Catch-all: ONLY for non-API routes
   app.get(/^(?!\/api).*$/, (_req, res) => {
     res.sendFile(path.join(clientBuildPath, 'index.html'));

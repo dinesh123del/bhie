@@ -1,3 +1,4 @@
+"use client"
 import { useMemo, useState, DragEvent } from 'react';
 import { UploadCloud, ImagePlus, Loader2, X } from 'lucide-react';
 

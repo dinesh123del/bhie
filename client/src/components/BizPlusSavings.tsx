@@ -1,3 +1,4 @@
+"use client"
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PiggyBank, ArrowDownRight, TrendingUp, Sparkles, MessageCircle, X } from 'lucide-react';

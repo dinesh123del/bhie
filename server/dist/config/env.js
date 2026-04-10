@@ -23,6 +23,8 @@ const envSchema = z
     GOOGLE_CLIENT_SECRET: z.string().trim().min(1).optional(),
     RAZORPAY_KEY_ID: z.string().trim().min(1).optional(),
     RAZORPAY_KEY_SECRET: z.string().trim().min(1).optional(),
+    STRIPE_SECRET_KEY: z.string().trim().min(1).optional(),
+    STRIPE_WEBHOOK_SECRET: z.string().trim().min(1).optional(),
     WHATSAPP_PHONE_NUMBER_ID: z.string().trim().min(1).optional(),
     WHATSAPP_ACCESS_TOKEN: z.string().trim().min(1).optional(),
     WHATSAPP_VERIFY_TOKEN: z.string().trim().min(1).optional(),

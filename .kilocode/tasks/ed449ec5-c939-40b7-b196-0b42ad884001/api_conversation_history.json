@@ -1,0 +1,1 @@
+[{"role":"user","content":[{"type":"text","text":"client/src/components/welcome/CinematicHero3D.tsx:388-390\n```\n              <ChromaticAberration \n                enabled={phase === 4}\n                offset={new THREE.Vector2(0.01, 0.01)} \n```"}],"ts":1775806097122}]

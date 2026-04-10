@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState } from 'react';
 import { Joyride, STATUS, Step } from 'react-joyride';
 

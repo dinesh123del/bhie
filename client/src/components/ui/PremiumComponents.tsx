@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiMiniSparkles } from 'react-icons/hi2';

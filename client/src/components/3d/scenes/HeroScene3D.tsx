@@ -8,77 +8,48 @@ interface HeroScene3DProps {
   children?: React.ReactNode;
 }
 
-// CSS-only background — no Three.js, no Canvas, no R3F
+// High-performance CSS-only background — No Canvas overhead
 export function HeroScene3D({ children }: HeroScene3DProps) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#050508]">
-      {/* ── Cinematic Background Asset (Dimmmed) ────────────────────── */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-40"
-        style={{ backgroundImage: 'url(/cinematic-bg.png)', filter: 'blur(2px) saturate(1.2)' }}
-      />
-
-      {/* Atmospheric Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#050508] via-transparent to-transparent opacity-90" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#050508] via-transparent to-transparent opacity-40" />
-
-      {/* Blue glow blob top-left */}
+    <div className="relative min-h-screen overflow-hidden bg-[#020203]">
+      {/* Cinematic Pulse Glows */}
       <div
-        className="absolute pointer-events-none"
+        className="absolute pointer-events-none opacity-20"
         style={{
-          width: 900, height: 600, left: '-10%', top: '-5%',
-          borderRadius: '50%',
-          background: 'radial-gradient(ellipse, rgba(0,122,255,0.08) 0%, transparent 70%)',
-          filter: 'blur(80px)',
-          animation: 'pulse 8s ease-in-out infinite',
+          width: '100vw', height: '100vh',
+          background: 'radial-gradient(circle at 20% 30%, rgba(79,70,229,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(124,58,237,0.1) 0%, transparent 50%)',
+          filter: 'blur(100px)',
         }}
       />
 
-      {/* Purple glow blob bottom-right */}
+      {/* Static Star Field (Cheap performance-wise) */}
       <div
-        className="absolute pointer-events-none"
-        style={{
-          width: 700, height: 500, right: '-5%', bottom: '10%',
-          borderRadius: '50%',
-          background: 'radial-gradient(ellipse, rgba(88,86,214,0.07) 0%, transparent 70%)',
-          filter: 'blur(60px)',
-          animation: 'pulse 11s ease-in-out infinite 2s',
-        }}
-      />
-
-      {/* Subtle star dots */}
-      <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none opacity-[0.15]"
         style={{
           backgroundImage: `
-            radial-gradient(1px 1px at 15% 20%, rgba(255,255,255,0.35) 0%, transparent 100%),
-            radial-gradient(1px 1px at 45% 8%, rgba(255,255,255,0.25) 0%, transparent 100%),
-            radial-gradient(1px 1px at 72% 15%, rgba(255,255,255,0.3) 0%, transparent 100%),
-            radial-gradient(1px 1px at 88% 35%, rgba(255,255,255,0.2) 0%, transparent 100%),
-            radial-gradient(1px 1px at 30% 65%, rgba(255,255,255,0.25) 0%, transparent 100%),
-            radial-gradient(1px 1px at 55% 75%, rgba(255,255,255,0.2) 0%, transparent 100%),
-            radial-gradient(1px 1px at 80% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
-            radial-gradient(1.5px 1.5px at 10% 85%, rgba(255,255,255,0.15) 0%, transparent 100%),
-            radial-gradient(1px 1px at 60% 45%, rgba(255,255,255,0.2) 0%, transparent 100%),
-            radial-gradient(1px 1px at 95% 55%, rgba(255,255,255,0.25) 0%, transparent 100%)
+            radial-gradient(1px 1px at 10% 10%, #fff 100%, transparent),
+            radial-gradient(1px 1px at 20% 40%, #fff 100%, transparent),
+            radial-gradient(1px 1px at 50% 20%, #fff 100%, transparent),
+            radial-gradient(1.5px 1.5px at 80% 30%, #fff 100%, transparent),
+            radial-gradient(1px 1px at 90% 80%, #fff 100%, transparent),
+            radial-gradient(1px 1px at 40% 90%, #fff 100%, transparent),
+            radial-gradient(1.5px 1.5px at 70% 60%, #fff 100%, transparent)
           `,
+          backgroundSize: '400px 400px',
         }}
       />
 
-      {/* Grid overlay */}
+      {/* Subtle Grid - Use transform for potential GPU optimization if needed, but here simple background is fine */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.04]"
+        className="absolute inset-0 pointer-events-none opacity-[0.03]"
         style={{
-          backgroundImage: `
-            linear-gradient(rgba(0,122,255,0.5) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,122,255,0.5) 1px, transparent 1px)
-          `,
-          backgroundSize: '80px 80px',
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+          backgroundSize: '100px 100px',
         }}
       />
 
-      {/* Content */}
-      <div className="relative z-10 w-full h-full">
+      {/* Content Container */}
+      <div className="relative z-10">
         {children}
       </div>
     </div>

@@ -29,12 +29,12 @@ export interface AdminStats {
 
 export const analyticsService = {
   getAnalytics: async () => {
-    const response = await api.get<AnalyticsSummary>('/analytics/summary');
+    const response = await api.get('/analytics/summary');
     return response.data;
   },
 
   getSummary: async () => {
-    const response = await api.get<AnalyticsSummary>('/analytics/summary');
+    const response = await api.get('/analytics/summary');
     return response.data;
   },
 
@@ -71,7 +71,7 @@ export const analyticsService = {
 
 export const adminService = {
   getStats: async () => {
-    const response = await api.get<AdminStats>('/admin/saas-metrics');
+    const response = await api.get('/admin/saas-metrics');
     return response.data;
   },
 

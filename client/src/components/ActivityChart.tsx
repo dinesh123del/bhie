@@ -85,7 +85,7 @@ const ActivityChart = ({ data }: ActivityChartProps) => {
                 <Tooltip
                   contentStyle={tooltipStyle}
                   cursor={{ fill: 'rgba(255,255,255,0.03)' }}
-                  formatter={(value: number) => [value.toLocaleString('en-IN'), '']}
+                  formatter={(value) => [(value || 0).toLocaleString('en-IN'), '']}
                 />
                 <Bar
                   dataKey="uploads"

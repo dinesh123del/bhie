@@ -63,17 +63,17 @@ let razorpayLoaderPromise: Promise<void> | null = null;
 
 export const paymentService = {
   async getSubscription() {
-    const response = await api.get<SubscriptionResponse>('/payment/subscription');
+    const response = await api.get('/payment/subscription');
     return response.data;
   },
 
   async createOrder(plan: 'pro' | 'premium') {
-    const response = await api.post<CreateOrderResponse>('/payment/create-order', { plan });
+    const response = await api.post('/payment/create-order', { plan });
     return response.data;
   },
 
   async createSubscription(plan: 'pro' | 'premium') {
-    const response = await api.post<CreateOrderResponse>('/payment/create-subscription', { plan });
+    const response = await api.post('/payment/create-subscription', { plan });
     return response.data;
   },
 

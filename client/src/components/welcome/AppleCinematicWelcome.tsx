@@ -1,13 +1,13 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import DemoVideoHero from './DemoVideoHero';
-import { BizPlusIcon } from './BizPlusLogo';
+import CinematicHero3D from './CinematicHero3D';
 
 const AppleCinematicWelcome: React.FC<{ onEnter: () => void }> = ({ onEnter }) => {
   const [phase, setPhase] = useState<'intro' | 'interaction'>('intro');
 
   useEffect(() => {
-    // Faster phase transition: 1.2 seconds for the reveal intro
+    // Sync UI reveal — faster transition for snappier feel
     const timer = setTimeout(() => setPhase('interaction'), 1200);
     return () => clearTimeout(timer);
   }, []);
@@ -15,15 +15,15 @@ const AppleCinematicWelcome: React.FC<{ onEnter: () => void }> = ({ onEnter }) =
   return (
     <div className="fixed inset-0 z-[10000] bg-black overflow-hidden font-sans select-none">
       <AnimatePresence mode="wait">
-        {/* BACKGROUND 3D HERO - Visible in both phases */}
+        {/* ADVANCED 3D HERO ENGINE */}
         <motion.div
-           key="hero-bg"
+           key="hero-3d"
            initial={{ opacity: 0 }}
            animate={{ opacity: 1 }}
-           transition={{ duration: 2 }}
+           transition={{ duration: 3 }}
            className="absolute inset-0"
         >
-          <DemoVideoHero />
+          <CinematicHero3D />
         </motion.div>
 
         {/* PHASE 1: MINIMALIST REVEAL */}
@@ -36,8 +36,16 @@ const AppleCinematicWelcome: React.FC<{ onEnter: () => void }> = ({ onEnter }) =
             transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
             className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center z-20"
           >
-            <div className="mb-12">
-              <BizPlusIcon size={120} animated glowing={false} />
+            <div className="mb-10 flex items-center justify-center" style={{ willChange: 'transform' }}>
+              <motion.img
+                src="/logo-mark.png"
+                alt="Biz Plus Logo"
+                className="select-none"
+                style={{ width: 120, height: 120, objectFit: 'contain', filter: 'drop-shadow(0 0 32px rgba(129,140,248,0.6))' }}
+                initial={{ opacity: 0, scale: 0.7 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              />
             </div>
             <h1 className="text-white text-6xl md:text-8xl font-black tracking-tighter mb-4">
               Biz Plus
@@ -61,11 +69,15 @@ const AppleCinematicWelcome: React.FC<{ onEnter: () => void }> = ({ onEnter }) =
              <motion.div 
                initial={{ y: -20, opacity: 0 }}
                animate={{ y: 0, opacity: 1 }}
-               transition={{ delay: 0.2 }}
+               transition={{ delay: 0.1, duration: 0.5 }}
                className="flex items-center gap-3"
              >
-               <BizPlusIcon size={24} />
-               <span className="text-white text-xs font-black uppercase tracking-[0.5em]">System Ecosystem</span>
+               <img
+                 src="/logo-mark.png"
+                 alt="Biz Plus"
+                 style={{ width: 28, height: 28, objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(129,140,248,0.8))' }}
+               />
+               <span className="text-white text-xs font-black uppercase tracking-[0.5em]">Biz Plus · Economic Intel</span>
              </motion.div>
 
             {/* Main Headline */}

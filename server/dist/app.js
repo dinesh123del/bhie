@@ -56,6 +56,18 @@ app.use(helmet({
     noSniff: true,
 }));
 // ── Standard Middleware ─────────────────────────────────────────────
+// ── Early Health Routes (bypass heavy middleware) ───────────────────
+app.get("/api/health", (_req, res) => {
+    res.json({ status: "ok", mode: env.NODE_ENV });
+});
+app.get("/api/debug-ping", (_req, res) => {
+    res.json({
+        status: "ok",
+        timestamp: new Date().toISOString(),
+        isProduction: env.IS_PRODUCTION
+    });
+});
+// ── Standard Middleware ─────────────────────────────────────────────
 app.use(compression());
 app.use(cookieParser());
 app.use(morgan(env.IS_PRODUCTION ? 'combined' : 'dev'));
@@ -67,6 +79,14 @@ const allowedOrigins = [
     "http://127.0.0.1:5001",
     "http://localhost:5173",
     "http://localhost:5174",
+    "http://localhost:5175",
+    "http://localhost:5176",
+    "http://localhost:5177",
+    "http://localhost:5178",
+    "http://localhost:5179",
+    "http://localhost:5180",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:5174",
     "https://bizplus.ai",
     "https://app.bizplus.ai",
     "https://www.bizplus.ai",
@@ -77,10 +97,16 @@ const allowedOrigins = [
 ].filter(Boolean);
 app.use(cors({
     origin: (origin, callback) => {
+        // Allow all origins in development
+        if (!env.IS_PRODUCTION)
+            return callback(null, true);
+        // Allow requests with no origin (like mobile apps or curl)
         if (!origin)
             return callback(null, true);
+        // Check exact matches
         if (allowedOrigins.includes(origin))
             return callback(null, true);
+        // Allow Vercel preview deployments
         if (origin.match(/^https:\/\/bhie[\w-]*\.vercel\.app$/))
             return callback(null, true);
         if (origin.match(/^https:\/\/biz-plus[\w-]*\.vercel\.app$/))
@@ -90,8 +116,6 @@ app.use(cors({
         if (origin.match(/^https:\/\/dinesh123del-bhie[\w-]*\.vercel\.app$/))
             return callback(null, true);
         if (origin.match(/^https:\/\/[\w-]+\.bizplus\.ai$/))
-            return callback(null, true);
-        if (!env.IS_PRODUCTION && origin.endsWith('.loca.lt'))
             return callback(null, true);
         callback(null, false);
     },
@@ -109,7 +133,7 @@ app.use(express.json({
     },
 }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-// ── Webhook Routes (mount BEFORE security middleware for query params) ──
+// ── Webhook Routes (mount BEFORE security middleware) ────────────────
 import whatsappRoutes from './routes/whatsapp.js';
 app.use('/webhook/whatsapp', whatsappRoutes);
 import whatsappPaymentWebhook from './routes/whatsapp-payment-webhook.js';
@@ -131,24 +155,22 @@ app.use((req, res, next) => {
     }
     next();
 });
-// ── Root & Health Routes ────────────────────────────────────────────
+// ── Root Route ──────────────────────────────────────────────────────
 app.get("/", (_req, res) => {
     if (env.IS_PRODUCTION) {
-        res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+        const indexPath = path.join(__dirname, '../../client/dist/index.html');
+        res.sendFile(indexPath);
     }
     else {
         res.redirect(env.CLIENT_URL || 'http://localhost:5173');
     }
 });
-app.get("/api/health", (_req, res) => {
-    res.json({ status: "ok" });
-});
-app.get("/api/debug-ping", (_req, res) => {
-    res.json({ status: "ok", timestamp: new Date().toISOString(), message: "Server is alive and updated!" });
-});
-// ── API Routes ──────────────────────────────────────────────────────
+// ── API Routes (Standard) ───────────────────────────────────────────
 import apiRouter from './routes/apiRouter.js';
 app.use('/api', apiLimiter, apiRouter);
+import subscriptionsRouter from './routes/subscriptions.js';
+import { authenticateToken } from './middleware/auth.js';
+app.use('/api/subscriptions', authenticateToken, subscriptionsRouter);
 import adminWhatsAppAnalytics from './routes/admin-whatsapp-analytics.js';
 app.use('/api/admin/whatsapp', adminWhatsAppAnalytics);
 import partnerApiRoutes from './routes/partner-api.js';
@@ -161,14 +183,14 @@ import referralRoutes from './routes/referralRoutes.js';
 app.use('/api/referrals', referralRoutes);
 import usageRoutes from './routes/usageRoutes.js';
 app.use('/api/usage', usageRoutes);
-// Sentinel Anomaly API
 import sentinelRoutes from './routes/sentinel.js';
 app.use('/api/sentinel', sentinelRoutes);
-// ── Static Serve & SPA Catch-All ────────────────────────────────────
+// ── Static Serve & App Catch-All ───────────────────────────────────
 if (env.IS_PRODUCTION) {
     const clientBuildPath = path.join(__dirname, '../../client/dist');
     app.use(express.static(clientBuildPath));
-    app.get('*', (_req, res) => {
+    // SPA Catch-all: ONLY for non-API routes
+    app.get(/^(?!\/api).*$/, (_req, res) => {
         res.sendFile(path.join(clientBuildPath, 'index.html'));
     });
 }

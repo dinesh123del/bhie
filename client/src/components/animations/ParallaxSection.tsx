@@ -1,3 +1,4 @@
+"use client"
 import React, { useRef, useEffect, ReactNode } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
 import { gsap, ScrollTrigger } from '../../lib/gsapConfig';

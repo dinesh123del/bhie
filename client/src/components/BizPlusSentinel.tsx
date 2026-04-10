@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Globe, Zap, AlertTriangle, CheckCircle2, BarChart4 } from 'lucide-react';

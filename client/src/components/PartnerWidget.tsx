@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+"use client"
+import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 interface PartnerWidgetProps {
@@ -30,50 +31,12 @@ export const BizPlusPartnerWidget: React.FC<PartnerWidgetProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    // Determine actual theme
-    const actualTheme = theme === 'auto' 
-      ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-      : theme;
-
-    // Fetch initial health data
-    fetchHealthData();
-
-    // Set up SSE for real-time updates
-    let eventSource: EventSource | null = null;
-    
-    if (businessId) {
-      eventSource = new EventSource(
-        `/api/partner/v2/stream/health?partner=${partnerId}&businesses=${businessId}&key=${apiKey}`
-      );
-      
-      eventSource.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          setHealth(data);
-        } catch (e) {
-          console.error('SSE parse error:', e);
-        }
-      };
-      
-      eventSource.onerror = () => {
-        console.error('SSE connection error');
-      };
-    }
-
-    return () => {
-      if (eventSource) {
-        eventSource.close();
-      }
-    };
-  }, [partnerId, apiKey, businessId]);
-
-  const fetchHealthData = async () => {
+  const fetchHealthData = useCallback(async () => {
     try {
       setLoading(true);
-      
+
       // If no specific business, show aggregated portfolio view
-      const endpoint = businessId 
+      const endpoint = businessId
         ? `/api/partner/v2/businesses/${businessId}/health-score`
         : `/api/partner/v2/partners/${partnerId}/portfolio`;
 
@@ -88,7 +51,7 @@ export const BizPlusPartnerWidget: React.FC<PartnerWidgetProps> = ({
       }
 
       const data = await response.json();
-      
+
       if (businessId) {
         setHealth({
           score: data.score,
@@ -112,7 +75,40 @@ export const BizPlusPartnerWidget: React.FC<PartnerWidgetProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [businessId, partnerId, apiKey]);
+
+  useEffect(() => {
+    // Fetch initial health data
+    fetchHealthData();
+
+    // Set up SSE for real-time updates
+    let eventSource: EventSource | null = null;
+
+    if (businessId) {
+      eventSource = new EventSource(
+        `/api/partner/v2/stream/health?partner=${partnerId}&businesses=${businessId}&key=${apiKey}`
+      );
+
+      eventSource.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          setHealth(data);
+        } catch (e) {
+          console.error('SSE parse error:', e);
+        }
+      };
+
+      eventSource.onerror = () => {
+        console.error('SSE connection error');
+      };
+    }
+
+    return () => {
+      if (eventSource) {
+        eventSource.close();
+      }
+    };
+  }, [partnerId, apiKey, businessId, theme, fetchHealthData]);
 
   const getScoreColor = (score: number): string => {
     if (score >= 80) return '#22c55e'; // green-500
@@ -140,7 +136,7 @@ export const BizPlusPartnerWidget: React.FC<PartnerWidgetProps> = ({
 
   if (loading) {
     return (
-      <div 
+      <div
         style={{ width, height }}
         className="flex items-center justify-center bg-gray-100 rounded-xl"
       >
@@ -151,7 +147,7 @@ export const BizPlusPartnerWidget: React.FC<PartnerWidgetProps> = ({
 
   if (error || !health) {
     return (
-      <div 
+      <div
         style={{ width, height }}
         className="flex items-center justify-center bg-red-50 rounded-xl p-4"
       >
@@ -212,16 +208,16 @@ export const BizPlusPartnerWidget: React.FC<PartnerWidgetProps> = ({
                 strokeWidth="8"
                 strokeLinecap="round"
                 initial={{ strokeDasharray: '0 339.292' }}
-                animate={{ 
-                  strokeDasharray: `${(health.score / 100) * 339.292} 339.292` 
+                animate={{
+                  strokeDasharray: `${(health.score / 100) * 339.292} 339.292`
                 }}
                 transition={{ duration: 1, ease: 'easeOut' }}
               />
             </svg>
-            
+
             {/* Score Text */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span 
+              <span
                 className="text-4xl font-bold"
                 style={{ color: scoreColor }}
               >
@@ -234,9 +230,9 @@ export const BizPlusPartnerWidget: React.FC<PartnerWidgetProps> = ({
 
         {/* Score Label */}
         <div className="text-center mt-4">
-          <span 
+          <span
             className="inline-block px-3 py-1 rounded-full text-sm font-medium"
-            style={{ 
+            style={{
               backgroundColor: `${scoreColor}20`,
               color: scoreColor
             }}
@@ -262,9 +258,9 @@ export const BizPlusPartnerWidget: React.FC<PartnerWidgetProps> = ({
           <p className="text-xs text-[#C0C0C0]">
             Last updated: {new Date(health.lastUpdated).toLocaleTimeString()}
           </p>
-          <a 
-            href="https://bizplus.io" 
-            target="_blank" 
+          <a
+            href="https://bizplus.io"
+            target="_blank"
             rel="noopener noreferrer"
             className="text-xs text-blue-600 hover:underline mt-1 inline-block"
           >
@@ -296,7 +292,7 @@ export const BizPlusHealthBadge: React.FC<{
   };
 
   return (
-    <div 
+    <div
       className={`${sizes[size]} ${getColor(score)} rounded-full flex items-center justify-center text-white font-bold shadow-md`}
       title={`Health Score: ${score}/100`}
     >

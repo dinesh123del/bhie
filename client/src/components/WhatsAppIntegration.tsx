@@ -1,3 +1,4 @@
+"use client"
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, Check, X, Bell, Clock, FileText, TrendingUp, Smartphone, Shield } from 'lucide-react';

@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Trophy, Star, PartyPopper, ArrowRight, Gift, Share2 } from 'lucide-react';

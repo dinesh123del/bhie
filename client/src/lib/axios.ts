@@ -1,5 +1,9 @@
-import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import { ENV } from '../config/env';
+
+type AxiosInstance = any;
+type AxiosError = any;
+type InternalAxiosRequestConfig = any;
 
 // Use validated environment config with fallback
 export const API = ENV.API_URL;
@@ -73,12 +77,12 @@ api.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error: any) => Promise.reject(error)
 );
 
 // --- Response Interceptor ---
 api.interceptors.response.use(
-  (response) => {
+  (response: any) => {
     // Reset network status on successful response
     if (isNetworkDown) {
       isNetworkDown = false;

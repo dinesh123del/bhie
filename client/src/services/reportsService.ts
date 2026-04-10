@@ -19,12 +19,12 @@ export interface ReportCreateRequest {
 
 export const reportsService = {
   getReports: async () => {
-    const response = await api.get<Report[]>('/reports');
+    const response = await api.get('/reports');
     return response.data;
   },
 
   createReport: async (data: ReportCreateRequest) => {
-    const response = await api.post<Report>('/reports', data);
+    const response = await api.post('/reports', data);
     return response.data;
   },
 

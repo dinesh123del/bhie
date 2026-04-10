@@ -1,3 +1,4 @@
+"use client"
 import React, { useRef, useEffect, useState } from 'react';
 import { motion, useInView, useSpring, useMotionValue, useTransform, animate } from 'framer-motion';
 import { tokens } from '../../lib/animationTokens';

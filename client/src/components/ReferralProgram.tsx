@@ -1,3 +1,4 @@
+"use client"
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Copy, Share2, Gift, Users, Award, Link2, Check, Sparkles } from 'lucide-react';

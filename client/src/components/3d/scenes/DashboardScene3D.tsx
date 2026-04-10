@@ -1,3 +1,4 @@
+"use client"
 import React, { Suspense, useRef, lazy } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
 import { Float, PerspectiveCamera, Stars } from '@react-three/drei';

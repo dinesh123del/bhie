@@ -1,7 +1,7 @@
 {
   "name": "biz-plus-server",
   "version": "1.0.0",
-  "description": "BIZ PLUS Backend API - Express + MongoDB + TypeScript",
+  "description": "BIZ PLUS Backend API - Express + MongoDB + TypeScript + Stripe",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -42,6 +42,7 @@
     "helmet": "^7.1.0",
     "hpp": "^0.2.3",
     "ioredis": "^5.3.2",
+    "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.3",
     "mammoth": "^1.12.0",
     "mongoose": "^8.23.0",
@@ -59,6 +60,7 @@
     "request-ip": "^3.3.0",
     "sharp": "^0.34.5",
     "socket.io": "^4.8.3",
+    "stripe": "^16.12.0",
     "tesseract.js": "^7.0.0",
     "transliteration": "^2.6.1",
     "tsx": "^4.21.0",

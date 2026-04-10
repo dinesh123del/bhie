@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { analyticsService, AnalyticsSummary, AdminStats, adminService } from '../services/analyticsService';
-import { AxiosError } from 'axios';
+type AxiosError = any;
 
 export const useAnalytics = () => {
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);

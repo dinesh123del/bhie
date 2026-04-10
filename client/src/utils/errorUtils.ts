@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios';
+type AxiosError = any;
 
 /**
  * Standard interface for parsed API errors
@@ -26,7 +26,7 @@ export const parseApiError = (error: any): ParsedError => {
 
   // Fallback for non-Axios or unhandled errors
   const message = error instanceof Error ? error.message : 'An unexpected error occurred';
-  
+
   return {
     message,
     statusCode: (error as AxiosError)?.response?.status
@@ -38,7 +38,7 @@ export const parseApiError = (error: any): ParsedError => {
  */
 export const getFriendlyErrorMessage = (error: any): string => {
   const parsed = parseApiError(error);
-  
+
   switch (parsed.statusCode) {
     case 401:
       return 'Your session has expired. Please log in again.';

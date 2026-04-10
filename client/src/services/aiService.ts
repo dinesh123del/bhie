@@ -42,7 +42,7 @@ export const aiService = {
    */
   analyzeBusinessData: async (businessData: BusinessData) => {
     try {
-      const response = await api.post<AIAnalysisResponse>(
+      const response = await api.post(
         '/ai/analyze',
         businessData
       );

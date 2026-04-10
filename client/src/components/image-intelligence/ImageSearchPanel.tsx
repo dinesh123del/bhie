@@ -1,3 +1,4 @@
+"use client"
 import { useState } from 'react';
 import { Search, Image, Loader2, Filter } from 'lucide-react';
 import { DetectedType } from '../../types/imageIntelligence';

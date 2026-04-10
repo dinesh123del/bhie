@@ -1,3 +1,4 @@
+"use client"
 import React, { Suspense, ReactNode, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { AlertCircle, RefreshCw, WifiOff } from 'lucide-react';

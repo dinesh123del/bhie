@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, X, IndianRupee, Calendar, Tag, FileText, Save, Loader, ArrowUpRight, TrendingUp } from 'lucide-react';
