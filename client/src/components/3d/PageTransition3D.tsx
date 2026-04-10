@@ -112,7 +112,7 @@ function TransitionFallback({ loadingText }: { loadingText?: string }) {
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-4 text-blue-400 text-sm"
+          className="mt-4 text-[#00D4FF] text-sm"
         >
           {loadingText}
         </motion.p>
@@ -182,7 +182,7 @@ export function PageTransition3D({
                 <motion.div
                   animate={{ scale: [1, 1.1, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  className="w-24 h-24 rounded-full bg-blue-500/20 flex items-center justify-center mb-4 mx-auto"
+                  className="w-24 h-24 rounded-full bg-[#00D4FF]/20 text-[#00D4FF]/20 flex items-center justify-center mb-4 mx-auto"
                 >
                   <motion.div
                     animate={{ rotate: 360 }}
@@ -190,7 +190,7 @@ export function PageTransition3D({
                     className="w-16 h-16 rounded-full border-2 border-blue-400/30 border-t-blue-400"
                   />
                 </motion.div>
-                <p className="text-blue-400 text-lg font-medium">{loadingText}</p>
+                <p className="text-[#00D4FF] text-lg font-medium">{loadingText}</p>
                 <p className="text-gray-500 text-sm mt-2">Preparing your 3D experience</p>
               </motion.div>
             </div>

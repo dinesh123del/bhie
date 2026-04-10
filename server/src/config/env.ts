@@ -135,7 +135,7 @@ console.log(` -> PORT: ${envValues.PORT}`);
 console.log(` -> NODE_ENV: ${envValues.NODE_ENV}`);
 console.log(` -> MONGODB: ${envValues.MONGO_URI ? 'CONNECTED [HIDDEN]' : 'MISSING'}`);
 console.log(` -> REDIS: ${envValues.REDIS_URL ? 'CONFIGURED [HIDDEN]' : 'MISSING'}`);
-console.log(` -> OPENAI: ${envValues.OPENAI_API_KEY ? 'CONFIGURED [HIDDEN]' : 'MISSING'}`);
+console.log(` -> SMART_ENGINE: ${envValues.OPENAI_API_KEY ? 'CONFIGURED [HIDDEN]' : 'MISSING'}`);
 console.log(` -> PINECONE: ${envValues.PINECONE_API_KEY ? 'CONFIGURED [HIDDEN]' : 'MOCKED'}`);
 
 

@@ -72,7 +72,7 @@ export class ErrorBoundary extends React.Component<
             <p className="text-gray-700">{this.state.error?.message}</p>
             <button
               onClick={() => window.location.reload()}
-              className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              className="w-full px-4 py-2 bg-[#00D4FF]/20 text-[#00D4FF] text-white rounded hover:bg-blue-700"
             >
               Reload Page
             </button>
@@ -137,7 +137,7 @@ export const EmptyState: React.FC<{
       {action && (
         <button
           onClick={action.onClick}
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="mt-4 px-4 py-2 bg-[#00D4FF]/20 text-[#00D4FF] text-white rounded hover:bg-blue-700"
         >
           {action.label}
         </button>

@@ -67,7 +67,7 @@ export default function ReferralProgram() {
     },
     { 
       name: 'LinkedIn', 
-      color: 'bg-blue-600', 
+      color: 'bg-[#00D4FF]/20 text-[#00D4FF]', 
       icon: '💼',
       url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralLink)}`
     },
@@ -93,7 +93,7 @@ export default function ReferralProgram() {
           whileHover={{ scale: 1.02 }}
           className="bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl p-4 border border-white/10"
         >
-          <Users className="w-5 h-5 text-blue-400 mb-2" />
+          <Users className="w-5 h-5 text-[#00D4FF] mb-2" />
           <p className="text-2xl font-black text-white">{stats.totalInvited}</p>
           <p className="text-xs text-white/50">Invited</p>
         </motion.div>
@@ -154,7 +154,7 @@ export default function ReferralProgram() {
                 </div>
                 <button
                   onClick={copyToClipboard}
-                  className="px-4 bg-blue-500 hover:bg-blue-400 rounded-xl transition-colors"
+                  className="px-4 bg-[#00D4FF]/20 text-[#00D4FF] hover:bg-blue-400 rounded-xl transition-colors"
                 >
                   {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
                 </button>
@@ -190,7 +190,7 @@ export default function ReferralProgram() {
                   'You both get rewards instantly!'
                 ].map((step, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <span className="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold flex items-center justify-center">
+                    <span className="w-6 h-6 rounded-full bg-[#00D4FF]/20 text-[#00D4FF]/20 text-[#00D4FF] text-xs font-bold flex items-center justify-center">
                       {i + 1}
                     </span>
                     <p className="text-white/70 text-sm">{step}</p>
@@ -249,7 +249,7 @@ export default function ReferralProgram() {
                       animate={{ width: `${progress}%` }}
                       transition={{ duration: 1, delay: index * 0.1 }}
                       className={`h-full rounded-full ${
-                        isUnlocked ? 'bg-amber-500' : 'bg-blue-500'
+                        isUnlocked ? 'bg-amber-500' : 'bg-[#00D4FF]/20 text-[#00D4FF]'
                       }`}
                     />
                   </div>

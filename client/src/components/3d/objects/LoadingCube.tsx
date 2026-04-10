@@ -198,7 +198,7 @@ export function LoadingCube3D({
       
       {showText && (
         <div className="mt-4 text-center">
-          <p className="text-blue-400 text-sm font-medium animate-pulse">
+          <p className="text-[#00D4FF] text-sm font-medium animate-pulse">
             Loading intelligent insights...
           </p>
           <p className="text-gray-500 text-xs mt-1">

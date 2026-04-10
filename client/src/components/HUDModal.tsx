@@ -36,7 +36,7 @@ export const HUDModal = ({ isOpen, onClose, data }: HUDModalProps) => {
                </div>
                <div>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white line-clamp-1">{data.title}</h2>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Record Details</p>
+                  <p className="text-sm font-medium text-gray-500 dark:text-[#C0C0C0]">Record Details</p>
                </div>
             </div>
             <button onClick={onClose} className="p-3 bg-gray-200/50 dark:bg-white/10 rounded-full hover:bg-gray-300/50 dark:hover:bg-white/20 text-gray-600 dark:text-white/60 transition-all">
@@ -48,7 +48,7 @@ export const HUDModal = ({ isOpen, onClose, data }: HUDModalProps) => {
           <div className="p-8">
             {/* Amount Centered */}
             <div className="text-center mb-10">
-               <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Total Amount</p>
+               <p className="text-sm font-medium text-gray-500 dark:text-[#C0C0C0] mb-1">Total Amount</p>
                <h1 className="text-6xl font-extrabold text-gray-900 dark:text-white tracking-tight">
                  ₹{data.amount.toLocaleString()}
                </h1>
@@ -61,14 +61,14 @@ export const HUDModal = ({ isOpen, onClose, data }: HUDModalProps) => {
             {/* Grid Stats */}
             <div className="grid grid-cols-2 gap-4 mb-8">
                 <div className="p-5 rounded-3xl bg-gray-50 dark:bg-white/[0.03] border border-black/5 dark:border-white/5 hover:border-brand-500/30 transition-colors">
-                   <div className="flex items-center gap-2 mb-2 text-gray-500 dark:text-gray-400">
+                   <div className="flex items-center gap-2 mb-2 text-gray-500 dark:text-[#C0C0C0]">
                      <FileText className="w-4 h-4" />
                      <span className="text-sm font-medium">Category</span>
                    </div>
                    <p className="text-lg font-bold text-gray-900 dark:text-white">{data.category}</p>
                 </div>
                 <div className="p-5 rounded-3xl bg-gray-50 dark:bg-white/[0.03] border border-black/5 dark:border-white/5 hover:border-brand-500/30 transition-colors">
-                   <div className="flex items-center gap-2 mb-2 text-gray-500 dark:text-gray-400">
+                   <div className="flex items-center gap-2 mb-2 text-gray-500 dark:text-[#C0C0C0]">
                      <IndianRupee className="w-4 h-4" />
                      <span className="text-sm font-medium">Type</span>
                    </div>
@@ -78,14 +78,14 @@ export const HUDModal = ({ isOpen, onClose, data }: HUDModalProps) => {
 
             {/* Description */}
             <div className="p-6 rounded-3xl bg-gray-50 dark:bg-white/[0.03] border border-black/5 dark:border-white/5">
-               <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Description</p>
-               <p className="text-base text-gray-800 dark:text-gray-200 leading-relaxed">
+               <p className="text-sm font-medium text-gray-500 dark:text-[#C0C0C0] mb-2">Description</p>
+               <p className="text-base text-gray-800 dark:text-white leading-relaxed">
                  {data.description || 'No additional details provided for this record.'}
                </p>
             </div>
             
             {/* Footer Metadata */}
-            <div className="mt-8 pt-6 border-t border-black/5 dark:border-white/5 flex flex-col md:flex-row gap-4 justify-between items-center text-sm font-medium text-gray-400 dark:text-gray-500">
+            <div className="mt-8 pt-6 border-t border-black/5 dark:border-white/5 flex flex-col md:flex-row gap-4 justify-between items-center text-sm font-medium text-[#C0C0C0] dark:text-gray-500">
                 <div className="flex items-center gap-2">
                    <Calendar className="w-4 h-4" />
                    {new Date(data.createdAt).toLocaleDateString('en-IN', {

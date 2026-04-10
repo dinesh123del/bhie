@@ -50,7 +50,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
                                                       </div>
 
                                                       <h1 className="text-4xl font-black text-white mb-4 tracking-tight">System Encountered a Hiccup</h1>
-                                                      <p className="text-slate-400 mb-8 leading-relaxed">
+                                                      <p className="text-[#C0C0C0] mb-8 leading-relaxed">
                                                                BIZ PLUS encountered an unexpected issue while processing. Your data is safe. Let's get you back to the dashboard.
                                                       </p>
 

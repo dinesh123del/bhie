@@ -16,24 +16,24 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50 sticky top-0 z-30">
+    <header className="bg-white/80 dark:bg-[#0A0A0A]/80 border border-white/5/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50 sticky top-0 z-30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-4">
-            <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-              <Bell className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+            <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#0A0A0A]/60">
+              <Bell className="w-5 h-5 text-gray-700 dark:text-[#C0C0C0]" />
             </button>
           </div>
           
           <div className="flex items-center space-x-4">
-            <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-              <Moon className="w-5 h-5 text-gray-700 dark:text-gray-300 hidden dark:block" />
-              <Sun className="w-5 h-5 text-gray-700 dark:text-gray-300 block dark:hidden" />
+            <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#0A0A0A]/60 transition-colors">
+              <Moon className="w-5 h-5 text-gray-700 dark:text-[#C0C0C0] hidden dark:block" />
+              <Sun className="w-5 h-5 text-gray-700 dark:text-[#C0C0C0] block dark:hidden" />
             </button>
             
             {user && (
-              <button className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                <UserCircle className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+              <button className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-100 dark:bg-[#0A0A0A]/60 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <UserCircle className="w-6 h-6 text-gray-700 dark:text-[#C0C0C0]" />
                 <span className="text-sm font-medium flex items-center">
                   {user.name || user.email.split('@')[0]} 
                   {getPlanBadge(user.plan)}

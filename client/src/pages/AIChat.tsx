@@ -80,7 +80,7 @@ const SmartChat = () => {
       onClick={onClick}
       className="flex items-center space-x-3 p-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-all group"
     >
-      <Icon className="w-5 h-5 text-blue-500 group-hover:scale-110" />
+      <Icon className="w-5 h-5 text-[#00D4FF] group-hover:scale-110" />
       <span className="font-medium">{text}</span>
     </button>
   );
@@ -113,9 +113,9 @@ const SmartChat = () => {
           )}
         </div>
 
-        <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700">
+        <div className="bg-white dark:bg-[#0A0A0A]/60 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700">
           <div className="flex items-center mb-6">
-            <Activity className="w-8 h-8 mr-3 text-blue-500" />
+            <Activity className="w-8 h-8 mr-3 text-[#00D4FF]" />
             <h2 className="text-2xl font-bold">Prediction</h2>
           </div>
           {prediction && (
@@ -127,7 +127,7 @@ const SmartChat = () => {
                 }`}>
                 {prediction.trend} Trend
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-600 dark:text-[#C0C0C0]">
                 Confidence: {prediction.confidence}
               </p>
             </div>
@@ -137,13 +137,13 @@ const SmartChat = () => {
 
       {/* Chat Interface */}
       <div className="bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
-        <div className="p-6 bg-white/50 dark:bg-gray-900/50 border-b border-gray-200/50 dark:border-gray-700/50">
+        <div className="p-6 bg-white/50 dark:bg-[#0A0A0A]/80 border border-white/5/50 border-b border-gray-200/50 dark:border-gray-700/50">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
               <Bot className="w-10 h-10 bg-blue-100 text-blue-600 p-3 rounded-2xl mr-4" />
               <div>
                 <h2 className="text-2xl font-bold text-white">Smart Business Assistant</h2>
-                <p className="text-gray-600 dark:text-gray-400">Ask about growth, risks, suggestions</p>
+                <p className="text-gray-600 dark:text-[#C0C0C0]">Ask about growth, risks, suggestions</p>
               </div>
             </div>
             <button
@@ -206,7 +206,7 @@ const SmartChat = () => {
             <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-md p-4 rounded-2xl shadow-lg ${msg.role === 'user'
                   ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
-                  : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700'
+                  : 'bg-white dark:bg-[#0A0A0A]/60 border border-gray-200 dark:border-gray-700'
                 }`}>
                 <p>{msg.content}</p>
                 <p className={`text-xs mt-2 opacity-75 ${msg.role === 'user' ? 'text-blue-100' : 'text-gray-500'
@@ -219,7 +219,7 @@ const SmartChat = () => {
 
           {loading && (
             <div className="flex justify-start">
-              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 rounded-2xl shadow-lg max-w-md">
+              <div className="bg-white dark:bg-[#0A0A0A]/60 border border-gray-200 dark:border-gray-700 p-4 rounded-2xl shadow-lg max-w-md">
                 <LoadingSpinner />
                 <p className="text-sm text-gray-500 mt-2">Analyzing...</p>
               </div>
@@ -230,20 +230,20 @@ const SmartChat = () => {
         </div>
 
         {/* Input */}
-        <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-900/50">
+        <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-[#0A0A0A]/80 border border-white/5/50">
           <div className="flex space-x-3">
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
               placeholder="Ask about your business data..."
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600"
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-[#0A0A0A]/60 dark:border-gray-600"
               disabled={loading}
             />
             <button
               onClick={sendMessage}
               disabled={loading || !input.trim()}
-              className="p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl transition-all disabled:opacity-50 flex items-center justify-center"
+              className="p-3 bg-[#00D4FF]/20 text-[#00D4FF] hover:bg-blue-700 text-white rounded-2xl transition-all disabled:opacity-50 flex items-center justify-center"
             >
               <Send className="w-5 h-5" />
             </button>

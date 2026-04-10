@@ -115,7 +115,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture, onClose
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 md:p-8"
       >
-        <PremiumCard className="relative w-full max-w-4xl aspect-[4/3] md:aspect-video overflow-hidden border-sky-500/30 bg-slate-950 p-0 shadow-[0_0_100px_rgba(14,165,233,0.2)]">
+        <PremiumCard className="relative w-full max-w-4xl aspect-[4/3] md:aspect-video overflow-hidden border-sky-500/30 bg-transparent p-0 shadow-[0_0_100px_rgba(14,165,233,0.2)]">
           {/* Header */}
           <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-6 bg-gradient-to-b from-black/80 to-transparent">
              <div className="flex items-center gap-2">

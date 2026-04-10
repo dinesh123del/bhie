@@ -59,7 +59,7 @@ const SummaryCard = ({
           <div className="relative z-10 flex flex-col gap-6">
             <div className="flex items-start justify-between">
               <div className="space-y-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 dark:text-[#C0C0C0] group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
                   {title}
                 </p>
                 <div className="text-4xl md:text-5xl font-[900] tracking-tighter text-gray-900 dark:text-white leading-none tabular-nums">
@@ -80,7 +80,7 @@ const SummaryCard = ({
             </div>
           </div>
 
-          <p className="relative z-10 text-sm leading-relaxed font-semibold text-gray-500 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors">
+          <p className="relative z-10 text-sm leading-relaxed font-semibold text-gray-500 dark:text-[#C0C0C0] group-hover:text-gray-800 dark:group-hover:text-white transition-colors">
             {detail}
           </p>
         </div>

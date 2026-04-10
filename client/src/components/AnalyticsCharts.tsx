@@ -39,7 +39,7 @@ const AnalyticsCharts = ({ analytics, trends }: ChartsProps) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       {/* Line Chart - Monthly Growth */}
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700">
+      <div className="bg-white dark:bg-[#0A0A0A]/60 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700">
         <h3 className="text-xl font-bold mb-6 flex items-center">
           Monthly Growth Trend
         </h3>
@@ -56,7 +56,7 @@ const AnalyticsCharts = ({ analytics, trends }: ChartsProps) => {
       </div>
 
       {/* Pie Chart - Category Distribution */}
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 row-span-2">
+      <div className="bg-white dark:bg-[#0A0A0A]/60 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 row-span-2">
         <h3 className="text-xl font-bold mb-6 flex items-center">
           Category Distribution
         </h3>
@@ -85,7 +85,7 @@ const AnalyticsCharts = ({ analytics, trends }: ChartsProps) => {
       </div>
 
       {/* Bar Chart - Status Comparison */}
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 col-span-2">
+      <div className="bg-white dark:bg-[#0A0A0A]/60 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 col-span-2">
         <h3 className="text-xl font-bold mb-6 flex items-center">
           Status Overview
         </h3>

@@ -110,7 +110,7 @@ const CompanySetup = () => {
             />
 
             <div>
-              <label className="text-gray-300 text-sm">Industry *</label>
+              <label className="text-[#C0C0C0] text-sm">Industry *</label>
               <select
                 name="industry"
                 value={formData.industry}

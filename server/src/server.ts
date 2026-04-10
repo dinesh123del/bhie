@@ -54,7 +54,7 @@ async function initializeIntelligenceSystems(): Promise<void> {
     });
 
     if (!env.OPENAI_API_KEY) {
-      logger.warn('⚠️ OpenAI API key not found. AI features will be limited.');
+      logger.warn('⚠️ Smart Engine API key not found. AI features will be limited.');
       return;
     }
 

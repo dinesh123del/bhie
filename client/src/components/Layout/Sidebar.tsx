@@ -28,7 +28,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose: _onClose }) => {
         <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
           BIZ PLUS
         </h1>
-        <p className="text-sm text-gray-400 mt-1">{user.role}</p>
+        <p className="text-sm text-[#C0C0C0] mt-1">{user.role}</p>
       </div>
 
       <nav className="mt-8 px-4 space-y-2">

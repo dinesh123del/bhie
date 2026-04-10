@@ -43,7 +43,7 @@ app.use(helmet({
       scriptSrc: ["'self'", "'unsafe-inline'", "https://checkout.razorpay.com", "https://*.googleapis.com", "https://accounts.google.com", "https://*.google.com"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://*.googleapis.com"],
       imgSrc: ["'self'", "data:", "blob:", "https://*.googleusercontent.com", "https://*.razorpay.com", "https://images.unsplash.com", "https://*.unsplash.com"],
-      connectSrc: ["'self'", "https://*.razorpay.com", "https://api.openai.com", "https://api.anthropic.com", "https://*.googleapis.com", "https://accounts.google.com"],
+      connectSrc: ["'self'", "https://*.razorpay.com", "https://*.googleapis.com", "https://accounts.google.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://fonts.googleapis.com"],
       mediaSrc: ["'self'", "https://*.mixkit.co", "https://assets.mixkit.co", "blob:"],
       objectSrc: ["'none'"],

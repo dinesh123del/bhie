@@ -45,7 +45,7 @@ export const SimpleCard = ({
   };
 
   const bgClasses = {
-    blue: 'bg-blue-500/10',
+    blue: 'bg-[#00D4FF]/20 text-[#00D4FF]/10',
     green: 'bg-emerald-500/10',
     red: 'bg-red-500/10',
     purple: 'bg-purple-500/10',
@@ -67,14 +67,14 @@ export const SimpleCard = ({
         {action && (
           <button
             onClick={action.onClick}
-            className="text-xs font-semibold text-blue-400 hover:text-blue-300"
+            className="text-xs font-semibold text-[#00D4FF] hover:text-blue-300"
           >
             {action.label}
           </button>
         )}
       </div>
 
-      <h3 className="text-sm text-slate-400 mb-1">{title}</h3>
+      <h3 className="text-sm text-[#C0C0C0] mb-1">{title}</h3>
       <p className="text-3xl font-bold text-white mb-2">{value}</p>
 
       {description && (
@@ -99,14 +99,14 @@ export const ModeToggle = ({
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="flex items-center gap-3 p-3 rounded-lg bg-slate-800/50 border border-slate-700"
+      className="flex items-center gap-3 p-3 rounded-lg bg-[#0A0A0A]/60/50 border border-slate-700"
     >
       <button
         onClick={() => onChange('simple')}
         className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
           mode === 'simple'
-            ? 'bg-blue-600 text-white'
-            : 'text-slate-400 hover:text-slate-300'
+            ? 'bg-[#00D4FF]/20 text-[#00D4FF] text-white'
+            : 'text-[#C0C0C0] hover:text-[#C0C0C0]'
         }`}
       >
         <Eye className="w-4 h-4" />
@@ -119,8 +119,8 @@ export const ModeToggle = ({
         onClick={() => onChange('advanced')}
         className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
           mode === 'advanced'
-            ? 'bg-blue-600 text-white'
-            : 'text-slate-400 hover:text-slate-300'
+            ? 'bg-[#00D4FF]/20 text-[#00D4FF] text-white'
+            : 'text-[#C0C0C0] hover:text-[#C0C0C0]'
         }`}
       >
         <BarChart3 className="w-4 h-4" />
@@ -181,18 +181,18 @@ export const SimplifiedInsight = ({
     <motion.div
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
-      className="p-4 rounded-lg bg-slate-800/50 border border-slate-700 border-l-2 border-l-blue-600 hover:bg-slate-800/80 transition-all cursor-default"
+      className="p-4 rounded-lg bg-[#0A0A0A]/60/50 border border-slate-700 border-l-2 border-l-blue-600 hover:bg-[#0A0A0A]/60/80 transition-all cursor-default"
     >
       <div className="flex items-start gap-3">
         <span className="text-2xl">{emoji}</span>
         <div className="flex-1">
           <h4 className="font-semibold text-white text-sm mb-1">{title}</h4>
-          <p className="text-2xl font-bold text-blue-400 mb-1">{stat}</p>
-          <p className="text-xs text-slate-400 mb-3">{insight}</p>
+          <p className="text-2xl font-bold text-[#00D4FF] mb-1">{stat}</p>
+          <p className="text-xs text-[#C0C0C0] mb-3">{insight}</p>
           {action && (
             <button
               onClick={action.onClick}
-              className="text-xs font-semibold text-blue-400 hover:text-blue-300 transition-all"
+              className="text-xs font-semibold text-[#00D4FF] hover:text-blue-300 transition-all"
             >
               {action.label} →
             </button>
@@ -231,7 +231,7 @@ export const OneClickAction = ({
       }`}
     >
       <h4 className="text-lg font-bold text-white mb-2">{title}</h4>
-      <p className="text-sm text-slate-400 mb-4">{description}</p>
+      <p className="text-sm text-[#C0C0C0] mb-4">{description}</p>
 
       <motion.button
         whileHover={{ scale: 1.02 }}
@@ -240,7 +240,7 @@ export const OneClickAction = ({
         className={`w-full py-3 font-bold rounded-lg transition-all ${
           urgent
             ? 'bg-red-600 hover:bg-red-700 text-white'
-            : 'bg-blue-600 hover:bg-blue-700 text-white'
+            : 'bg-[#00D4FF]/20 text-[#00D4FF] hover:bg-blue-700 text-white'
         }`}
       >
         {buttonText}
@@ -274,9 +274,9 @@ export const SimpleSummary = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: idx * 0.1 }}
-          className="p-4 rounded-lg bg-slate-800/50 border border-slate-700 text-center"
+          className="p-4 rounded-lg bg-[#0A0A0A]/60/50 border border-slate-700 text-center"
         >
-          <p className="text-xs text-slate-400 mb-2">{stat.label}</p>
+          <p className="text-xs text-[#C0C0C0] mb-2">{stat.label}</p>
           <p className="text-2xl font-bold text-white">{stat.value}</p>
           {stat.change !== undefined && (
             <p className={`text-xs mt-2 ${stat.change > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
@@ -302,11 +302,11 @@ export const SimpleHelp = ({
 }) => {
   return (
     <motion.div
-      className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-700 text-slate-400 text-xs font-bold cursor-help group"
+      className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-700 text-[#C0C0C0] text-xs font-bold cursor-help group"
       whileHover={{ scale: 1.1 }}
     >
       {icon}
-      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap border border-slate-700 z-50">
+      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-[#0A0A0A]/80 border border-white/5 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap border border-slate-700 z-50">
         {text}
       </div>
     </motion.div>

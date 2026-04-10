@@ -22,7 +22,7 @@ export function RevenueFlowCard({ revenue = 500000, growth = 15 }: { revenue?: n
       className="apple-card h-80 overflow-hidden bg-[#0A0A0B] border-white/5 p-6"
     >
       <div className="flex items-center gap-2 mb-1">
-        <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+        <span className="w-2 h-2 rounded-full bg-[#00D4FF]/20 text-[#00D4FF] animate-pulse" />
         <span className="text-xs font-black uppercase tracking-widest text-white/40">Revenue Flow</span>
       </div>
 

@@ -7,7 +7,7 @@ const MarketPulse = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
          <div className="flex items-center gap-3">
-            <Globe className="w-5 h-5 text-blue-400" />
+            <Globe className="w-5 h-5 text-[#00D4FF]" />
             <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-white/40">Global Context</h4>
          </div>
          <div className="flex items-center gap-2">
@@ -27,7 +27,7 @@ const MarketPulse = () => {
           <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
               <span className="text-[10px] font-black text-white/20 uppercase">Market Velocity</span>
               <div className="flex items-center gap-2">
-                  <BarChart2 className="w-4 h-4 text-blue-400" />
+                  <BarChart2 className="w-4 h-4 text-[#00D4FF]" />
                   <span className="text-[18px] font-black text-white">Top 8%</span>
               </div>
           </div>

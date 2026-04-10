@@ -219,7 +219,7 @@ export const BizPlusMomentum: React.FC = () => {
             exit={{ opacity: 0, scale: 0.9 }}
             className="mb-2"
           >
-            <PremiumCard className="w-72 bg-slate-950/80 backdrop-blur-2xl border-sky-500/30 p-4 shadow-[0_0_50px_rgba(14,165,233,0.1)]">
+            <PremiumCard className="w-72 bg-transparent/80 backdrop-blur-2xl border-sky-500/30 p-4 shadow-[0_0_50px_rgba(14,165,233,0.1)]">
               <div className="flex items-center gap-3 mb-3">
                 <div className="h-8 w-8 rounded-full bg-sky-500/10 flex items-center justify-center border border-sky-500/20">
                   <Activity className="h-4 w-4 text-sky-400" />
@@ -231,7 +231,7 @@ export const BizPlusMomentum: React.FC = () => {
               </div>
               
               <div className="space-y-3">
-                <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-1.5 w-full bg-[#0A0A0A]/60 rounded-full overflow-hidden">
                   <motion.div 
                     initial={{ width: 0 }}
                     animate={{ width: `${(lastInsight.resilience_impact / 2) * 100}%` }}
@@ -254,7 +254,7 @@ export const BizPlusMomentum: React.FC = () => {
 
       <motion.div 
         layout
-        className="flex items-center gap-3 bg-slate-950/90 backdrop-blur-xl border border-white/10 p-2 rounded-full shadow-2xl"
+        className="flex items-center gap-3 bg-transparent/90 backdrop-blur-xl border border-white/10 p-2 rounded-full shadow-2xl"
       >
         <AnimatePresence mode="wait">
           {isActive ? (

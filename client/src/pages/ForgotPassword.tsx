@@ -50,7 +50,7 @@ const ForgotPassword = () => {
 
         <div className="relative z-10">
           <h2 className="text-4xl font-bold text-white mb-2">Reset Password</h2>
-          <p className="text-gray-300 mb-8">Enter your email to receive reset instructions</p>
+          <p className="text-[#C0C0C0] mb-8">Enter your email to receive reset instructions</p>
 
           {error && (
             <motion.div
@@ -74,7 +74,7 @@ const ForgotPassword = () => {
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-200 mb-3">
+              <label htmlFor="email" className="block text-sm font-semibold text-white mb-3">
                 Email Address
               </label>
               <input
@@ -109,7 +109,7 @@ const ForgotPassword = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-gray-300">
+            <p className="text-[#C0C0C0]">
               Remember your password?{' '}
               <button
                 onClick={() => navigate('/login')}

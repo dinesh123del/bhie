@@ -50,7 +50,7 @@ export default function About() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="max-w-xl text-lg leading-relaxed text-slate-400"
+              className="max-w-xl text-lg leading-relaxed text-[#C0C0C0]"
             >
               BIZ PLUS turns messy lists of bills and numbers into a clear plan for you to grow.
             </motion.p>
@@ -73,7 +73,7 @@ export default function About() {
             initial={{ opacity: 0, scale: 0.9, rotate: 2 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 60, delay: 0.2 }}
-            className="group relative overflow-hidden rounded-[48px] border border-white/10 bg-slate-900 shadow-[0_40px_120px_rgba(0,0,0,0.6)]"
+            className="group relative overflow-hidden rounded-[48px] border border-white/10 bg-[#0A0A0A]/80 border border-white/5 shadow-[0_40px_120px_rgba(0,0,0,0.6)]"
           >
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
             <img
@@ -107,7 +107,7 @@ export default function About() {
                 0{index + 1}
               </div>
               <h2 className="text-2xl font-bold tracking-tight text-white">{principle.title}</h2>
-              <p className="mt-4 text-sm leading-8 text-slate-400">{principle.description}</p>
+              <p className="mt-4 text-sm leading-8 text-[#C0C0C0]">{principle.description}</p>
               <div className="mt-8 flex h-1.5 w-12 overflow-hidden rounded-full bg-white/10">
                 <motion.div
                   initial={{ x: '-100%' }}
@@ -142,13 +142,13 @@ export default function About() {
                 className="group relative overflow-hidden rounded-[40px] border border-white/10 bg-white/5 p-8 text-center transition-all hover:bg-white/[0.08]"
               >
                 <div className="mx-auto mb-6 h-24 w-24 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 p-1">
-                  <div className="flex h-full w-full items-center justify-center rounded-full bg-slate-950 text-3xl font-black text-white">
+                  <div className="flex h-full w-full items-center justify-center rounded-full bg-transparent text-3xl font-black text-white">
                     {member.name[0]}
                   </div>
                 </div>
                 <h3 className="text-xl font-bold text-white">{member.name}</h3>
                 <p className="mt-1 text-sm font-semibold uppercase tracking-widest text-cyan-400">{member.role}</p>
-                <p className="mt-4 text-sm leading-7 text-slate-400">{member.bio}</p>
+                <p className="mt-4 text-sm leading-7 text-[#C0C0C0]">{member.bio}</p>
               </motion.div>
             ))}
           </div>
@@ -157,12 +157,12 @@ export default function About() {
 
       <section className="px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl overflow-hidden rounded-[48px] border border-white/10 bg-gradient-to-br from-white/[0.05] to-transparent p-1 shadow-2xl backdrop-blur-xl">
-          <div className="rounded-[44px] bg-slate-950/80 p-8 sm:p-16">
+          <div className="rounded-[44px] bg-transparent/80 p-8 sm:p-16">
             <div className="grid gap-16 lg:grid-cols-[0.8fr_1.2fr]">
               <div className="space-y-6">
                 <span className="section-kicker">Our Vision</span>
                 <h2 className="text-4xl font-black text-white sm:text-5xl">Built to help you succeed.</h2>
-                <p className="text-lg text-slate-400">BIZ PLUS is here to make business simple for everyone.</p>
+                <p className="text-lg text-[#C0C0C0]">BIZ PLUS is here to make business simple for everyone.</p>
               </div>
               <div className="grid gap-4">
                 {milestones.map((milestone, idx) => (
@@ -171,7 +171,7 @@ export default function About() {
                     initial={{ opacity: 0, x: 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.1 }}
-                    className="flex items-center gap-5 rounded-[24px] border border-white/10 bg-white/5 px-6 py-5 text-sm font-medium text-slate-300"
+                    className="flex items-center gap-5 rounded-[24px] border border-white/10 bg-white/5 px-6 py-5 text-sm font-medium text-[#C0C0C0]"
                   >
                     <div className="flex h-8 w-8 min-w-[32px] items-center justify-center rounded-lg bg-cyan-500/20 text-cyan-400">
                       <Zap size={14} />

@@ -57,7 +57,7 @@ const Profile = () => {
               <div className="w-32 h-32 rounded-[2.5rem] bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-4xl font-black shadow-2xl border-4 border-white dark:border-white/10 group-hover:scale-105 transition-transform duration-500">
                 {user?.name?.charAt(0) || 'U'}
               </div>
-              <button className="absolute -bottom-2 -right-2 p-3 rounded-2xl bg-white dark:bg-slate-900 border border-black/5 dark:border-white/10 shadow-xl text-brand-500 hover:scale-110 transition-transform">
+              <button className="absolute -bottom-2 -right-2 p-3 rounded-2xl bg-white dark:bg-[#0A0A0A]/80 border border-white/5 border border-black/5 dark:border-white/10 shadow-xl text-brand-500 hover:scale-110 transition-transform">
                 <Camera className="w-5 h-5" />
               </button>
             </div>
@@ -69,7 +69,7 @@ const Profile = () => {
                 </h1>
                 <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
                   user?.plan === 'premium' 
-                    ? 'bg-purple-500/10 text-purple-500 border border-purple-500/20' 
+                    ? 'bg-purple-500/10 text-[#7B61FF] border border-purple-500/20' 
                     : user?.plan === 'pro'
                     ? 'bg-brand-500/10 text-brand-500 border border-brand-500/20'
                     : 'bg-gray-500/10 text-gray-500 border border-gray-500/20'
@@ -78,7 +78,7 @@ const Profile = () => {
                   {user?.plan} Status
                 </div>
               </div>
-              <p className="text-gray-500 dark:text-gray-400 font-medium flex items-center justify-center md:justify-start gap-2">
+              <p className="text-gray-500 dark:text-[#C0C0C0] font-medium flex items-center justify-center md:justify-start gap-2">
                 <Mail className="w-4 h-4" />
                 {user?.email}
               </p>
@@ -103,11 +103,11 @@ const Profile = () => {
         <div className="grid md:grid-cols-2 gap-8">
           <div className="space-y-6">
             <div className="p-8 rounded-[2.5rem] bg-white dark:bg-[#0A0A0B] border border-black/5 dark:border-white/5 shadow-xl">
-              <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mb-6">Account Information</h3>
+              <h3 className="text-[10px] font-black text-[#C0C0C0] uppercase tracking-[0.3em] mb-6">Account Information</h3>
               
               <div className="space-y-6">
                 <div>
-                  <label className="text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2 block">Full Name</label>
+                  <label className="text-xs font-black text-gray-500 dark:text-[#C0C0C0] uppercase tracking-widest mb-2 block">Full Name</label>
                   {isEditing ? (
                     <input
                       type="text"
@@ -121,7 +121,7 @@ const Profile = () => {
                 </div>
 
                 <div>
-                  <label className="text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2 block">Email Address</label>
+                  <label className="text-xs font-black text-gray-500 dark:text-[#C0C0C0] uppercase tracking-widest mb-2 block">Email Address</label>
                   {isEditing ? (
                     <input
                       type="email"
@@ -158,7 +158,7 @@ const Profile = () => {
                   </div>
                   <div>
                     <p className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider">{user?.plan} Access</p>
-                    <p className="text-[10px] font-bold text-gray-500 dark:text-gray-400">Next renewal: {user?.expiryDate ? new Date(user.expiryDate).toLocaleDateString() : 'Never'}</p>
+                    <p className="text-[10px] font-bold text-gray-500 dark:text-[#C0C0C0]">Next renewal: {user?.expiryDate ? new Date(user.expiryDate).toLocaleDateString() : 'Never'}</p>
                   </div>
                 </div>
                 <button className="text-[10px] font-black text-indigo-500 hover:underline uppercase tracking-widest">Manage</button>
@@ -168,21 +168,21 @@ const Profile = () => {
 
           <div className="space-y-6">
             <div className="p-8 rounded-[2.5rem] bg-white dark:bg-[#0A0A0B] border border-black/5 dark:border-white/5 shadow-xl">
-              <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mb-6">Usage Metrics</h3>
+              <h3 className="text-[10px] font-black text-[#C0C0C0] uppercase tracking-[0.3em] mb-6">Usage Metrics</h3>
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 rounded-3xl bg-black/[0.01] dark:bg-white/[0.01] border border-black/5 dark:border-white/5">
-                  <p className="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">Total Scans</p>
+                  <p className="text-[10px] font-black text-gray-500 dark:text-[#C0C0C0] uppercase tracking-widest mb-1">Total Scans</p>
                   <p className="text-2xl font-black text-gray-900 dark:text-white tabular-nums">{user?.usageCount}</p>
                 </div>
                 <div className="p-4 rounded-3xl bg-black/[0.01] dark:bg-white/[0.01] border border-black/5 dark:border-white/5">
-                  <p className="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">Status</p>
+                  <p className="text-[10px] font-black text-gray-500 dark:text-[#C0C0C0] uppercase tracking-widest mb-1">Status</p>
                   <p className="text-2xl font-black text-emerald-500 uppercase tracking-tighter">Active</p>
                 </div>
               </div>
 
               <div className="mt-8 space-y-4">
-                <div className="flex items-center justify-between text-xs font-black uppercase tracking-[0.2em] text-gray-400">
+                <div className="flex items-center justify-between text-xs font-black uppercase tracking-[0.2em] text-[#C0C0C0]">
                   <span>Usage Limit</span>
                   <span>{Math.min(100, (user?.usageCount || 0) / 5)}%</span>
                 </div>
@@ -200,12 +200,12 @@ const Profile = () => {
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 rounded-xl bg-purple-500/10">
-                    <Crown className="w-5 h-5 text-purple-500" />
+                    <Crown className="w-5 h-5 text-[#7B61FF]" />
                   </div>
-                  <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Special Access</h3>
+                  <h3 className="text-[10px] font-black text-[#C0C0C0] uppercase tracking-[0.3em]">Special Access</h3>
                 </div>
                 <p className="text-xl font-bold text-gray-900 dark:text-white mb-2 leading-tight">Unlock more insights with Pro.</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">Get advanced AI analysis, global multi-currency support, and better data insights.</p>
+                <p className="text-sm text-gray-500 dark:text-[#C0C0C0] mb-6 leading-relaxed">Get advanced AI analysis, global multi-currency support, and better data insights.</p>
                 <button className="w-full py-4 rounded-2xl bg-black dark:bg-white text-white dark:text-black font-black text-sm uppercase tracking-widest hover:scale-[1.02] transition-transform">Upgrade Now</button>
               </div>
               <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-500/20 blur-[60px] rounded-full" />

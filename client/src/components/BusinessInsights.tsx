@@ -286,7 +286,7 @@ export const BusinessInsights: React.FC<AnalysisDashboardProps> = ({
             <div className="grid md:grid-cols-3 gap-6">
                {analysis.strategies.immediateActions.slice(0, 3).map((action: string, idx: number) => (
                   <div key={idx} className="p-5 border border-slate-200 rounded-2xl flex gap-4">
-                     <span className="text-2xl font-black text-slate-300">0{idx + 1}</span>
+                     <span className="text-2xl font-black text-[#C0C0C0]">0{idx + 1}</span>
                      <p className="text-sm font-bold leading-snug">{action}</p>
                   </div>
                ))}

@@ -186,13 +186,13 @@ export default function SocialShare({ isOpen, onClose, data }: SocialShareProps)
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-slate-900 rounded-3xl p-6 w-full max-w-md border border-white/10"
+            className="bg-[#0A0A0A]/80 border border-white/5 rounded-3xl p-6 w-full max-w-md border border-white/10"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-white font-bold text-xl flex items-center gap-2">
-                <Share2 className="w-5 h-5 text-blue-400" />
+                <Share2 className="w-5 h-5 text-[#00D4FF]" />
                 Share Achievement
               </h3>
               <button
@@ -216,7 +216,7 @@ export default function SocialShare({ isOpen, onClose, data }: SocialShareProps)
             <div className="grid grid-cols-2 gap-3 mb-4">
               <button
                 onClick={shareToLinkedIn}
-                className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl transition-colors font-bold"
+                className="flex items-center justify-center gap-2 bg-[#00D4FF]/20 text-[#00D4FF] hover:bg-[#00D4FF]/20 text-[#00D4FF] text-white py-3 rounded-xl transition-colors font-bold"
               >
                 <Linkedin className="w-4 h-4" />
                 LinkedIn

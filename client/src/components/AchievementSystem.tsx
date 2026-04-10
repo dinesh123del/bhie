@@ -195,8 +195,8 @@ const ACHIEVEMENT_DEFINITIONS: Omit<Achievement, 'current' | 'unlocked' | 'unloc
 ];
 
 const RARITY_COLORS = {
-  common: { bg: 'bg-gray-500/10', border: 'border-gray-500/20', text: 'text-gray-400' },
-  rare: { bg: 'bg-blue-500/10', border: 'border-blue-500/20', text: 'text-blue-400' },
+  common: { bg: 'bg-gray-500/10', border: 'border-gray-500/20', text: 'text-[#C0C0C0]' },
+  rare: { bg: 'bg-[#00D4FF]/20 text-[#00D4FF]/10', border: 'border-blue-500/20', text: 'text-[#00D4FF]' },
   epic: { bg: 'bg-purple-500/10', border: 'border-purple-500/20', text: 'text-purple-400' },
   legendary: { bg: 'bg-amber-500/10', border: 'border-amber-500/20', text: 'text-amber-400' }
 };
@@ -361,7 +361,7 @@ export function AchievementSystem() {
                 <p className="text-2xl font-semibold" style={{ color: celebratingAchievement.color }}>
                   {celebratingAchievement.title}
                 </p>
-                <p className="text-gray-400">{celebratingAchievement.description}</p>
+                <p className="text-[#C0C0C0]">{celebratingAchievement.description}</p>
                 <div className="flex items-center justify-center gap-2 mt-4">
                   <Sparkles className="w-5 h-5 text-yellow-400" />
                   <span className="text-yellow-400 font-bold">+{celebratingAchievement.xpReward} XP</span>
@@ -413,13 +413,13 @@ export function AchievementSystem() {
               <Trophy className="w-6 h-6 text-yellow-400" />
               Achievements
             </h2>
-            <p className="text-gray-400 mt-1">
+            <p className="text-[#C0C0C0] mt-1">
               {unlockedCount} of {achievements.length} unlocked • {totalXP} XP earned
             </p>
           </div>
           <div className="text-right">
             <div className="text-3xl font-bold text-white">{Math.round(progressPercentage)}%</div>
-            <div className="text-sm text-gray-400">Complete</div>
+            <div className="text-sm text-[#C0C0C0]">Complete</div>
           </div>
         </div>
 
@@ -442,8 +442,8 @@ export function AchievementSystem() {
             onClick={() => setSelectedCategory(cat.id)}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
               selectedCategory === cat.id
-                ? 'bg-blue-500 text-white'
-                : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                ? 'bg-[#00D4FF]/20 text-[#00D4FF] text-white'
+                : 'bg-white/5 text-[#C0C0C0] hover:bg-white/10'
             }`}
           >
             {cat.label}
@@ -492,7 +492,7 @@ export function AchievementSystem() {
                   <h3 className={`font-semibold ${achievement.unlocked ? 'text-white' : 'text-gray-500'}`}>
                     {achievement.title}
                   </h3>
-                  <p className="text-sm text-gray-400 mt-0.5">{achievement.description}</p>
+                  <p className="text-sm text-[#C0C0C0] mt-0.5">{achievement.description}</p>
 
                   {/* Progress */}
                   {!achievement.unlocked && (
@@ -536,7 +536,7 @@ export function AchievementSystem() {
           <span>Common</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded-full bg-blue-500" />
+          <div className="w-3 h-3 rounded-full bg-[#00D4FF]/20 text-[#00D4FF]" />
           <span>Rare</span>
         </div>
         <div className="flex items-center gap-1">

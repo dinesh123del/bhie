@@ -165,7 +165,7 @@ export default function ViralWaitlist() {
                 { icon: Share2, text: 'Referral Rewards' },
               ].map((benefit) => (
                 <div key={benefit.text} className="flex items-center gap-2 bg-white/5 rounded-xl p-3">
-                  <benefit.icon className="w-4 h-4 text-blue-400" />
+                  <benefit.icon className="w-4 h-4 text-[#00D4FF]" />
                   <span className="text-white/70 text-sm">{benefit.text}</span>
                 </div>
               ))}

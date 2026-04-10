@@ -14,7 +14,7 @@ const plans = [
     price: '₹99',
     period: '/month',
     features: [
-      { icon: <TrendingUp size={18} className="text-blue-400" />, text: 'Unlimited uploads' },
+      { icon: <TrendingUp size={18} className="text-[#00D4FF]" />, text: 'Unlimited uploads' },
       { icon: <Zap size={18} className="text-purple-400" />, text: 'AI-powered insights' },
       { icon: <Shield size={18} className="text-indigo-400" />, text: 'Advanced analytics' },
     ],
@@ -63,7 +63,7 @@ export const UpgradeModal: React.FC = () => {
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 10 }}
-          className="relative max-w-2xl w-full bg-slate-900 border border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden shadow-indigo-500/20"
+          className="relative max-w-2xl w-full bg-[#0A0A0A]/80 border border-white/5 border border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden shadow-indigo-500/20"
         >
           {/* Glowing background effects */}
           <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-50" />
@@ -72,7 +72,7 @@ export const UpgradeModal: React.FC = () => {
 
           <button
             onClick={() => { setIsOpen(false); navigate('/dashboard'); }}
-            className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors z-50"
+            className="absolute top-4 right-4 text-[#C0C0C0] hover:text-white transition-colors z-50"
           >
             <X size={24} />
           </button>
@@ -90,7 +90,7 @@ export const UpgradeModal: React.FC = () => {
               {plans.map((plan) => (
                 <div
                   key={plan.id}
-                  className={`relative bg-slate-800/50 border rounded-xl p-5 cursor-pointer transition-all hover:bg-slate-800/80 ${
+                  className={`relative bg-[#0A0A0A]/60/50 border rounded-xl p-5 cursor-pointer transition-all hover:bg-[#0A0A0A]/60/80 ${
                     selectedPlan === plan.id
                       ? 'border-indigo-500/60 shadow-[0_0_20px_rgba(99,102,241,0.15)]'
                       : 'border-slate-700/50'
@@ -104,12 +104,12 @@ export const UpgradeModal: React.FC = () => {
                   )}
                   <div className="flex items-baseline gap-1 mb-4 mt-1">
                     <span className="text-2xl font-black text-white">{plan.price}</span>
-                    <span className="text-sm text-slate-400">{plan.period}</span>
+                    <span className="text-sm text-[#C0C0C0]">{plan.period}</span>
                   </div>
                   <ul className="space-y-3">
                     {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-center text-slate-300 gap-2.5 text-sm">
-                        <div className="p-0.5 rounded bg-slate-800/80">{feature.icon}</div>
+                      <li key={i} className="flex items-center text-[#C0C0C0] gap-2.5 text-sm">
+                        <div className="p-0.5 rounded bg-[#0A0A0A]/60/80">{feature.icon}</div>
                         <span>{feature.text}</span>
                       </li>
                     ))}
@@ -121,7 +121,7 @@ export const UpgradeModal: React.FC = () => {
             <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
               <button
                 onClick={() => { setIsOpen(false); navigate('/dashboard'); }}
-                className="flex-1 py-3 px-4 rounded-xl font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 hover:text-white transition-all order-2 sm:order-1"
+                className="flex-1 py-3 px-4 rounded-xl font-medium text-[#C0C0C0] bg-[#0A0A0A]/60 hover:bg-slate-700 hover:text-white transition-all order-2 sm:order-1"
               >
                 Maybe Later
               </button>

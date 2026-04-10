@@ -43,9 +43,9 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ recommendation 
       case 'warning':
         return { bg: 'bg-yellow-500/20 border-yellow-500/30 text-yellow-300', icon: '⚠️', textColor: 'text-yellow-300' };
       case 'suggestion':
-        return { bg: 'bg-blue-500/20 border-blue-500/30 text-blue-300', icon: '💡', textColor: 'text-blue-300' };
+        return { bg: 'bg-[#00D4FF]/20 text-[#00D4FF]/20 border-blue-500/30 text-blue-300', icon: '💡', textColor: 'text-blue-300' };
       default:
-        return { bg: 'bg-gray-500/20 border-gray-500/30 text-gray-300', icon: 'ℹ️', textColor: 'text-gray-300' };
+        return { bg: 'bg-gray-500/20 border-gray-500/30 text-[#C0C0C0]', icon: 'ℹ️', textColor: 'text-[#C0C0C0]' };
     }
   };
 
@@ -141,9 +141,9 @@ const PredictionCard: React.FC = () => {
       default:
         return {
           color: 'from-blue-600 to-blue-700',
-          bgColor: 'bg-blue-500/20',
+          bgColor: 'bg-[#00D4FF]/20 text-[#00D4FF]/20',
           borderColor: 'border-blue-500/30',
-          textColor: 'text-blue-400',
+          textColor: 'text-[#00D4FF]',
           icon: AlertCircle,
           label: 'Unknown',
         };
@@ -160,8 +160,8 @@ const PredictionCard: React.FC = () => {
     return (
       <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8">
         <div className="flex items-center justify-center gap-3">
-          <Loader className="animate-spin text-blue-400" size={24} />
-          <p className="text-gray-300">Processing your records...</p>
+          <Loader className="animate-spin text-[#00D4FF]" size={24} />
+          <p className="text-[#C0C0C0]">Processing your records...</p>
         </div>
       </div>
     );
@@ -205,14 +205,14 @@ const PredictionCard: React.FC = () => {
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-xl font-bold text-white mb-1">Health Score</h2>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-[#C0C0C0]">
                 Based on {prediction.metrics.totalRecords} record
                 {prediction.metrics.totalRecords !== 1 ? 's' : ''}
               </p>
             </div>
             <button
               onClick={fetchPrediction}
-              className="p-2 hover:bg-white/10 rounded-lg transition-colors text-gray-400 hover:text-white"
+              className="p-2 hover:bg-white/10 rounded-lg transition-colors text-[#C0C0C0] hover:text-white"
             >
               <RotateCw size={20} />
             </button>
@@ -265,7 +265,7 @@ const PredictionCard: React.FC = () => {
                   >
                     {prediction.healthScore}
                   </div>
-                  <div className="text-xs text-gray-400 mt-1">/ 100</div>
+                  <div className="text-xs text-[#C0C0C0] mt-1">/ 100</div>
                 </div>
               </div>
             </div>
@@ -285,7 +285,7 @@ const PredictionCard: React.FC = () => {
                 {prediction.metrics.riskFactors.length > 0 && (
                   <div className="space-y-1">
                     {prediction.metrics.riskFactors.map((factor, idx) => (
-                      <p key={idx} className="text-xs text-gray-300">
+                      <p key={idx} className="text-xs text-[#C0C0C0]">
                         • {factor}
                       </p>
                     ))}
@@ -296,13 +296,13 @@ const PredictionCard: React.FC = () => {
               {/* Quick Stats */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-white/5 border border-white/10 rounded-lg p-3">
-                  <p className="text-xs text-gray-400 mb-1">Active</p>
+                  <p className="text-xs text-[#C0C0C0] mb-1">Active</p>
                   <p className="text-lg font-bold text-emerald-400">
                     {prediction.metrics.activeCount}
                   </p>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded-lg p-3">
-                  <p className="text-xs text-gray-400 mb-1">Draft</p>
+                  <p className="text-xs text-[#C0C0C0] mb-1">Draft</p>
                   <p className="text-lg font-bold text-yellow-400">
                     {prediction.metrics.draftCount}
                   </p>
@@ -314,8 +314,8 @@ const PredictionCard: React.FC = () => {
           {/* Progress Bar */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-medium text-gray-300">Completion Rate</p>
-              <p className="text-sm font-bold text-blue-400">
+              <p className="text-sm font-medium text-[#C0C0C0]">Completion Rate</p>
+              <p className="text-sm font-bold text-[#00D4FF]">
                 {prediction.metrics.completionRate}%
               </p>
             </div>
@@ -360,7 +360,7 @@ const PredictionCard: React.FC = () => {
                 {/* Additional Recommendations */}
                 {recommendationsData.recommendations && recommendationsData.recommendations.length > 0 && (
                   <div>
-                    <h4 className="text-sm font-semibold text-gray-300 mb-3 uppercase tracking-wide">Additional Actions</h4>
+                    <h4 className="text-sm font-semibold text-[#C0C0C0] mb-3 uppercase tracking-wide">Additional Actions</h4>
                     <div className="space-y-2">
                       {recommendationsData.recommendations!.slice(0, 3).map((rec: any, idx: number) => (
                         <RecommendationCard key={idx} recommendation={rec} />
@@ -370,7 +370,7 @@ const PredictionCard: React.FC = () => {
                 )}
               </div>
             ) : (
-              <p className="text-gray-400 text-sm p-6 text-center">No advisor insights available yet</p>
+              <p className="text-[#C0C0C0] text-sm p-6 text-center">No advisor insights available yet</p>
             )}
             {recommendationsData && (
               <div className="mt-4 pt-4 border-t border-white/10 grid grid-cols-3 gap-2 text-xs">
@@ -395,7 +395,7 @@ const PredictionCard: React.FC = () => {
             </p>
             <button
               onClick={fetchPrediction}
-              className="text-xs px-3 py-1 bg-blue-600/20 border border-blue-500/30 text-blue-400 rounded hover:bg-blue-600/30 transition-colors flex items-center gap-1"
+              className="text-xs px-3 py-1 bg-[#00D4FF]/20 text-[#00D4FF]/20 border border-blue-500/30 text-[#00D4FF] rounded hover:bg-[#00D4FF]/20 text-[#00D4FF]/30 transition-colors flex items-center gap-1"
             >
               <TrendingUp size={12} />
               Refresh Analysis
@@ -460,7 +460,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
     >
       <div className="text-2xl mb-2">{icon}</div>
       <div className="text-2xl font-bold text-white mb-1">{value}</div>
-      <div className="text-xs text-gray-400">{label}</div>
+      <div className="text-xs text-[#C0C0C0]">{label}</div>
     </div>
   );
 };

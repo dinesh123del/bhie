@@ -148,7 +148,7 @@ const FullscreenLogoLoader = ({
             transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
           />
           <motion.p
-            className="text-sm uppercase tracking-[0.34em] text-slate-300"
+            className="text-sm uppercase tracking-[0.34em] text-[#C0C0C0]"
             animate={{ opacity: [0.45, 1, 0.45] }}
             transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
           >

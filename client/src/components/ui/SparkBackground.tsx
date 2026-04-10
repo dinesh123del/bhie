@@ -20,7 +20,7 @@ const SparkBackground = () => {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-[#020203]">
       {/* Deep Gradient Glows */}
-      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-500/10 blur-[150px] rounded-full animate-pulse" />
+      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-[#00D4FF]/20 text-[#00D4FF]/10 blur-[150px] rounded-full animate-pulse" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-purple-500/10 blur-[150px] rounded-full animate-pulse" style={{ animationDelay: '3s' }} />
       
       {/* Interactive Sparks */}

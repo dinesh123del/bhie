@@ -146,7 +146,7 @@ export default function FirstScanCelebration({ isOpen, onClose, scanCount }: Cel
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.5, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-            className="relative bg-slate-900 rounded-3xl p-8 max-w-md w-full text-center border border-white/10 overflow-hidden"
+            className="relative bg-[#0A0A0A]/80 border border-white/5 rounded-3xl p-8 max-w-md w-full text-center border border-white/10 overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Background Glow */}
@@ -239,7 +239,7 @@ export default function FirstScanCelebration({ isOpen, onClose, scanCount }: Cel
                   subtitle: `I just unlocked ${milestone.title} on BIZ PLUS!`,
                   date: new Date().toLocaleDateString()
                 })}
-                className="w-full flex items-center justify-center gap-2 bg-blue-600/20 text-blue-400 py-3 rounded-xl border border-blue-500/30 hover:bg-blue-600/30 transition-all font-bold group"
+                className="w-full flex items-center justify-center gap-2 bg-[#00D4FF]/20 text-[#00D4FF]/20 text-[#00D4FF] py-3 rounded-xl border border-blue-500/30 hover:bg-[#00D4FF]/20 text-[#00D4FF]/30 transition-all font-bold group"
               >
                 <Share2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
                 Share My Momentum
@@ -282,7 +282,7 @@ export default function FirstScanCelebration({ isOpen, onClose, scanCount }: Cel
               transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
               className="absolute bottom-20 right-8"
             >
-              <Sparkles className="w-6 h-6 text-blue-400" />
+              <Sparkles className="w-6 h-6 text-[#00D4FF]" />
             </motion.div>
           </motion.div>
         </motion.div>

@@ -6,10 +6,10 @@ node_modules/
 # -----------------------------
 # Build outputs
 # -----------------------------
-dist/
+# dist/
 build/
-client/dist/
-server/dist/
+# client/dist/
+# server/dist/
 .vite/
 server/uploads/
 uploads/

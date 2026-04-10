@@ -10,55 +10,53 @@ const config: Config = {
         sans: ['Inter', 'Geist', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        // Custom SaaS Palette
+        // Futuristic Cinematic Minimalism Core
+        cinematic: {
+          bg: '#0A0A0A',
+          primary: '#C0C0C0',     // Chrome Silver
+          accent1: '#00D4FF',     // Neon Blue
+          accent2: '#7B61FF',     // Electric Purple
+        },
+        // Legacy Mappings (Enforcing the new unified system over old names safely)
         premium: {
-          light: {
-            bg: '#f9fafb',
-            card: '#ffffff',
-            text: '#111827',
-            border: 'rgba(0, 0, 0, 0.08)',
-          },
-          dark: {
-            bg: '#0f172a',
-            card: '#111827',
-            text: '#f9fafb',
-            border: 'rgba(255, 255, 255, 0.1)',
-          }
+          light: { bg: '#0A0A0A', card: '#0A0A0A', text: '#C0C0C0', border: 'rgba(255,255,255,0.05)' },
+          dark: { bg: '#0A0A0A', card: '#0A0A0A', text: '#C0C0C0', border: 'rgba(255,255,255,0.05)' }
         },
         brand: {
-          50: '#f5f3ff',
-          100: '#ede9fe',
-          200: '#ddd6fe',
-          300: '#c4b5fd',
-          400: '#a78bfa',
-          500: '#8b5cf6',
-          600: '#7c3aed',
-          700: '#6d28d9',
-          800: '#5b21b6',
-          900: '#4c1d95',
+          50: '#0A0A0A', 100: '#0A0A0A', 200: '#111111', 300: '#C0C0C0', 400: '#00D4FF',
+          500: '#00D4FF', 600: '#7B61FF', 700: '#7B61FF', 800: '#0A0A0A', 900: '#0A0A0A',
         },
         bhie: {
-          primary: '#5E5CE6',
-          purple: '#BF5AF2',
-          black: '#000000',
-          surface: 'rgba(28, 28, 30, 0.7)',
-          border: 'rgba(255, 255, 255, 0.12)',
-          glow: 'rgba(94, 92, 230, 0.5)',
+          primary: '#00D4FF',
+          purple: '#7B61FF',
+          black: '#0A0A0A',
+          surface: 'rgba(10, 10, 10, 0.7)',
+          border: 'rgba(255, 255, 255, 0.05)',
+          glow: 'rgba(0, 212, 255, 0.5)',
         }
       },
+      backgroundImage: {
+         'gradient-cinematic': 'linear-gradient(135deg, #00D4FF 0%, #7B61FF 100%)',
+      },
       borderRadius: {
-        'xl': '1rem',
+        'xl': '1rem', // 16px radius standard
         '2xl': '1.25rem',
         '3xl': '1.5rem',
         '4xl': '2rem',
       },
       boxShadow: {
-        'premium': '0 10px 30px -10px rgba(0, 0, 0, 0.1)',
-        'premium-hover': '0 20px 40px -15px rgba(0, 0, 0, 0.15)',
-        'glow': '0 0 20px rgba(139, 92, 246, 0.3)',
+        'premium': '0 10px 30px -10px rgba(0, 212, 255, 0.05)',
+        'premium-hover': '0 20px 40px -15px rgba(0, 212, 255, 0.15)',
+        'glow-blue': '0 0 20px rgba(0, 212, 255, 0.3)',
+        'glow-purple': '0 0 20px rgba(123, 97, 255, 0.3)',
       },
       transitionTimingFunction: {
-        'premium': 'cubic-bezier(0.22, 1, 0.36, 1)',
+        'premium': 'cubic-bezier(0.4, 0, 0.2, 1)', // ease-in-out
+        'cinematic': 'cubic-bezier(0.22, 1, 0.36, 1)',
+      },
+      transitionDuration: {
+        '300': '300ms',
+        '600': '600ms',
       }
     },
   },

@@ -68,7 +68,7 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
       )}
 
       {extreme && (
-        <div className="absolute inset-[1px] -z-10 bg-slate-950 rounded-[2.5rem] opacity-90" />
+        <div className="absolute inset-[1px] -z-10 bg-transparent rounded-[2.5rem] opacity-90" />
       )}
 
       {gradient && (

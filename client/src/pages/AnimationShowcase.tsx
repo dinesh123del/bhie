@@ -43,7 +43,7 @@ const AnimationShowcase: React.FC = () => {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-slate-900 text-white overflow-x-hidden">
+    <div ref={containerRef} className="min-h-screen bg-[#0A0A0A]/80 border border-white/5 text-white overflow-x-hidden">
       {/* Scroll Progress Indicator */}
       <ScrollProgress color="bg-gradient-to-r from-indigo-500 to-purple-500" />
 
@@ -79,7 +79,7 @@ const AnimationShowcase: React.FC = () => {
 
             {/* Subheading */}
             <HeroStaggerItem>
-              <p className="text-xl md:text-2xl text-slate-400 mb-10 max-w-2xl mx-auto">
+              <p className="text-xl md:text-2xl text-[#C0C0C0] mb-10 max-w-2xl mx-auto">
                 Smooth, modern, high-performance animations inspired by Apple, Stripe, and Linear.
               </p>
             </HeroStaggerItem>
@@ -110,7 +110,7 @@ const AnimationShowcase: React.FC = () => {
                   <TrendingUp className="w-5 h-5 text-indigo-300" />
                 </div>
                 <div>
-                  <div className="text-sm text-slate-400">Revenue</div>
+                  <div className="text-sm text-[#C0C0C0]">Revenue</div>
                   <div className="text-2xl font-bold text-white">$124.5K</div>
                 </div>
               </div>
@@ -133,7 +133,7 @@ const AnimationShowcase: React.FC = () => {
             <div className="w-56 h-32 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl backdrop-blur-xl border border-white/10 p-5">
               <div className="flex items-center gap-2 mb-3">
                 <Users className="w-5 h-5 text-purple-300" />
-                <span className="text-sm text-slate-400">Active Users</span>
+                <span className="text-sm text-[#C0C0C0]">Active Users</span>
               </div>
               <div className="text-3xl font-bold text-white">24.8K</div>
               <div className="text-sm text-green-400 mt-1">+12.5% this week</div>
@@ -167,7 +167,7 @@ const AnimationShowcase: React.FC = () => {
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Scroll-Triggered Animations
             </h2>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+            <p className="text-xl text-[#C0C0C0] max-w-2xl mx-auto">
               Elements smoothly reveal as you scroll, creating an engaging storytelling experience.
             </p>
           </ScrollReveal>
@@ -180,7 +180,7 @@ const AnimationShowcase: React.FC = () => {
             ].map((feature, i) => (
               <div
                 key={i}
-                className="group p-8 bg-slate-800/50 rounded-2xl border border-slate-700/50 hover:border-indigo-500/50 transition-colors"
+                className="group p-8 bg-[#0A0A0A]/60/50 rounded-2xl border border-slate-700/50 hover:border-indigo-500/50 transition-colors"
               >
                 <motion.div
                   className="w-14 h-14 bg-indigo-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
@@ -189,7 +189,7 @@ const AnimationShowcase: React.FC = () => {
                   <feature.icon className="w-7 h-7 text-indigo-400" />
                 </motion.div>
                 <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                <p className="text-slate-400">{feature.desc}</p>
+                <p className="text-[#C0C0C0]">{feature.desc}</p>
               </div>
             ))}
           </ScrollRevealGroup>
@@ -199,13 +199,13 @@ const AnimationShowcase: React.FC = () => {
       {/* ============================================
           DATA VISUALIZATION SECTION
           ============================================ */}
-      <section className="py-32 px-6 bg-slate-800/30">
+      <section className="py-32 px-6 bg-[#0A0A0A]/60/30">
         <div className="max-w-6xl mx-auto">
           <ScrollReveal variant="fadeUp" className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Animated Data Visualizations
             </h2>
-            <p className="text-xl text-slate-400">
+            <p className="text-xl text-[#C0C0C0]">
               Charts and numbers that come alive with smooth animations.
             </p>
           </ScrollReveal>
@@ -243,7 +243,7 @@ const AnimationShowcase: React.FC = () => {
           </div>
 
           {/* Progress Bars */}
-          <ScrollReveal variant="scaleIn" className="bg-slate-800/50 rounded-2xl p-8 border border-slate-700/50">
+          <ScrollReveal variant="scaleIn" className="bg-[#0A0A0A]/60/50 rounded-2xl p-8 border border-slate-700/50">
             <h3 className="text-2xl font-bold mb-8">Performance Metrics</h3>
             <div className="space-y-6">
               <AnimatedBar
@@ -294,7 +294,7 @@ const AnimationShowcase: React.FC = () => {
                     </div>
                   </div>
                 </AnimatedProgressRing>
-                <p className="mt-4 text-lg font-medium text-slate-300">{item.label}</p>
+                <p className="mt-4 text-lg font-medium text-[#C0C0C0]">{item.label}</p>
               </ScrollReveal>
             ))}
           </div>
@@ -308,7 +308,7 @@ const AnimationShowcase: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           <ScrollReveal variant="fadeUp" className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">Parallax Effects</h2>
-            <p className="text-xl text-slate-400">
+            <p className="text-xl text-[#C0C0C0]">
               Depth and dimension through layered scroll-based movement.
             </p>
           </ScrollReveal>
@@ -333,7 +333,7 @@ const AnimationShowcase: React.FC = () => {
                 className="text-center"
               >
                 <h3 className="text-3xl md:text-4xl font-bold mb-4">Interactive Parallax</h3>
-                <p className="text-slate-300">Move your mouse to see the effect</p>
+                <p className="text-[#C0C0C0]">Move your mouse to see the effect</p>
               </motion.div>
             </div>
           </MouseParallax>
@@ -349,7 +349,7 @@ const AnimationShowcase: React.FC = () => {
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Ready to Elevate Your UI?
             </h2>
-            <p className="text-xl text-slate-400 mb-10">
+            <p className="text-xl text-[#C0C0C0] mb-10">
               Start building premium, animated experiences today with the BIZ PLUS Animation System.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -376,7 +376,7 @@ const AnimationShowcase: React.FC = () => {
               <motion.a
                 key={link}
                 href="#"
-                className="text-slate-400 hover:text-white transition-colors"
+                className="text-[#C0C0C0] hover:text-white transition-colors"
                 whileHover={{ y: -2 }}
               >
                 {link}

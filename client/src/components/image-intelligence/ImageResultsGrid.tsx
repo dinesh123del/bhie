@@ -17,17 +17,17 @@ export default function ImageResultsGrid({ title, items }: Props) {
     <section className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-white">{title}</h2>
-        <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-slate-300">{items.length} items</span>
+        <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-[#C0C0C0]">{items.length} items</span>
       </div>
 
       {items.length === 0 ? (
-        <div className="rounded-xl border border-white/10 bg-slate-900/60 p-6 text-center text-sm text-slate-400">
+        <div className="rounded-xl border border-white/10 bg-[#0A0A0A]/80 border border-white/5/60 p-6 text-center text-sm text-[#C0C0C0]">
           No records yet.
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {items.map((item) => (
-            <article key={item.id} className="overflow-hidden rounded-2xl border border-white/10 bg-slate-900/70">
+            <article key={item.id} className="overflow-hidden rounded-2xl border border-white/10 bg-[#0A0A0A]/80 border border-white/5/70">
               <img
                 src={toAbsoluteImageUrl(item.imageUrl)}
                 alt={item.originalName}
@@ -38,7 +38,7 @@ export default function ImageResultsGrid({ title, items }: Props) {
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <p className="truncate text-sm font-semibold text-white">{item.originalName}</p>
-                    <p className="text-xs text-slate-400">{item.detectedType} • {item.processingStatus}</p>
+                    <p className="text-xs text-[#C0C0C0]">{item.detectedType} • {item.processingStatus}</p>
                   </div>
 
                   <div className="text-right text-xs text-cyan-300">
@@ -55,7 +55,7 @@ export default function ImageResultsGrid({ title, items }: Props) {
                   ))}
                 </div>
 
-                <div className="space-y-2 text-xs text-slate-300">
+                <div className="space-y-2 text-xs text-[#C0C0C0]">
                   <p className="line-clamp-2">
                     <FileText className="mr-1 inline h-3 w-3" />
                     {item.extractedText || 'No text extracted yet'}

@@ -191,7 +191,7 @@ export function DashboardScene3D({
       <div className="relative">
         {showBackground && (
           <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0B] via-[#0f0f12] to-[#0A0A0B]">
-            <div className="absolute inset-0 bg-blue-500/5 blur-[100px]" />
+            <div className="absolute inset-0 bg-[#00D4FF]/20 text-[#00D4FF]/5 blur-[100px]" />
           </div>
         )}
         <div className="relative z-10">{children}</div>

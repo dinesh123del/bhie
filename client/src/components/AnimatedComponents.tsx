@@ -118,7 +118,7 @@ export const PremiumBadge: React.FC<{
     success: 'bg-emerald-500/30 text-emerald-100 border-emerald-400/50 font-semibold',
     warning: 'bg-amber-500/30 text-amber-100 border-amber-400/50 font-semibold',
     error: 'bg-red-500/30 text-red-100 border-red-400/50 font-semibold',
-    info: 'bg-blue-500/30 text-blue-100 border-blue-400/50 font-semibold',
+    info: 'bg-[#00D4FF]/20 text-[#00D4FF]/30 text-blue-100 border-blue-400/50 font-semibold',
   };
 
   return (
@@ -170,8 +170,8 @@ export const ProgressBar: React.FC<{
     <div className="w-full">
       {label && (
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-semibold text-gray-200">{label}</span>
-          <span className="text-sm font-bold text-gray-300">
+          <span className="text-sm font-semibold text-white">{label}</span>
+          <span className="text-sm font-bold text-[#C0C0C0]">
             {percentage.toFixed(0)}%
           </span>
         </div>
@@ -266,7 +266,7 @@ export const Modal: React.FC<{
             {title && (
               <h2 className="text-2xl font-bold text-white mb-6">{title}</h2>
             )}
-            <div className="text-gray-200">{children}</div>
+            <div className="text-white">{children}</div>
             {footer && <div className="mt-8 flex gap-3">{footer}</div>}
           </div>
         </motion.div>
@@ -322,7 +322,7 @@ export const StatCard: React.FC<{
 }> = ({ label, value, icon, trend, className = '' }) => (
   <PremiumCard className={`p-6 ${className}`}>
     <div className="flex items-start justify-between mb-4">
-      <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-widest">
+      <h3 className="text-sm font-semibold text-[#C0C0C0] uppercase tracking-widest">
         {label}
       </h3>
       {icon && (

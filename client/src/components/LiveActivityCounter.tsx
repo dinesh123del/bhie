@@ -20,7 +20,7 @@ const INITIAL_STATS: LiveStat[] = [
     value: 2847,
     suffix: '',
     icon: Users,
-    color: 'text-blue-400',
+    color: 'text-[#00D4FF]',
     increment: 3,
   },
   {
@@ -112,7 +112,7 @@ export default function LiveActivityCounter() {
                   initial={{ opacity: 0.5, scale: 0 }}
                   animate={{ opacity: 0, scale: 2 }}
                   exit={{ opacity: 0 }}
-                  className="absolute inset-0 bg-blue-500/20 rounded-2xl"
+                  className="absolute inset-0 bg-[#00D4FF]/20 text-[#00D4FF]/20 rounded-2xl"
                 />
               )}
             </AnimatePresence>
@@ -221,7 +221,7 @@ export default function LiveActivityCounter() {
         className="mt-6 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl p-4 border border-blue-500/30 flex items-center justify-between"
       >
         <div className="flex items-center gap-3">
-          <TrendingUp className="w-5 h-5 text-blue-400" />
+          <TrendingUp className="w-5 h-5 text-[#00D4FF]" />
           <p className="text-white text-sm">
             <span className="font-bold">{stats[0].value.toLocaleString()}</span> businesses are tracking their finances right now
           </p>

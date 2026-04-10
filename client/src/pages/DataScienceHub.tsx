@@ -285,7 +285,7 @@ ${analysis.profitabilityRoadmap.map(r => `- ${r.step}: ${r.rationale} (${r.impac
                                   <h4 className="text-lg font-black text-white whitespace-nowrap">{item.step}</h4>
                                   <div className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${
                                     item.impact === 'high' ? 'bg-red-500/20 text-red-400' :
-                                    item.impact === 'medium' ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400'
+                                    item.impact === 'medium' ? 'bg-amber-500/20 text-amber-400' : 'bg-[#00D4FF]/20 text-[#00D4FF]/20 text-[#00D4FF]'
                                   }`}>
                                     {item.impact} IMPACT
                                   </div>
@@ -311,7 +311,7 @@ ${analysis.profitabilityRoadmap.map(r => `- ${r.step}: ${r.rationale} (${r.impac
                         <p className="text-[10px] text-white/40 uppercase font-black mb-2">{stat.metric}</p>
                         <p className={`text-2xl font-black ${
                           stat.status === 'positive' ? 'text-emerald-400' : 
-                          stat.status === 'negative' ? 'text-red-400' : 'text-blue-400'
+                          stat.status === 'negative' ? 'text-red-400' : 'text-[#00D4FF]'
                         }`}>
                           {stat.value}
                         </p>
@@ -374,8 +374,8 @@ ${analysis.profitabilityRoadmap.map(r => `- ${r.step}: ${r.rationale} (${r.impac
                   </PremiumCard>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <PremiumCard className="p-6 border-white/5 bg-blue-500/5 hover:bg-blue-500/10 transition-colors">
-                      <div className="flex items-center gap-3 mb-4 text-blue-400">
+                    <PremiumCard className="p-6 border-white/5 bg-[#00D4FF]/20 text-[#00D4FF]/5 hover:bg-[#00D4FF]/20 text-[#00D4FF]/10 transition-colors">
+                      <div className="flex items-center gap-3 mb-4 text-[#00D4FF]">
                         <LineChart className="w-5 h-5" />
                         <h4 className="font-black text-xs uppercase tracking-widest">Track Your Trends</h4>
                       </div>

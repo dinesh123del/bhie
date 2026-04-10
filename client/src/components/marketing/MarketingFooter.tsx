@@ -17,16 +17,16 @@ export default function MarketingFooter() {
       <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.4fr_0.8fr_1fr]">
         <div className="space-y-5">
           <Logo size="md" to="/" subtitle="Economic Resilience" />
-          <p className="max-w-md text-sm leading-7 text-slate-300">
+          <p className="max-w-md text-sm leading-7 text-[#C0C0C0]">
             BIZ PLUS helps modern businesses turn operational data into decisions, momentum, and measurable growth.
           </p>
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.3em] text-[#C0C0C0]">
             Links
           </h3>
-          <div className="mt-5 flex flex-col gap-3 text-sm text-slate-300">
+          <div className="mt-5 flex flex-col gap-3 text-sm text-[#C0C0C0]">
             {footerLinks.map((link) => (
               <Link key={link.to} to={link.to} className="transition hover:text-white">
                 {link.label}
@@ -36,10 +36,10 @@ export default function MarketingFooter() {
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.3em] text-[#C0C0C0]">
             Contact
           </h3>
-          <div className="mt-5 space-y-4 text-sm text-slate-300">
+          <div className="mt-5 space-y-4 text-sm text-[#C0C0C0]">
             <div className="flex items-center gap-3">
               <Mail className="h-4 w-4 text-cyan-300" />
               <span>hello@bizplus.io</span>
@@ -56,7 +56,7 @@ export default function MarketingFooter() {
         </div>
       </div>
 
-      <div className="mx-auto mt-12 max-w-7xl border-t border-white/10 pt-6 text-sm text-slate-400">
+      <div className="mx-auto mt-12 max-w-7xl border-t border-white/10 pt-6 text-sm text-[#C0C0C0]">
         Copyright © 2026 BIZ PLUS. All rights reserved.
       </div>
     </footer>

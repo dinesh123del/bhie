@@ -169,7 +169,7 @@ export function RealTimeIntelligence({ businessId, className }: RealTimeIntellig
       case 'critical': return 'bg-red-500';
       case 'high': return 'bg-orange-500';
       case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-blue-500';
+      case 'low': return 'bg-[#00D4FF]/20 text-[#00D4FF]';
       default: return 'bg-gray-500';
     }
   };
@@ -179,7 +179,7 @@ export function RealTimeIntelligence({ businessId, className }: RealTimeIntellig
       <Card className={className}>
         <CardContent className="p-6">
           <div className="flex items-center justify-center h-32">
-            <RefreshCw className="h-6 w-6 animate-spin text-blue-500" />
+            <RefreshCw className="h-6 w-6 animate-spin text-[#00D4FF]" />
             <span className="ml-2 text-gray-600">Loading real-time intelligence...</span>
           </div>
         </CardContent>
@@ -227,7 +227,7 @@ export function RealTimeIntelligence({ businessId, className }: RealTimeIntellig
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
-                <Activity className="h-5 w-5 mr-2 text-blue-500" />
+                <Activity className="h-5 w-5 mr-2 text-[#00D4FF]" />
                 Live Business Overview
               </CardTitle>
             </CardHeader>
@@ -354,7 +354,7 @@ export function RealTimeIntelligence({ businessId, className }: RealTimeIntellig
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
-                <Zap className="h-5 w-5 mr-2 text-purple-500" />
+                <Zap className="h-5 w-5 mr-2 text-[#7B61FF]" />
                 Recent Events
                 <Badge className="ml-2" variant="secondary">
                   {events.length}

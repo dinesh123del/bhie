@@ -253,7 +253,7 @@ export default function LandingPagePremium() {
               viewport={{ once: true }}
               className="apple-card p-24 md:p-32 bg-[#0A0A0B] border-white/5 relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-blue-500/[0.03] blur-[150px] scale-150" />
+              <div className="absolute inset-0 bg-[#00D4FF]/20 text-[#00D4FF]/[0.03] blur-[150px] scale-150" />
               <div className="relative z-10 space-y-12">
                 <h2 className="text-[56px] md:text-[92px] font-black tracking-[-0.05em] leading-[0.9] text-white">
                   Ready to <br /> start?

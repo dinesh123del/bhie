@@ -26,7 +26,7 @@ const InsightCard = ({
   };
 
   const colors: Record<string, string> = {
-    recommendation: 'from-blue-900/30 to-slate-900 border-blue-700/30 text-blue-400',
+    recommendation: 'from-blue-900/30 to-slate-900 border-blue-700/30 text-[#00D4FF]',
     warning: 'from-red-900/30 to-slate-900 border-red-700/30 text-red-400',
     opportunity: 'from-emerald-900/30 to-slate-900 border-emerald-700/30 text-emerald-400'
   };
@@ -34,7 +34,7 @@ const InsightCard = ({
   const impacts: Record<string, string> = {
     high: 'bg-red-500/20 text-red-400',
     medium: 'bg-yellow-500/20 text-yellow-400',
-    low: 'bg-blue-500/20 text-blue-400'
+    low: 'bg-[#00D4FF]/20 text-[#00D4FF]/20 text-[#00D4FF]'
   };
 
   return (
@@ -58,11 +58,11 @@ const InsightCard = ({
             </span>
           </div>
 
-          <p className="text-slate-300 text-sm mb-4">{insight.description}</p>
+          <p className="text-[#C0C0C0] text-sm mb-4">{insight.description}</p>
 
           {insight.action && (
             <motion.button
-              className="text-sm font-semibold text-blue-400 hover:text-blue-300 flex items-center gap-2 group"
+              className="text-sm font-semibold text-[#00D4FF] hover:text-blue-300 flex items-center gap-2 group"
               whileHover={{ x: 4 }}
             >
               {insight.action}
@@ -209,7 +209,7 @@ const Insights = () => {
         transition={{ duration: 0.5 }}
       >
         <h1 className="text-4xl font-bold text-white mb-2">AI Insights</h1>
-        <p className="text-slate-400">Get personalized recommendations powered by AI</p>
+        <p className="text-[#C0C0C0]">Get personalized recommendations powered by AI</p>
       </motion.div>
 
       {/* AI Power Badge */}
@@ -219,7 +219,7 @@ const Insights = () => {
         transition={{ delay: 0.1 }}
         className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30"
       >
-        <Sparkles className="w-4 h-4 text-blue-400" />
+        <Sparkles className="w-4 h-4 text-[#00D4FF]" />
         <span className="text-sm font-semibold text-blue-300">Powered by AI</span>
       </motion.div>
 
@@ -242,7 +242,7 @@ const Insights = () => {
       {recommendations.length > 0 && (
         <div>
           <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-blue-400" />
+            <Sparkles className="w-6 h-6 text-[#00D4FF]" />
             Recommendations
           </h2>
           <div className="space-y-4">
@@ -275,13 +275,13 @@ const Insights = () => {
           whileHover={{ scale: 1.05 }}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 rounded-lg bg-blue-600">
+            <div className="p-2 rounded-lg bg-[#00D4FF]/20 text-[#00D4FF]">
               <BarChart3 className="w-5 h-5 text-white" />
             </div>
             <h3 className="text-lg font-semibold text-white">Insights Generated</h3>
           </div>
-          <p className="text-3xl font-bold text-blue-400">{insights.length}</p>
-          <p className="text-sm text-slate-400 mt-2">This month</p>
+          <p className="text-3xl font-bold text-[#00D4FF]">{insights.length}</p>
+          <p className="text-sm text-[#C0C0C0] mt-2">This month</p>
         </motion.div>
 
         <motion.div
@@ -295,7 +295,7 @@ const Insights = () => {
             <h3 className="text-lg font-semibold text-white">Opportunities</h3>
           </div>
           <p className="text-3xl font-bold text-emerald-400">{opportunities.length}</p>
-          <p className="text-sm text-slate-400 mt-2">Action items</p>
+          <p className="text-sm text-[#C0C0C0] mt-2">Action items</p>
         </motion.div>
 
         <motion.div
@@ -309,7 +309,7 @@ const Insights = () => {
             <h3 className="text-lg font-semibold text-white">Active Alerts</h3>
           </div>
           <p className="text-3xl font-bold text-red-400">{warnings.length}</p>
-          <p className="text-sm text-slate-400 mt-2">Requiring attention</p>
+          <p className="text-sm text-[#C0C0C0] mt-2">Requiring attention</p>
         </motion.div>
       </div>
 
@@ -321,7 +321,7 @@ const Insights = () => {
         transition={{ delay: 0.3 }}
       >
         <h3 className="text-xl font-bold text-white mb-4">How AI Insights Work</h3>
-        <ul className="space-y-3 text-slate-300">
+        <ul className="space-y-3 text-[#C0C0C0]">
           <li className="flex gap-3">
             <span className="text-purple-400 font-bold">1.</span>
             <span>Analyzes your financial data patterns and trends</span>

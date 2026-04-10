@@ -38,7 +38,7 @@ export const SoundInput = memo(
         transition={{ duration: 0.3 }}
       >
         {label && (
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-[#C0C0C0] mb-2">
             {label}
           </label>
         )}

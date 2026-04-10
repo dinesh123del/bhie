@@ -32,7 +32,7 @@ export const StaffingOptimizer: React.FC<StaffingOptimizerProps> = ({ forecasts 
   const getWeatherIcon = (condition?: string) => {
     if (!condition) return null;
     if (condition.includes('rain') || condition.includes('Rain')) {
-      return <CloudRain className="w-4 h-4 text-blue-500" />;
+      return <CloudRain className="w-4 h-4 text-[#00D4FF]" />;
     }
     return <Sun className="w-4 h-4 text-amber-500" />;
   };
@@ -147,11 +147,11 @@ export const StaffingOptimizer: React.FC<StaffingOptimizerProps> = ({ forecasts 
                     
                     <div className="mt-2 flex items-center gap-4 text-sm">
                       <span className="flex items-center gap-1">
-                        <Users className="w-4 h-4 text-gray-400" />
+                        <Users className="w-4 h-4 text-[#C0C0C0]" />
                         {forecast.predictedCovers} covers
                       </span>
                       <span className="flex items-center gap-1">
-                        <TrendingUp className="w-4 h-4 text-gray-400" />
+                        <TrendingUp className="w-4 h-4 text-[#C0C0C0]" />
                         {forecast.confidence}% confidence
                       </span>
                     </div>

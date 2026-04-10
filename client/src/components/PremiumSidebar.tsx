@@ -13,12 +13,10 @@ import {
   ShieldCheck,
   CreditCard,
   Activity,
-  GraduationCap,
-  Volume2,
-  VolumeX,
-  FilePlus2,
   FlaskConical,
   Briefcase,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { premiumFeedback } from '../utils/premiumFeedback';
@@ -76,16 +74,18 @@ const PremiumSidebar = () => {
       initial={false}
       animate={{ width: isCollapsed ? 80 : 260 }}
       transition={springConfig}
-      className="relative h-screen bg-[#000000] border-r border-[#1C1C1E] flex flex-col z-[60] overflow-hidden"
+      className="relative h-screen bg-[#0A0A0A]/80 backdrop-blur-3xl border-r border-white/5 flex flex-col z-[60] overflow-hidden"
     >
       {/* Logo Section */}
-      <div className="h-20 flex items-center px-6 border-b border-[#1C1C1E]">
+      <div className="h-20 flex items-center px-6 border-b border-white/5">
         <div
           className="flex items-center w-full active:scale-95 transition-transform cursor-pointer"
           onClick={() => handleNav('/')}
         >
           {isCollapsed ? (
-            <Logo size="sm" showSubtitle={false} />
+             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto">
+                <Logo size="sm" showSubtitle={false} />
+             </motion.div>
           ) : (
             <AnimatePresence mode="wait">
               <motion.div
@@ -94,7 +94,7 @@ const PremiumSidebar = () => {
                 exit={{ opacity: 0, x: -10 }}
                 className="flex items-center w-full"
               >
-                <Logo size="sm" showSubtitle={false} />
+                <Logo size="sm" showSubtitle={true} />
               </motion.div>
             </AnimatePresence>
           )}
@@ -102,32 +102,37 @@ const PremiumSidebar = () => {
       </div>
 
       {/* Main Navigation */}
-      <div className="flex-1 px-4 space-y-6 pt-6 overflow-y-auto no-scrollbar pb-6">
+      <div className="flex-1 px-4 space-y-6 pt-6 overflow-y-auto no-scrollbar pb-6 scrollbar-premium">
         <div>
-          {!isCollapsed && (
-            <p className="px-3 mb-3 text-[11px] font-semibold text-[#636366] uppercase tracking-wider">
-              Main Menu
-            </p>
-          )}
-          <nav className="space-y-1">
+          <AnimatePresence>
+            {!isCollapsed && (
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="px-3 mb-3 text-[10px] font-black text-[#C0C0C0]/50 uppercase tracking-[0.2em]">
+                Main Menu
+              </motion.p>
+            )}
+          </AnimatePresence>
+          <nav className="space-y-2">
             {navItems.map((item) => {
               const active = location.pathname === item.path;
               return (
                 <button
                   key={item.id}
                   onClick={() => handleNav(item.path)}
-                  className={`w-full group relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-300 ${active
-                      ? 'text-[#FFFFFF] bg-[#1C1C1E]'
-                      : 'text-[#A1A1A6] hover:text-[#FFFFFF] hover:bg-[#1C1C1E]/50'
+                  className={`w-full group relative flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 ${active
+                      ? 'text-white bg-gradient-to-r from-[#00D4FF]/10 to-[#7B61FF]/10 border border-[#00D4FF]/20 shadow-[0_0_15px_rgba(0,212,255,0.1)]'
+                      : 'text-[#C0C0C0] hover:text-white hover:bg-white/5 border border-transparent'
                     }`}
                 >
                   <item.icon
-                    className={`w-[18px] h-[18px] transition-colors duration-300 ${active ? 'text-[#007AFF]' : ''}`}
+                    className={`w-[20px] h-[20px] transition-all duration-300 ${active ? 'text-[#00D4FF] scale-110 drop-shadow-[0_0_8px_rgba(0,212,255,0.8)]' : 'group-hover:scale-110'}`}
                   />
                   {!isCollapsed && (
-                    <span className="text-[14px] font-medium tracking-tight">
+                    <span className="text-[14px] font-semibold tracking-tight">
                       {item.name}
                     </span>
+                  )}
+                  {active && !isCollapsed && (
+                    <motion.div layoutId="sidebar-active" className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-[#00D4FF] rounded-r-full shadow-[0_0_10px_rgba(0,212,255,0.8)]" />
                   )}
                 </button>
               );
@@ -136,12 +141,14 @@ const PremiumSidebar = () => {
         </div>
 
         <div>
-          {!isCollapsed && (
-            <p className="px-3 mb-3 text-[11px] font-semibold text-[#636366] uppercase tracking-wider">
-              Management
-            </p>
-          )}
-          <nav className="space-y-1">
+          <AnimatePresence>
+            {!isCollapsed && (
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="px-3 mb-3 text-[10px] font-black text-[#C0C0C0]/50 uppercase tracking-[0.2em]">
+                Management
+              </motion.p>
+            )}
+          </AnimatePresence>
+          <nav className="space-y-2">
             {mgmtItems.filter(item => {
               if (item.id === 'admin') return user?.role === 'admin';
               return true;
@@ -151,14 +158,16 @@ const PremiumSidebar = () => {
                 <button
                   key={item.id}
                   onClick={() => handleNav(item.path)}
-                  className={`w-full group relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-300 ${active
-                      ? 'text-[#FFFFFF] bg-[#1C1C1E]'
-                      : 'text-[#A1A1A6] hover:text-[#FFFFFF] hover:bg-[#1C1C1E]/50'
+                  className={`w-full group relative flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 ${active
+                      ? 'text-white bg-gradient-to-r from-[#00D4FF]/10 to-[#7B61FF]/10 border border-[#00D4FF]/20 shadow-[0_0_15px_rgba(0,212,255,0.1)]'
+                      : 'text-[#C0C0C0] hover:text-white hover:bg-white/5 border border-transparent'
                     }`}
                 >
-                  <item.icon className="w-[18px] h-[18px]" />
+                  <item.icon
+                    className={`w-[20px] h-[20px] transition-all duration-300 ${active ? 'text-[#00D4FF] scale-110 drop-shadow-[0_0_8px_rgba(0,212,255,0.8)]' : 'group-hover:scale-110'}`}
+                  />
                   {!isCollapsed && (
-                    <span className="text-[14px] font-medium tracking-tight">
+                    <span className="text-[14px] font-semibold tracking-tight">
                       {item.name}
                     </span>
                   )}
@@ -170,19 +179,13 @@ const PremiumSidebar = () => {
       </div>
 
       {/* Footer Section */}
-      <div className="p-4 border-t border-[#1C1C1E] space-y-2">
-        {!isCollapsed && (
-          <div className="mb-4 text-center">
-            {/* Streak Badge Removed */}
-          </div>
-        )}
-
+      <div className="p-4 border-t border-white/5 space-y-2 bg-[#0A0A0A]">
         <button
           onClick={toggleMute}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[#A1A1A6] hover:text-white hover:bg-[#1C1C1E] transition-all duration-300"
+          className="w-full flex items-center gap-4 px-4 py-3 rounded-2xl text-[#C0C0C0] hover:text-white hover:bg-white/5 transition-all duration-300"
         >
           {isMuted ? <VolumeX className="w-[18px] h-[18px]" /> : <Volume2 className="w-[18px] h-[18px]" />}
-          {!isCollapsed && <span className="text-[13px] font-medium">Sounds {isMuted ? 'Off' : 'On'}</span>}
+          {!isCollapsed && <span className="text-[13px] font-semibold">Sounds {isMuted ? 'Off' : 'On'}</span>}
         </button>
 
         <button
@@ -191,10 +194,10 @@ const PremiumSidebar = () => {
             logout();
             navigate('/login');
           }}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[#FF3B30] hover:bg-[#FF3B30]/10 transition-all duration-300"
+          className="w-full flex items-center gap-4 px-4 py-3 rounded-2xl text-red-500 hover:bg-red-500/10 transition-all duration-300"
         >
           <LogOut className="w-[18px] h-[18px]" />
-          {!isCollapsed && <span className="text-[13px] font-medium">Sign Out</span>}
+          {!isCollapsed && <span className="text-[13px] font-semibold">Sign Out</span>}
         </button>
 
         <button
@@ -202,7 +205,7 @@ const PremiumSidebar = () => {
             premiumFeedback.click();
             setIsCollapsed(!isCollapsed);
           }}
-          className="w-full flex items-center justify-center h-10 mt-2 rounded-lg text-[#636366] hover:text-white hover:bg-[#1C1C1E] transition-all duration-300"
+          className="w-full flex items-center justify-center h-12 mt-2 rounded-2xl text-[#C0C0C0] hover:text-[#00D4FF] hover:bg-white/5 border border-white/5 transition-all duration-300"
         >
           {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
         </button>

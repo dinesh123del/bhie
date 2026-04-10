@@ -122,7 +122,7 @@ const Workflows: React.FC = () => {
                   >
                     <div className="flex items-center gap-5">
                       <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border ${
-                        action.type === 'cancel' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-blue-500/10 text-blue-400 border-blue-500/20'
+                        action.type === 'cancel' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-[#00D4FF]/20 text-[#00D4FF]/10 text-[#00D4FF] border-blue-500/20'
                       }`}>
                         {action.type === 'cancel' ? <CreditCard className="w-5 h-5" /> : <Search className="w-5 h-5" />}
                       </div>

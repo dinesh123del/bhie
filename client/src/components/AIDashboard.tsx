@@ -231,7 +231,7 @@ export const AIDashboard: React.FC = () => {
                     {analysis.analysis.market.opportunities.map(
                       (opp: string, idx: number) => (
                         <li key={idx} className="flex items-start bg-blue-50 p-3 rounded">
-                          <span className="text-blue-500 mr-3 flex-shrink-0">→</span>
+                          <span className="text-[#00D4FF] mr-3 flex-shrink-0">→</span>
                           <span className="text-gray-700">{opp}</span>
                         </li>
                       )

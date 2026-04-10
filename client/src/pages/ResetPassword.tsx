@@ -68,7 +68,7 @@ const ResetPassword = () => {
 
         <div className="relative z-10">
           <h2 className="text-4xl font-bold text-white mb-2">Create New Password</h2>
-          <p className="text-gray-300 mb-8">Enter your reset token and new password</p>
+          <p className="text-[#C0C0C0] mb-8">Enter your reset token and new password</p>
 
           {error && (
             <motion.div
@@ -92,7 +92,7 @@ const ResetPassword = () => {
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="token" className="block text-sm font-semibold text-gray-200 mb-3">
+              <label htmlFor="token" className="block text-sm font-semibold text-white mb-3">
                 Reset Token
               </label>
               <input
@@ -107,7 +107,7 @@ const ResetPassword = () => {
             </div>
 
             <div>
-              <label htmlFor="newPassword" className="block text-sm font-semibold text-gray-200 mb-3">
+              <label htmlFor="newPassword" className="block text-sm font-semibold text-white mb-3">
                 New Password
               </label>
               <div className="relative">
@@ -124,7 +124,7 @@ const ResetPassword = () => {
                 <button
                   type="button"
                   onClick={() => setShowNewPassword(!showNewPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#C0C0C0] hover:text-white transition-colors"
                 >
                   {showNewPassword ? (
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -141,7 +141,7 @@ const ResetPassword = () => {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-200 mb-3">
+              <label htmlFor="confirmPassword" className="block text-sm font-semibold text-white mb-3">
                 Confirm Password
               </label>
               <div className="relative">
@@ -158,7 +158,7 @@ const ResetPassword = () => {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#C0C0C0] hover:text-white transition-colors"
                 >
                   {showConfirmPassword ? (
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -195,7 +195,7 @@ const ResetPassword = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-gray-300">
+            <p className="text-[#C0C0C0]">
               Back to{' '}
               <button
                 onClick={() => navigate('/login')}

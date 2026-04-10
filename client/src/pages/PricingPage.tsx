@@ -130,7 +130,7 @@ export default function PricingPage() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.08 }}
-            className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-300"
+            className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#C0C0C0]"
           >
             Our platform aligns planning, reporting, and insight generation inside one premium workflow.
           </motion.p>
@@ -154,7 +154,7 @@ export default function PricingPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <h2 className="text-2xl font-bold text-white">{plan.name}</h2>
-                    <p className="mt-3 text-sm leading-7 text-slate-300">{plan.description}</p>
+                    <p className="mt-3 text-sm leading-7 text-[#C0C0C0]">{plan.description}</p>
                   </div>
                   {plan.featured && (
                     <span className="rounded-full border border-amber-300/30 bg-amber-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">
@@ -165,12 +165,12 @@ export default function PricingPage() {
 
                 <div className="mt-10 flex items-end gap-2">
                   <span className="text-5xl font-black text-white">{plan.price}</span>
-                  {plan.period ? <span className="pb-1 text-sm text-slate-400">{plan.period}</span> : null}
+                  {plan.period ? <span className="pb-1 text-sm text-[#C0C0C0]">{plan.period}</span> : null}
                 </div>
 
                 <div className="mt-10 space-y-4">
                   {plan.features.map((feature) => (
-                    <div key={feature} className="flex items-start gap-3 text-sm leading-7 text-slate-300">
+                    <div key={feature} className="flex items-start gap-3 text-sm leading-7 text-[#C0C0C0]">
                       <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-300/15">
                         <Check className="h-3.5 w-3.5 text-cyan-200" />
                       </div>
@@ -224,7 +224,7 @@ export default function PricingPage() {
                 'Cross-functional visibility',
                 'Frictionless onboarding',
               ].map((item) => (
-                <div key={item} className="rounded-[24px] border border-white/10 bg-slate-950/35 px-5 py-4 text-sm text-slate-300">
+                <div key={item} className="rounded-[24px] border border-white/10 bg-transparent/35 px-5 py-4 text-sm text-[#C0C0C0]">
                   {item}
                 </div>
               ))}

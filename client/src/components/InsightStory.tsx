@@ -45,7 +45,7 @@ export const InsightStory = ({ insight }: { insight: StoryInsight }) => {
   const textColors = {
     positive: 'text-emerald-400',
     negative: 'text-red-400',
-    neutral: 'text-blue-400',
+    neutral: 'text-[#00D4FF]',
     warning: 'text-orange-400'
   };
 
@@ -75,7 +75,7 @@ export const InsightStory = ({ insight }: { insight: StoryInsight }) => {
       </div>
 
       {/* Story/Narrative */}
-      <p className="text-slate-300 text-sm leading-relaxed">
+      <p className="text-[#C0C0C0] text-sm leading-relaxed">
         {insight.story}
       </p>
     </motion.div>
@@ -91,7 +91,7 @@ export const FixActionCard = ({ action }: { action: FixAction }) => {
   const priorityColors = {
     high: 'bg-red-500/20 text-red-400 border-red-500/30',
     medium: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-    low: 'bg-blue-500/20 text-blue-400 border-blue-500/30'
+    low: 'bg-[#00D4FF]/20 text-[#00D4FF]/20 text-[#00D4FF] border-blue-500/30'
   };
 
   const difficultyLevels = {
@@ -105,7 +105,7 @@ export const FixActionCard = ({ action }: { action: FixAction }) => {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       whileHover={{ x: 4 }}
-      className="p-6 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-slate-600 transition-all group"
+      className="p-6 rounded-xl bg-[#0A0A0A]/60/50 border border-slate-700 hover:border-slate-600 transition-all group"
     >
       {/* Header with Priority Badge */}
       <div className="flex items-start justify-between mb-4">
@@ -118,23 +118,23 @@ export const FixActionCard = ({ action }: { action: FixAction }) => {
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="p-2 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-blue-400 transition-all"
+          className="p-2 rounded-lg hover:bg-slate-700 text-[#C0C0C0] hover:text-[#00D4FF] transition-all"
         >
           <Zap className="w-5 h-5" />
         </motion.button>
       </div>
 
       {/* Fix Summary */}
-      <p className="text-slate-300 text-sm mb-4">{action.fix}</p>
+      <p className="text-[#C0C0C0] text-sm mb-4">{action.fix}</p>
 
       {/* Metrics Row */}
       <div className="grid grid-cols-2 gap-3 mb-4 pb-4 border-b border-slate-700">
         <div>
-          <p className="text-xs text-slate-400">Estimated Impact</p>
+          <p className="text-xs text-[#C0C0C0]">Estimated Impact</p>
           <p className="text-sm font-semibold text-emerald-400">{action.estimatedImpact}</p>
         </div>
         <div className="text-right">
-          <p className="text-xs text-slate-400">Difficulty</p>
+          <p className="text-xs text-[#C0C0C0]">Difficulty</p>
           <p className={`text-sm font-semibold ${difficultyLevels[action.difficulty].color}`}>
             {difficultyLevels[action.difficulty].label}
           </p>
@@ -143,13 +143,13 @@ export const FixActionCard = ({ action }: { action: FixAction }) => {
 
       {/* Step by Step */}
       <div className="space-y-2 mb-4">
-        <p className="text-xs font-semibold text-slate-400 uppercase">How to Fix</p>
+        <p className="text-xs font-semibold text-[#C0C0C0] uppercase">How to Fix</p>
         {action.actionSteps.map((step, idx) => (
           <div key={idx} className="flex gap-3">
-            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-600/30 border border-blue-500/50 flex items-center justify-center">
-              <span className="text-xs font-bold text-blue-400">{idx + 1}</span>
+            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#00D4FF]/20 text-[#00D4FF]/30 border border-blue-500/50 flex items-center justify-center">
+              <span className="text-xs font-bold text-[#00D4FF]">{idx + 1}</span>
             </div>
-            <p className="text-sm text-slate-300 pt-0.5">{step}</p>
+            <p className="text-sm text-[#C0C0C0] pt-0.5">{step}</p>
           </div>
         ))}
       </div>
@@ -205,23 +205,23 @@ export const TodayActionCard = ({
             <motion.div
               animate={{ rotate: completed ? 360 : 0 }}
               transition={{ duration: 0.6 }}
-              className={`p-2 rounded-full ${completed ? 'bg-emerald-500/20' : 'bg-blue-600/20'}`}
+              className={`p-2 rounded-full ${completed ? 'bg-emerald-500/20' : 'bg-[#00D4FF]/20 text-[#00D4FF]/20'}`}
             >
               {completed ? (
                 <CheckCircle className="w-6 h-6 text-emerald-400" />
               ) : (
-                <Clock className="w-6 h-6 text-blue-400" />
+                <Clock className="w-6 h-6 text-[#00D4FF]" />
               )}
             </motion.div>
             <div>
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Today's Focus</p>
+              <p className="text-xs font-semibold text-[#C0C0C0] uppercase tracking-wide">Today's Focus</p>
               <p className="text-lg font-bold text-white">{action.problem}</p>
             </div>
           </div>
         </div>
 
         {/* Action Description */}
-        <p className="text-slate-300 text-sm mb-4">{action.fix}</p>
+        <p className="text-[#C0C0C0] text-sm mb-4">{action.fix}</p>
 
         {/* Progress/Status */}
         <div className="flex items-center justify-between mb-4">
@@ -230,7 +230,7 @@ export const TodayActionCard = ({
               ? 'bg-red-500/20 text-red-400'
               : action.priority === 'medium'
               ? 'bg-yellow-500/20 text-yellow-400'
-              : 'bg-blue-500/20 text-blue-400'
+              : 'bg-[#00D4FF]/20 text-[#00D4FF]/20 text-[#00D4FF]'
           }`}>
             {action.estimatedImpact}
           </span>
@@ -238,7 +238,7 @@ export const TodayActionCard = ({
             <motion.div
               animate={{ x: [0, 4, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="text-blue-400 text-sm font-semibold"
+              className="text-[#00D4FF] text-sm font-semibold"
             >
               →
             </motion.div>
@@ -296,18 +296,18 @@ export const PredictionWarning = ({
         </motion.div>
         <div className="flex-1">
           <h3 className="text-lg font-bold text-white">Predicted Loss Alert</h3>
-          <p className="text-xs text-slate-400 mt-1">Based on current trends</p>
+          <p className="text-xs text-[#C0C0C0] mt-1">Based on current trends</p>
         </div>
       </div>
 
       {/* Prediction Metrics */}
       <div className="grid grid-cols-2 gap-3 mb-4 pb-4 border-b border-red-700/30">
         <div>
-          <p className="text-xs text-slate-400 mb-1">Projected Loss</p>
+          <p className="text-xs text-[#C0C0C0] mb-1">Projected Loss</p>
           <p className="text-2xl font-bold text-red-400">${predictedLoss.toLocaleString()}</p>
         </div>
         <div>
-          <p className="text-xs text-slate-400 mb-1">Timeframe</p>
+          <p className="text-xs text-[#C0C0C0] mb-1">Timeframe</p>
           <p className="text-2xl font-bold text-red-400">{timeframe}</p>
         </div>
       </div>
@@ -315,7 +315,7 @@ export const PredictionWarning = ({
       {/* Confidence Indicator */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">
-          <p className="text-xs font-semibold text-slate-400">Prediction Confidence</p>
+          <p className="text-xs font-semibold text-[#C0C0C0]">Prediction Confidence</p>
           <p className="text-xs font-bold text-red-400">{confidence}%</p>
         </div>
         <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
@@ -330,10 +330,10 @@ export const PredictionWarning = ({
 
       {/* Recommendations */}
       <div>
-        <p className="text-xs font-semibold text-slate-400 mb-2">What You Can Do</p>
+        <p className="text-xs font-semibold text-[#C0C0C0] mb-2">What You Can Do</p>
         <ul className="space-y-2">
           {recommendations.map((rec, idx) => (
-            <li key={idx} className="flex gap-2 text-sm text-slate-300">
+            <li key={idx} className="flex gap-2 text-sm text-[#C0C0C0]">
               <span className="text-red-400 font-bold">→</span>
               <span>{rec}</span>
             </li>
@@ -387,7 +387,7 @@ export const generateInsightStories = (data: any): StoryInsight[] => {
     metric: 'Spending Health',
     value: `${(expenseRatio * 100).toFixed(0)}%`,
     icon: <DollarSign className="w-6 h-6" />,
-    color: expenseRatio > 0.7 ? 'bg-red-600' : 'bg-blue-600',
+    color: expenseRatio > 0.7 ? 'bg-red-600' : 'bg-[#00D4FF]/20 text-[#00D4FF]',
     sentiment: expenseRatio > 0.7 ? 'warning' : 'neutral'
   });
 

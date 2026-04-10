@@ -208,11 +208,11 @@ export default function PublicDemo() {
                   />
                 </div>
                 <div className="flex gap-2 text-xs text-white/30">
-                  <span className={scanProgress > 30 ? 'text-blue-400' : ''}>🔍 Detecting text</span>
+                  <span className={scanProgress > 30 ? 'text-[#00D4FF]' : ''}>🔍 Detecting text</span>
                   <span>→</span>
-                  <span className={scanProgress > 60 ? 'text-blue-400' : ''}>🧠 Extracting data</span>
+                  <span className={scanProgress > 60 ? 'text-[#00D4FF]' : ''}>🧠 Extracting data</span>
                   <span>→</span>
-                  <span className={scanProgress > 90 ? 'text-blue-400' : ''}>✓ Verifying</span>
+                  <span className={scanProgress > 90 ? 'text-[#00D4FF]' : ''}>✓ Verifying</span>
                 </div>
               </div>
             </motion.div>
@@ -258,7 +258,7 @@ export default function PublicDemo() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-white/50 text-sm">Category</span>
-                  <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm font-medium">
+                  <span className="px-3 py-1 bg-[#00D4FF]/20 text-[#00D4FF]/20 text-[#00D4FF] rounded-full text-sm font-medium">
                     {result.category}
                   </span>
                 </div>

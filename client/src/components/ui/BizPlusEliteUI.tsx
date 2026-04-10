@@ -83,7 +83,7 @@ export const IntelligentMessage: React.FC<{
   >
     <div className="p-5 flex gap-4 items-start">
       <div className={`p-3 rounded-2xl ${
-        type === 'insight' ? 'bg-blue-500/10 text-blue-400' :
+        type === 'insight' ? 'bg-[#00D4FF]/20 text-[#00D4FF]/10 text-[#00D4FF]' :
         type === 'warning' ? 'bg-amber-500/10 text-amber-400' :
         'bg-emerald-500/10 text-emerald-400'
       }`}>

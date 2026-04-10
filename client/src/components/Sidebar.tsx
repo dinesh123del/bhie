@@ -70,7 +70,7 @@ const Sidebar = () => {
       {/* Mobile Toggle Button */}
       <motion.button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className="fixed top-4 left-4 z-50 lg:hidden p-2 rounded-lg bg-slate-800 text-white hover:bg-slate-700"
+        className="fixed top-4 left-4 z-50 lg:hidden p-2 rounded-lg bg-[#0A0A0A]/60 text-white hover:bg-slate-700"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
@@ -109,7 +109,7 @@ const Sidebar = () => {
           </motion.div>
           <motion.button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-1 rounded-lg hover:bg-slate-700 text-slate-300 hidden lg:flex"
+            className="p-1 rounded-lg hover:bg-slate-700 text-[#C0C0C0] hidden lg:flex"
             whileHover={{ backgroundColor: 'rgba(51, 65, 85, 0.7)' }}
           >
             <ChevronRight className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
@@ -123,8 +123,8 @@ const Sidebar = () => {
               key={item.path}
               onClick={() => handleNavClick(item.path)}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all relative group ${isActive(item.path)
-                  ? 'bg-blue-600 text-white'
-                  : 'text-slate-300 hover:bg-slate-700'
+                  ? 'bg-[#00D4FF]/20 text-[#00D4FF] text-white'
+                  : 'text-[#C0C0C0] hover:bg-slate-700'
                 }`}
               whileHover={{ x: 4 }}
               whileTap={{ scale: 0.98 }}
@@ -164,7 +164,7 @@ const Sidebar = () => {
         <div className="border-t border-slate-700 p-4">
           <motion.button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-red-600/10 hover:text-red-400 transition-all"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-[#C0C0C0] hover:bg-red-600/10 hover:text-red-400 transition-all"
             whileHover={{ x: 4 }}
             whileTap={{ scale: 0.98 }}
           >

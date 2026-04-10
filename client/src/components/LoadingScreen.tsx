@@ -175,7 +175,7 @@ const LoadingScreen = ({ onComplete }: { onComplete?: () => void }) => {
           <motion.div
             animate={{ rotate: 360, scale: [1, 1.1, 1], opacity: [0.2, 0.5, 0.2] }}
             transition={{ rotate: { duration: 40, repeat: Infinity, ease: "linear" }, scale: { duration: 6, repeat: Infinity } }}
-            className="absolute inset-[-50px] rounded-full bg-blue-500/10 blur-[40px]"
+            className="absolute inset-[-50px] rounded-full bg-[#00D4FF]/20 text-[#00D4FF]/10 blur-[40px]"
           />
           <motion.div
             initial={{ scale: 0.6, opacity: 0, rotate: -45 }}
@@ -187,7 +187,7 @@ const LoadingScreen = ({ onComplete }: { onComplete?: () => void }) => {
             <motion.div
               animate={{ opacity: [0.2, 0.4, 0.2] }}
               transition={{ duration: 4, repeat: Infinity }}
-              className="absolute inset-0 bg-blue-600/5 blur-2xl" 
+              className="absolute inset-0 bg-[#00D4FF]/20 text-[#00D4FF]/5 blur-2xl" 
             />
             
             <div className="relative z-10 w-24 h-24 rounded-[2rem] bg-gradient-to-br from-white to-gray-400 p-[1px] shadow-2xl">
@@ -227,12 +227,12 @@ const LoadingScreen = ({ onComplete }: { onComplete?: () => void }) => {
               <motion.div 
                 initial={{ width: '0%' }}
                 animate={{ width: `${progress}%` }}
-                className="absolute h-full left-0 top-0 bg-blue-500 shadow-[0_0_20px_rgba(0,122,255,1)]"
+                className="absolute h-full left-0 top-0 bg-[#00D4FF]/20 text-[#00D4FF] shadow-[0_0_20px_rgba(0,122,255,1)]"
               />
             </div>
             <div className="flex justify-between items-center px-1">
               <span className="text-[9px] font-black text-white/10 uppercase tracking-[0.4em]">Initialize Core Link</span>
-              <span className="text-[9px] font-mono text-blue-500/60 tabular-nums">{Math.floor(progress)}%</span>
+              <span className="text-[9px] font-mono text-[#00D4FF]/60 tabular-nums">{Math.floor(progress)}%</span>
             </div>
           </div>
         </div>
@@ -241,7 +241,7 @@ const LoadingScreen = ({ onComplete }: { onComplete?: () => void }) => {
       {/* Floating Peripheral Micro-details */}
       <div className="absolute top-12 left-12 opacity-20 hidden md:block">
         <div className="flex items-center gap-2">
-          <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse" />
+          <div className="w-1 h-1 rounded-full bg-[#00D4FF]/20 text-[#00D4FF] animate-pulse" />
           <span className="text-[8px] font-mono text-white tracking-[0.4em] uppercase">Node: 127.0.0.1</span>
         </div>
       </div>

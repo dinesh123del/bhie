@@ -142,14 +142,14 @@ export default function ReferralWidget({ isOpen, onClose }: ReferralWidgetProps)
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white">Refer & Earn</h2>
-                  <p className="text-sm text-slate-400">Invite friends, get rewards</p>
+                  <p className="text-sm text-[#C0C0C0]">Invite friends, get rewards</p>
                 </div>
               </div>
               <button
                 onClick={onClose}
                 className="p-2 rounded-lg hover:bg-white/10 transition-colors"
               >
-                <X className="w-5 h-5 text-slate-400" />
+                <X className="w-5 h-5 text-[#C0C0C0]" />
               </button>
             </div>
 
@@ -164,7 +164,7 @@ export default function ReferralWidget({ isOpen, onClose }: ReferralWidgetProps)
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <Share2 className="w-4 h-4 text-cyan-400" />
-                      <span className="text-xs text-slate-400">Invites</span>
+                      <span className="text-xs text-[#C0C0C0]">Invites</span>
                     </div>
                     <p className="text-2xl font-bold text-white">{stats.totalSent}</p>
                   </motion.div>
@@ -177,7 +177,7 @@ export default function ReferralWidget({ isOpen, onClose }: ReferralWidgetProps)
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <Users className="w-4 h-4 text-amber-400" />
-                      <span className="text-xs text-slate-400">Pending</span>
+                      <span className="text-xs text-[#C0C0C0]">Pending</span>
                     </div>
                     <p className="text-2xl font-bold text-white">{stats.pending}</p>
                   </motion.div>
@@ -190,7 +190,7 @@ export default function ReferralWidget({ isOpen, onClose }: ReferralWidgetProps)
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <CheckCircle className="w-4 h-4 text-emerald-400" />
-                      <span className="text-xs text-slate-400">Joined</span>
+                      <span className="text-xs text-[#C0C0C0]">Joined</span>
                     </div>
                     <p className="text-2xl font-bold text-white">{stats.converted}</p>
                   </motion.div>
@@ -218,8 +218,8 @@ export default function ReferralWidget({ isOpen, onClose }: ReferralWidgetProps)
                 </h3>
 
                 <div className="flex gap-2 mb-4">
-                  <div className="flex-1 bg-slate-950/50 rounded-xl px-4 py-3 border border-white/10">
-                    <p className="text-sm text-slate-300 truncate">{referralLink}</p>
+                  <div className="flex-1 bg-transparent/50 rounded-xl px-4 py-3 border border-white/10">
+                    <p className="text-sm text-[#C0C0C0] truncate">{referralLink}</p>
                   </div>
                   <button
                     onClick={() => copyToClipboard(referralLink)}
@@ -265,7 +265,7 @@ export default function ReferralWidget({ isOpen, onClose }: ReferralWidgetProps)
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
                     placeholder="friend@example.com"
-                    className="flex-1 bg-slate-950/50 rounded-xl px-4 py-3 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
+                    className="flex-1 bg-transparent/50 rounded-xl px-4 py-3 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
                     required
                   />
                   <button
@@ -289,7 +289,7 @@ export default function ReferralWidget({ isOpen, onClose }: ReferralWidgetProps)
                     {referrals.slice(0, 5).map((referral) => (
                       <div
                         key={referral.id}
-                        className="flex items-center justify-between p-3 bg-slate-950/30 rounded-xl"
+                        className="flex items-center justify-between p-3 bg-transparent/30 rounded-xl"
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-2 h-2 rounded-full ${
@@ -319,7 +319,7 @@ export default function ReferralWidget({ isOpen, onClose }: ReferralWidgetProps)
                   <Gift className="w-5 h-5 text-amber-400 mt-0.5" />
                   <div>
                     <p className="text-sm font-medium text-amber-300">How it works</p>
-                    <ul className="text-xs text-slate-400 mt-2 space-y-1">
+                    <ul className="text-xs text-[#C0C0C0] mt-2 space-y-1">
                       <li>• Share your link with friends</li>
                       <li>• They get 50% off their first month</li>
                       <li>• You get 1 month free Pro when they subscribe</li>

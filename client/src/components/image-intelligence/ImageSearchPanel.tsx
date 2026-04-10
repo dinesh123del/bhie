@@ -52,7 +52,7 @@ export default function ImageSearchPanel({ searching, onSearch, onReverseSearch 
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search text, objects, tags, product names..."
-          className="rounded-xl border border-white/20 bg-slate-900/70 px-4 py-2 text-sm text-white outline-none focus:border-cyan-400"
+          className="rounded-xl border border-white/20 bg-[#0A0A0A]/80 border border-white/5/70 px-4 py-2 text-sm text-white outline-none focus:border-cyan-400"
         />
         <button
           type="button"
@@ -66,12 +66,12 @@ export default function ImageSearchPanel({ searching, onSearch, onReverseSearch 
       </div>
 
       <div className="mt-4 grid gap-3 md:grid-cols-3">
-        <label className="space-y-1 text-xs text-slate-300">
+        <label className="space-y-1 text-xs text-[#C0C0C0]">
           <span className="inline-flex items-center gap-1"><Filter className="h-3 w-3" /> Type</span>
           <select
             value={type}
             onChange={(event) => setType(event.target.value as DetectedType | '')}
-            className="w-full rounded-xl border border-white/20 bg-slate-900/70 px-3 py-2 text-sm text-white outline-none focus:border-cyan-400"
+            className="w-full rounded-xl border border-white/20 bg-[#0A0A0A]/80 border border-white/5/70 px-3 py-2 text-sm text-white outline-none focus:border-cyan-400"
           >
             <option value="">All</option>
             <option value="invoice">Invoice</option>
@@ -82,28 +82,28 @@ export default function ImageSearchPanel({ searching, onSearch, onReverseSearch 
           </select>
         </label>
 
-        <label className="space-y-1 text-xs text-slate-300">
+        <label className="space-y-1 text-xs text-[#C0C0C0]">
           <span>From Date</span>
           <input
             type="date"
             value={dateFrom}
             onChange={(event) => setDateFrom(event.target.value)}
-            className="w-full rounded-xl border border-white/20 bg-slate-900/70 px-3 py-2 text-sm text-white outline-none focus:border-cyan-400"
+            className="w-full rounded-xl border border-white/20 bg-[#0A0A0A]/80 border border-white/5/70 px-3 py-2 text-sm text-white outline-none focus:border-cyan-400"
           />
         </label>
 
-        <label className="space-y-1 text-xs text-slate-300">
+        <label className="space-y-1 text-xs text-[#C0C0C0]">
           <span>To Date</span>
           <input
             type="date"
             value={dateTo}
             onChange={(event) => setDateTo(event.target.value)}
-            className="w-full rounded-xl border border-white/20 bg-slate-900/70 px-3 py-2 text-sm text-white outline-none focus:border-cyan-400"
+            className="w-full rounded-xl border border-white/20 bg-[#0A0A0A]/80 border border-white/5/70 px-3 py-2 text-sm text-white outline-none focus:border-cyan-400"
           />
         </label>
       </div>
 
-      <div className="mt-5 rounded-xl border border-white/10 bg-slate-900/60 p-4">
+      <div className="mt-5 rounded-xl border border-white/10 bg-[#0A0A0A]/80 border border-white/5/60 p-4">
         <p className="mb-2 text-sm font-medium text-white">Reverse Image Search</p>
         <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-emerald-400 px-3 py-2 text-sm font-semibold text-slate-950">
           <Image className="h-4 w-4" />

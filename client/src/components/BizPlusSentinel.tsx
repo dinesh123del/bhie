@@ -67,7 +67,7 @@ const BizPlusSentinel = ({
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'FORTIFIED': return 'text-emerald-400';
-      case 'RESILIENT': return 'text-blue-400';
+      case 'RESILIENT': return 'text-[#00D4FF]';
       case 'STABLE': return 'text-amber-400';
       case 'VULNERABLE': return 'text-rose-400';
       default: return 'text-white/40';

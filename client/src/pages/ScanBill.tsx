@@ -89,7 +89,7 @@ const ScanBill = () => {
               ) : (
                 <div className="py-12">
                   <Upload className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-                  <p className="text-gray-400">Upload an image of your receipt</p>
+                  <p className="text-[#C0C0C0]">Upload an image of your receipt</p>
                 </div>
               )}
               <input type="file" id="bill-upload" className="hidden" onChange={onFileChange} accept="image/*" />

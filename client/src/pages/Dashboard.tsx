@@ -523,7 +523,7 @@ const Dashboard = () => {
                 transition={{ duration: 0.8, delay: 0.6 }}
                 className="text-center space-y-4"
               >
-                <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-500/10 to-green-500/10 border border-blue-500/20 text-blue-400">
+                <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-500/10 to-green-500/10 border border-blue-500/20 text-[#00D4FF]">
                   <Activity className="w-4 h-4" />
                   <span className="text-[10px] font-black uppercase tracking-[0.4em]">BUSINESS INSIGHTS</span>
                 </div>
@@ -580,7 +580,7 @@ const Dashboard = () => {
 
           <aside className="space-y-8">
             <div className="apple-card p-8 bg-gradient-to-br from-[#111113] to-black border-white/5 relative overflow-hidden group">
-              <div className="absolute inset-0 bg-blue-500/5 blur-[80px] -translate-x-1/2 -translate-y-1/2 group-hover:scale-150 transition-transform duration-1000" />
+              <div className="absolute inset-0 bg-[#00D4FF]/20 text-[#00D4FF]/5 blur-[80px] -translate-x-1/2 -translate-y-1/2 group-hover:scale-150 transition-transform duration-1000" />
               <div className="relative z-10 space-y-6">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-black uppercase tracking-[0.3em] text-[#007AFF]">System Status</span>
@@ -613,7 +613,7 @@ const Dashboard = () => {
         {/* EXTREME FOOTER: Vision Engine */}
         <PremiumSection delay={0.4} className="pb-20">
           <div className="apple-card p-16 md:p-24 overflow-hidden relative border-white/5 bg-[#0A0A0B]">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/[0.03] blur-[150px] rounded-full" />
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#00D4FF]/20 text-[#00D4FF]/[0.03] blur-[150px] rounded-full" />
             <div className="relative z-10 flex flex-col lg:flex-row items-center gap-20">
               <div className="space-y-8 flex-1">
                 <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/40">
@@ -667,7 +667,7 @@ const Dashboard = () => {
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-slate-900 rounded-3xl p-6 w-full max-w-2xl border border-white/10 max-h-[90vh] overflow-y-auto"
+            className="bg-[#0A0A0A]/80 border border-white/5 rounded-3xl p-6 w-full max-w-2xl border border-white/10 max-h-[90vh] overflow-y-auto"
           >
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-white font-bold text-xl">Grow with BIZ PLUS</h3>
@@ -709,7 +709,7 @@ const Dashboard = () => {
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-slate-900 rounded-3xl p-6 w-full max-w-lg border border-white/10"
+            className="bg-[#0A0A0A]/80 border border-white/5 rounded-3xl p-6 w-full max-w-lg border border-white/10"
           >
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-white font-bold text-xl flex items-center gap-2">

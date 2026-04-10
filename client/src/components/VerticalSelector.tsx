@@ -19,7 +19,7 @@ const verticals: Vertical[] = [
     icon: Building2,
     description: 'For all business types',
     features: ['Expense tracking', 'Invoicing', 'Basic analytics', 'AI insights'],
-    color: 'bg-blue-500'
+    color: 'bg-[#00D4FF]/20 text-[#00D4FF]'
   },
   {
     id: 'restaurant',

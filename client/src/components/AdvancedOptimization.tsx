@@ -222,7 +222,7 @@ export function AdvancedOptimization({ businessId, className }: AdvancedOptimiza
       <Card className={className}>
         <CardContent className="p-6">
           <div className="flex items-center justify-center h-32">
-            <RefreshCw className="h-6 w-6 animate-spin text-blue-500" />
+            <RefreshCw className="h-6 w-6 animate-spin text-[#00D4FF]" />
             <span className="ml-2 text-gray-600">Loading optimization tools...</span>
           </div>
         </CardContent>
@@ -235,7 +235,7 @@ export function AdvancedOptimization({ businessId, className }: AdvancedOptimiza
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <Zap className="h-6 w-6 text-purple-500" />
+          <Zap className="h-6 w-6 text-[#7B61FF]" />
           <h2 className="text-2xl font-bold">Advanced Optimization</h2>
         </div>
         <Button
@@ -302,7 +302,7 @@ export function AdvancedOptimization({ businessId, className }: AdvancedOptimiza
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
-                <TrendingUp className="h-5 w-5 mr-2 text-blue-500" />
+                <TrendingUp className="h-5 w-5 mr-2 text-[#00D4FF]" />
                 Investment Portfolio Optimization
               </CardTitle>
             </CardHeader>
@@ -360,7 +360,7 @@ export function AdvancedOptimization({ businessId, className }: AdvancedOptimiza
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
-                <Calendar className="h-5 w-5 mr-2 text-purple-500" />
+                <Calendar className="h-5 w-5 mr-2 text-[#7B61FF]" />
                 Resource Scheduling
               </CardTitle>
             </CardHeader>

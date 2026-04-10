@@ -85,7 +85,7 @@ const OtpLogin = () => {
 
         <div className="relative z-10">
           <h2 className="text-4xl font-bold text-white mb-2">OTP Login</h2>
-          <p className="text-gray-300 mb-8">
+          <p className="text-[#C0C0C0] mb-8">
             {step === 'email' ? 'Enter your email to receive OTP' : 'Enter the OTP sent to your email'}
           </p>
 
@@ -102,7 +102,7 @@ const OtpLogin = () => {
           {step === 'email' ? (
             <form className="space-y-6" onSubmit={handleSendOtp}>
               <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-200 mb-3">
+                <label htmlFor="email" className="block text-sm font-semibold text-white mb-3">
                   Email Address
                 </label>
                 <input
@@ -129,7 +129,7 @@ const OtpLogin = () => {
           ) : (
             <form className="space-y-6" onSubmit={handleVerifyOtp}>
               <div>
-                <label htmlFor="otp" className="block text-sm font-semibold text-gray-200 mb-3">
+                <label htmlFor="otp" className="block text-sm font-semibold text-white mb-3">
                   6-Digit OTP
                 </label>
                 <input
@@ -165,7 +165,7 @@ const OtpLogin = () => {
           )}
 
           <div className="mt-6 text-center">
-            <p className="text-gray-300">
+            <p className="text-[#C0C0C0]">
               Prefer password login?{' '}
               <button
                 onClick={() => navigate('/login')}

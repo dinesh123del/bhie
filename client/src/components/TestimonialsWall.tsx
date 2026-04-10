@@ -171,7 +171,7 @@ export default function TestimonialsWall() {
             className="bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-8 md:p-12 border border-white/10"
           >
             {/* Quote Icon */}
-            <Quote className="w-12 h-12 text-blue-500/30 mb-6" />
+            <Quote className="w-12 h-12 text-[#00D4FF]/30 mb-6" />
 
             {/* Stars */}
             <div className="flex gap-1 mb-6">

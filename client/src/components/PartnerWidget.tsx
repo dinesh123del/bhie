@@ -259,7 +259,7 @@ export const BizPlusPartnerWidget: React.FC<PartnerWidgetProps> = ({
 
         {/* Footer */}
         <div className="mt-4 text-center">
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-[#C0C0C0]">
             Last updated: {new Date(health.lastUpdated).toLocaleTimeString()}
           </p>
           <a 

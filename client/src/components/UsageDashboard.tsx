@@ -127,7 +127,7 @@ export default function UsageDashboard({ isOpen, onClose }: UsageDashboardProps)
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white">Usage & Billing</h2>
-                  <p className="text-sm text-slate-400">
+                  <p className="text-sm text-[#C0C0C0]">
                     {billing?.plan ? `Current Plan: ${billing.plan.charAt(0).toUpperCase() + billing.plan.slice(1)}` : 'Loading...'}
                   </p>
                 </div>
@@ -136,7 +136,7 @@ export default function UsageDashboard({ isOpen, onClose }: UsageDashboardProps)
                 onClick={onClose}
                 className="p-2 rounded-lg hover:bg-white/10 transition-colors"
               >
-                <X className="w-5 h-5 text-slate-400" />
+                <X className="w-5 h-5 text-[#C0C0C0]" />
               </button>
             </div>
 
@@ -161,7 +161,7 @@ export default function UsageDashboard({ isOpen, onClose }: UsageDashboardProps)
                       <div className="flex items-end justify-between">
                         <div>
                           <p className="text-3xl font-bold text-white">${billing.totalOverageCost.toFixed(2)}</p>
-                          <p className="text-sm text-slate-400 mt-1">Current billing period</p>
+                          <p className="text-sm text-[#C0C0C0] mt-1">Current billing period</p>
                         </div>
                         <button className="px-4 py-2 bg-rose-500 hover:bg-rose-600 rounded-xl text-white font-medium transition-colors">
                           Pay Now
@@ -213,7 +213,7 @@ export default function UsageDashboard({ isOpen, onClose }: UsageDashboardProps)
                         </div>
 
                         <div className="flex items-center justify-between text-sm">
-                          <span className="text-slate-400">
+                          <span className="text-[#C0C0C0]">
                             {stat.used} / {stat.limit === 'unlimited' ? '∞' : stat.limit} used
                           </span>
                           <span className={stat.remaining === 0 ? 'text-rose-400' : 'text-emerald-400'}>
@@ -236,7 +236,7 @@ export default function UsageDashboard({ isOpen, onClose }: UsageDashboardProps)
                       <CreditCard className="w-5 h-5 text-cyan-400" />
                       Quick Purchase
                     </h3>
-                    <p className="text-sm text-slate-400 mb-4">
+                    <p className="text-sm text-[#C0C0C0] mb-4">
                       Running low? Buy additional credits instantly.
                     </p>
                     <div className="flex gap-2 flex-wrap">
@@ -258,7 +258,7 @@ export default function UsageDashboard({ isOpen, onClose }: UsageDashboardProps)
                       <TrendingUp className="w-5 h-5 text-cyan-400" />
                       <h3 className="text-lg font-semibold text-white">Need More?</h3>
                     </div>
-                    <p className="text-sm text-slate-400 mb-4">
+                    <p className="text-sm text-[#C0C0C0] mb-4">
                       Upgrade your plan for higher limits and better rates.
                     </p>
                     <button
@@ -286,14 +286,14 @@ export default function UsageDashboard({ isOpen, onClose }: UsageDashboardProps)
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0.9, opacity: 0 }}
-                    className="bg-slate-900 rounded-2xl p-6 border border-white/10 max-w-sm w-full"
+                    className="bg-[#0A0A0A]/80 border border-white/5 rounded-2xl p-6 border border-white/10 max-w-sm w-full"
                   >
                     <h3 className="text-lg font-bold text-white mb-4">
                       Buy {USAGE_LABELS[selectedType]} Credits
                     </h3>
 
                     <div className="mb-6">
-                      <label className="text-sm text-slate-400 mb-2 block">Amount</label>
+                      <label className="text-sm text-[#C0C0C0] mb-2 block">Amount</label>
                       <div className="flex items-center gap-4">
                         <input
                           type="range"
@@ -312,7 +312,7 @@ export default function UsageDashboard({ isOpen, onClose }: UsageDashboardProps)
 
                     <div className="bg-white/5 rounded-xl p-4 mb-6">
                       <div className="flex justify-between items-center">
-                        <span className="text-slate-400">Cost</span>
+                        <span className="text-[#C0C0C0]">Cost</span>
                         <span className="text-xl font-bold text-white">
                           ${(purchaseAmount * 0.5).toFixed(2)}
                         </span>

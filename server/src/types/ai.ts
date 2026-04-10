@@ -114,7 +114,7 @@ export interface AIAnalysisRequest {
 
 export interface AIHealthResponse {
   status: 'healthy' | 'unhealthy';
-  openaiConnected: boolean;
+  smartEngineConnected: boolean;
   agentsReady: boolean;
 }
 

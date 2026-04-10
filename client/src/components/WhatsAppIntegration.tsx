@@ -128,9 +128,9 @@ export default function WhatsAppIntegration() {
           </div>
 
           {/* Phone Mockup */}
-          <div className="relative bg-slate-800 rounded-3xl p-4 border border-white/10 max-w-xs mx-auto">
+          <div className="relative bg-[#0A0A0A]/60 rounded-3xl p-4 border border-white/10 max-w-xs mx-auto">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-6 bg-black rounded-b-2xl" />
-            <div className="bg-slate-900 rounded-2xl overflow-hidden">
+            <div className="bg-[#0A0A0A]/80 border border-white/5 rounded-2xl overflow-hidden">
               <div className="bg-green-600 p-3 flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
                   <span className="text-lg">🤖</span>

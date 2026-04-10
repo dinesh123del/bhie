@@ -145,7 +145,7 @@ const Uploads = () => {
       case 'scanning':
         return <Clock className="w-5 h-5 text-emerald-400 animate-pulse" />;
       case 'processing':
-        return <Clock className="w-5 h-5 text-blue-500 animate-spin" />;
+        return <Clock className="w-5 h-5 text-[#00D4FF] animate-spin" />;
       default:
         return null;
     }
@@ -160,13 +160,13 @@ const Uploads = () => {
         transition={{ duration: 0.5 }}
       >
         <h1 className="text-4xl font-bold text-white mb-2">File Uploads</h1>
-        <p className="text-slate-400">Upload your financial documents and records</p>
+        <p className="text-[#C0C0C0]">Upload your financial documents and records</p>
       </motion.div>
 
       {/* Upload Zone */}
-      <div className="flex items-center justify-between p-4 bg-slate-800/80 border border-slate-700 rounded-xl mb-4">
+      <div className="flex items-center justify-between p-4 bg-[#0A0A0A]/60/80 border border-slate-700 rounded-xl mb-4">
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-lg ${privacyMode ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-700 text-slate-400'}`}>
+          <div className={`p-2 rounded-lg ${privacyMode ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-700 text-[#C0C0C0]'}`}>
             <ShieldCheck className="w-6 h-6" />
           </div>
           <div>
@@ -174,7 +174,7 @@ const Uploads = () => {
               Privacy-First Mode
               {privacyMode && <span className="text-[10px] bg-emerald-500 text-white px-1.5 py-0.5 rounded-full uppercase">Active</span>}
             </h3>
-            <p className="text-xs text-slate-400">Processes receipts locally on your device for 100% data privacy.</p>
+            <p className="text-xs text-[#C0C0C0]">Processes receipts locally on your device for 100% data privacy.</p>
           </div>
         </div>
         <button
@@ -192,8 +192,8 @@ const Uploads = () => {
         onDrop={handleDrop}
         className={`relative p-12 rounded-2xl border-2 border-dashed transition-all cursor-pointer ${
           dragActive
-            ? 'border-blue-400 bg-blue-500/10'
-            : 'border-slate-600 bg-slate-800/50 hover:border-slate-500'
+            ? 'border-blue-400 bg-[#00D4FF]/20 text-[#00D4FF]/10'
+            : 'border-slate-600 bg-[#0A0A0A]/60/50 hover:border-slate-500'
         }`}
         whileHover={{ borderColor: '#60a5fa' }}
       >
@@ -218,7 +218,7 @@ const Uploads = () => {
             <h3 className="text-xl font-semibold text-white mb-2">
               {dragActive ? 'Drop files here' : 'Drag & drop your files'}
             </h3>
-            <p className="text-slate-400 mb-4">or click to browse</p>
+            <p className="text-[#C0C0C0] mb-4">or click to browse</p>
             <p className="text-sm text-slate-500">
               Supported formats: CSV, Excel, PDF, JPG, PNG
             </p>
@@ -227,7 +227,7 @@ const Uploads = () => {
           <motion.button
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="mt-4 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-4 px-6 py-3 bg-[#00D4FF]/20 text-[#00D4FF] hover:bg-blue-700 text-white rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -252,12 +252,12 @@ const Uploads = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.05 }}
-                className="p-4 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-slate-600 transition-all"
+                className="p-4 rounded-lg bg-[#0A0A0A]/60/50 border border-slate-700 hover:border-slate-600 transition-all"
               >
                 <div className="flex items-start gap-4">
                   {/* File Icon */}
                   <div className="flex-shrink-0 p-3 rounded-lg bg-slate-700/50">
-                    <File className="w-6 h-6 text-blue-400" />
+                    <File className="w-6 h-6 text-[#00D4FF]" />
                   </div>
 
                   {/* File Info */}
@@ -270,14 +270,14 @@ const Uploads = () => {
                           ? 'bg-emerald-500/20 text-emerald-400'
                           : file.status === 'failed'
                           ? 'bg-red-500/20 text-red-400'
-                          : 'bg-blue-500/20 text-blue-400'
+                          : 'bg-[#00D4FF]/20 text-[#00D4FF]/20 text-[#00D4FF]'
                       }`}>
                         {file.status.charAt(0).toUpperCase() + file.status.slice(1)}
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between gap-4">
-                      <div className="text-sm text-slate-400">
+                      <div className="text-sm text-[#C0C0C0]">
                         {formatFileSize(file.size)} • {file.uploadedAt}
                       </div>
 
@@ -292,7 +292,7 @@ const Uploads = () => {
                               transition={{ duration: 0.3 }}
                             />
                           </div>
-                          <p className="text-xs text-slate-400 mt-1">{file.progress}%</p>
+                          <p className="text-xs text-[#C0C0C0] mt-1">{file.progress}%</p>
                         </div>
                       )}
                     </div>
@@ -301,7 +301,7 @@ const Uploads = () => {
                   {/* Delete Button */}
                   <motion.button
                     onClick={() => handleRemove(file.id)}
-                    className="flex-shrink-0 p-2 rounded-lg hover:bg-red-500/20 text-slate-400 hover:text-red-400 transition-all"
+                    className="flex-shrink-0 p-2 rounded-lg hover:bg-red-500/20 text-[#C0C0C0] hover:text-red-400 transition-all"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -321,7 +321,7 @@ const Uploads = () => {
           animate={{ opacity: 1 }}
           className="text-center py-12"
         >
-          <p className="text-slate-400">No files uploaded yet. Start by uploading your first file!</p>
+          <p className="text-[#C0C0C0]">No files uploaded yet. Start by uploading your first file!</p>
         </motion.div>
       )}
 
@@ -333,25 +333,25 @@ const Uploads = () => {
         transition={{ delay: 0.2 }}
       >
         <h3 className="text-lg font-semibold text-white mb-3">Upload Tips</h3>
-        <ul className="space-y-2 text-slate-300 text-sm">
+        <ul className="space-y-2 text-[#C0C0C0] text-sm">
           <li className="flex gap-2">
-            <span className="text-blue-400">•</span>
+            <span className="text-[#00D4FF]">•</span>
             <span>Upload CSV files for bulk income/expense records</span>
           </li>
           <li className="flex gap-2">
-            <span className="text-blue-400">•</span>
+            <span className="text-[#00D4FF]">•</span>
             <span>Excel files will be automatically processed and categorized</span>
           </li>
           <li className="flex gap-2">
-            <span className="text-blue-400">•</span>
+            <span className="text-[#00D4FF]">•</span>
             <span>Receipt images are scanned locally on your device (Privacy-First)</span>
           </li>
           <li className="flex gap-2">
-            <span className="text-blue-400">•</span>
+            <span className="text-[#00D4FF]">•</span>
             <span>AI pattern recognition remembers your spending habits across years</span>
           </li>
           <li className="flex gap-2">
-            <span className="text-blue-400">•</span>
+            <span className="text-[#00D4FF]">•</span>
             <span>Autonomous anomaly detection flags unusual transactions instantly</span>
           </li>
         </ul>

@@ -149,7 +149,7 @@ const PremiumRegister = () => {
             {/* Heading */}
             <div className="mb-6">
               <h2 className="text-2xl md:text-3xl font-black text-white mb-1 tracking-tight">Create Account</h2>
-              <p className="text-gray-400 text-xs md:text-sm font-medium">Start building your economic resilience today</p>
+              <p className="text-[#C0C0C0] text-xs md:text-sm font-medium">Start building your economic resilience today</p>
             </div>
 
             {/* Error Alert */}
@@ -237,7 +237,7 @@ const PremiumRegister = () => {
 
             {/* Login Link */}
             <motion.div variants={itemVariants} className="text-center">
-              <p className="text-gray-400 text-sm">
+              <p className="text-[#C0C0C0] text-sm">
                 Already have an account?{' '}
                 <Link
                   to="/login"
@@ -262,7 +262,7 @@ const PremiumRegister = () => {
           ].map((benefit, idx) => (
             <div key={idx} className="text-xs">
               <p className="text-lg mb-2">{benefit.icon}</p>
-              <p className="text-gray-400">{benefit.text}</p>
+              <p className="text-[#C0C0C0]">{benefit.text}</p>
             </div>
           ))}
         </motion.div>

@@ -122,15 +122,15 @@
 
   /* Glass */
   .glassmorphism {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(10, 10, 10, 0.6);
+    backdrop-filter: blur(40px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   .glassmorphism-dark {
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(40px) saturate(150%);
+    border: 1px solid rgba(0, 212, 255, 0.1);
   }
 
   /* Shadows */
@@ -161,7 +161,7 @@
 ============================================ */
 
 body {
-  @apply bg-slate-950 text-white;
+  /* Inherited mostly from index.css for global unification */
 }
 
 /* Scrollbar */

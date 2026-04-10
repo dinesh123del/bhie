@@ -141,7 +141,7 @@ export default function ImageIntelligencePage() {
                 GOOGLE LENS–LEVEL PIPELINE
               </p>
               <h1 className="mt-2 text-2xl font-bold text-white md:text-3xl">Image Intelligence Engine</h1>
-              <p className="mt-1 text-sm text-slate-300">Upload images, extract business intelligence, search by text and visual similarity.</p>
+              <p className="mt-1 text-sm text-[#C0C0C0]">Upload images, extract business intelligence, search by text and visual similarity.</p>
             </div>
 
             <button
@@ -183,7 +183,7 @@ export default function ImageIntelligencePage() {
         ) : null}
 
         {loading ? (
-          <div className="rounded-xl border border-white/10 bg-slate-900/70 p-8 text-center text-sm text-slate-400">
+          <div className="rounded-xl border border-white/10 bg-[#0A0A0A]/80 border border-white/5/70 p-8 text-center text-sm text-[#C0C0C0]">
             Loading image intelligence records...
           </div>
         ) : (
@@ -200,7 +200,7 @@ export default function ImageIntelligencePage() {
 function MetricCard({ label, value, tone }: { label: string; value: number; tone: string }) {
   return (
     <div className="rounded-xl border border-white/10 bg-black/20 p-3">
-      <p className="text-xs uppercase tracking-wide text-slate-400">{label}</p>
+      <p className="text-xs uppercase tracking-wide text-[#C0C0C0]">{label}</p>
       <p className={`mt-1 text-2xl font-bold ${tone}`}>{value}</p>
     </div>
   );

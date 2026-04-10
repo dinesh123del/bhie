@@ -32,7 +32,7 @@ export const Modal: React.FC<ModalProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-40 bg-slate-950/72 backdrop-blur-xl"
+            className="fixed inset-0 z-40 bg-transparent/72 backdrop-blur-xl"
           />
 
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6">
@@ -131,7 +131,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onCancel}
-            className="fixed inset-0 z-40 bg-slate-950/72 backdrop-blur-xl"
+            className="fixed inset-0 z-40 bg-transparent/72 backdrop-blur-xl"
           />
 
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

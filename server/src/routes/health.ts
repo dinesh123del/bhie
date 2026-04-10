@@ -19,10 +19,9 @@ interface HealthReport {
   services: {
     database: { status: 'up' | 'down'; latency?: number };
     redis: { status: 'up' | 'down' };
-    ai: {
-      openai: 'active' | 'inactive';
-      claude: 'active' | 'inactive';
-      blackbox: 'active' | 'inactive';
+    smartEngine: {
+      status: 'active' | 'inactive';
+      provider: string;
     };
   };
 }
@@ -67,10 +66,9 @@ router.get(
       services: {
         database: { status: dbStatus, latency: Date.now() - start },
         redis: { status: redisStatus },
-        ai: {
-          openai: env.OPENAI_API_KEY ? 'active' : 'inactive',
-          claude: env.CLAUDE_API_KEY ? 'active' : 'inactive',
-          blackbox: env.BLACKBOX_API_KEY ? 'active' : 'inactive'
+        smartEngine: {
+          status: (env.OPENAI_API_KEY || env.CLAUDE_API_KEY || env.BLACKBOX_API_KEY) ? 'active' : 'inactive',
+          provider: env.OPENAI_API_KEY ? 'openai' : env.CLAUDE_API_KEY ? 'claude' : env.BLACKBOX_API_KEY ? 'blackbox' : 'none'
         }
       }
     };

@@ -60,7 +60,7 @@ export default function Privacy() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="max-w-xl text-lg leading-8 text-slate-400"
+              className="max-w-xl text-lg leading-8 text-[#C0C0C0]"
             >
               Learn how we protect your business data and respect your choice in every step of the journey.
             </motion.p>
@@ -73,7 +73,7 @@ export default function Privacy() {
             className="group relative overflow-hidden rounded-[36px] border border-white/10 bg-white/5 p-2 shadow-2xl"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-            <div className="aspect-square h-full w-full rounded-[30px] bg-slate-900 flex items-center justify-center relative overflow-hidden">
+            <div className="aspect-square h-full w-full rounded-[30px] bg-[#0A0A0A]/80 border border-white/5 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(79,70,229,0.1)_0%,transparent_70%)]" />
                 <Shield size={120} className="text-sky-500 opacity-80" />
             </div>
@@ -98,7 +98,7 @@ export default function Privacy() {
                 </div>
                 <div className="space-y-3">
                   <h3 className="text-2xl font-bold text-white">{section.title}</h3>
-                  <p className="text-sm leading-7 text-slate-400">{section.content}</p>
+                  <p className="text-sm leading-7 text-[#C0C0C0]">{section.content}</p>
                 </div>
               </motion.div>
             ))}
@@ -107,7 +107,7 @@ export default function Privacy() {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="mt-20 rounded-[40px] border border-white/10 bg-slate-900/40 p-8 text-center backdrop-blur-md sm:p-12"
+            className="mt-20 rounded-[40px] border border-white/10 bg-[#0A0A0A]/80 border border-white/5/40 p-8 text-center backdrop-blur-md sm:p-12"
           >
             <p className="text-sm text-slate-500">
               Last updated: April 5, 2026. Your trust is our most valuable asset.

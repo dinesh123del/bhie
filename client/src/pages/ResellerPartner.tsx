@@ -33,7 +33,7 @@ export default function ResellerPartner() {
           <CheckCircle2 size={48} />
         </motion.div>
         <h2 className="text-3xl font-bold text-white text-center">Application Received!</h2>
-        <p className="text-slate-400 max-w-md text-center">
+        <p className="text-[#C0C0C0] max-w-md text-center">
           Our team will review your CA/Firm details and contact you within 24 hours to activate your Reseller Portal.
         </p>
         <button
@@ -50,15 +50,15 @@ export default function ResellerPartner() {
     <div className="max-w-6xl mx-auto px-4 py-12">
       {/* Header */}
       <div className="text-center mb-16 relative">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-blue-500/20 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-[#00D4FF]/20 text-[#00D4FF]/20 blur-[120px] rounded-full pointer-events-none" />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <span className="inline-block py-1.5 px-4 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-semibold mb-6">
+          <span className="inline-block py-1.5 px-4 rounded-full bg-[#00D4FF]/20 text-[#00D4FF]/10 border border-blue-500/20 text-[#00D4FF] text-sm font-semibold mb-6">
             CA & ACCOUNTING FIRMS
           </span>
           <h1 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">
             Partner with BIZ PLUS
           </h1>
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-[#C0C0C0] max-w-2xl mx-auto leading-relaxed">
             Manage dozens of client businesses from a single dashboard.
             Resell BIZ PLUS's deep intelligence, provide <strong>Official Audit Certifications</strong>, and earn 20% recurring commission.
           </p>
@@ -90,18 +90,18 @@ export default function ResellerPartner() {
           transition={{ delay: 0.1 }}
           className="space-y-10"
         >
-          <div className="bg-slate-900/50 border border-slate-800 rounded-3xl p-8 relative overflow-hidden">
+          <div className="bg-[#0A0A0A]/80 border border-white/5/50 border border-slate-800 rounded-3xl p-8 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-6 opacity-10">
               <IndianRupee size={120} />
             </div>
             <h3 className="text-2xl font-bold text-white mb-2">Revenue Potential</h3>
-            <p className="text-slate-400 mb-8">Special pricing block for CA Partners</p>
+            <p className="text-[#C0C0C0] mb-8">Special pricing block for CA Partners</p>
 
             <div className="flex items-baseline gap-2 mb-2">
               <span className="text-4xl font-black text-white">₹4,999</span>
               <span className="text-slate-500">/ month</span>
             </div>
-            <p className="text-sm text-slate-400 mb-6 border-b border-slate-800 pb-6">
+            <p className="text-sm text-[#C0C0C0] mb-6 border-b border-slate-800 pb-6">
               Includes access for up to <strong>50 client businesses</strong>
             </p>
 
@@ -112,8 +112,8 @@ export default function ResellerPartner() {
                 'Custom white-labeled reports (Your Logo)',
                 'Dedicated Account Manager'
               ].map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-slate-300">
-                  <CheckCircle2 size={18} className="text-blue-400 shrink-0" />
+                <li key={i} className="flex items-center gap-3 text-[#C0C0C0]">
+                  <CheckCircle2 size={18} className="text-[#00D4FF] shrink-0" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -121,19 +121,19 @@ export default function ResellerPartner() {
           </div>
 
           <div className="grid sm:grid-cols-2 gap-6">
-            <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6">
+            <div className="bg-[#0A0A0A]/80 border border-white/5/50 border border-slate-800 rounded-2xl p-6">
               <div className="w-10 h-10 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center mb-4">
                 <LineChart size={20} />
               </div>
               <h4 className="text-white font-bold mb-2">20% Recurring</h4>
-              <p className="text-sm text-slate-400">Earn lifetime commissions for every client that upgrades via your link.</p>
+              <p className="text-sm text-[#C0C0C0]">Earn lifetime commissions for every client that upgrades via your link.</p>
             </div>
-            <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6">
+            <div className="bg-[#0A0A0A]/80 border border-white/5/50 border border-slate-800 rounded-2xl p-6">
               <div className="w-10 h-10 bg-purple-500/10 text-purple-400 rounded-xl flex items-center justify-center mb-4">
                 <ShieldCheck size={20} />
               </div>
               <h4 className="text-white font-bold mb-2">Priority Access</h4>
-              <p className="text-sm text-slate-400">Jump the queue. Your clients get premium servers & priority OCR.</p>
+              <p className="text-sm text-[#C0C0C0]">Jump the queue. Your clients get premium servers & priority OCR.</p>
             </div>
           </div>
         </motion.div>
@@ -145,62 +145,62 @@ export default function ResellerPartner() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
+          <div className="bg-[#0A0A0A]/80 border border-white/5 border border-slate-800 rounded-3xl p-8 shadow-2xl">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center border border-blue-500/20">
-                <Briefcase className="text-blue-400" />
+              <div className="w-12 h-12 bg-[#00D4FF]/20 text-[#00D4FF]/10 rounded-2xl flex items-center justify-center border border-blue-500/20">
+                <Briefcase className="text-[#00D4FF]" />
               </div>
               <div>
                 <h3 className="text-xl font-bold text-white">Apply for Partnership</h3>
-                <p className="text-sm text-slate-400">Takes 2 minutes</p>
+                <p className="text-sm text-[#C0C0C0]">Takes 2 minutes</p>
               </div>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">Firm Name</label>
+                <label className="text-sm font-medium text-[#C0C0C0]">Firm Name</label>
                 <input
                   required
                   type="text"
                   placeholder="e.g. Sharma & Associates CA"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                  className="w-full bg-transparent border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-300">Your Name</label>
+                  <label className="text-sm font-medium text-[#C0C0C0]">Your Name</label>
                   <input
                     required
                     type="text"
                     defaultValue={user?.name}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-transparent border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-300">Phone</label>
+                  <label className="text-sm font-medium text-[#C0C0C0]">Phone</label>
                   <input
                     required
                     type="tel"
                     placeholder="+91..."
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-transparent border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">Email Address</label>
+                <label className="text-sm font-medium text-[#C0C0C0]">Email Address</label>
                 <input
                   required
                   type="email"
                   defaultValue={user?.email}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-transparent border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">Estimated Clients</label>
-                <select className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 appearance-none">
+                <label className="text-sm font-medium text-[#C0C0C0]">Estimated Clients</label>
+                <select className="w-full bg-transparent border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 appearance-none">
                   <option value="1-10">1 - 10 Businesses</option>
                   <option value="11-50">11 - 50 Businesses</option>
                   <option value="50-100">50 - 100 Businesses</option>

@@ -16,8 +16,8 @@ const AlertItem: React.FC<AlertProps> = ({ alert, onMarkRead }) => {
       case 'danger': return 'border-red-500/30 bg-red-500/10 text-red-100';
       case 'warning': return 'border-yellow-500/30 bg-yellow-500/10 text-yellow-100';
       case 'success': return 'border-emerald-500/30 bg-emerald-500/10 text-emerald-100';
-      case 'info': return 'border-blue-500/30 bg-blue-500/10 text-blue-100';
-      default: return 'border-gray-500/30 bg-gray-500/10 text-gray-100';
+      case 'info': return 'border-blue-500/30 bg-[#00D4FF]/20 text-[#00D4FF]/10 text-blue-100';
+      default: return 'border-gray-500/30 bg-gray-500/10 text-white';
     }
   };
 
@@ -45,7 +45,7 @@ const AlertItem: React.FC<AlertProps> = ({ alert, onMarkRead }) => {
           {alert.type === 'danger' && <AlertCircle className="h-5 w-5 text-red-400" />}
           {alert.type === 'warning' && <Bell className="h-5 w-5 text-yellow-400" />}
           {alert.type === 'success' && <CheckCircle className="h-5 w-5 text-emerald-400" />}
-          {alert.type === 'info' && <Info className="h-5 w-5 text-blue-400" />}
+          {alert.type === 'info' && <Info className="h-5 w-5 text-[#00D4FF]" />}
         </div>
         <div className="flex-1 min-w-0">
           <p className="font-semibold text-sm leading-5 line-clamp-2 mb-1">{alert.message}</p>

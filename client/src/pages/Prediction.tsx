@@ -38,12 +38,12 @@ const ForecastEngine: React.FC = () => {
         {/* Header */}
         <div className="mb-12 animate-fadeIn">
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 bg-blue-600/20 border border-blue-500/30 rounded-lg">
-              <TrendingUp className="text-blue-400" size={28} />
+            <div className="p-3 bg-[#00D4FF]/20 text-[#00D4FF]/20 border border-blue-500/30 rounded-lg">
+              <TrendingUp className="text-[#00D4FF]" size={28} />
             </div>
             <div>
               <h1 className="text-4xl md:text-5xl font-bold">Forecast Engine</h1>
-              <p className="text-gray-400 text-lg mt-1">
+              <p className="text-[#C0C0C0] text-lg mt-1">
                 Advanced analytics & strategic forecasting
               </p>
             </div>
@@ -72,10 +72,10 @@ const ForecastEngine: React.FC = () => {
         {/* Stats Section */}
         {recordCount > 0 && (
           <div className="mb-8 p-4 bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-xl flex items-center gap-4">
-            <Info className="text-blue-400 flex-shrink-0" size={20} />
+            <Info className="text-[#00D4FF] flex-shrink-0" size={20} />
             <div>
               <p className="font-medium text-white mb-1">Current Dataset</p>
-              <p className="text-sm text-gray-300">
+              <p className="text-sm text-[#C0C0C0]">
                 Analysis based on {recordCount} record{recordCount !== 1 ? 's' : ''} with
                 real-time updates
               </p>
@@ -159,7 +159,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ icon, title, description }) => (
   <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4 hover:bg-white/15 transition-all">
     <div className="text-3xl mb-2">{icon}</div>
     <h3 className="font-semibold text-white mb-1">{title}</h3>
-    <p className="text-xs text-gray-400">{description}</p>
+    <p className="text-xs text-[#C0C0C0]">{description}</p>
   </div>
 );
 
@@ -183,12 +183,12 @@ const ProcessCard: React.FC<ProcessCardProps> = ({
         <div className="text-4xl">{icon}</div>
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center text-sm font-bold">
+            <div className="w-7 h-7 bg-[#00D4FF]/20 text-[#00D4FF] rounded-full flex items-center justify-center text-sm font-bold">
               {step}
             </div>
             <h3 className="font-semibold text-white">{title}</h3>
           </div>
-          <p className="text-sm text-gray-400">{description}</p>
+          <p className="text-sm text-[#C0C0C0]">{description}</p>
         </div>
       </div>
     </div>
@@ -210,12 +210,12 @@ const MetricExplanation: React.FC<MetricExplanationProps> = ({
 }) => (
   <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6">
     <h3 className="text-lg font-bold text-white mb-2">{label}</h3>
-    <p className="text-xs text-blue-400 mb-3">Range: {range}</p>
-    <p className="text-sm text-gray-400 mb-4">{description}</p>
+    <p className="text-xs text-[#00D4FF] mb-3">Range: {range}</p>
+    <p className="text-sm text-[#C0C0C0] mb-4">{description}</p>
     <div className="space-y-2">
       {factors.map((factor, idx) => (
-        <div key={idx} className="flex items-start gap-2 text-xs text-gray-300">
-          <span className="text-blue-400 mt-1">→</span>
+        <div key={idx} className="flex items-start gap-2 text-xs text-[#C0C0C0]">
+          <span className="text-[#00D4FF] mt-1">→</span>
           <span>{factor}</span>
         </div>
       ))}

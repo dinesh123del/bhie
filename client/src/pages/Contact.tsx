@@ -51,7 +51,7 @@ export default function Contact() {
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.2 }}
-                className="max-w-xl text-lg leading-relaxed text-slate-400"
+                className="max-w-xl text-lg leading-relaxed text-[#C0C0C0]"
               >
                 Have questions about our premium features or need help with your account? Our team is here to support your business growth.
               </motion.p>

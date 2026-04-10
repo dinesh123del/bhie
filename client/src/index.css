@@ -3,211 +3,122 @@
 @tailwind utilities;
 
 /* ─────────────────────────────────────────────
-   BIZ PLUS DESIGN SYSTEM v4.0 — VISIBILITY & ACCESSIBILITY EDITION
-   (Elite Dark UI Base)
+   BIZ PLUS DESIGN SYSTEM v5.0 — CINEMATIC MINIMALISM
    ───────────────────────────────────────────── */
 
 @layer base {
   :root {
-    /* BIZ PLUS PRO DESIGN SYSTEM (DARK) */
-    --biz-black:        #000000;
-    --biz-gray-900:     #1C1C1E;
-    --biz-gray-800:     #2C2C2E;
-    --biz-gray-700:     #3A3A3C;
-    --biz-gray-600:     #48484A;
-    --biz-gray-500:     #636366;
+    --bg-black: #0A0A0A;
+    --text-chrome: #C0C0C0;
+    --accent-blue: #00D4FF;
+    --accent-purple: #7B61FF;
     
-    --biz-blue:         #007AFF;
-    --biz-indigo:       #5856D6;
-    --biz-purple:       #AF52DE;
-    --biz-pink:         #FF2D55;
-    --biz-orange:       #FF9500;
-    --biz-teal:         #30B0C7;
+    --glass-background: rgba(10, 10, 10, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.05);
     
-    /* BIZ PLUS Intelligence Gradient (Apple-style) */
-    --brand-gradient:    linear-gradient(135deg, #007AFF, #AF52DE, #FF2D55);
-    --glass-background:  rgba(10, 10, 12, 0.4);
-    --glass-border:      rgba(255, 255, 255, 0.06);
-    
-    --primary-blue:      #0A84FF;
-    --primary-text:      #FFFFFF;
-    --secondary-text:    rgba(255, 255, 255, 0.65);
-    --tertiary-text:     rgba(255, 255, 255, 0.4);
-    
-    --biz-border:      var(--glass-border);
-    --biz-surface:     rgba(255, 255, 255, 0.03);
-    --biz-primary:     var(--biz-blue);
-    --biz-glow:        rgba(0, 122, 255, 0.15);
-    
-    --sf-easing:         cubic-bezier(0.2, 0.8, 0.2, 1);
-    --spring-easing:     cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --sf-easing: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   html, body {
     @apply min-h-[100svh];
-    background-color: var(--biz-black);
-    color: var(--primary-text);
-    font-family: "SF Pro Display", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-black);
+    color: var(--text-chrome);
+    font-family: "SF Pro Display", "Inter", -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
     scroll-behavior: smooth;
     overflow-x: hidden;
-    letter-spacing: -0.015em;
   }
 
   h1, h2, h3, h4, h5, h6 {
+    color: #FFFFFF;
     font-weight: 700;
-    letter-spacing: -0.035em;
-    color: var(--primary-text);
-    line-height: 1.1;
-  }
-
-  p {
-    color: var(--secondary-text);
-    line-height: 1.6;
-    letter-spacing: -0.005em;
-  }
-
-  ::selection {
-    background: rgba(0, 122, 255, 0.3);
-    color: white;
   }
 }
 
-/* ─────────────────────────────────────────────
-   BIZ PLUS FLUID COMPONENT SYSTEM
-   ───────────────────────────────────────────── */
 @layer components {
-  /* Ultra-refined Glassmorphism (Extreme Edition) */
-  .apple-glass {
-    backdrop-filter: blur(50px) saturate(220%);
-    -webkit-backdrop-filter: blur(50px) saturate(220%);
+  /* Extrapolating Legacy Apple Card to the new Cinematic Architecture */
+  .apple-card, .cinematic-card {
+    @apply relative overflow-hidden transition-all duration-[400ms] ease-[var(--sf-easing)];
+    backdrop-filter: blur(40px) saturate(150%);
+    -webkit-backdrop-filter: blur(40px) saturate(150%);
     background: var(--glass-background);
     border: 1px solid var(--glass-border);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
   }
 
-  /* Extreme Bento Card */
-  .apple-card {
-    @apply relative overflow-hidden transition-all duration-700 ease-[var(--sf-easing)];
-    backdrop-filter: blur(40px) saturate(200%);
-    -webkit-backdrop-filter: blur(40px) saturate(200%);
-    background: rgba(20, 20, 22, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 2.5rem;
+  .apple-card:hover, .cinematic-card:hover {
+    transform: scale(1.02);
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
   }
 
-  .apple-card:hover {
-    transform: scale(1.005) translateY(-2px);
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8), 
-                inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-  }
-
-  /* Magnetic Button (Extreme) */
-  .btn-apple {
-    @apply relative inline-flex items-center justify-center px-10 py-4 rounded-full font-bold transition-all duration-500 overflow-hidden;
-    background: #FFFFFF;
-    color: #000000;
-    font-size: 0.95rem;
-    letter-spacing: -0.01em;
-    transform: perspective(1000px) translateZ(0);
+  /* Extrapolating Legacy Button to the new Architecture */
+  .btn-apple, .cinematic-btn, .btn-apple-outline {
+    @apply relative inline-flex items-center justify-center px-8 py-3 transition-all duration-[400ms] ease-[var(--sf-easing)] overflow-hidden;
+    background: transparent;
+    color: var(--text-chrome);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    font-weight: 500;
   }
   
-  .btn-apple:hover {
-    transform: perspective(1000px) scale(1.05) translateZ(20px);
-    box-shadow: 0 20px 40px rgba(255, 255, 255, 0.2);
-  }
-
-  .btn-apple:active {
-    transform: perspective(1000px) scale(0.96) translateZ(0);
-  }
-
-  .btn-apple-outline {
-    @apply relative inline-flex items-center justify-center px-10 py-4 rounded-full font-semibold transition-all duration-500;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+  .btn-apple:hover, .cinematic-btn:hover, .btn-apple-outline:hover {
+    transform: scale(1.02);
+    border-color: var(--accent-blue);
     color: #FFFFFF;
-    backdrop-filter: blur(24px);
-  }
-  
-  .btn-apple-outline:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+    background: linear-gradient(135deg, rgba(0,212,255,0.1) 0%, rgba(123,97,255,0.1) 100%);
   }
 
-  /* Intelligence Text Gradient (Extreme) */
-  .text-ai-extreme {
-    background: linear-gradient(135deg, #007AFF 0%, #AF52DE 45%, #FF2D55 100%);
+  .btn-apple:active, .cinematic-btn:active, .btn-apple-outline:active {
+    transform: scale(0.98);
+  }
+
+  /* Cinematic Inputs */
+  .cinematic-input {
+    @apply w-full bg-transparent border border-white/10 rounded-2xl px-4 py-3 text-white transition-all duration-300 outline-none;
+    backdrop-filter: blur(20px);
+  }
+
+  .cinematic-input:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+    background: rgba(0, 212, 255, 0.05);
+  }
+
+  /* Intelligence Gradient (Redefined exclusively to Blue -> Purple) */
+  .text-ai-extreme, .text-cinematic-gradient, .text-gradient-brand {
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: ai-shimmer 8s linear infinite;
+    animation: shimmering 6s linear infinite;
   }
 }
 
-/* ─────────────────────────────────────────────
-   CINEMATIC MICRO-ANIMATIONS
-   ───────────────────────────────────────────── */
-@keyframes apple-float {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-20px); }
-}
-.animate-apple-float { animation: apple-float 8s ease-in-out infinite; }
-
-@keyframes ai-shimmer {
+/* Micro-animations */
+@keyframes shimmering {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-.animate-ai-glow {
-  background-size: 300% 300%;
-  animation: ai-shimmer 12s ease infinite;
+
+@keyframes cinematic-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
 }
 
-@keyframes entrance-blur {
-  0% { filter: blur(20px); opacity: 0; transform: scale(1.1); }
-  100% { filter: blur(0px); opacity: 1; transform: scale(1); }
-}
-.animate-entrance { animation: entrance-blur 1.2s var(--sf-easing) both; }
+.animate-apple-float { animation: cinematic-float 8s ease-in-out infinite; }
 
-/* Scrollbar iOS */
-::-webkit-scrollbar { width: 4px; height: 4px; }
+/* Cinematic Scrollbar */
+::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--glass-border);
   border-radius: 10px;
 }
-::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
 
-/* Custom Utilities */
 .mask-radial {
   mask-image: radial-gradient(circle at center, black, transparent 80%);
-}
-/* CUSTOM SCROLLBAR (iOS Style)
-   ───────────────────────────────────────────── */
-.scrollbar-premium::-webkit-scrollbar       { width: 6px; }
-.scrollbar-premium::-webkit-scrollbar-track { background: transparent; }
-.scrollbar-premium::-webkit-scrollbar-thumb {
-  background: var(--tertiary-text);
-  border-radius: 10px;
-  opacity: 0.3;
-}
-
-/* ─────────────────────────────────────────────
-   BACKGROUND MESH (Subtle depth)
-   ───────────────────────────────────────────── */
-.bg-mesh {
-  background-image:
-    radial-gradient(at 10% 10%, var(--biz-glow) 0px, transparent 40%),
-    radial-gradient(at 90% 10%, var(--biz-glow) 0px, transparent 40%);
-}
-
-.text-gradient-brand {
-  background: var(--brand-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
 }

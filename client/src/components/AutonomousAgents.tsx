@@ -206,7 +206,7 @@ export function AutonomousAgents({ businessId, className }: AutonomousAgentsProp
     switch (status) {
       case 'completed': return <CheckCircle className="h-4 w-4 text-green-500" />;
       case 'failed': return <XCircle className="h-4 w-4 text-red-500" />;
-      case 'processing': return <RefreshCw className="h-4 w-4 text-blue-500 animate-spin" />;
+      case 'processing': return <RefreshCw className="h-4 w-4 text-[#00D4FF] animate-spin" />;
       case 'pending': return <Clock className="h-4 w-4 text-yellow-500" />;
       default: return <Clock className="h-4 w-4 text-gray-500" />;
     }
@@ -229,7 +229,7 @@ export function AutonomousAgents({ businessId, className }: AutonomousAgentsProp
       case 'critical': return 'bg-red-500';
       case 'high': return 'bg-orange-500';
       case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-blue-500';
+      case 'low': return 'bg-[#00D4FF]/20 text-[#00D4FF]';
       default: return 'bg-gray-500';
     }
   };
@@ -239,7 +239,7 @@ export function AutonomousAgents({ businessId, className }: AutonomousAgentsProp
       <Card className={className}>
         <CardContent className="p-6">
           <div className="flex items-center justify-center h-32">
-            <RefreshCw className="h-6 w-6 animate-spin text-blue-500" />
+            <RefreshCw className="h-6 w-6 animate-spin text-[#00D4FF]" />
             <span className="ml-2 text-gray-600">Loading autonomous agents...</span>
           </div>
         </CardContent>
@@ -252,7 +252,7 @@ export function AutonomousAgents({ businessId, className }: AutonomousAgentsProp
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <BarChart3 className="h-6 w-6 text-blue-500" />
+          <BarChart3 className="h-6 w-6 text-[#00D4FF]" />
           <h2 className="text-2xl font-bold">Business Analysis Tools</h2>
         </div>
         <Button

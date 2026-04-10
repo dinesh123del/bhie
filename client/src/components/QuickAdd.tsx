@@ -158,7 +158,7 @@ export default function QuickAdd({ onRecordAdded, className = '', externalOpen, 
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setOpen(false)}
-              className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md"
+              className="fixed inset-0 z-[100] bg-transparent/80 backdrop-blur-md"
             />
 
             {/* Modal Container */}
@@ -179,14 +179,14 @@ export default function QuickAdd({ onRecordAdded, className = '', externalOpen, 
                             Add Record
                             <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-tighter bg-brand-500/10 text-brand-500 border border-brand-500/20">Sync Active</span>
                         </h3>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 font-semibold tracking-tight">Entry will be processed by the financial engines.</p>
+                        <p className="text-xs text-gray-500 dark:text-[#C0C0C0] font-semibold tracking-tight">Entry will be processed by the financial engines.</p>
                       </div>
                       <button
                         onClick={() => {
                           setOpen(false);
                           premiumFeedback.click();
                         }}
-                        className="rounded-2xl p-2.5 text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-all duration-300"
+                        className="rounded-2xl p-2.5 text-[#C0C0C0] hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-all duration-300"
                       >
                         <X className="h-6 w-6" />
                       </button>
@@ -201,7 +201,7 @@ export default function QuickAdd({ onRecordAdded, className = '', externalOpen, 
                           className={`flex-1 flex items-center justify-center gap-2.5 rounded-xl px-4 py-3.5 text-xs font-black uppercase tracking-widest transition-all duration-500 ${
                             form.type === 'income'
                               ? 'bg-white dark:bg-white/15 text-emerald-600 dark:text-emerald-400 shadow-xl scale-105'
-                              : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'
+                              : 'text-gray-500 hover:text-gray-800 dark:text-[#C0C0C0] dark:hover:text-white'
                           }`}
                         >
                           <ArrowUpRight className="w-4 h-4" />
@@ -213,7 +213,7 @@ export default function QuickAdd({ onRecordAdded, className = '', externalOpen, 
                           className={`flex-1 flex items-center justify-center gap-2.5 rounded-xl px-4 py-3.5 text-xs font-black uppercase tracking-widest transition-all duration-500 ${
                             form.type === 'expense'
                               ? 'bg-white dark:bg-white/15 text-rose-600 dark:text-rose-400 shadow-xl scale-105'
-                              : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'
+                              : 'text-gray-500 hover:text-gray-800 dark:text-[#C0C0C0] dark:hover:text-white'
                           }`}
                         >
                           <TrendingUp className="w-4 h-4 rotate-180" />
@@ -223,12 +223,12 @@ export default function QuickAdd({ onRecordAdded, className = '', externalOpen, 
 
                       {/* Big Amount Section */}
                       <div className="space-y-4">
-                        <label className="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.25em] text-gray-500 dark:text-gray-400 ml-1">
+                        <label className="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.25em] text-gray-500 dark:text-[#C0C0C0] ml-1">
                           Calculated Amount
                         </label>
                         <div className="relative group">
                           <div className="absolute inset-y-0 left-8 flex items-center pointer-events-none">
-                             <span className="text-3xl font-black text-gray-300 dark:text-gray-600">₹</span>
+                             <span className="text-3xl font-black text-[#C0C0C0] dark:text-gray-600">₹</span>
                           </div>
                           <input
                             type="number"
@@ -246,7 +246,7 @@ export default function QuickAdd({ onRecordAdded, className = '', externalOpen, 
 
                       {/* Row 1: Title */}
                       <div className="space-y-2.5">
-                        <label className="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.25em] text-gray-500 dark:text-gray-400 ml-1">
+                        <label className="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.25em] text-gray-500 dark:text-[#C0C0C0] ml-1">
                           Transaction Identifer
                         </label>
                         <input
@@ -262,7 +262,7 @@ export default function QuickAdd({ onRecordAdded, className = '', externalOpen, 
                       {/* Row 2: Category & Date */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2.5">
-                          <label className="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.25em] text-gray-500 dark:text-gray-400 ml-1">
+                          <label className="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.25em] text-gray-500 dark:text-[#C0C0C0] ml-1">
                             Classification
                           </label>
                           <div className="relative">
@@ -283,7 +283,7 @@ export default function QuickAdd({ onRecordAdded, className = '', externalOpen, 
                         </div>
 
                         <div className="space-y-2.5">
-                          <label className="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.25em] text-gray-500 dark:text-gray-400 ml-1">
+                          <label className="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.25em] text-gray-500 dark:text-[#C0C0C0] ml-1">
                             Date of Record
                           </label>
                           <input
@@ -314,7 +314,7 @@ export default function QuickAdd({ onRecordAdded, className = '', externalOpen, 
 
                       {/* Description */}
                       <div className="space-y-2.5">
-                        <label className="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.25em] text-gray-500 dark:text-gray-400 ml-1">
+                        <label className="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.25em] text-gray-500 dark:text-[#C0C0C0] ml-1">
                           Extended Notes
                         </label>
                         <textarea

@@ -235,8 +235,8 @@ export function SmartAlerts() {
     switch (priority) {
       case 'urgent': return 'bg-red-500/20 border-red-500/30 text-red-400';
       case 'high': return 'bg-orange-500/20 border-orange-500/30 text-orange-400';
-      case 'medium': return 'bg-blue-500/20 border-blue-500/30 text-blue-400';
-      default: return 'bg-gray-500/20 border-gray-500/30 text-gray-400';
+      case 'medium': return 'bg-[#00D4FF]/20 text-[#00D4FF]/20 border-blue-500/30 text-[#00D4FF]';
+      default: return 'bg-gray-500/20 border-gray-500/30 text-[#C0C0C0]';
     }
   };
 
@@ -297,19 +297,19 @@ export function SmartAlerts() {
               <div className="p-6 border-b border-white/10">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
-                      <Bell className="w-5 h-5 text-blue-400" />
+                    <div className="w-10 h-10 rounded-full bg-[#00D4FF]/20 text-[#00D4FF]/20 flex items-center justify-center">
+                      <Bell className="w-5 h-5 text-[#00D4FF]" />
                     </div>
                     <div>
                       <h2 className="text-xl font-bold text-white">Smart Insights</h2>
-                      <p className="text-sm text-gray-400">{alerts.length} notifications</p>
+                      <p className="text-sm text-[#C0C0C0]">{alerts.length} notifications</p>
                     </div>
                   </div>
                   <button
                     onClick={() => setShowPanel(false)}
                     className="p-2 hover:bg-white/10 rounded-full transition-colors"
                   >
-                    <X className="w-5 h-5 text-gray-400" />
+                    <X className="w-5 h-5 text-[#C0C0C0]" />
                   </button>
                 </div>
               </div>
@@ -346,7 +346,7 @@ export function SmartAlerts() {
 
                       {/* Content */}
                       <h3 className="font-semibold text-white mb-1">{alert.title}</h3>
-                      <p className="text-sm text-gray-300 leading-relaxed">{alert.message}</p>
+                      <p className="text-sm text-[#C0C0C0] leading-relaxed">{alert.message}</p>
 
                       {/* Action */}
                       {alert.action && (

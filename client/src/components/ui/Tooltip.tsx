@@ -37,11 +37,11 @@ export const Tooltip: React.FC<TooltipProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.15 }}
-            className={`absolute ${positionClasses[position]} z-50 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap border border-white/10 shadow-lg`}
+            className={`absolute ${positionClasses[position]} z-50 px-2 py-1 bg-[#0A0A0A]/80 border border-white/5 text-white text-xs rounded whitespace-nowrap border border-white/10 shadow-lg`}
           >
             {content}
             <motion.div
-              className={`absolute w-1.5 h-1.5 bg-gray-900 border border-white/10 ${
+              className={`absolute w-1.5 h-1.5 bg-[#0A0A0A]/80 border border-white/5 border border-white/10 ${
                 position === 'top'
                   ? '-bottom-1 left-1/2 -translate-x-1/2 rotate-45'
                   : position === 'bottom'

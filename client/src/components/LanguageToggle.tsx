@@ -25,7 +25,7 @@ export const LanguageToggle: React.FC = () => {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/50 border border-slate-700 hover:border-indigo-500/50 transition-all text-sm font-medium text-slate-300 hover:text-white"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0A0A0A]/60/50 border border-slate-700 hover:border-indigo-500/50 transition-all text-sm font-medium text-[#C0C0C0] hover:text-white"
       >
         <Languages className="w-4 h-4 text-indigo-400" />
         <span className="hidden sm:inline">{selectedLang.name.split(' (')[0]}</span>
@@ -43,7 +43,7 @@ export const LanguageToggle: React.FC = () => {
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              className="absolute right-0 mt-2 w-48 py-2 bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-2xl z-50 overflow-hidden"
+              className="absolute right-0 mt-2 w-48 py-2 bg-[#0A0A0A]/80 border border-white/5/95 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-2xl z-50 overflow-hidden"
             >
               <div className="px-3 py-1 mb-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                 Select Language
@@ -59,7 +59,7 @@ export const LanguageToggle: React.FC = () => {
                     className={`w-full flex items-center justify-between px-4 py-2 text-sm transition-colors ${
                       language === lang.code 
                         ? 'bg-indigo-600/20 text-indigo-400' 
-                        : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                        : 'text-[#C0C0C0] hover:bg-[#0A0A0A]/60 hover:text-white'
                     }`}
                   >
                     <span>{lang.name}</span>

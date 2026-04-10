@@ -95,7 +95,7 @@ export default function Hero({ onPrimaryClick, onSecondaryClick }) {
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-sky-400 to-fuchsia-500 text-slate-950 shadow-[0_0_24px_rgba(56,189,248,0.4)]">
               <Sparkles className="h-4 w-4" />
             </span>
-            <span className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-200">
+            <span className="text-xs font-semibold uppercase tracking-[0.28em] text-white">
               BIZ PLUS Premium Intelligence
             </span>
           </motion.div>
@@ -112,7 +112,7 @@ export default function Hero({ onPrimaryClick, onSecondaryClick }) {
 
           <motion.p
             variants={itemVariants}
-            className="mx-auto mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg lg:mx-0 lg:max-w-xl"
+            className="mx-auto mt-6 max-w-2xl text-base leading-7 text-[#C0C0C0] sm:text-lg lg:mx-0 lg:max-w-xl"
           >
             Monitor revenue, uncover risk, and automate decisions with a polished intelligence
             workspace built for fast-moving teams.
@@ -158,7 +158,7 @@ export default function Hero({ onPrimaryClick, onSecondaryClick }) {
             {stats.map((stat) => (
               <div key={stat.label} className="min-w-[132px]">
                 <p className="text-2xl font-black tracking-[-0.06em] text-white">{stat.value}</p>
-                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#C0C0C0]">
                   {stat.label}
                 </p>
               </div>
@@ -190,7 +190,7 @@ export default function Hero({ onPrimaryClick, onSecondaryClick }) {
               animate={{ rotate: 360 }}
               transition={{ duration: 22, repeat: Infinity, ease: 'linear' }}
             >
-              <div className="absolute inset-5 rounded-full border border-white/10 bg-slate-950/80" />
+              <div className="absolute inset-5 rounded-full border border-white/10 bg-transparent/80" />
               <motion.div
                 className="absolute inset-12 rounded-full bg-[radial-gradient(circle_at_30%_30%,rgba(125,211,252,0.96),rgba(96,165,250,0.25),rgba(15,23,42,0.05))] shadow-[0_0_80px_rgba(56,189,248,0.48)]"
                 animate={{ scale: [1, 1.08, 1], opacity: [0.84, 1, 0.84] }}
@@ -203,22 +203,22 @@ export default function Hero({ onPrimaryClick, onSecondaryClick }) {
               animate={{ y: [0, -16, 0] }}
               transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
             >
-              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Signal flow</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#C0C0C0]">Signal flow</p>
               <div className="mt-3 flex items-center gap-3">
                 <div className="h-10 w-10 rounded-2xl bg-[linear-gradient(135deg,rgba(34,197,94,0.9),rgba(56,189,248,0.85))] shadow-[0_0_24px_rgba(34,197,94,0.28)]" />
                 <div>
                   <p className="text-sm font-semibold text-white">Live ingestion</p>
-                  <p className="text-xs text-slate-400">Invoices, banking, ops</p>
+                  <p className="text-xs text-[#C0C0C0]">Invoices, banking, ops</p>
                 </div>
               </div>
             </motion.div>
 
             <motion.div
-              className="absolute bottom-8 right-0 w-[14rem] rounded-[1.8rem] border border-white/10 bg-slate-950/70 p-5 backdrop-blur-2xl shadow-[0_24px_80px_rgba(2,6,23,0.42)]"
+              className="absolute bottom-8 right-0 w-[14rem] rounded-[1.8rem] border border-white/10 bg-transparent/70 p-5 backdrop-blur-2xl shadow-[0_24px_80px_rgba(2,6,23,0.42)]"
               animate={{ y: [0, 14, 0] }}
               transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
             >
-              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Smart pulse</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#C0C0C0]">Smart pulse</p>
               <div className="mt-4 space-y-3">
                 {insightCards.map((card) => (
                   <div
@@ -226,7 +226,7 @@ export default function Hero({ onPrimaryClick, onSecondaryClick }) {
                     className={`rounded-2xl border border-white/8 bg-[linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-3`}
                   >
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-slate-200">
+                      <div className="flex items-center gap-2 text-white">
                         <span className={`flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br ${card.tone}`}>
                           {card.icon}
                         </span>

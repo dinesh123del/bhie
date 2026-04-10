@@ -240,7 +240,7 @@ export const AIAnalysisForm: React.FC<AIAnalysisFormProps> = ({
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold rounded-lg transition"
+          className="flex-1 px-6 py-3 bg-[#00D4FF]/20 text-[#00D4FF] hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold rounded-lg transition"
         >
           {loading ? (
             <span className="flex items-center justify-center gap-2">

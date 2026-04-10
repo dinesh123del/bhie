@@ -27,10 +27,9 @@ interface HealthReport {
   services: {
     database: { status: 'up' | 'down'; latency?: number };
     redis: { status: 'up' | 'down' };
-    intelligence: {
-      openai: string;
-      claude: string;
-      blackbox: string;
+    smartEngine: {
+      status: 'active' | 'inactive';
+      provider: string;
     };
   };
 }
@@ -209,12 +208,12 @@ const SystemHealth = () => {
                       <h3 className="text-lg font-black text-white uppercase tracking-tight italic">Analysis Services</h3>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {Object.entries(report.services.intelligence || {}).map(([name, status]) => (
-                        <div key={name} className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
-                          <span className="text-xs font-bold text-white/80 capitalize">{name} System</span>
-                          <StatusIcon status={status as string} />
+                      {report.services.smartEngine && (
+                        <div className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
+                          <span className="text-xs font-bold text-white/80 capitalize">Smart Engine ({report.services.smartEngine.provider})</span>
+                          <StatusIcon status={report.services.smartEngine.status} />
                         </div>
-                      ))}
+                      )}
                     </div>
                   </PremiumCard>
                 </div>

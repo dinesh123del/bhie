@@ -225,7 +225,7 @@ export function AICompanion() {
       case 'celebratory': return <PartyPopper className="w-4 h-4 text-pink-400" />;
       case 'concerned': return <Heart className="w-4 h-4 text-red-400" />;
       case 'encouraging': return <TrendingUp className="w-4 h-4 text-green-400" />;
-      default: return <Sparkles className="w-4 h-4 text-blue-400" />;
+      default: return <Sparkles className="w-4 h-4 text-[#00D4FF]" />;
     }
   };
 
@@ -235,7 +235,7 @@ export function AICompanion() {
       case 'celebratory': return 'bg-pink-500/10 border-pink-500/20';
       case 'concerned': return 'bg-red-500/10 border-red-500/20';
       case 'encouraging': return 'bg-green-500/10 border-green-500/20';
-      default: return 'bg-blue-500/10 border-blue-500/20';
+      default: return 'bg-[#00D4FF]/20 text-[#00D4FF]/10 border-blue-500/20';
     }
   };
 
@@ -277,7 +277,7 @@ export function AICompanion() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white">{COMPANION_NAME}</h3>
-                  <p className="text-xs text-blue-400 flex items-center gap-1">
+                  <p className="text-xs text-[#00D4FF] flex items-center gap-1">
                     <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
                     Your Business Companion
                   </p>
@@ -287,7 +287,7 @@ export function AICompanion() {
                 onClick={() => setIsOpen(false)}
                 className="p-2 hover:bg-white/10 rounded-full transition-colors"
               >
-                <X className="w-5 h-5 text-gray-400" />
+                <X className="w-5 h-5 text-[#C0C0C0]" />
               </button>
             </div>
 
@@ -309,8 +309,8 @@ export function AICompanion() {
                     )}
 
                     <div className={`p-3 rounded-2xl ${message.role === 'user'
-                      ? 'bg-blue-600 text-white'
-                      : `bg-[#1A1A1B] text-gray-200 border ${getMoodColor(message.mood)}`
+                      ? 'bg-[#00D4FF]/20 text-[#00D4FF] text-white'
+                      : `bg-[#1A1A1B] text-white border ${getMoodColor(message.mood)}`
                       }`}>
                       <p className="text-sm leading-relaxed whitespace-pre-line">{message.content}</p>
                     </div>
@@ -321,7 +321,7 @@ export function AICompanion() {
                         {message.actions.map((action, idx) => (
                           <button
                             key={idx}
-                            className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-xs text-blue-400 transition-colors"
+                            className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-xs text-[#00D4FF] transition-colors"
                           >
                             {action}
                           </button>
@@ -383,7 +383,7 @@ export function AICompanion() {
                 <button
                   onClick={handleSend}
                   disabled={!inputValue.trim() || isTyping}
-                  className="p-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-full text-white transition-colors"
+                  className="p-2.5 bg-[#00D4FF]/20 text-[#00D4FF] hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-full text-white transition-colors"
                 >
                   <Send className="w-4 h-4" />
                 </button>
@@ -397,7 +397,7 @@ export function AICompanion() {
                     onClick={() => {
                       setInputValue(prompt);
                     }}
-                    className="px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full text-xs text-gray-400 whitespace-nowrap transition-colors"
+                    className="px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full text-xs text-[#C0C0C0] whitespace-nowrap transition-colors"
                   >
                     {prompt}
                   </button>

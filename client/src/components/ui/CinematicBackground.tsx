@@ -1,0 +1,90 @@
+import React, { useEffect, useRef } from 'react';
+
+// Lightweight 2D Canvas Particle engine for ambient background
+export const CinematicBackground: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d', { alpha: false });
+    if (!ctx) return;
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const particles: { x: number; y: number; r: number; vx: number; vy: number; op: number }[] = [];
+    const count = window.innerWidth < 768 ? 40 : 120; // Performance scale
+
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 1.5 + 0.5,
+        vx: (Math.random() - 0.5) * 0.2, // Extremely slow drift
+        vy: (Math.random() - 0.5) * 0.2,
+        op: Math.random() * 0.4 + 0.1,
+      });
+    }
+
+    let animationFrameId: number;
+
+    const render = () => {
+      // Deep Black base
+      ctx.fillStyle = '#0A0A0A';
+      ctx.fillRect(0, 0, width, height);
+
+      // Subtle ambient gradient (Pulse)
+      const pulse = Math.sin(Date.now() * 0.0005) * 0.05 + 0.1;
+      const gradient = ctx.createRadialGradient(
+        width / 2, height / 2, 0,
+        width / 2, height / 2, Math.max(width, height)
+      );
+      gradient.addColorStop(0, `rgba(0, 212, 255, ${pulse * 0.3})`); // Neon Blue core
+      gradient.addColorStop(0.5, `rgba(123, 97, 255, ${pulse * 0.15})`); // Electric purple mid
+      gradient.addColorStop(1, 'rgba(10, 10, 10, 1)'); // Blend explicitly into Deep Black
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, height);
+
+      // Render Particles
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(192, 192, 192, ${p.op})`; // Chrome silver subtle particles
+        ctx.fill();
+      });
+
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    const handleResize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 z-[-1] pointer-events-none"
+    />
+  );
+};

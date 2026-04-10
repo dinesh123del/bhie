@@ -153,11 +153,11 @@ const Reports = () => {
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white">Reports</h1>
-          <p className="mt-2 text-sm text-gray-400">
+          <p className="mt-2 text-sm text-[#C0C0C0]">
             Create lightweight report records from the live backend and manage them in one place.
           </p>
         </div>
-        <p className="text-sm font-medium text-gray-400">{reportCountLabel}</p>
+        <p className="text-sm font-medium text-[#C0C0C0]">{reportCountLabel}</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
@@ -170,7 +170,7 @@ const Reports = () => {
             className={`group rounded-2xl border p-6 text-left transition disabled:cursor-not-allowed disabled:opacity-60 ${
               template.isPremium 
                 ? 'border-amber-500/30 bg-amber-500/5 hover:border-amber-400 hover:bg-amber-500/10' 
-                : 'border-dashed border-gray-700 bg-gray-900/70 hover:border-sky-400 hover:bg-sky-500/5'
+                : 'border-dashed border-gray-700 bg-[#0A0A0A]/80 border border-white/5/70 hover:border-sky-400 hover:bg-sky-500/5'
             }`}
           >
             <div className="flex items-start justify-between gap-3">
@@ -182,7 +182,7 @@ const Reports = () => {
                   <h2 className="text-lg font-semibold text-white flex items-center gap-2">
                     {template.title}
                   </h2>
-                  <p className="text-sm text-gray-400">Type: {template.type}</p>
+                  <p className="text-sm text-[#C0C0C0]">Type: {template.type}</p>
                 </div>
               </div>
               {template.isPremium && (
@@ -192,7 +192,7 @@ const Reports = () => {
                  </span>
               )}
             </div>
-            <p className="mt-4 text-sm leading-6 text-gray-400">
+            <p className="mt-4 text-sm leading-6 text-[#C0C0C0]">
               {creatingType === template.type ? 'Creating report...' : template.content}
             </p>
           </button>
@@ -206,7 +206,7 @@ const Reports = () => {
         </div>
 
         {reports.length === 0 ? (
-          <div className="mt-6 rounded-2xl border border-gray-800 bg-gray-900/60 p-6 text-sm text-gray-400">
+          <div className="mt-6 rounded-2xl border border-gray-800 bg-[#0A0A0A]/80 border border-white/5/60 p-6 text-sm text-[#C0C0C0]">
             No reports yet. Use one of the templates above to create your first saved report.
           </div>
         ) : (
@@ -217,7 +217,7 @@ const Reports = () => {
               return (
                 <div
                   key={reportId ?? `${report.title}-${report.createdAt}`}
-                  className="rounded-2xl border border-gray-800 bg-gray-900/70 p-5"
+                  className="rounded-2xl border border-gray-800 bg-[#0A0A0A]/80 border border-white/5/70 p-5"
                 >
                   <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                     <div>
@@ -225,7 +225,7 @@ const Reports = () => {
                         {report.type || 'general'}
                       </p>
                       <h3 className="mt-2 text-lg font-semibold text-white">{report.title}</h3>
-                      <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-400">
+                      <p className="mt-3 max-w-3xl text-sm leading-6 text-[#C0C0C0]">
                         {report.content || 'No content provided.'}
                       </p>
                       <p className="mt-3 text-xs text-gray-500">

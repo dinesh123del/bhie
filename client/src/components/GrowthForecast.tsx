@@ -13,7 +13,7 @@ const GrowthForecast: React.FC<GrowthForecastProps> = ({ data }) => {
       case 'low': return 'text-emerald-400 bg-emerald-400/10';
       case 'medium': return 'text-amber-400 bg-amber-400/10';
       case 'high': return 'text-rose-400 bg-rose-400/10';
-      default: return 'text-blue-400 bg-blue-400/10';
+      default: return 'text-[#00D4FF] bg-blue-400/10';
     }
   };
 
@@ -98,7 +98,7 @@ const GrowthForecast: React.FC<GrowthForecastProps> = ({ data }) => {
             {/* Strategic Insight */}
             <div className="p-6 rounded-3xl bg-white/5 border border-white/5 backdrop-blur-3xl">
                 <div className="flex gap-4">
-                    <ShieldAlert className={`w-6 h-6 shrink-0 ${data.riskLevel === 'high' ? 'text-rose-400' : 'text-blue-400'}`} />
+                    <ShieldAlert className={`w-6 h-6 shrink-0 ${data.riskLevel === 'high' ? 'text-rose-400' : 'text-[#00D4FF]'}`} />
                     <p className="text-[15px] font-medium text-white/70 leading-relaxed italic">
                         "{data.recommendation}"
                     </p>

@@ -60,7 +60,7 @@ export default function Terms() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="max-w-xl text-lg leading-8 text-slate-300"
+              className="max-w-xl text-lg leading-8 text-[#C0C0C0]"
             >
               We keep things simple and secure, so you can focus on growing your business.
             </motion.p>
@@ -100,7 +100,7 @@ export default function Terms() {
                 </div>
                 <div className="space-y-3">
                   <h3 className="text-2xl font-bold text-white">{section.title}</h3>
-                  <p className="text-sm leading-7 text-slate-300">{section.content}</p>
+                  <p className="text-sm leading-7 text-[#C0C0C0]">{section.content}</p>
                 </div>
               </motion.div>
             ))}
@@ -109,9 +109,9 @@ export default function Terms() {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="mt-20 rounded-[40px] border border-white/10 bg-slate-900/40 p-8 text-center backdrop-blur-md sm:p-12"
+            className="mt-20 rounded-[40px] border border-white/10 bg-[#0A0A0A]/80 border border-white/5/40 p-8 text-center backdrop-blur-md sm:p-12"
           >
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-[#C0C0C0]">
               Last updated: April 5, 2026. If you have any questions, please email us at
               <span className="ml-2 font-semibold text-cyan-300 hover:underline">hello@bizplus.io</span>
             </p>

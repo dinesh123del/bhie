@@ -100,7 +100,7 @@ const SimulationEngine = () => {
           </div>
           <div>
             <h1 className="text-4xl font-bold text-white">Simulation Engine</h1>
-            <p className="text-slate-400 text-sm">Ask "What If?" — 1,000 parallel futures analyzed instantly</p>
+            <p className="text-[#C0C0C0] text-sm">Ask "What If?" — 1,000 parallel futures analyzed instantly</p>
           </div>
         </div>
       </motion.div>
@@ -110,7 +110,7 @@ const SimulationEngine = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="p-6 rounded-2xl bg-slate-800/60 border border-slate-700/50 backdrop-blur-sm"
+        className="p-6 rounded-2xl bg-[#0A0A0A]/60/60 border border-slate-700/50 backdrop-blur-sm"
       >
         <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
           <Target className="w-5 h-5 text-violet-400" /> Define Your Scenario
@@ -119,103 +119,103 @@ const SimulationEngine = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {/* Revenue */}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Monthly Revenue (₹)</label>
+            <label className="block text-sm font-medium text-[#C0C0C0] mb-1.5">Monthly Revenue (₹)</label>
             <input
               type="number"
               value={revenue}
               onChange={(e) => setRevenue(e.target.value)}
               placeholder="e.g. 500000"
-              className="w-full px-4 py-2.5 bg-slate-900/60 border border-slate-600 rounded-lg text-white placeholder:text-slate-500 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
+              className="w-full px-4 py-2.5 bg-[#0A0A0A]/80 border border-white/5/60 border border-slate-600 rounded-lg text-white placeholder:text-slate-500 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
             />
           </div>
 
           {/* Expenses */}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Monthly Expenses (₹)</label>
+            <label className="block text-sm font-medium text-[#C0C0C0] mb-1.5">Monthly Expenses (₹)</label>
             <input
               type="number"
               value={expenses}
               onChange={(e) => setExpenses(e.target.value)}
               placeholder="e.g. 350000"
-              className="w-full px-4 py-2.5 bg-slate-900/60 border border-slate-600 rounded-lg text-white placeholder:text-slate-500 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
+              className="w-full px-4 py-2.5 bg-[#0A0A0A]/80 border border-white/5/60 border border-slate-600 rounded-lg text-white placeholder:text-slate-500 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
             />
           </div>
 
           {/* Months */}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Simulate Months</label>
+            <label className="block text-sm font-medium text-[#C0C0C0] mb-1.5">Simulate Months</label>
             <input
               type="number"
               value={months}
               onChange={(e) => setMonths(e.target.value)}
-              className="w-full px-4 py-2.5 bg-slate-900/60 border border-slate-600 rounded-lg text-white focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
+              className="w-full px-4 py-2.5 bg-[#0A0A0A]/80 border border-white/5/60 border border-slate-600 rounded-lg text-white focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
             />
           </div>
 
           {/* New Hires */}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">New Hires</label>
+            <label className="block text-sm font-medium text-[#C0C0C0] mb-1.5">New Hires</label>
             <input
               type="number"
               value={newHires}
               onChange={(e) => setNewHires(e.target.value)}
-              className="w-full px-4 py-2.5 bg-slate-900/60 border border-slate-600 rounded-lg text-white focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
+              className="w-full px-4 py-2.5 bg-[#0A0A0A]/80 border border-white/5/60 border border-slate-600 rounded-lg text-white focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
             />
           </div>
 
           {/* Avg Salary */}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Avg Annual Salary (₹)</label>
+            <label className="block text-sm font-medium text-[#C0C0C0] mb-1.5">Avg Annual Salary (₹)</label>
             <input
               type="number"
               value={avgSalary}
               onChange={(e) => setAvgSalary(e.target.value)}
-              className="w-full px-4 py-2.5 bg-slate-900/60 border border-slate-600 rounded-lg text-white focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
+              className="w-full px-4 py-2.5 bg-[#0A0A0A]/80 border border-white/5/60 border border-slate-600 rounded-lg text-white focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
             />
           </div>
 
           {/* Loan Amount */}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Loan Amount (₹)</label>
+            <label className="block text-sm font-medium text-[#C0C0C0] mb-1.5">Loan Amount (₹)</label>
             <input
               type="number"
               value={loanAmount}
               onChange={(e) => setLoanAmount(e.target.value)}
               placeholder="0"
-              className="w-full px-4 py-2.5 bg-slate-900/60 border border-slate-600 rounded-lg text-white placeholder:text-slate-500 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
+              className="w-full px-4 py-2.5 bg-[#0A0A0A]/80 border border-white/5/60 border border-slate-600 rounded-lg text-white placeholder:text-slate-500 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
             />
           </div>
 
           {/* Loan Rate */}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Loan Interest Rate (%)</label>
+            <label className="block text-sm font-medium text-[#C0C0C0] mb-1.5">Loan Interest Rate (%)</label>
             <input
               type="number"
               value={loanRate}
               onChange={(e) => setLoanRate(e.target.value)}
-              className="w-full px-4 py-2.5 bg-slate-900/60 border border-slate-600 rounded-lg text-white focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
+              className="w-full px-4 py-2.5 bg-[#0A0A0A]/80 border border-white/5/60 border border-slate-600 rounded-lg text-white focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
             />
           </div>
 
           {/* Revenue Growth */}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Revenue Growth (%/mo)</label>
+            <label className="block text-sm font-medium text-[#C0C0C0] mb-1.5">Revenue Growth (%/mo)</label>
             <input
               type="number"
               value={revenueGrowth}
               onChange={(e) => setRevenueGrowth(e.target.value)}
-              className="w-full px-4 py-2.5 bg-slate-900/60 border border-slate-600 rounded-lg text-white focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
+              className="w-full px-4 py-2.5 bg-[#0A0A0A]/80 border border-white/5/60 border border-slate-600 rounded-lg text-white focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
             />
           </div>
 
           {/* Expense Growth */}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Expense Growth (%/mo)</label>
+            <label className="block text-sm font-medium text-[#C0C0C0] mb-1.5">Expense Growth (%/mo)</label>
             <input
               type="number"
               value={expenseGrowth}
               onChange={(e) => setExpenseGrowth(e.target.value)}
-              className="w-full px-4 py-2.5 bg-slate-900/60 border border-slate-600 rounded-lg text-white focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
+              className="w-full px-4 py-2.5 bg-[#0A0A0A]/80 border border-white/5/60 border border-slate-600 rounded-lg text-white focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-all"
             />
           </div>
         </div>
@@ -257,7 +257,7 @@ const SimulationEngine = () => {
             <div className={`p-6 rounded-2xl bg-gradient-to-br ${getSuccessBg(result.success_probability)} border backdrop-blur-sm`}>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl font-bold text-white">Simulation Verdict</h2>
-                <span className="text-xs bg-slate-700/50 text-slate-300 px-3 py-1 rounded-full">
+                <span className="text-xs bg-slate-700/50 text-[#C0C0C0] px-3 py-1 rounded-full">
                   {result.simulations_run.toLocaleString()} simulations · {result.months_simulated} months
                 </span>
               </div>
@@ -268,7 +268,7 @@ const SimulationEngine = () => {
                 </div>
                 <div>
                   <p className="text-white font-semibold text-lg">Success Probability</p>
-                  <p className="text-slate-300 text-sm">{result.verdict}</p>
+                  <p className="text-[#C0C0C0] text-sm">{result.verdict}</p>
                 </div>
               </div>
 
@@ -292,11 +292,11 @@ const SimulationEngine = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="p-5 rounded-xl bg-slate-800/60 border border-slate-700/50"
+                className="p-5 rounded-xl bg-[#0A0A0A]/60/60 border border-slate-700/50"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <BarChart3 className="w-4 h-4 text-blue-400" />
-                  <span className="text-sm text-slate-400">Median Outcome</span>
+                  <BarChart3 className="w-4 h-4 text-[#00D4FF]" />
+                  <span className="text-sm text-[#C0C0C0]">Median Outcome</span>
                 </div>
                 <p className={`text-2xl font-bold ${result.median_outcome >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                   {formatCurrency(result.median_outcome)}
@@ -307,11 +307,11 @@ const SimulationEngine = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="p-5 rounded-xl bg-slate-800/60 border border-slate-700/50"
+                className="p-5 rounded-xl bg-[#0A0A0A]/60/60 border border-slate-700/50"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingUp className="w-4 h-4 text-emerald-400" />
-                  <span className="text-sm text-slate-400">Best Case (95th %ile)</span>
+                  <span className="text-sm text-[#C0C0C0]">Best Case (95th %ile)</span>
                 </div>
                 <p className="text-2xl font-bold text-emerald-400">
                   {formatCurrency(result.best_case)}
@@ -322,11 +322,11 @@ const SimulationEngine = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="p-5 rounded-xl bg-slate-800/60 border border-slate-700/50"
+                className="p-5 rounded-xl bg-[#0A0A0A]/60/60 border border-slate-700/50"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingDown className="w-4 h-4 text-red-400" />
-                  <span className="text-sm text-slate-400">Worst Case (5th %ile)</span>
+                  <span className="text-sm text-[#C0C0C0]">Worst Case (5th %ile)</span>
                 </div>
                 <p className="text-2xl font-bold text-red-400">
                   {formatCurrency(result.worst_case)}
@@ -337,11 +337,11 @@ const SimulationEngine = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="p-5 rounded-xl bg-slate-800/60 border border-slate-700/50"
+                className="p-5 rounded-xl bg-[#0A0A0A]/60/60 border border-slate-700/50"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <AlertTriangle className="w-4 h-4 text-amber-400" />
-                  <span className="text-sm text-slate-400">Bankruptcy Risk</span>
+                  <span className="text-sm text-[#C0C0C0]">Bankruptcy Risk</span>
                 </div>
                 <p className={`text-2xl font-bold ${result.bankruptcy_risk <= 10 ? 'text-emerald-400' : result.bankruptcy_risk <= 30 ? 'text-amber-400' : 'text-red-400'}`}>
                   {result.bankruptcy_risk}%
@@ -360,7 +360,7 @@ const SimulationEngine = () => {
                 <ShieldCheck className="w-5 h-5 text-violet-400" />
                 <h3 className="text-white font-semibold">How This Works</h3>
               </div>
-              <p className="text-slate-300 text-sm leading-relaxed">
+              <p className="text-[#C0C0C0] text-sm leading-relaxed">
                 We ran <strong>{result.simulations_run.toLocaleString()} Monte Carlo simulations</strong> of your business
                 over <strong>{result.months_simulated} months</strong>. Each simulation applies random market fluctuations
                 (±15% revenue variance, ±8% expense variance) to model real-world uncertainty. The Success Probability
