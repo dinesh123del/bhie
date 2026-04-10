@@ -131,7 +131,10 @@ api.interceptors.response.use(
         }
       } else if (typeof response.data === 'string') {
         if (response.data.includes('<html') || response.data.includes('<!DOCTYPE')) {
-          errorMessage = `Server processing error (${response.status}). Please try again later.`;
+          errorMessage = `Operational failure: Server returned HTML instead of data. This typically happens during routing conflicts or infrastructure swaps. Please refresh.`;
+          const routingError = new Error(errorMessage);
+          (routingError as any).isRoutingError = true;
+          return Promise.reject(routingError);
         } else {
           errorMessage = response.data;
         }

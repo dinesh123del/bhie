@@ -80,4 +80,14 @@ router.use('/predictions', predictionsRoutes);
 router.use('/quantum', quantumRoutes);
 router.use('/moment', momentIntelligenceRoutes);
 
+// --- Final API 404 Handler ---
+// Prevents unmatched /api routes from falling through to the root SPA catch-all
+router.use('*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `API Route not found: ${req.originalUrl}`,
+    error: 'NotFoundError'
+  });
+});
+
 export default router;
