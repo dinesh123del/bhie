@@ -235,13 +235,13 @@ function App() {
   useEffect(() => {
     const safetyTimeout = setTimeout(() => {
       if (!dataReady) setDataReady(true);
-    }, 8000);
+    }, 4000); // Faster safety fallback
 
     const preload = async () => {
       try {
         await Promise.allSettled([
-          fetch(`${API}/api/auth/csrf-token`, { credentials: 'include', signal: AbortSignal.timeout(3000) }),
-          fetch(`${API}/api/health`, { signal: AbortSignal.timeout(2500) })
+          fetch(`${API}/api/auth/csrf-token`, { credentials: 'include', signal: AbortSignal.timeout(2000) }),
+          fetch(`${API}/api/health`, { signal: AbortSignal.timeout(1500) })
         ]);
       } finally {
         setDataReady(true);
@@ -272,9 +272,9 @@ function App() {
                   animate={{ opacity: 1 }}
                   exit={{ 
                     opacity: 0, 
-                    scale: 1.2, 
-                    filter: 'blur(100px)',
-                    transition: { duration: 1.5, ease: [0.76, 0, 0.24, 1] } 
+                    scale: 1.05, 
+                    filter: 'blur(40px)',
+                    transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } 
                   }}
                   className="fixed inset-0 z-[20000]"
                 >
@@ -287,9 +287,9 @@ function App() {
                   animate={{ opacity: 1 }}
                   exit={{ 
                     opacity: 0, 
-                    scale: 1.5, 
-                    filter: 'blur(150px)',
-                    transition: { duration: 2, ease: [0.76, 0, 0.24, 1] }
+                    scale: 1.1, 
+                    filter: 'blur(40px)',
+                    transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } 
                   }}
                   className="fixed inset-0 z-[10000]"
                 >
