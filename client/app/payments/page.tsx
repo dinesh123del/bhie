@@ -1,10 +1,10 @@
 "use client"
 
 import { useState } from 'react'
-import { useAuth } from '@/hooks/useAuth'
-import UsageDashboard from '@/components/UsageDashboard'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useAuth } from '@/src/hooks/useAuth'
+import UsageDashboard from '@/src/components/UsageDashboard'
+import { Button } from '@/src/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/src/components/ui/card'
 
 const tiers = [
          { name: 'Free', price: 0, limit: '100 AI queries/month', features: ['Basic AI', 'Receipt Scanning'] },

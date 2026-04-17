@@ -5,6 +5,7 @@ const nextConfig = {
          distDir: '.next',
          experimental: {
                   typedRoutes: true,
+                  serverComponentsExternalPackages: ['framer-motion'],
          },
          images: {
                   remotePatterns: [

@@ -1,3 +1,4 @@
+"use client"
 import { motion } from 'framer-motion';
 import { ArrowRight, Building2, Orbit, ShieldCheck, Sparkles, Zap, ZapOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
